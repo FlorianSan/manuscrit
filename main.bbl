@@ -1,0 +1,22 @@
+\begin{thebibliography}{xxxx}
+
+\bibitem[Goossens~1993]{goossens93}
+Goossens, M., Mittelbach, F. \iftoggle{ThesisInEnglish}{and}{et} Samarin, A.
+\newblock The latex companion.
+\newblock Addison-Wesley, Reading, Massachusetts, \monthname[12] 1993.
+
+\bibitem[Liu~2019]{liu2019robust}
+Liu, D., Liu, H., Li, Z., Hou, X. \iftoggle{ThesisInEnglish}{and}{et} Wang, Q.
+\newblock {\em Robust attitude control for tail-sitter unmanned aerial vehicles
+  in flight mode transitions}.
+\newblock International Journal of Robust and Nonlinear Control, vol.~29,
+  no.~4, pages 1132--1149, 2019.
+
+\bibitem[Overleaf~2022]{overleaf_project}
+Overleaf.
+\newblock {\em Overleaf Your Projects}.
+\newblock 2022.
+\newblock \iftoggle{ThesisInEnglish}{[Online]. Available:}{[En ligne].
+  Disponible :} \url{https://www.overleaf.com/project}.
+
+\end{thebibliography}

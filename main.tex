@@ -1,0 +1,142 @@
+%%%%%%%% 1. DOCUMENTCLASS %%%%%%%%
+% Choose the language of your thesis passing 'french' or 'english' as
+% \documentclass option.
+% Note1: The 'page de garde' will always be written in French.
+% Note2: You will have an error if you change the language of the document and
+%        compile it without cleaning the auxiliary files. Compiling it again
+%        should solve the problem.
+\documentclass[english,a4paper,11pt,twoside]{StyleThese}
+
+
+%%%%%%%% 2. PACKAGES AND BASIC INFO %%%%%%%%
+\include{formatAndDefs}
+
+% Loading the tlsflyleaf.sty package require some option to define the
+% establishment name, the doctoral school and the PhD speciality.
+% In that aim you have 2 key-value option:
+%   - Ets=<value> : define the establishment name
+%   - ED=<value>  : define the doctoral school and speciality
+%   - ED2=<value> : define the second speciality ("double mention"). OPTIONAL.
+% The full list of accepted values for each option could be find either
+% in the documentation or in tlsflyleaf.sty file.
+%\usepackage[ED=MITT-STICRT, Ets=INSA]{tlsflyleaf}
+%\usepackage[ED=SDU2E-Ast, ED2=SDU2E-Eco, Ets=UT3]{tlsflyleaf}
+\usepackage[ED=EDSYS-A, Ets=ENAC]{tlsflyleaf}
+
+% Setup basic string
+\title{Titre de la th\`ese}
+\author{Florian SANSOU}
+\defencedate{jj/mm/aaaa}
+\lab{Ecole Nationale d’Aviation Civile}
+%\cotutelle{}
+
+% Setup custom pdf info
+\makeatletter
+\hypersetup {
+  pdftitle={\@title},
+  pdfauthor={\@author},
+  pdfsubject={Thesis subject},
+  pdfkeywords={key, words},
+}
+\makeatother
+
+% Setup people like your boss, the jury team and the referees
+% - First you need to define how number they will be in each category
+%   It is done with the commands \nboss{n}, \nreferee{n} and \njudge{n}.
+%   You can define more people in each category than the number given
+%   but only the first "\npeople" will be print.
+% - Then use the command \makesomeone{<category>}{<number>}{<name>}{<status>}{<other>}
+%   where:
+%     <category> should be select in ['boss', 'referee', 'judge']
+%     <number>   is the rank for printing the person.
+%                Only number <= "\npeople" will be printed
+%     <name>     First name and las name of the people
+%     <status>   Is (s)he a "charg\'e de recher" ou un "professeur d'universit\'e"...
+%     <other>    What ever string you want to add (laboratory, jury member place...).
+%% Boss
+\nboss{2}
+\makesomeone{boss}{2}{Second DIRECTEUR}{}{}  % Sera affiche en second
+\makesomeone{boss}{1}{Premier DIRECTEUR}{}{} % Sera afiche en premier
+%% Referee
+\nreferee{2}
+\makesomeone{referee}{1}{Premier RAPPORTEUR}{}{}
+\makesomeone{referee}{2}{Second RAPPORTEUR}{}{}
+%% Judges
+\njudge{5}
+\makesomeone{judge}{1}{Premier MEMBRE}{Professeur des universit\'es}{Pr\'esident du jury}
+\makesomeone{judge}{2}{Second MEMBRE}{Ing\'enieur de recherche}{Rapporteur}
+\makesomeone{judge}{3}{Troisi\`eme MEMBRE}{Charg\'e de recherche}{Examinateur}
+\makesomeone{judge}{4}{Quatri\`eme MEMBRE}{Ma\^itre de conf\'erences}{Co-directeur de th\`ese}
+\makesomeone{judge}{5}{Ciqui\`eme MEMBRE}{Directeur de recherche}{Directeur de th\`ese}
+
+% Other package here
+% ...
+
+\sloppy
+\begin{document}
+
+%%%%%%%% 3. COVER PAGE %%%%%%%%
+
+\makeatletter
+\pdfbookmark{\@title}{title}
+\makeatother
+
+\makeflyleaf
+% \includepdf[pages=-]{chapters/couverture_these.pdf} % if you want to use generated pdf cover (e.g. ADUM), use this instead of \makeflyleaf. You'll also need \usepackage{pdfpages}
+\cleardoublepage
+\dominitoc
+
+
+%%%%%%%% 4. ACKNOWLEDGMENTS AND TABLES OF CONTENT %%%%%%%%
+\pagenumbering{roman}
+\include{chapters/Acknowledgments}
+
+\cleardoublepage
+\pdfbookmark{\contentsname}{toc}
+\tableofcontents
+
+\renewcommand{\listfigurename}{Liste des figures}
+\listoffigures
+\addcontentsline{toc}{chapter}{\listfigurename}
+\mtcaddchapter
+
+\listoftables
+\addcontentsline{toc}{chapter}{\listtablename}
+\mtcaddchapter
+
+\printnomenclature
+% Use \mtcfixnomenclature below if you have a glossary (added with
+% \printnomenclature above) and you're see a shift in the mini-table of
+% contents at the begining of each chapter (example: no mini-toc in chapter 1;
+% mini-toc of chapter 1 appearing in chapter 2; and so on).
+%
+% You should not use \mtcfixnomenclature if you have no glossary (that means,
+% if you don't use \printnomenclature or if your glossary is empty).
+\mtcfixnomenclature
+
+
+%%%%%%%% 5. MAIN CONTENT %%%%%%%%
+\mainmatter
+
+\include{chapters/Introduction}
+\include{chapters/Chapter1}
+\include{chapters/Chapter2}
+\include{chapters/Conclusion}
+
+
+%%%%%%%% 6. APPENDIX %%%%%%%%
+\appendix
+
+\include{chapters/Annexe1}
+
+%%%%%%%% 7. BIBLIOGRAPHIE %%%%%%%%
+\bibliographystyle{StyleThese}
+%\bibliographystyle{plain}
+\bibliography{biblio}
+
+
+%%%%%%%% 8. LAST PAGE %%%%%%%%
+\cleardoublepage
+\include{chapters/Abstract}
+
+\end{document}

@@ -1,0 +1,164 @@
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{datetime} % For month display
+\usepackage{lmodern} % Font Latin Modern Roman
+\usepackage{tabularx} % Table
+\usepackage{multirow} % Table multirow
+
+\iftoggle{ThesisInEnglish}{%
+  \usepackage[english]{babel}
+}{ %
+  \usepackage[english,main=french]{babel}
+}
+
+\usepackage{hhline}
+\usepackage[left=1.5in,right=1.3in,top=1.1in,bottom=1.1in,includefoot,includehead,headheight=13.6pt]{geometry}
+\renewcommand{\baselinestretch}{1.05}
+
+% Math
+\usepackage{amsmath,amssymb}
+
+%%%%%%%% Table of contents %%%%%%%%
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+
+% Table of contents for each chapter
+\usepackage[nottoc, notlof, notlot]{tocbibind}
+\usepackage{minitoc}
+\setcounter{minitocdepth}{2}
+\mtcindent=15pt
+
+% Use \minitoc where to put a table of contents
+\let\minitocORIG\minitoc
+\renewcommand{\minitoc}{\minitocORIG \vspace{1.5em}}
+
+% Glossary / list of abbreviations
+\usepackage[intoc]{nomencl}
+\iftoggle{ThesisInEnglish}{%
+  \renewcommand{\nomname}{Glossary}
+}{ %
+  \renewcommand{\nomname}{Liste des abréviations}
+}
+\makenomenclature
+
+
+%%%%%%%% Image %%%%%%%%
+\usepackage{ifpdf}
+
+\ifpdf
+  \usepackage[pdftex]{graphicx}
+  \DeclareGraphicsExtensions{.jpg}
+  \usepackage[pagebackref,hyperindex=true]{hyperref}
+  \usepackage{tikz}
+  \usetikzlibrary{arrows,shapes,calc}
+\else
+  \usepackage{graphicx}
+  \DeclareGraphicsExtensions{.ps,.eps}
+  \usepackage[dvipdfm,pagebackref,hyperindex=true]{hyperref}
+\fi
+
+\usepackage{rotating} % Sideways of figures & tables
+\usepackage{tablefootnote}
+
+
+%%%%%%%% PDF %%%%%%%%
+% Links in pdf
+\usepackage{color}
+\definecolor{linkcol}{rgb}{0,0,0.4}
+\definecolor{citecol}{rgb}{0.5,0,0}
+\definecolor{linkcol}{rgb}{0,0,0}
+\definecolor{citecol}{rgb}{0,0,0}
+% Change this to change the informations included in the pdf file
+
+% Basic pdf setup
+\hypersetup
+{
+  bookmarksopen=true,
+  %pdftoolbar=false, %barre d'outils non visible
+  pdfmenubar=true, %barre de menu visible
+  pdfhighlight=/O, %effet d'un clic sur un lien hypertexte
+  colorlinks=true, %couleurs sur les liens hypertextes
+  pdfpagemode=UseNone, %aucun mode de page
+  pdfpagelayout=SinglePage, %ouverture en simple page
+  pdffitwindow=true, %pages ouvertes entierement dans toute la fenetre
+  linkcolor=linkcol, %couleur des liens hypertextes internes
+  citecolor=citecol, %couleur des liens pour les citations
+  urlcolor=linkcol %couleur des liens pour les url
+}
+
+
+%%%%%%%% Backref in biblio %%%%%%%%
+%% Nicer backref links
+\iftoggle{ThesisInEnglish}{%
+  \renewcommand*{\backref}[1]{}
+  \renewcommand*{\backrefalt}[4]{%
+  \ifcase #1 %
+  (Not cited.)%
+  \or
+  (Cited in page~#2.)%
+  \else
+  (Cited in pages~#2.)%
+  \fi}
+  \renewcommand*{\backrefsep}{, }
+  \renewcommand*{\backreftwosep}{ and~}
+  \renewcommand*{\backreflastsep}{ and~}
+}{%
+  \renewcommand*{\backref}[1]{}
+  \renewcommand*{\backrefalt}[4]{%
+  \ifcase #1 %
+  (Non cité.)%
+  \or
+  (Cité en page~#2.)%
+  \else
+  (Cité en pages~#2.)%
+  \fi}
+  \renewcommand*{\backrefsep}{, }
+  \renewcommand*{\backreftwosep}{ et~}
+  \renewcommand*{\backreflastsep}{ et~}
+}
+
+\usepackage{xurl} % allow break url
+
+%%%%%%%% Fancy Header %%%%%%%%
+% Fancy Header Style Options
+\usepackage{fancyhdr}                   % Fancy Header and Footer
+\pagestyle{fancy}                       % Sets fancy header and footer
+\fancyfoot{}                            % Delete current footer settings
+
+\fancyhead[LE,RO]{\bfseries\thepage}    % Page number (boldface) in left on even
+                                        % pages and right on odd pages
+\fancyhead[RE]{\bfseries\nouppercase{\leftmark}}      % Chapter in the right on even pages
+\fancyhead[LO]{\bfseries\nouppercase{\rightmark}}     % Section in the left on odd pages
+
+\let\headruleORIG\headrule
+\renewcommand{\headrule}{\color{black} \headruleORIG}
+\renewcommand{\headrulewidth}{1.0pt}
+\usepackage{colortbl}
+\arrayrulecolor{black}
+
+\fancypagestyle{plain}{
+  \fancyhead{}
+  \fancyfoot{}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+
+%%%%%%%% Clear Header %%%%%%%%
+% Clear Header Style on the Last Empty Odd pages
+\makeatletter
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else%
+  \hbox{}%
+  \thispagestyle{empty}%              % Empty header styles
+  \newpage%
+  \if@twocolumn\hbox{}\newpage\fi\fi\fi}
+\makeatother
+
+
+%%%%%%%% Center Page %%%%%%%%
+% centered page environment (for abstract)
+\newenvironment{vcenterpage}
+{\newpage\vspace*{\fill}\thispagestyle{empty}\renewcommand{\headrulewidth}{0pt}}
+{\vspace*{\fill}}
+
+
+%%%%%%%% End Common Format %%%%%%%%

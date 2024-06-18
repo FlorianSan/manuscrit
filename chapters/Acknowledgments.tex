@@ -1,0 +1,21 @@
+% Here you can see an example of how to create text conditioned by the language
+% variable. The \iftoggle command:
+%
+%   \iftoggle{ThesisInEnglish}{%
+%   <your-text-in-english>
+%   }{%
+%   <your-text-in-french>
+%   }
+%
+% will compile only one of the two blocks, depending on the variable you set at
+% the beginning of this document. Language selection is managed this way in the
+% formatAndDefs.tex file. You too can create sections of your thesis that is
+% language dependend this way, although you probably won't need it. Another use
+% of \iftoggle can be found at the end of this file.
+\iftoggle{ThesisInEnglish}{%
+\section*{Acknowledgments}
+}{%
+\section*{Remerciements}
+}
+
+A faire en dernier :-) 
