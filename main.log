@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.4.29)  18 JUN 2024 14:11
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.4.29)  21 JUN 2024 10:24
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -772,35 +772,114 @@ Package: shadowtext 2012/05/07 v0.3 Shadow Text
 \@pdgInnerBoxWidth=\skip85
 \@pdgInnerBoxHeight=\skip86
 \@linethickness=\skip87
+) (/usr/share/texlive/texmf-dist/tex/latex/siunitx/siunitx.sty
+Package: siunitx 2022-02-02 v3.0.46 A comprehensive (SI) units package
+\l__siunitx_angle_tmp_dim=\dimen284
+\l__siunitx_angle_marker_box=\box89
+\l__siunitx_angle_unit_box=\box90
+\l__siunitx_compound_count_int=\count345
+ (/usr/share/texlive/texmf-dist/tex/latex/translations/translations.sty
+Package: translations 2022/01/04 v1.11 internationalization of LaTeX2e packages (CN)
 )
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 76.
+\l__siunitx_number_exponent_fixed_int=\count346
+\l__siunitx_number_min_decimal_int=\count347
+\l__siunitx_number_min_integer_int=\count348
+\l__siunitx_number_round_precision_int=\count349
+\l__siunitx_number_group_minimum_int=\count350
+\l__siunitx_table_tmp_box=\box91
+\l__siunitx_table_tmp_dim=\dimen285
+\l__siunitx_table_column_width_dim=\dimen286
+\l__siunitx_table_integer_box=\box92
+\l__siunitx_table_decimal_box=\box93
+\l__siunitx_table_before_box=\box94
+\l__siunitx_table_after_box=\box95
+\l__siunitx_table_before_dim=\dimen287
+\l__siunitx_table_carry_dim=\dimen288
+\l__siunitx_unit_tmp_int=\count351
+\l__siunitx_unit_position_int=\count352
+\l__siunitx_unit_total_int=\count353
+ (/usr/share/texlive/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty (/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2022-01-21 L3 programming layer (loader) 
+ (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count354
+\l__pdf_internal_box=\box96
+))
+Package: l3keys2e 2022-01-12 LaTeX2e option processing using LaTeX3 keys
+)) (/usr/share/texlive/texmf-dist/tex/latex/mathtools/empheq.sty
+Package: empheq 2017/03/31 v2.15 Emphasizing equations
+ (/usr/share/texlive/texmf-dist/tex/latex/mathtools/mhsetup.sty
+Package: mhsetup 2021/03/18 v1.4 programming setup (MH)
+) (/usr/share/texlive/texmf-dist/tex/latex/mathtools/mathtools.sty
+Package: mathtools 2021/02/02 v1.28 mathematical typesetting tools
+\g_MT_multlinerow_int=\count355
+\l_MT_multwidth_dim=\dimen289
+\origjot=\skip88
+\l_MT_shortvdotswithinadjustabove_dim=\dimen290
+\l_MT_shortvdotswithinadjustbelow_dim=\dimen291
+\l_MT_above_intertext_sep=\dimen292
+\l_MT_below_intertext_sep=\dimen293
+\l_MT_above_shortintertext_sep=\dimen294
+\l_MT_below_shortintertext_sep=\dimen295
+\xmathstrut@box=\box97
+\xmathstrut@dim=\dimen296
+)
+\l_EQ_equationtype_int=\count356
+\l_EQ_alignmentmode_int=\count357
+\l_EQ_totalwidth_dim=\dimen297
+\l_EQ_displaywidth_dim=\dimen298
+\l_EQ_temp_linewidth_dim=\dimen299
+\l_EQ_linewidth_dim=\dimen300
+\EmphEqdelimitershortfall=\dimen301
+\EmphEqdelimiterfactor=\count358
+\g_EQ_toptag_height_dim=\dimen302
+\g_EQ_bottomtag_depth_dim=\dimen303
+\g_EQ_toprow_height_dim=\dimen304
+\g_EQ_bottomrow_depth_dim=\dimen305
+\g_EQ_widesttag_dim=\dimen306
+\EQ_mathdisplay_box=\box98
+\EQ_tag_box=\box99
+\g_EQ_temprow_int=\count359
+) (/usr/share/texlive/texmf-dist/tex/latex/bbold/bbold.sty
+Package: bbold 1994/04/06 Bbold symbol package
+LaTeX Font Info:    Redeclaring math alphabet \mathbb on input line 42.
+) (/usr/share/texlive/texmf-dist/tex/latex/makecell/makecell.sty
+Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
+\rotheadsize=\dimen307
+\c@nlinenum=\count360
+\TeXr@lab=\toks45
+) (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count361
+\float@exts=\toks46
+\float@box=\box100
+\@float@everytoks=\toks47
+\@floatcapt=\box101
+)
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 93.
  (/usr/share/texmf/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
-File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count345
-\l__pdf_internal_box=\box89
-) (./main.aux (./chapters/Acknowledgments.aux) (./chapters/Introduction.aux) (./chapters/Chapter1.aux) (./chapters/Chapter2.aux) (./chapters/Conclusion.aux) (./chapters/Annexe1.aux) (./chapters/Abstract.aux))
+) (./main.aux (./chapters/Acknowledgments.aux) (./chapters/Introduction.aux) (./chapters/Chapter1.aux) (./chapters/Chapter2.aux) (./chapters/Chapter3.aux) (./chapters/Conclusion.aux) (./chapters/Annexe1.aux) (./chapters/Abstract.aux))
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -865,24 +944,24 @@ Package minitoc(hints) Warning: W0023
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count346
-\scratchdimen=\dimen284
-\scratchbox=\box90
-\nofMPsegments=\count347
-\nofMParguments=\count348
-\everyMPshowfont=\toks45
-\MPscratchCnt=\count349
-\MPscratchDim=\dimen285
-\MPnumerator=\count350
-\makeMPintoPDFobject=\count351
-\everyMPtoPDFconversion=\toks46
+\scratchcounter=\count362
+\scratchdimen=\dimen308
+\scratchbox=\box102
+\nofMPsegments=\count363
+\nofMParguments=\count364
+\everyMPshowfont=\toks48
+\MPscratchCnt=\count365
+\MPscratchDim=\dimen309
+\MPnumerator=\count366
+\makeMPintoPDFobject=\count367
+\everyMPtoPDFconversion=\toks49
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
  (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring ON on input line 76.
+Package hyperref Info: Link coloring ON on input line 93.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
@@ -890,15 +969,19 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ) (/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count352
+\c@section@level=\count368
 )
-LaTeX Info: Redefining \ref on input line 76.
-LaTeX Info: Redefining \pageref on input line 76.
-LaTeX Info: Redefining \nameref on input line 76.
+LaTeX Info: Redefining \ref on input line 93.
+LaTeX Info: Redefining \pageref on input line 93.
+LaTeX Info: Redefining \nameref on input line 93.
  (./main.out) (./main.out)
 \@outlinefile=\write6
 \openout6 = `main.out'.
 
+ (/usr/share/texlive/texmf-dist/tex/latex/translations/translations-basic-dictionary-english.trsl
+File: translations-basic-dictionary-english.trsl (english translation file `translations-basic-dictionary')
+)
+Package translations Info: loading dictionary `translations-basic-dictionary' for `english'. on input line 93.
 *geometry* verbose mode - [ newgeometry ] result:
 * driver: pdftex
 * paper: a4paper
@@ -933,26 +1016,26 @@ LaTeX Info: Redefining \nameref on input line 76.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Trying to load font information for T1+pbk on input line 84.
+LaTeX Font Info:    Trying to load font information for T1+pbk on input line 102.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pbk.fd
 File: t1pbk.fd 2001/06/04 font definitions for T1/pbk.
 )
 LaTeX Font Info:    Font shape `T1/pbk/m/n' in size <42.67912> not available
-(Font)              Font shape `T1/pbk/l/n' tried instead on input line 84.
+(Font)              Font shape `T1/pbk/l/n' tried instead on input line 102.
 
 
 LaTeX Font Warning: Font shape `T1/cmr/b/sc' undefined
-(Font)              using `T1/cmr/b/n' instead on input line 84.
+(Font)              using `T1/cmr/b/n' instead on input line 102.
 
-<tlsflyleaf/logo-univ.jpg, id=71, 214.1601pt x 284.5029pt>
+<tlsflyleaf/logo-univ.jpg, id=79, 214.1601pt x 284.5029pt>
 File: tlsflyleaf/logo-univ.jpg Graphic file (type jpg)
 <use tlsflyleaf/logo-univ.jpg>
-Package pdftex.def Info: tlsflyleaf/logo-univ.jpg  used on input line 84.
+Package pdftex.def Info: tlsflyleaf/logo-univ.jpg  used on input line 102.
 (pdftex.def)             Requested size: 142.26378pt x 188.99236pt.
-<tlsflyleaf/filigrammecut.jpg, id=72, 330.69pt x 467.2pt>
+<tlsflyleaf/filigrammecut.jpg, id=80, 330.69pt x 467.2pt>
 File: tlsflyleaf/filigrammecut.jpg Graphic file (type jpg)
 <use tlsflyleaf/filigrammecut.jpg>
-Package pdftex.def Info: tlsflyleaf/filigrammecut.jpg  used on input line 84.
+Package pdftex.def Info: tlsflyleaf/filigrammecut.jpg  used on input line 102.
 (pdftex.def)             Requested size: 307.28984pt x 434.14218pt.
 [1
 
@@ -962,7 +1045,7 @@ Package pdftex.def Info: tlsflyleaf/filigrammecut.jpg  used on input line 84.
 
 ]
 Package minitoc Info: I0024
-(minitoc)             PREPARING MINITOCS FROM main.toc on input line 88.
+(minitoc)             PREPARING MINITOCS FROM main.toc on input line 107.
 Package minitoc Info: I0033
 (minitoc)             Writing main.mtc1.
 \openout3 = `main.mtc1'.
@@ -995,9 +1078,32 @@ Package minitoc Info: I0033
 (minitoc)             Writing main.mtc8.
 \openout3 = `main.mtc8'.
 
+Package minitoc Info: I0033
+(minitoc)             Writing main.mtc9.
+\openout3 = `main.mtc9'.
+
+Package minitoc Info: I0025
+(minitoc)             PREPARING PARTTOCS FROM main.toc on input line 108.
+
+{\reset@font\ptcCfont\mtc@string\contentsline{chapter}{\noexpand \leavevmode Liste des figures}{\reset@font\ptcCfont v}{chapter*.3}}
+{\reset@font\ptcCfont\mtc@string\contentsline{chapter}{\noexpand \leavevmode List of Tables}{\reset@font\ptcCfont vii}{chapter*.4}}
+{\reset@font\ptcCfont\mtc@string\contentsline{starchapter}{\noexpand \leavevmode Introduction}{\reset@font\ptcCfont 1}{chapter*.5}}
+{\reset@font\ptcCfont\mtc@string\contentsline{chapter}{\noexpand \leavevmode \numberline {1}Darko UAV modelling}{\reset@font\ptcCfont 3}{chapter.1}}
+{\reset@font\ptcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {1.1}Model of the DarkO UAV}{\reset@font\ptcSfont 3}{section.1.1}}
+{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {1.1.1}Full nonlinear model}{\reset@font\ptcSSfont 4}{subsection.1.1.1}}
+{\reset@font\ptcCfont\mtc@string\contentsline{chapter}{\noexpand \leavevmode \numberline {2}Chapitre2}{\reset@font\ptcCfont 11}{chapter.2}}
+{\reset@font\ptcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {2.1}section1}{\reset@font\ptcSfont 11}{section.2.1}}
+{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {2.1.1}subsection1a}{\reset@font\ptcSSfont 11}{subsection.2.1.1}}
+{\reset@font\ptcCfont\mtc@string\contentsline{chapter}{\noexpand \leavevmode \numberline {3}Chapitre2}{\reset@font\ptcCfont 13}{chapter.3}}
+{\reset@font\ptcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {3.1}section1}{\reset@font\ptcSfont 13}{section.3.1}}
+{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.1.1}subsection1a}{\reset@font\ptcSSfont 13}{subsection.3.1.1}}
+{\reset@font\ptcCfont\mtc@string\contentsline{starchapter}{\noexpand \leavevmode Conclusion}{\reset@font\ptcCfont 15}{chapter*.7}}
+{\reset@font\ptcCfont\mtc@string\contentsline{chapter}{\noexpand \leavevmode \numberline {A}Exemple d'annexe}{\reset@font\ptcCfont 17}{appendix.A}}
+{\reset@font\ptcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {A.1}Exemple d'annexe}{\reset@font\ptcSfont 17}{section.A.1}}
+{\reset@font\ptcCfont\mtc@string\contentsline{chapter}{\noexpand \leavevmode Bibliography}{\reset@font\ptcCfont 19}{appendix*.8}}
 \openout2 = `chapters/Acknowledgments.aux'.
 
- (./chapters/Acknowledgments.tex) [1
+(./chapters/Acknowledgments.tex) [1
 
 ] [2
 
@@ -1061,7 +1167,7 @@ No file main.nls.
  (./chapters/Introduction.tex)pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.121 \include{chapters/Introduction}
+l.141 \include{chapters/Introduction}
                                       [1
 
 
@@ -1072,13 +1178,83 @@ l.121 \include{chapters/Introduction}
 <to be read again> 
                    \relax 
 l.1 \chapter
-            {Contexte scientifique et Ã‰tat~de~l'art} [2
+            {Darko UAV modelling} [2
 
 
 
 
 ]
 Chapter 1.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <9> on input line 12.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 12.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 12.
+(/usr/share/texmf/tex/latex/lm/t1lmtt.fd
+File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+<figures/800px-Apogee_v100_top_1E.jpeg, id=168, 803.0pt x 496.85625pt>
+File: figures/800px-Apogee_v100_top_1E.jpeg Graphic file (type jpg)
+<use figures/800px-Apogee_v100_top_1E.jpeg>
+Package pdftex.def Info: figures/800px-Apogee_v100_top_1E.jpeg  used on input line 16.
+(pdftex.def)             Requested size: 316.12253pt x 195.60785pt.
+<figures/darko.pdf, id=169, 233.4321pt x 157.5486pt>
+File: figures/darko.pdf Graphic file (type pdf)
+<use figures/darko.pdf>
+Package pdftex.def Info: figures/darko.pdf  used on input line 27.
+(pdftex.def)             Requested size: 395.15166pt x 266.72562pt.
+ [3pdfTeX warning (ext4): destination with the same identifier (name{figure.1.1}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.88 
+      <./figures/800px-Apogee_v100_top_1E.jpeg>]
+LaTeX Font Info:    Trying to load font information for U+bbold on input line 91.
+ (/usr/share/texlive/texmf-dist/tex/latex/bbold/Ubbold.fd) [4pdfTeX warning (ext4): destination with the same identifier (name{figure.1.2}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.100   \end{empheq}
+                     <./figures/darko.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [5pdfTeX warning (ext4): destination with the same identifier (name{table.1.1}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.110 \begin{align}
+                   ]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [6]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [7]
+<figures/ident_motor March 27 2024 1651.png, id=280, 421.575pt x 316.18124pt>
+File: figures/ident_motor March 27 2024 1651.png Graphic file (type png)
+<use figures/ident_motor March 27 2024 1651.png>
+Package pdftex.def Info: figures/ident_motor March 27 2024 1651.png  used on input line 172.
+(pdftex.def)             Requested size: 395.15166pt x 296.37094pt.
+<figures/IMG_20230609_085023.jpg, id=282, 3661.68pt x 2746.26pt>
+File: figures/IMG_20230609_085023.jpg Graphic file (type jpg)
+<use figures/IMG_20230609_085023.jpg>
+Package pdftex.def Info: figures/IMG_20230609_085023.jpg  used on input line 179.
+(pdftex.def)             Requested size: 237.0934pt x 225.51907pt.
+) [8pdfTeX warning (ext4): destination with the same identifier (name{figure.1.3}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.142 \include{chapters/Chapter1}
+                                  <./figures/ident_motor March 27 2024 1651.png (PNG copy)>] [9pdfTeX warning (ext4): destination with the same identifier (name{figure.1.4}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.142 \include{chapters/Chapter1}
+                                  <./figures/IMG_20230609_085023.jpg>]
+\openout2 = `chapters/Chapter2.aux'.
+
+ (./chapters/Chapter2.tex [10
+
+
+
+
+]
+Chapter 2.
 \openout3 = `main.mtc'.
 
 \openout3 = `main.mtc'.
@@ -1087,56 +1263,45 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <10> on input line 2.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <7> on input line 2.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 2.
-(./main.mtc5)
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 14.
- (/usr/share/texmf/tex/latex/lm/t1lmtt.fd
-File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-))
-Underfull \hbox (badness 6775) in paragraph at lines 13--122
-\T1/lmr/m/n/10.95 Pour ajouter un sym-bole à la liste des abrévi-a-tions il faut utiliser
- []
+(./main.mtc6)) [11]
+\openout2 = `chapters/Chapter3.aux'.
 
-[3]
-\openout2 = `chapters/Chapter2.aux'.
-
- (./chapters/Chapter2.tex [4
+ (./chapters/Chapter3.tex [12
 
 
 
 
 ]
-Chapter 2.
+Chapter 3.
 Package minitoc Info: I0006
-(minitoc)             main.mtc6 is empty on input line 2.
-) [5]
+(minitoc)             main.mtc7 is empty on input line 2.
+) [13]
 \openout2 = `chapters/Conclusion.aux'.
 
- (./chapters/Conclusion.tex [6
+ (./chapters/Conclusion.tex [14
 
 
 
 
-]) [7]
+]) [15]
 \openout2 = `chapters/Annexe1.aux'.
 
- (./chapters/Annexe1.tex [8
+ (./chapters/Annexe1.tex [16
 
 
 
 
 ]
 Appendix A.
-) [9] (./main.bbl (./main.brf)
+) [17] (./main.bbl (./main.brf)
 \tf@brf=\write10
 \openout10 = `main.brf'.
 
- [10
+ [18
 
 
 
-]) [11] [12
+]) [19] [20
 
 ]
 \openout2 = `chapters/Abstract.aux'.
@@ -1174,10 +1339,10 @@ Appendix A.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
- [13
+ [21
 
 
-]) [14]
+]) [22]
 Package minitoc Info: I0009
 (minitoc)             Listing minitoc auxiliary files. 
 (minitoc)             Creating the main.maf file.
@@ -1185,32 +1350,47 @@ Package minitoc Info: I0009
 
 
 
+Package minitoc(hints) Warning: W0075
+(minitoc(hints))                You have used \doparttoc, 
+(minitoc(hints))                but not \parttoc.
+
+Package minitoc(hints) Info: I0053
+(minitoc(hints))             You have loaded the float package; 
+(minitoc(hints))             please be aware that the minitoc package 
+(minitoc(hints))             facilities can not be used for new types 
+(minitoc(hints))             of floats defined by the float package.
+
 Package minitoc(hints) Warning: W0024
 (minitoc(hints))                Some hints have been written 
 (minitoc(hints))                in the main.log file.
 
-(./main.aux (./chapters/Acknowledgments.aux) (./chapters/Introduction.aux) (./chapters/Chapter1.aux) (./chapters/Chapter2.aux) (./chapters/Conclusion.aux) (./chapters/Annexe1.aux) (./chapters/Abstract.aux))
+[23
+
+
+] (./main.aux (./chapters/Acknowledgments.aux) (./chapters/Introduction.aux) (./chapters/Chapter1.aux) (./chapters/Chapter2.aux) (./chapters/Chapter3.aux) (./chapters/Conclusion.aux) (./chapters/Annexe1.aux) (./chapters/Abstract.aux))
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 55C062F103E98CA26E527412BBD1CEF2;1921.
+(rerunfilecheck)             Checksum: B12B8273E8B644870BE5C1999AC4856B;2124.
 Package rerunfilecheck Info: File `main.brf' has not changed.
-(rerunfilecheck)             Checksum: 827B058447E9E97E38E20AFC0774E048;166.
+(rerunfilecheck)             Checksum: 9BEAC8709F3E8047014ABB404D97A876;1103.
  ) 
 Here is how much of TeX's memory you used:
- 30006 strings out of 478287
- 573858 string characters out of 5849289
- 949578 words of memory out of 5000000
- 47284 multiletter control sequences out of 15000+600000
- 537017 words of font info for 78 fonts, out of 8000000 for 9000
+ 34562 strings out of 478287
+ 699226 string characters out of 5849289
+ 1063663 words of memory out of 5000000
+ 51733 multiletter control sequences out of 15000+600000
+ 561927 words of font info for 101 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 117i,12n,111p,1341b,461s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrb1200.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/bookman/ubkl8a.pfb>
-Output written on main.pdf (24 pages, 562920 bytes).
+ 117i,21n,111p,1341b,934s stack positions out of 5000i,500n,10000p,200000b,80000s
+pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist, replaced by a fixed one
+
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/bbold-type1/bbold10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrb1200.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/bookman/ubkl8a.pfb>
+Output written on main.pdf (33 pages, 1283632 bytes).
 PDF statistics:
- 267 PDF objects out of 1000 (max. 8388607)
- 218 compressed objects within 3 object streams
- 44 named destinations out of 1000 (max. 500000)
- 151 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 478 PDF objects out of 1000 (max. 8388607)
+ 376 compressed objects within 4 object streams
+ 72 named destinations out of 1000 (max. 500000)
+ 199 words of extra memory for PDF output out of 10000 (max. 10000000)
 

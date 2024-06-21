@@ -1,22 +1,49 @@
 \begin{thebibliography}{xxxx}
 
-\bibitem[Goossens~1993]{goossens93}
-Goossens, M., Mittelbach, F. \iftoggle{ThesisInEnglish}{and}{et} Samarin, A.
-\newblock The latex companion.
-\newblock Addison-Wesley, Reading, Massachusetts, \monthname[12] 1993.
-
-\bibitem[Liu~2019]{liu2019robust}
-Liu, D., Liu, H., Li, Z., Hou, X. \iftoggle{ThesisInEnglish}{and}{et} Wang, Q.
-\newblock {\em Robust attitude control for tail-sitter unmanned aerial vehicles
-  in flight mode transitions}.
-\newblock International Journal of Robust and Nonlinear Control, vol.~29,
-  no.~4, pages 1132--1149, 2019.
-
-\bibitem[Overleaf~2022]{overleaf_project}
-Overleaf.
-\newblock {\em Overleaf Your Projects}.
-\newblock 2022.
+\bibitem[Hua~2013]{hamel_minhduc}
+Hua, M.-D., Hamel, T., Morin, P. \iftoggle{ThesisInEnglish}{and}{et} Samson, C.
+\newblock {\em Introduction to feedback control of underactuated {VTOL}
+  vehicles: A review of basic control design ideas and principles}.
+\newblock IEEE, Control Systems, vol.~33, pages 61--75, 02 2013.
 \newblock \iftoggle{ThesisInEnglish}{[Online]. Available:}{[En ligne].
-  Disponible :} \url{https://www.overleaf.com/project}.
+  Disponible :}
+  \href{https://dx.doi.org/10.1109/MCS.2012.2225931}{http://dx.doi.org/10.1109/MCS.2012.2225931}.
+
+\bibitem[Jardin~2012]{Jardin2007OptimizedMO}
+Jardin, M. \iftoggle{ThesisInEnglish}{and}{et} Mueller, E.
+\newblock {\em Optimized Measurements of {UAV} Mass Moment of Inertia with a
+  Bifilar Pendulum}.
+\newblock \iftoggle{ThesisInEnglish}{In}{Dans} AIAA Guidance, Navigation and
+  Control Conference and Exhibit, 2012.
+
+\bibitem[Lustosa~2019]{lustosa:hal-03035938}
+Lustosa, L.~R., Defaÿ, F. \iftoggle{ThesisInEnglish}{and}{et} Moschetta, J.-M.
+\newblock {\em Global Singularity-Free Aerodynamic Model for Algorithmic Flight
+  Control of Tail Sitters}.
+\newblock {Journal of Guidance, Control, and Dynamics}, vol.~42, no.~2, pages
+  303--316, \monthname[2] 2019.
+\newblock \iftoggle{ThesisInEnglish}{[Online]. Available:}{[En ligne].
+  Disponible :}
+  \href{https://dx.doi.org/10.2514/1.G003374}{http://dx.doi.org/10.2514/1.G003374}.
+
+\bibitem[Olszanecki~Barth~2020]{olszaneckibarth:hal-02542982}
+Olszanecki~Barth, J.~M., Condomines, J.-P., Bronz, M., Moschetta, J.-M., Join,
+  C. \iftoggle{ThesisInEnglish}{and}{et} Fliess, M.
+\newblock {\em {Model-free control algorithms for micro air vehicles with
+  transitioning flight capabilities}}.
+\newblock {International Journal of Micro Air Vehicles}, vol.~12, pages 1--22,
+  \monthname[4] 2020.
+\newblock \iftoggle{ThesisInEnglish}{[Online]. Available:}{[En ligne].
+  Disponible :}
+  \href{https://dx.doi.org/10.1177/1756829320914264}{http://dx.doi.org/10.1177/1756829320914264}.
+
+\bibitem[Sansou~2022]{sansou:stage}
+Sansou, F.
+\newblock {\em Commande hybride d'un drone convertible pour des déplacements
+  sous optimaux}.
+\newblock Master Thesis. ENAC Toulouse, 2022.
+\newblock \iftoggle{ThesisInEnglish}{[Online]. Available:}{[En ligne].
+  Disponible :}
+  \href{https://dx.doi.org/10.48550/ARXIV.2203.15387}{http://dx.doi.org/10.48550/ARXIV.2203.15387}.
 
 \end{thebibliography}

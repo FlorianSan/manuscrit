@@ -23,6 +23,23 @@
 %\usepackage[ED=SDU2E-Ast, ED2=SDU2E-Eco, Ets=UT3]{tlsflyleaf}
 \usepackage[ED=EDSYS-A, Ets=ENAC]{tlsflyleaf}
 
+\usepackage{siunitx}
+\usepackage{empheq}
+\usepackage{bbold}
+\usepackage{array,multirow,makecell}
+% \usepackage{hyperref}
+\usepackage{float}
+
+\newcommand{\smallmat}[1]{\left[ \begin{smallmatrix}#1 \end{smallmatrix} \right]}
+\newcommand{\bigmat}[1]{\begin{bmatrix}#1 \end{bmatrix}}
+
+\newcommand{\smallm}[1]{\begin{smallmatrix}#1 \end{smallmatrix}}
+\newcommand\real{{\mathbb R}}
+\newcommand{\skewsym}[1]{\left[#1\right]_{\times}}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\diag}{diag}
+
+
 % Setup basic string
 \title{Titre de la th\`ese}
 \author{Florian SANSOU}
@@ -75,6 +92,7 @@
 \sloppy
 \begin{document}
 
+
 %%%%%%%% 3. COVER PAGE %%%%%%%%
 
 \makeatletter
@@ -84,7 +102,9 @@
 \makeflyleaf
 % \includepdf[pages=-]{chapters/couverture_these.pdf} % if you want to use generated pdf cover (e.g. ADUM), use this instead of \makeflyleaf. You'll also need \usepackage{pdfpages}
 \cleardoublepage
+\onehalfspacing
 \dominitoc
+\doparttoc
 
 
 %%%%%%%% 4. ACKNOWLEDGMENTS AND TABLES OF CONTENT %%%%%%%%
@@ -121,6 +141,7 @@
 \include{chapters/Introduction}
 \include{chapters/Chapter1}
 \include{chapters/Chapter2}
+\include{chapters/Chapter3}
 \include{chapters/Conclusion}
 
 

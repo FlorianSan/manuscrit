@@ -4,8 +4,14 @@
 \contentsline {xchapter}{}{vii}{chapter*.4}%
 \contentsline {xchapter}{}{vii}{chapter*.4}%
 \addvspace {10\p@ }
-\contentsline {xchapter}{Contexte scientifique et État~de~l'art}{3}{chapter.1}%
+\contentsline {xchapter}{Darko UAV modelling}{3}{chapter.1}%
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Apogee v1.00 top view.}}{3}{figure.1.1}%
+\contentsline {figure}{\numberline {1.2}{\ignorespaces DarkO body frame with a schematic representation of the actuators.}}{4}{figure.1.2}%
+\contentsline {figure}{\numberline {1.3}{\ignorespaces Input-output response of an Esc-Motor-Propeller assembly.}}{8}{figure.1.3}%
+\contentsline {figure}{\numberline {1.4}{\ignorespaces Bifilar pendulum mounting for the identication of $\boldsymbol {J}$.}}{9}{figure.1.4}%
 \addvspace {10\p@ }
-\contentsline {xchapter}{Chapitre2}{5}{chapter.2}%
+\contentsline {xchapter}{Chapitre2}{11}{chapter.2}%
 \addvspace {10\p@ }
-\contentsline {xchapter}{Exemple d'annexe}{9}{appendix.A}%
+\contentsline {xchapter}{Chapitre2}{13}{chapter.3}%
+\addvspace {10\p@ }
+\contentsline {xchapter}{Exemple d'annexe}{17}{appendix.A}%
