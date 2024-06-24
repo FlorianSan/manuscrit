@@ -1,20 +1,19 @@
-\babel@toc {english}{}\relax 
+\babel@toc {french}{}\relax 
 \contentsline {chapter}{Liste des figures}{v}{chapter*.3}%
 \contentsline {xchapter}{}{v}{chapter*.3}%
-\contentsline {chapter}{List of Tables}{vii}{chapter*.4}%
+\contentsline {chapter}{Liste des tableaux}{vii}{chapter*.4}%
 \contentsline {xchapter}{}{vii}{chapter*.4}%
 \contentsline {xchapter}{}{vii}{chapter*.4}%
 \contentsline {starchapter}{Introduction}{1}{chapter*.5}%
-\contentsline {chapter}{\numberline {1}Darko UAV modelling}{3}{chapter.1}%
+\contentsline {chapter}{\numberline {1}Généralité sur les drones convertible}{3}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Model of the DarkO UAV}{3}{section.1.1}%
-\contentsline {subsection}{\numberline {1.1.1}Full nonlinear model}{4}{subsection.1.1.1}%
-\contentsline {chapter}{\numberline {2}Chapitre2}{11}{chapter.2}%
-\contentsline {section}{\numberline {2.1}section1}{11}{section.2.1}%
-\contentsline {subsection}{\numberline {2.1.1}subsection1a}{11}{subsection.2.1.1}%
-\contentsline {chapter}{\numberline {3}Chapitre2}{13}{chapter.3}%
-\contentsline {section}{\numberline {3.1}section1}{13}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}subsection1a}{13}{subsection.3.1.1}%
-\contentsline {starchapter}{Conclusion}{15}{chapter*.7}%
+\contentsline {chapter}{\numberline {2}Objectif de commande}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}section1}{5}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}subsection1a}{5}{subsection.2.1.1}%
+\contentsline {chapter}{\numberline {3}Modélisation d'un drone convertible : DarkO}{7}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Modèle du drone DarkO}{7}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Modèle non-linéaire complet}{9}{subsection.3.1.1}%
+\contentsline {starchapter}{Conclusion}{15}{chapter*.10}%
 \contentsline {chapter}{\numberline {A}Exemple d'annexe}{17}{appendix.A}%
 \contentsline {section}{\numberline {A.1}Exemple d'annexe}{17}{section.A.1}%
-\contentsline {chapter}{Bibliography}{19}{appendix*.8}%
+\contentsline {chapter}{Bibliographie}{19}{appendix*.11}%
