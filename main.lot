@@ -1,14 +1,25 @@
 \babel@toc {french}{}\relax 
-\contentsline {xchapter}{}{v}{chapter*.3}%
 \contentsline {xchapter}{}{vii}{chapter*.4}%
-\contentsline {xchapter}{}{vii}{chapter*.4}%
-\contentsline {xchapter}{}{vii}{chapter*.4}%
+\contentsline {xchapter}{}{ix}{chapter*.5}%
+\contentsline {xchapter}{}{xi}{chapter*.6}%
+\contentsline {xchapter}{}{xi}{chapter*.6}%
+\contentsline {xchapter}{}{xi}{chapter*.6}%
 \addvspace {10\p@ }
 \contentsline {xchapter}{Généralité sur les drones convertible}{3}{chapter.1}%
 \addvspace {10\p@ }
-\contentsline {xchapter}{Objectif de commande}{5}{chapter.2}%
+\contentsline {xchapter}{Objectifs de commande}{5}{chapter.2}%
 \addvspace {10\p@ }
 \contentsline {xchapter}{Modélisation d'un drone convertible : DarkO}{7}{chapter.3}%
-\contentsline {table}{\numberline {3.1}{\ignorespaces Identified numerical parameters of the DarkO model.}}{9}{table.3.1}%
+\contentsline {table}{\numberline {3.1}{\ignorespaces Paramètres numériques identifiés du modèle DarkO.}}{10}{table.3.1}%
 \addvspace {10\p@ }
-\contentsline {xchapter}{Exemple d'annexe}{17}{appendix.A}%
+\contentsline {xchapter}{Commande hybride}{31}{chapter.4}%
+\addvspace {10\p@ }
+\contentsline {xchapter}{Étude longitudinale sur une maquette à trois degrés de liberté}{33}{chapter.5}%
+\addvspace {10\p@ }
+\contentsline {xchapter}{Commande proportionnelle intégrale d'un drone convertible à 6 degrés de liberté}{35}{chapter.6}%
+\addvspace {10\p@ }
+\contentsline {xchapter}{Modélisation d'un drone à aile libre rotation libre}{37}{chapter.7}%
+\addvspace {10\p@ }
+\contentsline {xchapter}{Commande d'un drone à aile libre rotation libre}{39}{chapter.8}%
+\addvspace {10\p@ }
+\contentsline {xchapter}{Exemple d'annexe}{43}{appendix.A}%

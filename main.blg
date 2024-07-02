@@ -6,14 +6,21 @@ A level-1 auxiliary file: chapters/Introduction.aux
 A level-1 auxiliary file: chapters/Chapter1.aux
 A level-1 auxiliary file: chapters/Chapter2.aux
 A level-1 auxiliary file: chapters/Chapter3.aux
+A level-1 auxiliary file: chapters/Chapter4.aux
+A level-1 auxiliary file: chapters/Chapter5.aux
+A level-1 auxiliary file: chapters/Chapter6.aux
+A level-1 auxiliary file: chapters/Chapter7.aux
+A level-1 auxiliary file: chapters/Chapter8.aux
 A level-1 auxiliary file: chapters/Conclusion.aux
 A level-1 auxiliary file: chapters/Annexe1.aux
 The style file: StyleThese.bst
 A level-1 auxiliary file: chapters/Abstract.aux
 Database file #1: biblio.bib
+Warning--I didn't find a database entry for "sansou:ECC"
+Warning--I didn't find a database entry for "tregouet:hal-01760720"
 You've used 5 entries,
             2464 wiz_defined-function locations,
-            617 strings with 6615 characters,
+            625 strings with 6761 characters,
 and the built_in function-call counts, 2213 in all, are:
 = -- 221
 > -- 94
@@ -52,3 +59,4 @@ warning$ -- 0
 while$ -- 16
 width$ -- 7
 write$ -- 77
+(There were 2 warnings)

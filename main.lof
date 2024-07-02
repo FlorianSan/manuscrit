@@ -1,17 +1,31 @@
 \babel@toc {french}{}\relax 
-\contentsline {xchapter}{}{v}{chapter*.3}%
 \contentsline {xchapter}{}{vii}{chapter*.4}%
-\contentsline {xchapter}{}{vii}{chapter*.4}%
-\contentsline {xchapter}{}{vii}{chapter*.4}%
+\contentsline {xchapter}{}{ix}{chapter*.5}%
+\contentsline {xchapter}{}{xi}{chapter*.6}%
+\contentsline {xchapter}{}{xi}{chapter*.6}%
+\contentsline {xchapter}{}{xi}{chapter*.6}%
 \addvspace {10\p@ }
 \contentsline {xchapter}{Généralité sur les drones convertible}{3}{chapter.1}%
 \addvspace {10\p@ }
-\contentsline {xchapter}{Objectif de commande}{5}{chapter.2}%
+\contentsline {xchapter}{Objectifs de commande}{5}{chapter.2}%
 \addvspace {10\p@ }
 \contentsline {xchapter}{Modélisation d'un drone convertible : DarkO}{7}{chapter.3}%
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Vue de dessus d'un autopilote Apogee v1.00.}}{7}{figure.3.1}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Repère de référence de DarkO avec une représentation schématique des actionneurs.}}{8}{figure.3.2}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Input-output response of an Esc-Motor-Propeller assembly.}}{12}{figure.3.3}%
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Bifilar pendulum mounting for the identication of $\boldsymbol {J}$.}}{13}{figure.3.4}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Vue de dessus d'un autopilote Apogee v1.00.}}{8}{figure.3.1}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Repère de référence de DarkO avec une représentation schématique des actionneurs.}}{9}{figure.3.2}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Input-output response of an Esc-Motor-Propeller assembly.}}{14}{figure.3.3}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Bifilar pendulum mounting for the identication of $\boldsymbol {J}$.}}{15}{figure.3.4}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Bifilar pendulum identication of $\boldsymbol {J}$.}}{16}{figure.3.5}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Parameters ($\theta $, $\delta $, $\tau $) of the equilibrium point (surface) established in Theorem~\ref {thm:eqs} and Algorithm \ref {alg:eq} for constant horizontal and vertical wind ($w_{\text {r}x}$,$w_{\text {r}z}$), and actuators saturation levels (red).}}{21}{figure.3.6}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Parameters ($\theta $, $\delta $, $\tau $) of the equilibrium point (blue) established in Theorem~\ref {thm:eqs} and Algorithm \ref {alg:eq} for a constant horizontal wind $w_{\text {r}x}$, and actuators saturation levels (red).}}{22}{figure.3.7}%
 \addvspace {10\p@ }
-\contentsline {xchapter}{Exemple d'annexe}{17}{appendix.A}%
+\contentsline {xchapter}{Commande hybride}{31}{chapter.4}%
+\addvspace {10\p@ }
+\contentsline {xchapter}{Étude longitudinale sur une maquette à trois degrés de liberté}{33}{chapter.5}%
+\addvspace {10\p@ }
+\contentsline {xchapter}{Commande proportionnelle intégrale d'un drone convertible à 6 degrés de liberté}{35}{chapter.6}%
+\addvspace {10\p@ }
+\contentsline {xchapter}{Modélisation d'un drone à aile libre rotation libre}{37}{chapter.7}%
+\addvspace {10\p@ }
+\contentsline {xchapter}{Commande d'un drone à aile libre rotation libre}{39}{chapter.8}%
+\addvspace {10\p@ }
+\contentsline {xchapter}{Exemple d'annexe}{43}{appendix.A}%

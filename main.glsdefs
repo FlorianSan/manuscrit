@@ -1,0 +1,28 @@
+\glsdefs@newdocentry{gcd}%
+{%
+name={GCD},%
+sort={GCD},%
+type={acronym},%
+first={Greatest Common Divisor\glsspace (GCD)},%
+firstplural={Greatest Common Divisor\acrpluralsuffix \glsspace (GCD\acrpluralsuffix )},%
+text={GCD},%
+plural={GCD\acrpluralsuffix },%
+description={Greatest Common Divisor},%
+descriptionplural={Greatest Common Divisor\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Greatest Common Divisor},%
+longplural={Greatest Common Divisor},%
+short={GCD},%
+shortplural={GCD},%
+counter={page},%
+parent={},%
+%
+}%
+

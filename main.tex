@@ -30,6 +30,10 @@
 \usepackage{hyperref}
 \usepackage{float}
 \usepackage{todonotes}
+\usepackage{algorithm,algpseudocode,algorithmicx}
+\usepackage{amsthm}
+\usepackage{etoolbox}
+
 
 \newcommand{\smallmat}[1]{\left[ \begin{smallmatrix}#1 \end{smallmatrix} \right]}
 \newcommand{\bigmat}[1]{\begin{bmatrix}#1 \end{bmatrix}}
@@ -39,13 +43,27 @@
 \newcommand{\skewsym}[1]{\left[#1\right]_{\times}}
 \DeclareMathOperator{\rank}{rank}
 \DeclareMathOperator{\diag}{diag}
+\DeclareMathSymbol{\shortminus}{\mathbin}{AMSa}{"39}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Théorème}
+\newtheorem{remm}{Remarque}
+\renewcommand{\listalgorithmname}{Liste des algorithmes}
+\floatname{algorithm}{Algorithme}
+\newenvironment{remark}{\begin{remm}\rm }{\hfill \hspace*{1pt} \hfill $\circ$\end{remm}}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+\def\NoNumber#1{{\def\alglinenumber##1{}\State #1}\addtocounter{ALG@line}{-1}}
+
+
+
+
 
 
 % Setup basic string
-\title{Titre de la th\`ese}
+\title{Control actif de la turbulence sur un micro drone convertible}
 \author{Florian SANSOU}
 \defencedate{jj/mm/aaaa}
-\lab{Ecole Nationale d’Aviation Civile}
+\lab{École Nationale d’Aviation Civile}
 %\cotutelle{}
 
 % Setup custom pdf info
@@ -73,19 +91,20 @@
 %     <other>    What ever string you want to add (laboratory, jury member place...).
 %% Boss
 \nboss{2}
-\makesomeone{boss}{2}{Second DIRECTEUR}{}{}  % Sera affiche en second
-\makesomeone{boss}{1}{Premier DIRECTEUR}{}{} % Sera afiche en premier
+\makesomeone{boss}{2}{M. Gautier HATTENBERGER}{co-directeur de th\`ese}{}  % Sera affiche en second
+\makesomeone{boss}{1}{M. Fabrice DEMOURANT}{Directeur de th\`ese}{} % Sera afiche en premier
 %% Referee
 \nreferee{2}
-\makesomeone{referee}{1}{Premier RAPPORTEUR}{}{}
-\makesomeone{referee}{2}{Second RAPPORTEUR}{}{}
+\makesomeone{referee}{1}{M. Paolo ROBUFFO GIORDANO}{}{}
+\makesomeone{referee}{2}{M. Pascal MORIN}{}{}
 %% Judges
-\njudge{5}
-\makesomeone{judge}{1}{Premier MEMBRE}{Professeur des universit\'es}{Pr\'esident du jury}
-\makesomeone{judge}{2}{Second MEMBRE}{Ing\'enieur de recherche}{Rapporteur}
-\makesomeone{judge}{3}{Troisi\`eme MEMBRE}{Charg\'e de recherche}{Examinateur}
-\makesomeone{judge}{4}{Quatri\`eme MEMBRE}{Ma\^itre de conf\'erences}{Co-directeur de th\`ese}
-\makesomeone{judge}{5}{Ciqui\`eme MEMBRE}{Directeur de recherche}{Directeur de th\`ese}
+\njudge{6}
+\makesomeone{judge}{1}{Mme Sophie TARBOURIECH}{Directrice de recherche LAAS-CNRS}{Pr\'esidente du jury}
+\makesomeone{judge}{2}{M. Paolo ROBUFFO GIORDANO}{Directeur de recherche IRISA-CNRS}{Rapporteur}
+\makesomeone{judge}{3}{M. Pascal MORIN}{Professeur des universit\'es  Sorbonne Université}{Rapporteur}
+\makesomeone{judge}{4}{Philippe CHEVREL}{Enseignant chercheur IMT ATLANTIQUE}{Examinateur}
+\makesomeone{judge}{5}{M. Fabrice DEMOURANT}{Ing\'enieur de recherche ONERA}{Directeur de th\`ese}
+\makesomeone{judge}{6}{M. Gautier HATTENBERGER}{Enseignant chercheur ENAC}{Co-directeur de th\`ese}
 
 % Other package here
 % ...
@@ -116,16 +135,22 @@
 \pdfbookmark{\contentsname}{toc}
 \tableofcontents
 
+
 \renewcommand{\listfigurename}{Liste des figures}
 \listoffigures
 \addcontentsline{toc}{chapter}{\listfigurename}
-\mtcaddchapter
+
 
 \listoftables
 \addcontentsline{toc}{chapter}{\listtablename}
 \mtcaddchapter
 
+\listofalgorithms
+\addcontentsline{toc}{chapter}{\listalgorithmname}
+\mtcaddchapter
+
 \printnomenclature
+\mtcaddchapter
 % Use \mtcfixnomenclature below if you have a glossary (added with
 % \printnomenclature above) and you're see a shift in the mini-table of
 % contents at the begining of each chapter (example: no mini-toc in chapter 1;
@@ -135,6 +160,11 @@
 % if you don't use \printnomenclature or if your glossary is empty).
 \mtcfixnomenclature
 
+% \printglossary
+% \printglossary[type=\acronymtype]
+% \mtcaddchapter
+
+
 
 %%%%%%%% 5. MAIN CONTENT %%%%%%%%
 \mainmatter
@@ -143,6 +173,11 @@
 \include{chapters/Chapter1}
 \include{chapters/Chapter2}
 \include{chapters/Chapter3}
+\include{chapters/Chapter4}
+\include{chapters/Chapter5}
+\include{chapters/Chapter6}
+\include{chapters/Chapter7}
+\include{chapters/Chapter8}
 \include{chapters/Conclusion}
 
 

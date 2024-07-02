@@ -1,19 +1,51 @@
 \babel@toc {french}{}\relax 
 \contentsline {chapter}{Liste des figures}{v}{chapter*.3}%
-\contentsline {xchapter}{}{v}{chapter*.3}%
 \contentsline {chapter}{Liste des tableaux}{vii}{chapter*.4}%
 \contentsline {xchapter}{}{vii}{chapter*.4}%
-\contentsline {xchapter}{}{vii}{chapter*.4}%
-\contentsline {starchapter}{Introduction}{1}{chapter*.5}%
+\contentsline {chapter}{Liste des algorithmes}{ix}{chapter*.5}%
+\contentsline {xchapter}{}{ix}{chapter*.5}%
+\contentsline {chapter}{\nonumberline Liste des abréviations}{xi}{chapter*.6}%
+\contentsline {xchapter}{}{xi}{chapter*.6}%
+\contentsline {xchapter}{}{xi}{chapter*.6}%
+\contentsline {starchapter}{Introduction}{1}{chapter*.7}%
 \contentsline {chapter}{\numberline {1}Généralité sur les drones convertible}{3}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Model of the DarkO UAV}{3}{section.1.1}%
-\contentsline {chapter}{\numberline {2}Objectif de commande}{5}{chapter.2}%
+\contentsline {section}{\numberline {1.1}Gen}{3}{section.1.1}%
+\contentsline {chapter}{\numberline {2}Objectifs de commande}{5}{chapter.2}%
 \contentsline {section}{\numberline {2.1}section1}{5}{section.2.1}%
-\contentsline {subsection}{\numberline {2.1.1}subsection1a}{5}{subsection.2.1.1}%
 \contentsline {chapter}{\numberline {3}Modélisation d'un drone convertible : DarkO}{7}{chapter.3}%
 \contentsline {section}{\numberline {3.1}Modèle du drone DarkO}{7}{section.3.1}%
 \contentsline {subsection}{\numberline {3.1.1}Modèle non-linéaire complet}{9}{subsection.3.1.1}%
-\contentsline {starchapter}{Conclusion}{15}{chapter*.10}%
-\contentsline {chapter}{\numberline {A}Exemple d'annexe}{17}{appendix.A}%
-\contentsline {section}{\numberline {A.1}Exemple d'annexe}{17}{section.A.1}%
-\contentsline {chapter}{Bibliographie}{19}{appendix*.11}%
+\contentsline {subsection}{\numberline {3.1.2}Modèle non linéaire simplifiée à basse vitesse}{12}{subsection.3.1.2}%
+\contentsline {section}{\numberline {3.2}Identification des paramètres du modèle}{14}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Modélisation des actionneurs}{14}{subsection.3.2.1}%
+\contentsline {section}{\numberline {3.3}Équilibres stationnaires}{15}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Équilibre stationnaire sans vent}{15}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Équilibre stationnaire en présence de vent}{17}{subsection.3.3.2}%
+\contentsline {section}{\numberline {3.4}Dynamiques linéarisés}{22}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Dynamique linéarisé sans vent}{22}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Dynamique linéarisé en présence de vent}{23}{subsection.3.4.2}%
+\contentsline {section}{\numberline {3.5}Conclusion du Chapitre \ref {chap:model}}{28}{section.3.5}%
+\contentsline {chapter}{\numberline {4}Commande hybride}{31}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Motivation}{31}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Schéma de commande hybride}{31}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Simulations}{31}{section.4.3}%
+\contentsline {chapter}{\numberline {5}Étude longitudinale sur une maquette à trois degrés de liberté}{33}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Motivation}{33}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Schéma de commande linéaire proportionnel intégral}{33}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Maquette expérimentale}{33}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Résultats}{33}{section.5.4}%
+\contentsline {chapter}{\numberline {6}Commande proportionnelle intégrale d'un drone convertible à 6 degrés de liberté}{35}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Schéma de commande linéaire proportionnel intégral : 6 Dof}{35}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Maquette expérimentale : 6 Dof}{35}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Résultats}{35}{section.6.3}%
+\contentsline {chapter}{\numberline {7}Modélisation d'un drone à aile libre rotation libre}{37}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Design et modélisation d'un drone : Colibri}{37}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Estimation d'état}{37}{section.7.2}%
+\contentsline {chapter}{\numberline {8}Commande d'un drone à aile libre rotation libre}{39}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Inversion non linéaire incrémentale de la dynamique du drone}{39}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Commande Udwadia-Kalaba}{39}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Vols expérimentaux}{39}{section.8.3}%
+\contentsline {starchapter}{Conclusion}{41}{chapter*.17}%
+\contentsline {chapter}{\numberline {A}Exemple d'annexe}{43}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Exemple d'annexe}{43}{section.A.1}%
+\contentsline {chapter}{Bibliographie}{45}{appendix*.18}%
