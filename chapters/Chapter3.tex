@@ -464,12 +464,12 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
 
 \section{Dynamiques linéarisés}
 \subsection{Dynamique linéarisé sans vent}
-Considérons le cas sans vent discuté dans la section \ref{sec:eq_nowind} pour lequel nous utilisons le vecteur de commande $\boldsymbol{u}_{\text{nowind}}$  et le vecteur de commande à l'équilibre $\boldsymbol{u}_{\text{nowind},\text{eq}}$ défini dans l'équation \eqref{eq:bar_u} et rapellons la transformation du vecteur de comamande suivante $ \boldsymbol{u}_{\text{nowind}} := \begin{bmatrix}\tau_{1}  \!&\! \tau_{2}  \!&\! \delta_{1}\tau_{1} \!&\! \delta_{2}\tau_{2} \end{bmatrix}^\top$, la dynamqiue linearisé dans le cas sans vent est
+Considérons le cas sans vent discuté dans la section \ref{sec:eq_nowind} pour lequel nous utilisons le vecteur de commande $\boldsymbol{u}_{\text{nowind}}$  et le vecteur de commande à l'équilibre $\boldsymbol{u}_{\text{nowind},\text{eq}}$ défini dans l'équation \eqref{eq:bar_u} et rapellons la transformation du vecteur de comamande suivante $ \boldsymbol{u}_{\text{nowind}} := \begin{bmatrix}\tau_{1}  \!&\! \tau_{2}  \!&\! \delta_{1}\tau_{1} \!&\! \delta_{2}\tau_{2} \end{bmatrix}^\top$, la dynamqiue linearisé dans le cas sans vent est 
 \begin{align}
     \label{eq:linearized}
      \boldsymbol{\dot{\tilde{x}}} = \boldsymbol{A}_{0} \tilde{\boldsymbol{x}} + \boldsymbol{G}_{0} (\boldsymbol{u}_{\text{nowind}}-\boldsymbol{u}_{\text{nowind},\text{eq}}),
 \end{align}
-where the expression of $\boldsymbol{A}_{0}$ is 
+où l'expression de $\boldsymbol{A}_{0}$ est
 \begin{align}
     \label{matrice_A}
         \boldsymbol{A}_{0} = \boldsymbol{A}_{w} \Big|_{\boldsymbol{w}=0} =\begin{bmatrix}
@@ -479,7 +479,7 @@ where the expression of $\boldsymbol{A}_{0}$ is
         \mathbb{0}_{3} & \mathbb{0}_{3} & \mathbb{0}_{3} & \mathbb{0}_{3}
         \end{bmatrix},
 \end{align}
-with the following selections
+avec les matrices suivante
 \begin{align*}
     \boldsymbol{A}_{\epsilon\omega} = \frac{\sqrt{2}}{4}\begin{bmatrix} 
         1 & 0 & -1 \\ 
