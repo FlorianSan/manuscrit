@@ -1,27 +1,78 @@
-\chapter{Généralité sur les drones}
+\chapter{Généralités sur les drones}
 % \addstarredchapter{Introduction} %Sinon cela n'apparait pas dans la table des matières
 % \markboth{Introduction}{Introduction} % headers
 
 % \chapter{}
 % \minitoc
+% \newacronym{gcd}{GCD}{Greatest Common Divisor}
 
 \section{Drone autonome}
-% \newacronym{gcd}{GCD}{Greatest Common Divisor}
-\section{Micro drone convertible}
-    \subsection{Domaine de vol}
-    \subsection{Types d'architecture}
-        \subsubsection*{\textit{Quadplanes}}
-        \subsubsection*{\textit{Tiltwing}}
-        \subsubsection*{\textit{Tiltrotor}}
-        \subsubsection*{\textit{Tailsitter}}
-        \subsubsection*{\textit{Freewing}}
+Ces dernières années, le domaine des drones s'est considérablement développé, de nombreux progrès ont été réalisé dans la conduite de vol autonome qui permette de réaliser de nombreuse tache longue, répétitive ou dangereuse de manière plus sûre que des avions ou des systèmes télépiloté. Les drones ont fait leurs preuves dans de nombreuses applications civiles, alors qu'ils étaient auparavant conçus à des fins de surveillance et de destruction dans le secteur militaire. La possibilité d'utiliser des systèmes de vol autonomes dans le secteur civil a commencé avec l'accessibilité croissante proposée par l'industrie commerciale grâce à des solutions à faible coût pour les applications d'imagerie aérienne. L'intérêt porté aux applications d'imagerie aérienne a motivé le développement de plusieurs projets, notamment dans les domaines de l'aide humanitaire, des secours en cas de catastrophe, de la recherche et du sauvetage, des opérations de sécurité, de la surveillance, de l'agriculture de précision et de l'inspection des infrastructures civiles.
 
-\section{Propriétés des \textit{tailsitter} et des \textit{freewing}}
-\todo{Parler des élevons comme un mélange aileron volet} 
+\section{Micros drone convertible}
+Les micros drone sont une gamme de drone intéressante par leurs petites tailles qui leur permettent d'intervenir dans des espaces confiné ou contraint. Ils n'ont cependant qu'une charge utile restreinte souvent limitée à l'emport d'une caméra ou d'un colis de faible masse. 
+    \subsection{Domaine de vol} 
+    Tout l'intérêt d'un drone convertible réside dans la capacité à décoller et atterrir verticalement, tout en conservant une bonne efficacité énergétique, en vol d'avancement, conféré par une aile. Cette aile a l'avantage de généré de la portance, qui s'oppose au poids un drone et permet d'assurer sa sustentation. La contrepartie de la génération de la portance est le trainé qui s'oppose à l'avancement et doit être contré par une force de traction générée par les hélices.
+    Nous pouvons définir l'efficacité énergétique comme le ratio entre le temps de vol et l'énergie électrique nécessaire pour effectuer ce vol. Nous pouvons comparer l'efficacité d'un drone quadrirotor qui assure sa sustentation uniquement grâce à des hélices (à l'instar d'un hélicoptère), a celle d'un drone à voilure fixe et à celle d'un convertible.
+    \begin{table}[ht]
+        \centering
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+            Type d'architecture & Vitesse & Stationnaire & Temps de vol \\
+            \hline \hline
+            Drone à voilure fixe & & & \\
+            \hline
+            Quadrirotor & & & \\
+            \hline
+            Drone convertible & & & \\
+            
+        \end{tabular}
+    \end{table}
+    Drone à voilure fixe, stationnaire impossible, grande efficité ernegetique vitesse mini et max
+    Quadrirotor, grande manouvrabilité, faible efficaité energetique
+    Convertible, dommaine de vol important, sensibilité aux pertubation, grand efficaticté energetique en vol d'avancement, faible en stationnaire 
+
+    Nous observons qu'un drone convertible possède un domaine de vol bien plus important qu'un drone à voilure fixe qui ne va pas pouvoir voler à basse vitesse et qu'un quadrirotor dont l'autonomie vas être limité par sa consommation. Ainsi un drone convertible semble un outil tout à fait approprié pour de nombreuse mission.
+
+    \subsection{Types d'architecture des drones convertibles}
+    La conception structurelle et aérodynamique d'un drone est le facteur principal permettant des transitions stable et fluide. De plus, il est nécessaire d'optimiser l'architecture pour une mission de manière à être le plus efficace dans la tache principale du drone. Au vu de la diversité des missions, un grand nombre d'architectures ont été proposé et que nous pouvons catégoriser en quatre classes : \textit{quadplanes}, \textit{tiltrotor}, \textit{tailsitter}, \textit{tiltwing}. Nous ajoutons la catégorie \textit{quadplanes} aux trois autres catégories (\textit{tiltrotor}, \textit{tailsitter} et \textit{tiltwing}) classiquement utilisé lors des études bibliographiques sur les drones convertibles \cite{saeed_survey_2018,ducard_review_2021}.
+        \subsubsection*{\textit{Quadplanes}}
+        Les \textit{quadplanes} sont conçu par la fusion d'un avion et d'un quadrirotor, ce qui permet un découpage de l'actionnement en fonction de la phase de vol. Le premier système de propulsion est composé de quatre hélices générant une force verticale permet le contrôle lors de phase de décollage, d'atterrissage et de stationnaire. Le second système de propulsion est composé d'une  propulsive supplémentaire afin d'atteindre des vitesses en vol d'avancement.
+
+        L'avantage de ce type d'architecture est sa grande robustesse. Effectivement, aucune pièce en mouvement est nécessaire pour réaliser la transition ce que réduit le risque de défaillance mécanique. L'inconvénient est le manque d'efficacité. Lors d'un vol d'avancement, la portance sera générée par l'aile, ainsi il est possible de désactiver les rotors qui génèrerons des perturbations aérodynamiques et des trainés parasites. Effectivement, les axes des moteurs se retrouvent orthogonaux au flux d'air généré par le déplacement du drone, ce qui correspond au cas le plus défavorable en termes de trainé. De plus, la surcharge engendrée par l'emport de moteur supplémentaire se traduit par une diminution de la charge utile transportable. 
+
+        En termes de contrôle, un atout indéniable est la séparation des actionnements en fonction de phase de vol. Ainsi, l'architecture de commande sera basée sur un mécanisme de commutation permettant de choisir la loi de commande appropriée sur un critère de vitesse air. Ce critère est pertinent, car il est lié à l'efficacité de l'aile à générer de la portance induite par le flux d'air. Ainsi à basse vitesse, le drone se stabilise avec l'actionnement quadrirotor et la loi de commande associé et dans les vitesses plus importante, la commutation de loi permet de contrôler le drone en mode avion. Toutefois, le passage d'une loi à l'autre reste le point clé de la commande et demeure complexe et critique.
+
+        \subsubsection*{\textit{Tiltrotor}}
+
+        Les \textit{tiltrotor} nécessitent l'utilisation d'un actionneur supplémentaire afin d'effectuer la transition. Les rotors sont montés sur des arbres basculants actionnés et la transition du vol stationnaire au vol d'avancement (ou inversement) s'effectue progressivement en fonction de l'inclinaison du rotor. Ainsi l'angle entre le souffle des hélices et l'aile peut être ajusté à chaque instant. Cet angle joue un rôle important dans le contrôle des forces et des moments aérodynamiques : sa maîtrise permet de mieux gérer non seulement les performances aérodynamiques du vol lors des transitions, mais aussi la stabilité du système sur l'ensemble du domaine de vol. 
+        Malgré le fait que les \textit{tiltrotor} embarqué un actionneur uniquement dédié à la transition, ce qui augmente la masse du drone, cette architecture est intéressante, car elle permet d'utiliser les mêmes actionneurs pour assurée la sustentation en stationnaire que pour générer la traction en mode avion
+
+        \subsubsection*{\textit{Tailsitter}}
+        Contrairement au \textit{tiltrotor} qui se pose sur le fuselage de l'avion, les \textit{tailsitter} se posent à la verticale. Durant la transition du mode stationnaire au vol d'avancement la structure entière bascule vers l'avant modifiant l'angle d'incidence de la voiture. Selon la configuration du \textit{tailsitter}, la transition peut être réalisée soit par la génération du moment aérodynamique créé par les élevons, soit par le couple créé par le système de propulsion. Pendant le vol d'avancement, en position horizontale, le \textit{tailsitter} vole comme un avion conventionnel sans dérive. En utilisant des techniques aérodynamiques classiques, les concepteurs peuvent optimiser le profil de l'aile du \textit{tailsitter} pour le rendre plus endurant afin de réduire la consommation d'énergie. Grâce à ce processus d'optimisation aérodynamique, le \textit{tailsitter} peut effectuer des missions de vol de plus d'une heure.
+        
+        Ils semblent être la configuration le plus abouti des drones convertibles, car il utilise les mêmes actionneurs dans tout le domaine de vols. Ainsi, il n'embarque aucune masse superflue.
+
+    
+        \subsubsection*{\textit{Tiltwing}} 
+        \todo{citation}
+        La particularité des \textit{tiltwings} réside dans le fait que les rotors sont inclinées en même temps que les ailes. Un actionneur supplémentaire et puissant est donc nécessaire pour surmonter le couple de l'aile afin de la positionner dans l'orientation souhaitée. La commande de cet actionneur doit être prise en compte lors de la conception des lois de commande. Pendant le décollage, l'atterrissage et les vols stationnaires, les ailes doivent être positionnées vers le haut afin de produire une force de poussée opposée au vecteur gravité. Dans ces phases de vol, lorsque les ailes sont orientées vers le haut, l'aéronef est plus vulnérable aux vents et les lois de commande doivent rejeter ces perturbations. Dans la littérature, il existe plusieurs configurations d'ailes basculantes et différentes approches de contrôle conçues pour stabiliser leur dynamique de vol 
+        % \cite{}.
+
+        \paragraph*{\textit{Freewing}}
+        Une gamme en cours de développement à l'intérieur de l'architecture des \textit{tiltwing} est les \textit{freewing}. Ils sont actionnés comme des \textit{tiltwing} sauf au niveau de l'axe de rotation entre l'aile et le fuselage. Cette rotation est laissée libre, ce degrés de liberté permet à l'aile de changer librement son incidence.
+
+\section{Propriétés des \textit{tailsitters} et des \textit{freewings}}
+    D'un point de vue mécanique, les \textit{tailsitters} et les \textit{freewings} sont caractérisés comme des systèmes sous-actionnés avec une dynamique fortement couplée. Ces caractéristiques mécaniques rendent le processus de modélisation et d'identification difficile. Cela peut s'expliquer par le fait que, pour ce type de système, une entrée de commande donnée agit simultanément sur différentes dynamiques. Ainsi, l'identification de l'influence d'une entrée de commande donnée sur une dynamique particulière reste un processus important qui nécessite plus d'attention.
     \subsection{Actionnement}
+    Dans ces deux architectures, il est courant de trouver des actionneurs basés sur des effets aérodynamiques. Ces actionneurs ont l'avantage d'être peut consommateur en énergies, ils ont mue par des servomoteurs qui consomme peu d'électricité proportionnellement aux couples qu'ils génèrent. Dans le cas des ailes volantes, les surfaces aérodynamiques sont souvent placé sur la partie arrière des ailes et peuvent être utilisé symétriquement similairement à des volets ou anti-symétriquement comme des ailerons. Nous utiliserons donc la contraction des deux mots anglais pour définir ces surfaces aérodynamiques qui porte le nom d'élevon.
+    Dans les phases de stationnaire, atterrissage ou décollage, la plateforme est maintenue en vol par les hélices, ainsi il est nécessaire de dimensionner les groupes moteurs-hélices pour qui puisse générer assez de force. En fonction des configurations, les moments peuvent être obtenus par des différentiels sur l'utilisation des moteurs ou bien par des surfaces aérodynamiques. Dans le cas de surface soufflé par le flux d'air des hélices, il existe un couplage des actionneurs qui complexifie la modélisation et le contrôle de ces architectures.
     \subsection{Aérodynamique}
 
 \section{Modélisations}
+\todo{Compromis précision du modèle et commande}
+\todo{Modèle de turbulence dryden}
+
 
 \section{Commandes}
 
