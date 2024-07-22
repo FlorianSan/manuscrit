@@ -3,8 +3,39 @@
 \label{chap:objectif}
 
 \section{Contexte opérationnel}
+Tout l'intérêt des drones est leurs capacités à se maintenir stabilisé sans intervention humaine. Ainsi, les opérateurs peuvent se concentrer sur la mission, sans devoir consacrer une grande attention au pilotage du drone. 
+
+Les nombreux progrès dans les systèmes d'estimation état permettent de connaitre précisément l'orientation et la position des drones pour assurer la stabilisation, le guidage et la navigation. Les progrès sont lié à l'amélioration continue des capteurs, notamment des centrales inertielles (Inertial measurement Units, IMU), \nomenclature[]{\(IMU\)}{Centrales inertielles (\textit{Inertial measurement Units})} constitué d'un accéléromètre, d'un gyroscope et d'un magnétomètre. La Table \ref{tab:autopilote_ev} montre l'évolution des vitesses des microcontrôleurs (Microcontroller Unit, MCU) \nomenclature[]{\(MCU\)}{Microcontrôleurs (\textit{Inertial measurement Units})} embarqué sur les autopilotes et de la réduction du bruit des capteurs inertiel.
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        Génération & Année & MCU & Vitesse & Capteur  & Bruit RMS \\
+        \hline \hline
+        \href{https://wiki.paparazziuav.org/wiki/Apogee/v1.00}{Apogee}  & 2013 & STM32F4 & 168 MHz & MPU-9150 & \begin{tabular}{ccc} Gyro : 0.06 dps \\
+        Accel: 4 mg  \end{tabular}  \\
+        \hline
+        \href{https://wiki.paparazziuav.org/wiki/Chimera/v1.00}{Chimera} & 2016 & STM32F7 & 216 MHz &  MPU-9250 & \begin{tabular}{ccc} Gyro : 0.1  dps \\
+        Accel: 8 mg  \end{tabular}\\
+        \hline
+        \href{https://wiki.paparazziuav.org/wiki/Tawaki/v1.10}{Tawaki 1} &2019 &  STM32F7 & 216 MHz  & ICM-20600 & \begin{tabular}{ccc} Gyro : 0.04 dps \\
+        Accel: 1 mg  \end{tabular}\\
+        \hline
+        \href{https://wiki.paparazziuav.org/wiki/Tawaki/v2.01}{Tawaki 2} &2023 &  STM32H7 & 480 MHz & ICM-42688-P & \begin{tabular}{ccc} Gyro : 0.028 dps \\
+        Accel: 0.70 mg  \end{tabular} \\
+        \hline
+    \end{tabular}
+    \caption{Évolution des autopilotes paparazzi sur dix ans.}
+    \label{tab:autopilote_ev}
+\end{table}
+
+Sur une période de dix ans, nous pouvons observer que les microcontrôleurs ont doublé leurs vitesses d'exécution, que les fabricants ont divisé par deux le bruit moyen sur les gyroscopes et par quatre le bruit moyen des accéléromètres.
+Ces évolutions continues permettent une amélioration de l'estimation du drone utilisé pour la stabilisation. Il en résulte une stabilité accrue et de nouvelle possibilité pour la commande des drones.
+
+
 \section{Contexte de la thèse}
-L'études des drones covertibles 
+De nombreux travaux ont été mener sur les \textit{tailsitters}, avec l'objectif de couvrir l'intégralité du domaine de vol. Ce dernier est constitué de trois phases, le stationnaire, la transition et le vol d'avancement. Chaque phase possède des contraintes  
+
 vol complet 
 methode sans modèles 
 

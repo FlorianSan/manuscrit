@@ -48,10 +48,18 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
 
     \subsection{Types d'architecture des drones convertibles}
     La conception structurelle et aérodynamique d'un drone est le facteur principal permettant des transitions stables et fluides. De plus, il est nécessaire d'optimiser l'architecture pour une mission, de manière à être le plus efficace. Au vu de la diversité des tâches à réaliser, un grand nombre de modèles ont été proposés, lesquels sont catégorisables en quatre classes : \textit{quadplanes}, \textit{tiltrotor}, \textit{tailsitter}, \textit{tiltwing}. 
-    En ce qu'il s'agit des prémices des convertibles, il parait opportun d'ajouter aux trois grandes catégories classiquement citées dans les états de l'art (\textit{tiltrotor}, \textit{tailsitter}, \textit{tiltwing}) \cite{saeed_survey_2018,ducard_review_2021}, la catégorie \textit{quadplanes}.
+    En ce qu'il s'agit des prémices des convertibles, il parait opportun d'ajouter aux trois grandes catégories classiquement citées dans les états de l'art (\textit{tiltrotor}, \textit{tailsitter}, \textit{tiltwing}) \cite{saeed_survey_2018,ducard_review_2021, review_2022}, la catégorie \textit{quadplanes}.
 
         \subsubsection*{\textit{Quadplanes}}
         Les \textit{quadplanes} résultent de la fusion d'un avion et d'un quadrirotor, ce qui permet un découplage de l'actionnement en fonction de la phase de vol. Le premier système de propulsion est composé de quatre hélices générant une force verticale permettant le contrôle lors de phase de décollage, d'atterrissage et stationnaire. Le second système de propulsion est composé d'une hélice propulsive supplémentaire afin de maintenir le vol d'avancement.
+
+        \begin{figure}[ht]
+            \centering
+                \includegraphics[width=0.6\columnwidth]{figures/Avy-Drone-quadplane.jpg}
+                \caption{Structure \textit{quadplanes} proposée par \cite{Avy_2023}.}
+                \label{fig:quadplane}
+        \end{figure}
+        
 
         L'avantage de ce type d'architecture est sa grande robustesse. Effectivement, aucune pièce en mouvement n'est nécessaire pour réaliser la transition, ce que réduit le risque de défaillance mécanique. Toutefois, l'inconvénient réside dans son manque d'efficacité. Lors d'un vol d'avancement, la portance sera générée par l'aile. Ainsi, il est possible de désactiver les rotors qui génèrent des perturbations aérodynamiques et des trainées parasites. Les axes des moteurs se retrouvent orthogonaux au flux d'air généré par le déplacement du drone, ce qui correspond au cas le plus défavorable en termes de trainée. De plus, la surcharge engendrée par l'emport de moteurs supplémentaires se traduit par une diminution de la charge utile transportable. 
 
@@ -61,10 +69,35 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
 
         Les \textit{tiltrotor} nécessitent l'utilisation d'un actionneur dédié à la modification de l'orientation des moteurs. Les rotors sont montés sur des arbres basculants actionnés et la transition du vol stationnaire au vol d'avancement (ou inversement) s'effectue progressivement en fonction de l'inclinaison du rotor. Ainsi, l'angle entre le souffle des hélices et l'aile peut être ajusté à chaque instant. Cet angle joue un rôle important dans le contrôle des forces et des moments aérodynamiques : sa maîtrise permet de mieux gérer, non seulement, les performances aérodynamiques du vol lors des transitions, mais aussi la stabilité du système sur l'ensemble du domaine de vol. 
         Malgré le fait que les \textit{tiltrotor} embarquent un actionneur uniquement dédié à la transition, ce qui augmente la masse du drone, cette architecture est intéressante car elle permet d'utiliser les mêmes actionneurs pour assurer la sustentation en stationnaire et pour générer la traction en mode avion.
-        \todo{photo}
+        \begin{figure}[ht]
+            \centering
+            \resizebox{.9\textwidth}{!}{%
+            \includegraphics[height=3cm]{figures/tiltrotorhover.png}
+            \quad
+            \includegraphics[height=3cm]{figures/tiltrotorforward.png}
+            }
+            \caption{Structure \textit{Tiltrotor}  proposée par \cite{7040348}, dans deux configurations, vol stationnaire et d'avancement.}
+            \label{fig:tiltrotor}
+        \end{figure}
+
+
+        
 
         \subsubsection*{\textit{Tailsitter}}
         Contrairement au \textit{tiltrotor} qui se pose sur le fuselage de l'avion, les \textit{tailsitter} se posent à la verticale. Durant la transition du mode stationnaire au vol d'avancement, la structure entière bascule vers l'avant modifiant l'angle d'incidence de la voiture. Selon la configuration du \textit{tailsitter}, la transition peut être réalisée soit par la génération du moment aérodynamique créé par les élevons, soit par le couple créé par le système de propulsion. Pendant le vol d'avancement, en position horizontale, le \textit{tailsitter} vole comme un avion conventionnel sans dérive. En utilisant des techniques aérodynamiques classiques, les concepteurs peuvent optimiser le profil de l'aile du \textit{tailsitter} pour le rendre plus endurant afin de réduire la consommation d'énergie. Grâce à ce processus d'optimisation aérodynamique, le \textit{tailsitter} peut effectuer des missions de vol de plus d'une heure.
+
+        \begin{figure}[ht]
+            \centering
+            \resizebox{.9\textwidth}{!}{%
+            \includegraphics[height=3cm]{figures/cyclone.png}
+            \quad
+            \includegraphics[height=3cm]{figures/falcon.png}
+            \quad
+            \includegraphics[height=3cm]{figures/HoverEye.png}
+            }
+            \caption{Structure \textit{tiltrotor}  proposée par \cite{Smeur_2020,fernandez:hal-04612206,pflimlin:tel-00132352}.}
+            \label{fig:tiltrotor}
+        \end{figure}
         
         Ce modèle semble être la configuration la plus aboutie des drones convertibles, car il utilise les mêmes actionneurs dans tout le domaine de vols. Ainsi, aucune masse superflue n'est embarquée.
 
@@ -74,6 +107,16 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
         La particularité des \textit{tiltwings} réside dans le fait que les rotors sont inclinés en même temps que les ailes. Un actionneur supplémentaire et puissant est donc nécessaire pour surmonter le couple de l'aile afin de la positionner dans l'orientation souhaitée. La commande de cet actionneur doit être prise en compte lors de la conception des lois de commande. Pendant le décollage, l'atterrissage et les vols stationnaires, les ailes doivent être positionnées vers le haut afin de produire une force de poussée opposée au vecteur gravité. Dans ces phases de vol, lorsque les ailes sont orientées vers le haut, l'aéronef est plus vulnérable aux vents et les lois de commande doivent rejeter ces perturbations. Dans la littérature, il existe plusieurs configurations d'ailes basculantes et différentes approches de contrôle conçues pour stabiliser leur dynamique de vol.
         % \cite{}.
         \todo{cite}
+        \begin{figure}[ht]
+            \centering
+            \resizebox{.9\textwidth}{!}{%
+            \includegraphics[height=3cm]{figures/tiltwing_aero2.png}
+            \quad
+            \includegraphics[height=3cm]{figures/avigle_tiltwing.png}
+            }
+            \caption{Structure \textit{tiltwings}  proposée par \cite{Aero2_2024, Ostermann2012ControlCO}.}
+            \label{fig:tiltrotor}
+        \end{figure}
 
         Par ailleurs, les \textit{freewing} sont une gamme en cours de développement à l'intérieur de l'architecture des \textit{tiltwing}. Ils sont actionnés comme des \textit{tiltwing} sauf au niveau de l'axe de rotation entre l'aile et le fuselage. Cette rotation est laissée libre, ce degré de liberté permet à l'aile de changer librement son incidence.
         \todo{avantages}
@@ -155,5 +198,5 @@ Le modèle de von Kármán
 La figure \ref{fig:actionDarko} illustre les effets des actionneurs sur la dynamique de l'attitude des \textit{tailsitters}. L'angle de roulis  peut être contrôlé par des braquages de volets asymétriques, l'angle de tangage par des braquages de volets symétriques et la rotation autour de l'axe de lacet est contrôlée par un dispositif de poussée différentielle, ce qui permet d'obtenir un angle de tangage plus élevé. La rotation autour de l'axe de lacet est contrôlée par une configuration de poussée différentielle, qui crée un couple temporaire non nul autour de son axe. Le dispositif de poussée différentielle crée une différence entre les rotations de l'hélice gauche et de l'hélice droite, et modifie ainsi la vitesse de rotation de l'avion et modifie ainsi le comportement aérodynamique autour des volets.
 
 \section{Présentation de la thèse}
-
+L'étude des drones convertibles est un point central de notre travail. Nous nous intéresserons à deux architectures, dans un premier temps un \textit{tailsitters}, DarkO puis dans un second temps un \textit{freewings}, Colibri, basée sur une aile inspiré de DarkO en rotation libre autour d'un fuselage qui sera maintenu horizontal.
 
