@@ -50,7 +50,7 @@ La figure \ref{fig:darko2} montre le modèle de DarkO, ainsi qu'un repère de r�
         \hline
         $S_{\text{wet}}$ (Surface soufflée) & 0.0180 & \SI{}{\square\meter}\\
         \hline
-        $S_{\text{p}}$ (Surface de helice) & 0.0127 & \SI{}{\square\meter}\\
+        $S_{\text{p}}$ (Surface de hélice) & 0.0127 & \SI{}{\square\meter}\\
         \hline
         $\boldsymbol{J}=\diag(J_{x},J_{y},J_{z})$ & \!\! $\diag(0.0067,0.0012,0.0082)$\!\! & \SI{}{\kilogram\square\meter}\\
         \hline
@@ -72,7 +72,7 @@ La figure \ref{fig:darko2} montre le modèle de DarkO, ainsi qu'un repère de r�
         \hline
         $C_{\text{d}}$ (Trainé) & 0.1644 & --\\
         \hline
-        $C_{y}$ (Lateral) & 0 & --\\
+        $C_{y}$ (Latéral) & 0 & --\\
         \hline
          $C_{\ell}$ (Portance) & 5.4001 & --\\
         \hline
@@ -240,7 +240,8 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
     \todo{ajouter explication sur l'indentification}
 
 \subsection{Modélisation des actionneurs}
-    Les actionneurs de DakO ont des dynamqies qui limite leurs actions en terme d'amplitude et de vitesse.
+    \label{sec:saturation}
+    Les actionneurs de DarkO ont des dynamiques qui limite leurs actions en terme d'amplitude et de vitesse.
 
     Pour les moteurs électriques générant la traction par les hélices, il existe deux causes de saturation. Une saturation à haute vitesse liée à  la tension maximale du moteur et une saturation basse vitesse lié à la vitesse minimale de commutation de bobine du moteur pour maintenir la rotation. De plus, ces saturations permettent d'obtenir une modèle réaliste à énergie finie. Elle correspond à la contrainte suivante  $\omega_i \in [2500,~16000]~rpm = [262,~1675]~\SI{}{\radian\per\second}$, $i=1,2$. En termes de dynamique, nous avons représenté la chaîne d'actionnement du moteur (composée de l'ESC, du moteur et de l'hélice) par une fonction de transfert du premier ordre ayant une constante de temps égale à \SI{0,0125}{\second}, ce qui fournit un système d'actionnement assez agressif.
 
@@ -252,8 +253,12 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
 
     Nous proposons une modification du vecteur de commande, dans le cas d'un équilibre sans vent $\boldsymbol{w}_{\mathrm{eq}} = 0$, basé sur le couplage des actionneurs. 
     \begin{align}
-    \boldsymbol{u}_{\text{nowind}} := \begin{bmatrix}\tau_{1}  \!&\! \tau_{2}  \!&\! \delta_{1}\tau_{1} \!&\! \delta_{2}\tau_{2} \end{bmatrix}^\top
+        \label{eq:vector_u_nowind}
+        \boldsymbol{u}_{\text{nowind}} := \begin{bmatrix}\tau_{1}  \!&\! \tau_{2}  \!&\! \delta_{1}\tau_{1} \!&\! \delta_{2}\tau_{2} \end{bmatrix}^\top
     \end{align}
+    
+    Nous soulignons que le vecteur $\boldsymbol{u}_{\text{nowind}}$ dans \eqref{eq:vector_u_nowind} correspond à une transformation non inversible des actionneurs de DarkO correspondant à $\boldsymbol{u} := \begin{bmatrix}\tau_{1}  \!&\! \tau_{2}  \!&\! \delta_{1} \!&\! \delta_{2} \end{bmatrix}^\top$ (\eqref{eq:vector_u}). Néanmoins, si l'on impose les contraintes de saturation décrites dans la section~\ref{sec:saturation}, il est possible de déterminer de manière unique $\boldsymbol{u}$ à partir d'une valeur souhaitée de $\boldsymbol{u}_{\text{nowind}}$ dans \eqref{eq:vector_u_nowind}, car les valeurs positives non nulles de $\tau_{1}$ et $\tau_{2}$ peuvent être déterminées à partir des deux premières composantes de $\boldsymbol{u}_{\text{nowind}}$, puis $\delta_1$ et $\delta_2$ sont facilement construites à partir des deux dernières composantes de $\boldsymbol{u}_{\text{nowind}}$. 
+
     Nous obtenons un modèle linéaire vis-à-vis de sa commande, dérivé de \eqref{eq:dyna_simp} en imposant  $\boldsymbol{w} = 0$,
     \begin{subequations}\label{eq:withouwind}
     \begin{align}
@@ -307,19 +312,17 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
             &\boldsymbol{\omega}_{\text{b},\text{eq}} = 0 , \quad \boldsymbol{v}_{\text{eq}} = 0, 
     \end{align}
     \end{subequations}
-    où
+    où nous définissons deux quaternions $\boldsymbol{q}_{\mathrm{eq}\psi}$ et $\boldsymbol{q}_{\mathrm{eq}\psi}$ permettant d'exprimer l'ensemble des conditions de vent dans le repère inertiel vers un repère tourné où le vent est toujours contenu dans le plan $x-z$. Grâce à cette transformation, nous exprimons un ensemble continue d'équilibre en présence de vent. 
+
     \begin{align}
     \label{eq:qtheta}
         \boldsymbol{q}_{\mathrm{eq}\theta} &:= \begin{bmatrix} \cos(\frac{\theta}{2}) & 0 & \sin(\frac{\theta}{2}) & 0 \end{bmatrix}^\top
     \end{align}
-    \todo{traduire et amelioré l'explication}
-    we define the quaternion $\boldsymbol{q}_{\mathrm{eq}\psi}$ associated with a horizontal rotation $\psi = \arctan(w_{x}, w_{y})$ of the inertial reference frame towards the (nonzero) horizontal wind direction:
-
     \begin{align}
     \label{eq:qpsi}
         \boldsymbol{q}_{\mathrm{eq}\psi} &:= \begin{bmatrix} \cos(\frac{\psi}{2}) & 0 & 0 & \sin(\frac{\psi}{2}) \end{bmatrix}^\top.
     \end{align}
-    et l'angle d'inclinaison $\theta$, la poussée des hélices $\tau$, et la déflexion des élevons $\delta$ peuvent être obtenu à partir de l'algorithme~\ref{alg:eq}. 
+    Les parametres de l'équilibres sont la rotation horizontale $\psi = \arctan(w_{x}, w_{y})$, l'angle d'inclinaison $\theta$, la poussée des hélices $\tau$, et la déflexion des élevons $\delta$. Ils peuvent être obtenus à partir de l'algorithme~\ref{alg:eq}. 
 
     \begin{algorithm}
     \caption{Obtention des paramètres d'équilibre en \eqref{eq:equilibrium}.}
@@ -446,19 +449,18 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
 
 
     À partir de l'expression analytique \eqref{eq:equilibrium} de l'équilibre du drone pour différentes conditions de vent $\boldsymbol{w}$, nous reportons, sur la Fig. \ref{fig:saturation}, les valeurs correspondantes de $\theta$, $\delta$, $\tau$ pour des valeurs de vitesse de vent horizontale allant de 0 à \SI{-20}{\meter\per\second} et pour des valeurs de vitesse de vent verticale allant de \SI{-6}{} à \SI{6}{\meter\per\second}. L'angle d'incidence $\theta$ diminue de \SI{90}{\degree} à \SI{-4.65}{\degree}. $\theta = \SI{90}{\degree}$ correspond à un vol stationnaire sans vent. La traction $\tau$ atteint son minimum à $w_{rx} = \SI{-12.8}{\meter\per\second}$, ce qui correspond à une condition de vol qui minimise la consommation d'énergie, car les moteurs sont la principale source de consommation électrique.
-        
-    \todo{traduction caption}
+
     \begin{figure}[ht!]
         \centering
         \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\columnwidth]{figures/equilibrium_wx_wz.png}
-        \caption{Parameters ($\theta$, $\delta$, $\tau$) of the equilibrium point (surface) established in Theorem~\ref{thm:eqs} and Algorithm \ref{alg:eq} for constant horizontal and vertical wind ($w_{\text{r}x}$,$w_{\text{r}z}$), and actuators saturation levels (red).}
+        \caption{Les paramètres ($\tau$, $\delta$, $\theta$) de l'ensemble des points d'équilibres (surface) obtenue à l'aide du Théorème~\ref{thm:eqs} et de l'Algorithme \ref{alg:eq} pour un vent constant horizontal et vertical ($w_{\text{r}x}$,$w_{\text{r}z}$), avec les saturations des actionneurs (rose).}
         \label{fig:saturation}
     \end{figure}
     Il est possible de faire une coupe des surfaces présentée dans \eqref{fig:saturation} pour une vitesse verticale nulle $\boldsymbol{w}_{\text{rx}} = 0$, ce qui nous donne le résultat de la Figure \ref{fig:saturation_wz0}
     \begin{figure}[ht!]
         \centering
         \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\columnwidth]{figures/equilibrium.png}
-        \caption{Parameters ($\theta$, $\delta$, $\tau$) of the equilibrium point (blue) established in Theorem~\ref{thm:eqs} and Algorithm \ref{alg:eq} for a constant horizontal wind $w_{\text{r}x}$, and actuators saturation levels (red).}
+        \caption{Section des surfaces de la Figure \ref{fig:saturation} pour $w_{\text{r}z} = \SI{0}{\meter\per\second}$.}
         \label{fig:saturation_wz0}
     \end{figure}
 
@@ -718,7 +720,7 @@ $f_{\text{m}}$ générée par les moteurs, liée à la traction des hélices et 
 \end{align}
 qui, après calculs, coïncident avec les sélections de \eqref{eq:motor_elevon_forces}, données dans l'Algorithme~\ref{alg:linea}.
 
-En utilisant les définitions \eqref{eq:diffR_eps}, \eqref{eq:diffRtop}, ainsi que les expressions \eqref{eq:diffRsparse}, \eqref{eq:draglift}, \eqref{eq : motor_el}, et leurs formes équivalentes indiquées dans \eqref{eq:draglift_ALG}, \eqref{eq:motor_elevon_forces} données dans l'Algorithme~\ref{alg:linea}, nous pouvons finalement calculer à partir de \eqref{eq:Aveps_derivation}
+En utilisant les définitions \eqref{eq:diffR_eps}, \eqref{eq:diffRtop}, ainsi que les expressions \eqref{eq:diffRsparse}, \eqref{eq:draglift}, \eqref{eq:motor_el}, et leurs formes équivalentes indiquées dans \eqref{eq:draglift_ALG}, \eqref{eq:motor_elevon_forces} données dans l'Algorithme~\ref{alg:linea}, nous pouvons finalement calculer à partir de \eqref{eq:Aveps_derivation}
 \begin{multline*}
     \!\boldsymbol{A}_{v\epsilon} \!=\! \frac{1}{m} \big( \partial \boldsymbol{R}_{\boldsymbol{ \epsilon}} (\boldsymbol{ \epsilon} , \boldsymbol{M}_{\text{f}}(\boldsymbol{u_{\text{eq}}}))  \shortminus \partial \boldsymbol{R}_{\boldsymbol{ \epsilon}} ( \boldsymbol{ \epsilon} ,\boldsymbol{D}_{\text{f}}(\boldsymbol{u_{\text{eq}}})  \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert  \boldsymbol{R}_\theta^\top \! \boldsymbol{w}_{\mathrm{eq}})  \\    \left. \shortminus  \boldsymbol{R}_\theta \boldsymbol{D}_{\text{f}}(\boldsymbol{u})  \lVert \boldsymbol{w}_{\mathrm{r,eq}} \rVert \partial \boldsymbol{R}_{\boldsymbol{ \epsilon}}( -\boldsymbol{ \epsilon}, \boldsymbol{w}_{\mathrm{r,eq}})\smallmat{0\\ 1\\ 0} \big)\right|_{\mathrm{eq}}.
 \end{multline*}
@@ -784,7 +786,6 @@ dans \eqref{eq:rotated_coord}, nous obtenons l'expression
  \frac{\partial}{\partial \boldsymbol{w}_\text{r}} \left(  \boldsymbol{D}_{\text{m}}(\boldsymbol{u}) \lVert \boldsymbol{w}_{\text{r}} \rVert \boldsymbol{w}_{\text{r}}\right)\right|_{\mathrm{eq}}$, où nous rappelons que $\boldsymbol{D}_{\text{m,eq}} = \boldsymbol{D}_{\text{m}}(\boldsymbol{u_{\text{eq}}})$.
 \end{proof}
 
-\todo{Traduire l'algo}
 \begin{algorithm}
      \caption{Détermination des matrices de la linéarisation de \eqref{eq:lpv_linearisation}}\label{alg:linea}
       \hspace*{.1cm} \textbf{Entrées} : Vecteur de vent $\boldsymbol{w}_{\text{eq}} =\smallmat{w_x & w_y & w_z}^\top$ et\\
@@ -817,7 +818,7 @@ dans \eqref{eq:rotated_coord}, nous obtenons l'expression
             \end{smallmatrix} \end{array} \! \!\right]
 \end{align*}
 
-\State Definisson les forces de portance et de trainé ainsi que leurs dérivées par rapport à $\epsilon_2$ (défini dans l'étape 1), comme
+\State Définissons les forces de portance et de trainé ainsi que leurs dérivées par rapport à $\epsilon_2$ (défini dans l'étape 1), comme
 \begin{equation}
 \label{eq:draglift_ALG}
 \!\! \smallmat{\!f_{\text{d}} & \frac{\partial  f_{\text{d}}  }{\partial \epsilon_{2}} \!\! \\ 0 & 0  \\ \! f_{\ell} & \frac{\partial  f_{\ell} \!\! }{\partial \epsilon_{2}}} 
@@ -872,7 +873,7 @@ dans \eqref{eq:rotated_coord}, nous obtenons l'expression
 \nonumber
 & \boldsymbol{G}_{v} = \frac{1}{m}    \boldsymbol{R}_\theta \!\! \left[ \!\! \begin{array}{c|c} 
      \boldsymbol{G}_{v\tau}\!\! & \! \! \boldsymbol{G}_{v\delta} 
-    \end{array} \!\! \right ], \; \boldsymbol{G}_{v\tau} :=      \smallmat{
+    \end{array} \!\! \right], \; \boldsymbol{G}_{v\tau} :=      \smallmat{
    1 \shortminus \frac{S_{\text{wet}} C_{\text{d}}}{4S_{\text{p}}}\\ 0 \\ \shortminus\frac{S_{\text{wet}} C_{\ell} \xi_{\text{f}}\delta}{2S_{\text{p}}} } \smallmat{ 1 \\ 1}^\top                     \\
    \label{eq:Gv_ALG_luca}
    &\quad  \boldsymbol{G}_{v\delta} := 

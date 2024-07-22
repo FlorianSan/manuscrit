@@ -9,7 +9,7 @@
 
 \section{Test bench presentation}\label{sec:test_bench}
 \subsection{Motivation for the design}\label{subsec:motivation}
-Closed-loop simulations with the controller developed in \cite[]{sansou22}, show that in the presence of constant horizontal wind in the $(x_{[B]},z_{[B]})$ plane, the UAV changes its pitch angle. This behaviour has also been observed in wind tunnel tests with the experimental device. Intuitively speaking, a reduced angle of attack leads to a smaller surface area facing the wind, so as to reduce the drag force, which strongly impacts the position. At the same time, the air flow due to the constant wind generates lift, compensated by a reduced propeller thrust and a consequent reduction of the UAV consumption. The goal of the prototype described here is to evaluate experimentally the effect of the wind on the DarkO device.
+Closed-loop simulations with the controller developed in \cite[]{sansouECC}, show that in the presence of constant horizontal wind in the $(x_{[B]},z_{[B]})$ plane, the UAV changes its pitch angle. This behaviour has also been observed in wind tunnel tests with the experimental device. Intuitively speaking, a reduced angle of attack leads to a smaller surface area facing the wind, so as to reduce the drag force, which strongly impacts the position. At the same time, the air flow due to the constant wind generates lift, compensated by a reduced propeller thrust and a consequent reduction of the UAV consumption. The goal of the prototype described here is to evaluate experimentally the effect of the wind on the DarkO device.
 
 % \begin{table}[ht]
 %   \centering
@@ -90,7 +90,7 @@ The transitional velocity and position of the UAV are then obtained by single an
 
 
 \section{Integral-based linear control}\label{sec:cmd}
-In our previous work \cite[III.B]{sansou22} we proposed a proportional feedback stabilizing a hovering position in the absence of wind (perturbation). We propose here an extension including integral action, suitable for operating with a non-measured perturbation represented by a constant wind. The objective is to stabilize the drone at the reference position, rejecting the unknown constant wind disturbance.
+In our previous work \cite[III.B]{sansouECC} we proposed a proportional feedback stabilizing a hovering position in the absence of wind (perturbation). We propose here an extension including integral action, suitable for operating with a non-measured perturbation represented by a constant wind. The objective is to stabilize the drone at the reference position, rejecting the unknown constant wind disturbance.
 
 \subsection{Description of the control scheme}
 We experiment the situation with the wind only acting along the $x_{[I]}$ axis, with the drone oriented towards the wind, i.e. with zero roll and yaw angles. In this configuration, the wind only acts on the linear velocity along the $x_{[B]}$ and $z_{[B]}$ axes, and it only generates a moment about the $y_{[B]}$ axis. A careful inspection of the control and the disturbance input matrices $F$, $M$ 

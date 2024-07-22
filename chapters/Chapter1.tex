@@ -34,9 +34,24 @@ Ces évolutions continues permettent une amélioration de l'estimation du drone 
 
 
 \section{Contexte de la thèse}
-De nombreux travaux ont été mener sur les \textit{tailsitters}, avec l'objectif de couvrir l'intégralité du domaine de vol. Ce dernier est constitué de trois phases, le stationnaire, la transition et le vol d'avancement. Chaque phase possède des contraintes  
+De nombreux travaux ont été mener sur les \textit{tailsitters}, avec l'objectif de couvrir l'intégralité du domaine de vol. Ce dernier est constitué des phases de vol suivantes :
+\begin{enumerate}
+    \item Décollage vertical
+    \item Transition entre le vol stationnaire et le vol d'avancement
+    \item Vol d'avancement
+    \item Transition entre le vol d'avancement et le vol stationnaire
+    \item Atterrissage vertical
+\end{enumerate}
+Bien que l'on puisse observer une symétrie dans la phase \raisebox{.5pt}{\textcircled{\raisebox{-.9pt} {1}}} et \raisebox{.5pt}{\textcircled{\raisebox{-.9pt} {5}}}, qui correspondent au décollage et à l'atterrissage vertical, une différence fondamentale est observé. Lors du décollage, la vitesse du drone engendrera un flux d'aire sur l'aile orienté dans le même sens que le flux d'aire généré par les hélices. Cependant, lors de l'atterrissage, le flux d'air va se trouver inversé, le drone doit descendre, ce qui engendre une vitesse opposée à la direction du flux d'air des hélices. Cette inversion génère une instabilité qui doit être compensé par le contrôleur.
 
-vol complet 
+\begin{figure}[ht]
+    \centering
+        \includegraphics[width=0.8\columnwidth]{figures/darko_transition.png}
+        \caption{Phase de vol d'un drone \textit{tailsitters}, DarkO.}
+        \label{fig:darko_flight}
+\end{figure}
+Le vecteur $\overrightarrow{W}$ représente la perturbation de vent qui peut affecter le vol sur l'intégralité des cinq phases de vol.
+
 methode sans modèles 
 
 
@@ -44,6 +59,5 @@ methode sans modèles
 
 \todo{rejet de perturbation, model based control}
 
-\section{Perturbations}
 
 \section{Résumée}

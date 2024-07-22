@@ -2,14 +2,14 @@
 \minitoc
 
 \section{Inversion non linéaire incrémentale de la dynamique du drone}
-The theory of Incremental Nonlinear Dynamic Inversion (INDI) used in the context of micro-UAVs is presented in \cite{doi:10.2514/1.G001490}. We use the notation proposed in \cite{doi:10.2514/1.G004520}, without providing extra details, due to length constraints. The central underlying assumption is that the so-called timescale separation principle holds w.r.t. the actuator dynamics and the dynamics of aerodynamic forces and moments. The control signal can then be computed incrementally using the actuator effectiveness matrix $G$.
+The theory of Incremental Nonlinear Dynamic Inversion (INDI) used in the context of micro-UAVs is presented in \cite{smeurINDI}. We use the notation proposed in \cite{smeurINDITail}, without providing extra details, due to length constraints. The central underlying assumption is that the so-called timescale separation principle holds w.r.t. the actuator dynamics and the dynamics of aerodynamic forces and moments. The control signal can then be computed incrementally using the actuator effectiveness matrix $G$.
 \begin{align}
     u_{\text{W}} = u_{\text{W}} + G^{\dag} (\nu - \begin{bmatrix}
     \dot{\omega}_{\text{W}} \\
     T_{\text{W}}
     \end{bmatrix})
 \end{align}
-where $ \dot{\omega}_{\text{W}} \in \real^{3}$ is the measured angular acceleration obtain by finite difference from equation (\ref{eq:gyro_deplacement}), $T_{\text{W}} \in \real$ is the current thrust, $\nu$ is define in \cite[equation (4)]{doi:10.2514/1.G004520} and $G$ is the control effectiveness matrix, determined as follows :
+where $ \dot{\omega}_{\text{W}} \in \real^{3}$ is the measured angular acceleration obtain by finite difference from equation (\ref{eq:gyro_deplacement}), $T_{\text{W}} \in \real$ is the current thrust, $\nu$ is define in \cite[equation (4)]{smeurINDITail} and $G$ is the control effectiveness matrix, determined as follows :
 \begin{align*}
     \begin{bmatrix}
     \partial \phi \\

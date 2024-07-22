@@ -51,7 +51,7 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
     En ce qu'il s'agit des prémices des convertibles, il parait opportun d'ajouter aux trois grandes catégories classiquement citées dans les états de l'art (\textit{tiltrotor}, \textit{tailsitter}, \textit{tiltwing}) \cite{saeed_survey_2018,ducard_review_2021, review_2022}, la catégorie \textit{quadplanes}.
 
         \subsubsection*{\textit{Quadplanes}}
-        Les \textit{quadplanes} résultent de la fusion d'un avion et d'un quadrirotor, ce qui permet un découplage de l'actionnement en fonction de la phase de vol. Le premier système de propulsion est composé de quatre hélices générant une force verticale permettant le contrôle lors de phase de décollage, d'atterrissage et stationnaire. Le second système de propulsion est composé d'une hélice propulsive supplémentaire afin de maintenir le vol d'avancement.
+        Les \textit{quadplanes} résultent de la fusion d'un avion et d'un quadrirotor (comme visible sur la figure \ref{fig:quadplane}), ce qui permet un découplage de l'actionnement en fonction de la phase de vol. Le premier système de propulsion est composé de quatre hélices générant une force verticale permettant le contrôle lors de phase de décollage, d'atterrissage et stationnaire. Le second système de propulsion est composé d'une hélice propulsive supplémentaire afin de maintenir le vol d'avancement.
 
         \begin{figure}[ht]
             \centering
@@ -67,7 +67,7 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
 
         \subsubsection*{\textit{Tiltrotor}}
 
-        Les \textit{tiltrotor} nécessitent l'utilisation d'un actionneur dédié à la modification de l'orientation des moteurs. Les rotors sont montés sur des arbres basculants actionnés et la transition du vol stationnaire au vol d'avancement (ou inversement) s'effectue progressivement en fonction de l'inclinaison du rotor. Ainsi, l'angle entre le souffle des hélices et l'aile peut être ajusté à chaque instant. Cet angle joue un rôle important dans le contrôle des forces et des moments aérodynamiques : sa maîtrise permet de mieux gérer, non seulement, les performances aérodynamiques du vol lors des transitions, mais aussi la stabilité du système sur l'ensemble du domaine de vol. 
+        Les \textit{tiltrotor} nécessitent l'utilisation d'un actionneur dédié à la modification de l'orientation des moteurs. Les rotors sont montés sur des arbres basculants actionnés et la transition du vol stationnaire au vol d'avancement (ou inversement) s'effectue progressivement en fonction de l'inclinaison du rotor. {\color{blue}Les deux configurations sont représentés sur la figure \ref{fig:tiltrotor}.} Ainsi, l'angle entre le souffle des hélices et l'aile peut être ajusté à chaque instant. Cet angle joue un rôle important dans le contrôle des forces et des moments aérodynamiques : sa maîtrise permet de mieux gérer, non seulement, les performances aérodynamiques du vol lors des transitions, mais aussi la stabilité du système sur l'ensemble du domaine de vol. 
         Malgré le fait que les \textit{tiltrotor} embarquent un actionneur uniquement dédié à la transition, ce qui augmente la masse du drone, cette architecture est intéressante car elle permet d'utiliser les mêmes actionneurs pour assurer la sustentation en stationnaire et pour générer la traction en mode avion.
         \begin{figure}[ht]
             \centering
@@ -84,7 +84,7 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
         
 
         \subsubsection*{\textit{Tailsitter}}
-        Contrairement au \textit{tiltrotor} qui se pose sur le fuselage de l'avion, les \textit{tailsitter} se posent à la verticale. Durant la transition du mode stationnaire au vol d'avancement, la structure entière bascule vers l'avant modifiant l'angle d'incidence de la voiture. Selon la configuration du \textit{tailsitter}, la transition peut être réalisée soit par la génération du moment aérodynamique créé par les élevons, soit par le couple créé par le système de propulsion. Pendant le vol d'avancement, en position horizontale, le \textit{tailsitter} vole comme un avion conventionnel sans dérive. En utilisant des techniques aérodynamiques classiques, les concepteurs peuvent optimiser le profil de l'aile du \textit{tailsitter} pour le rendre plus endurant afin de réduire la consommation d'énergie. Grâce à ce processus d'optimisation aérodynamique, le \textit{tailsitter} peut effectuer des missions de vol de plus d'une heure.
+        Contrairement au \textit{tiltrotor} qui se pose sur le fuselage de l'avion (figure \ref{fig:tiltrotor}), les \textit{tailsitter} se posent à la verticale (voir figure centrale \ref{fig:tailsitter}). Durant la transition du mode stationnaire au vol d'avancement, la structure entière bascule vers l'avant modifiant l'angle d'incidence de la voiture. Selon la configuration du \textit{tailsitter}, la transition peut être réalisée soit par la génération du moment aérodynamique créé par les élevons, soit par le couple créé par le système de propulsion. Pendant le vol d'avancement, en position horizontale, le \textit{tailsitter} vole comme un avion conventionnel sans dérive. En utilisant des techniques aérodynamiques classiques, les concepteurs peuvent optimiser le profil de l'aile du \textit{tailsitter} pour le rendre plus endurant afin de réduire la consommation d'énergie. Grâce à ce processus d'optimisation aérodynamique, le \textit{tailsitter} peut effectuer des missions de vol de plus d'une heure.
 
         \begin{figure}[ht]
             \centering
@@ -96,15 +96,14 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
             \includegraphics[height=3cm]{figures/HoverEye.png}
             }
             \caption{Structure \textit{tiltrotor}  proposée par \cite{Smeur_2020,fernandez:hal-04612206,pflimlin:tel-00132352}.}
-            \label{fig:tiltrotor}
+            \label{fig:tailsitter}
         \end{figure}
         
         Ce modèle semble être la configuration la plus aboutie des drones convertibles, car il utilise les mêmes actionneurs dans tout le domaine de vols. Ainsi, aucune masse superflue n'est embarquée.
 
     
         \subsubsection*{\textit{Tiltwing}} 
-        \todo{citation}
-        La particularité des \textit{tiltwings} réside dans le fait que les rotors sont inclinés en même temps que les ailes. Un actionneur supplémentaire et puissant est donc nécessaire pour surmonter le couple de l'aile afin de la positionner dans l'orientation souhaitée. La commande de cet actionneur doit être prise en compte lors de la conception des lois de commande. Pendant le décollage, l'atterrissage et les vols stationnaires, les ailes doivent être positionnées vers le haut afin de produire une force de poussée opposée au vecteur gravité. Dans ces phases de vol, lorsque les ailes sont orientées vers le haut, l'aéronef est plus vulnérable aux vents et les lois de commande doivent rejeter ces perturbations. Dans la littérature, il existe plusieurs configurations d'ailes basculantes et différentes approches de contrôle conçues pour stabiliser leur dynamique de vol.
+        La particularité des \textit{tiltwings} réside dans le fait que les rotors sont inclinés en même temps que les ailes (voir figure \ref{fig:tiltwing}). Un actionneur supplémentaire et puissant est donc nécessaire pour surmonter le couple de l'aile afin de la positionner dans l'orientation souhaitée. La commande de cet actionneur doit être prise en compte lors de la conception des lois de commande. Pendant le décollage, l'atterrissage et les vols stationnaires, les ailes doivent être positionnées vers le haut afin de produire une force de poussée opposée au vecteur gravité. Dans ces phases de vol, lorsque les ailes sont orientées vers le haut, l'aéronef est plus vulnérable aux vents et les lois de commande doivent rejeter ces perturbations. Dans la littérature, il existe plusieurs configurations d'ailes basculantes et différentes approches de contrôle conçues pour stabiliser leur dynamique de vol.
         % \cite{}.
         \todo{cite}
         \begin{figure}[ht]
@@ -115,11 +114,11 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
             \includegraphics[height=3cm]{figures/avigle_tiltwing.png}
             }
             \caption{Structure \textit{tiltwings}  proposée par \cite{Aero2_2024, Ostermann2012ControlCO}.}
-            \label{fig:tiltrotor}
+            \label{fig:tiltwing}
         \end{figure}
 
-        Par ailleurs, les \textit{freewing} sont une gamme en cours de développement à l'intérieur de l'architecture des \textit{tiltwing}. Ils sont actionnés comme des \textit{tiltwing} sauf au niveau de l'axe de rotation entre l'aile et le fuselage. Cette rotation est laissée libre, ce degré de liberté permet à l'aile de changer librement son incidence.
-        \todo{avantages}
+        Par ailleurs, les \textit{freewing} sont une gamme en cours de développement à l'intérieur de l'architecture des \textit{tiltwing}. Ils sont actionnés comme des \textit{tiltwing} sauf au niveau de l'axe de rotation entre l'aile et le fuselage. Cette rotation est laissée libre, ce degré de liberté permet à l'aile de changer librement son incidence. {\color{blue} Il résulte un gain de masse car il est possible de se supprimer de l'actionneur puissant et lourd nécessaire à la rotation de l'aile. De plus, l'aile étant libre de s'orientée, les turbulences ont un impact plus faible sur la structure, ce qui rends les vols plus stables \cite{freewing2012, Johnson2021, Johnson2023}. }
+
 
 \section{Propriétés des \textit{tailsitters} et des \textit{freewings}}
     D'un point de vue mécanique, les \textit{tailsitters} et les \textit{freewings} sont caractérisés comme des systèmes sous-actionnés avec une dynamique fortement couplée. Ces caractéristiques mécaniques rendent le processus de modélisation et d'identification difficile. Cela peut s'expliquer par le fait que, pour ce type de système, une entrée de commande donnée agit simultanément sur différentes dynamiques. Ainsi, l'identification de l'influence d'une entrée de commande donnée sur une dynamique particulière reste un processus important qui nécessite plus d'attention.
@@ -147,23 +146,24 @@ Un modèle de véhicule précis est nécessaire pour les conceptions classiques 
 
 
 Dans notre cas, nous nous sommes intéressé à l'impact du vent sur les architectures mentionné précédent. Il est donc nécessaire de modéliser le vent. Dans le cas de vent constant ou de cisaillement de vent un modèle à échelon semble tout à fait approprié pour représenter le changement brusque de vitesse de vent. 
-Pour les rafales, nous utiliserons plusieurs modèles. Nous pouvons utiliser le modèle "Chapeau mexicain" ou les "Vaguelette de Morlet".
+Pour les rafales, nous utiliserons plusieurs modèles. Nous pouvons utiliser le modèle "Chapeau mexicain" ou les "ondelette de Morlet".
+
 La fonction définissant le chapeau mexicain est :
 \begin{align}
-    \Psi(t)= (1-t^{2})\exp^{\frac{t^{2}}{2}}
+    \Psi_{mex}(t)= w_{m} - \frac{A_g}{2} \left(1-\cos(2 \pi f_g (t-t_{0,mex}))\right)\sin(3 \pi f_g (t-{0,mex}))
 \end{align}
-et la fonction vaguelette de Morlet est défini par 
+et la fonction ondelette de Morlet est défini par :
 \begin{align}
-    \Psi _{\sigma }(t)=c_{\sigma }\pi ^{-{\frac {1}{4}}}e^{-{\frac {1}{2}}t^{2}}(e^{i\sigma t}-\kappa _{\sigma })
+    \Psi_{mor}(t)=  w_{m} + A_g \exp(-(t+t_{0,mor})) \cos(5*(t-t_{0,mor}))
 \end{align}
+où $w_{m}$ est le vent moyen sans perturbation, $t_{0,mex}$ représente l'instant de début de perturbation et $t_{0,mor}$ l'instant où la perturbation est maximale, $A_g$ est l'intensité maximale de la perturbation et  $f_g$ est la fréquence de la perturbation. Les tracées de la figure \ref{fig:mexhat} montre la représentation temporelle des deux fonctions pour les valeurs $w_{m} = \SI{1}{\meter\per\second}$, $t_{0,mex} = \SI{2}{\second}$,  $t_{0,mor} = \SI{5}{\second}$, $A_g = \SI{1}{\meter\per\second}$ et $f_g = \SI{0.8}{\radian\per\second}$.
 
 
-\todo{faire mes figures}
 \begin{figure}[ht!]
     \centerline{
-    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.8\columnwidth]{figures/Mexican-hat-and-Morlet-wavelet-functions_W640.jpg}}
-    \caption{Todo.}
-    \label{mexhat}
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.8\columnwidth]{figures/mex_hat_morlet.png}}
+    \caption{Représentation temporelle des modèles de perturbations de vent.}
+    \label{fig:mexhat}
 \end{figure}
 
 Le modèle de Dryden est defini
