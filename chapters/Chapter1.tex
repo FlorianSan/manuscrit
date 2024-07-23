@@ -3,9 +3,11 @@
 \label{chap:objectif}
 
 \section{Contexte opérationnel}
-Tout l'intérêt des drones est leurs capacités à se maintenir stabilisé sans intervention humaine. Ainsi, les opérateurs peuvent se concentrer sur la mission, sans devoir consacrer une grande attention au pilotage du drone. 
+Tout l'intérêt des drones est leur capacité à se maintenir stabilisé sans intervention humaine. Ainsi, les opérateurs peuvent se concentrer sur la mission, sans devoir consacrer une grande attention au pilotage du drone. 
 
-Les nombreux progrès dans les systèmes d'estimation état permettent de connaitre précisément l'orientation et la position des drones pour assurer la stabilisation, le guidage et la navigation. Les progrès sont lié à l'amélioration continue des capteurs, notamment des centrales inertielles (Inertial Measurement Units, IMU), \nomenclature[]{\(IMU\)}{Centrales inertielles (\textit{Inertial Measurement Units})} constitué d'un accéléromètre, d'un gyroscope et d'un magnétomètre. La Table \ref{tab:autopilote_ev} montre l'évolution des vitesses des microcontrôleurs (Microcontroller Unit, MCU) \nomenclature[]{\(MCU\)}{Microcontrôleurs (\textit{Microcontroller Unit})} embarqué sur les autopilotes et de la réduction du bruit des capteurs inertiel.
+Les nombreux progrès dans les systèmes d'estimation état permettent de connaître précisément l'orientation et la position des drones pour assurer la stabilisation, le guidage et la navigation. Les progrès sont liés à l'amélioration continue des capteurs, notamment des centrales inertielles (Inertial Measurement Units, IMU), \nomenclature[]{\(IMU\)}{Centrales inertielles (\textit{Inertial Measurement Units})} constitué d'un accéléromètre, d'un gyroscope et d'un magnétomètre.
+
+La Table \ref{tab:autopilote_ev} montre l'évolution des vitesses des microcontrôleurs (Microcontroller Unit, MCU) \nomenclature[]{\(MCU\)}{Microcontrôleurs (\textit{Microcontroller Unit})} embarqué sur les autopilotes et de la réduction du bruit des capteurs inertiels.
 \begin{table}[ht]
     \centering
     \begin{tabular}{|c|c|c|c|c|c|}
@@ -29,12 +31,14 @@ Les nombreux progrès dans les systèmes d'estimation état permettent de connai
     \label{tab:autopilote_ev}
 \end{table}
 
-Sur une période de dix ans, nous pouvons observer que les microcontrôleurs ont doublé leurs vitesses d'exécution, que les fabricants ont divisé par deux le bruit moyen sur les gyroscopes et par quatre le bruit moyen des accéléromètres.
-Ces évolutions continues permettent une amélioration de l'estimation du drone utilisé pour la stabilisation. Il en résulte une stabilité accrue et de nouvelle possibilité pour la commande des drones.
+Sur une période de dix ans, nous pouvons observer que les microcontrôleurs ont doublé leur vitesse d'exécution, que les fabricants ont divisé par deux le bruit moyen sur les gyroscopes et par quatre le bruit moyen des accéléromètres.
+Ces évolutions continues permettent une amélioration de l'estimation du drone utilisée pour la stabilisation. Il en résulte une stabilité accrue et de nouvelles possibilités pour la commande des drones.
 
 
 \section{Contexte de la thèse}
-De nombreux travaux ont été mener sur les \textit{tailsitters}, avec l'objectif de couvrir l'intégralité du domaine de vol. 
+
+
+De nombreux travaux ont été menés sur les \textit{tailsitters}, avec l'objectif de couvrir l'intégralité du domaine de vol. 
 Nous pouvons citer en exemple le \textit{tailsitter} à double rotor appelé « T-Wing » \cite{Stone2002PreliminaryDO, TWing2008}, un autre tail-sitter appelé « MavIon » \cite{oatao14575}, ou le « JLion » et le « KH-Lion » \cite{8003167}. Ces drones partagent une architecture similaire basée sur une aile supportant deux moteurs sur le bord d'attaque et soufflant deux élevons situés sur le bord de fuite. Cette architecture offre une plus grande robustesse que les \textit{tiltrotors}, qui nécessitent des pièces mobiles, ce qui les rend plus fragiles et un actionneur puissant pour faire tourner l'ensemble moteur-hélice.
 La complexité inhérente à ces architectures nécessite un travail de modélisation en raison des nombreuses non-linéarités et couplages impliqués, en particulier en termes de modélisation des effets aérodynamiques. Dans ce contexte, l'interférence aérodynamique entre l'aile fixe et les rotors a été modélisée dans \cite{droandi_zanotti_gibertini_grassi_campanardi_2015, Simmons2022, aerospace5030079}, et les forces et moments d'hélice générés à des angles d'attaque élevés sont abordés dans \cite{Fernandez2023}. Cependant, ces modèles sont complexes et ne sont que partiellement utilisables pour la conception des commandes. 
 
@@ -50,7 +54,7 @@ Ce dernier est constitué des phases de vol suivantes :
     \item Transition entre le vol d'avancement et le vol stationnaire
     \item Atterrissage vertical
 \end{enumerate}
-Bien que l'on puisse observer une symétrie dans la phase \raisebox{.5pt}{\textcircled{\raisebox{-.9pt} {1}}} et \raisebox{.5pt}{\textcircled{\raisebox{-.9pt} {5}}}, qui correspondent au décollage et à l'atterrissage vertical, une différence fondamentale est observé. Lors du décollage, la vitesse du drone engendrera un flux d'aire sur l'aile orienté dans le même sens que le flux d'air généré par les hélices. Cependant, lors de l'atterrissage, le flux d'air va se trouver inversé, le drone doit descendre, ce qui engendre une vitesse opposée à la direction du flux d'air des hélices. Cette inversion génère une instabilité qui doit être compensé par le contrôleur.
+Bien que l'on puisse observer une symétrie dans la phase \raisebox{.5pt}{\textcircled{\raisebox{-.9pt} {1}}} et \raisebox{.5pt}{\textcircled{\raisebox{-.9pt} {5}}}, qui correspondent au décollage et à l'atterrissage vertical, une différence fondamentale est observée. Lors du décollage, la vitesse du drone engendrera un flux d'aire sur l'aile orienté dans le même sens que le flux d'air généré par les hélices. Cependant, lors de l'atterrissage, le flux d'air va se trouver inversé, le drone devant descendre, ce qui engendre une vitesse opposée à la direction du flux d'air des hélices. Cette inversion génère une instabilité qui doit être compensée par le contrôleur.
 
 Le vecteur $\overrightarrow{W}$ représente la perturbation de vent qui peut affecter le vol sur l'intégralité des cinq phases de vol. Toutefois, on observe que dans les phases décollage \raisebox{.5pt}{\textcircled{\raisebox{-.9pt} {1}}}, de transition \raisebox{.5pt}{\textcircled{\raisebox{-.9pt} {2}}} et \raisebox{.5pt}{\textcircled{\raisebox{-.9pt} {4}}} et d'atterrissage \raisebox{.5pt}{\textcircled{\raisebox{-.9pt} {5}}} le drone offre une grande surface verticale sujette au vent. Ainsi, il est nécessaire de traité l'impact du vent sur cette architecture.
 
@@ -63,10 +67,11 @@ Le vecteur $\overrightarrow{W}$ représente la perturbation de vent qui peut aff
 
 Actuellement, nous pouvons mentionner deux types d'architecture de commande ayant fonctionné sur ce tailsitter. La première est basée sur une inversion incrémentale de la dynamique du drone (\textit{Incremental Non-linear Dynamic Inversion}, INDI) et la seconde est basée sur le technique sans modèle (\textit{Model free control}, MFC).
 
+Les deux architectures sur lesquelles se sont concentré nos recherches sont celle de DarkO, un \textit{tailsitters} et celle de Colibri un \textit{freewings} basé sur une aile inspiré de DarkO en rotation libre autour d'un fuselage qui sera maintenu horizontal.
 
 
 
 \todo{rejet de perturbation et metrique de maintient de position }
 
 
-\section{Résumée}
+\section{Résumé}
