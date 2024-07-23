@@ -3,7 +3,7 @@
 
 \section{Schéma de commande linéaire proportionnel intégral : 6 Dof}
 \section{Integral-based linear control}
-\label{sec:cmd}
+\label{sec:6dofcmd}
 \subsection{Description of the control scheme}
 \label{sec:ctl_sche}
 
@@ -346,7 +346,7 @@ The singular values of the output and the input sensitivity function (respective
 
 
 
-\begin{figure}[ht]
+\begin{figure}[ht!]
     \centering
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.9\columnwidth]{figures/transferts_tcst.png}
     \caption{Diagrams of the singular values of the transfer functions in \eqref{eq:validation_step} at the first iteration of Algorithm~\ref{alg:iterativeOptimisation}.}
@@ -354,7 +354,7 @@ The singular values of the output and the input sensitivity function (respective
 \end{figure}
 
 
-\begin{figure}[t!]
+\begin{figure}[ht!]
     \centering
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.9\columnwidth]{figures/sim_systune_lpv_noise.png}
     \caption{Simulation of the non-linear model \eqref{eq:dyna_orig} (solid line) and the linearized model  \eqref{eq:lpv_linearisation} (dashed line) with increasing constant wind steps with the controller tuned using the multimodel optimization of Algorithm~\ref{alg:iterativeOptimisation} in  Section~\ref{sec:h_inf_multi}.}
@@ -373,7 +373,7 @@ The effectiveness of the control scheme tuned on the basis of Algorithm~\ref{alg
 \section{Experimental flight with open wind tunnel} 
 \label{sec:exp}
 DarkO's experimental flight took place in a dedicated space (see Fig.~\ref{fig:flight_windshape}) with an Optitrack localization system based on a NED convention as per Figure~\ref{fig:darko2}. We used an open-vein wind generator to obtain wind steps that we measured with a hot-wire probe (the vertical bar in Fig.~\ref{fig:flight_windshape}). 
-\begin{figure}[ht]
+\begin{figure}[ht!]
     \centering
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=1\columnwidth]{figures/img_flight_darko.png}
     \caption{DarkO's experimental flight in front of the open wind tunnel.}
@@ -382,7 +382,7 @@ DarkO's experimental flight took place in a dedicated space (see Fig.~\ref{fig:f
 Although this wind information is recorded on board the drone to synchronize the data, we do not use this measurement in the control law. The measurement frequency of this wind probe is only 0.5 Hz, so we only have one measurement every two seconds. 
 The state estimation is carried out using an inertial navigation system to merge the Inertial Measurement Unit (IMU) + Optitrack sensor data in order to obtain an accurate estimation of the output $\boldsymbol{y}$ in Fig.~\ref{fig:commande_int}. However, the drone's angular velocity $\boldsymbol{\omega}_{\text{b}}$ is measured based on the IMU's gyrometer, which provides noisy measurements, therefore we added a second order Butterworth low-pass filter with cut-off frequency of 20 Hz to smoothen out the output $\boldsymbol{\omega}_{\text{b}}$. The Butterworth filter is considered in the linearized dynamics when optimizing the controller gains following Algorithm~\ref{alg:iterativeOptimisation}. 
 \todo{comparaison lineaire}
-\begin{figure}[ht]
+\begin{figure}[ht!]
     \centering
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.9\columnwidth]{figures/exp_systune_struct.png}
     %'/home/florian/Log/DarkoLog/09_11_23/23_11_05__06_40_06_SD.data'
@@ -394,7 +394,7 @@ We also used the ESCs associated with the performance shown in Figure~\ref{fig:I
 
 We carried out a flight experiment where DarkO was manually put into a stabilized hovering mode in front of the wind tunnel, then we switched on the control law of Algorithm~\ref{alg:iterativeOptimisation}. As the drone had to be stabilized at least \SI{30}{\centi\meter} away from the wind tunnel, a manual command was gradually applied to avoid overshooting, which could damage the wind tunnel. Once DarkO was close enough to the setpoint $\boldsymbol{r}_{p}$ of Fig.~\ref{fig:commande_int}, we switched on the proposed controller, obtaining the results in Fig.~\ref{fig:ExpSytuneStruct}. During the follow-up experimentation phase, as shown in the lower plot of Fig.~\ref{fig:ExpSytuneStruct}, we stepwise increased the wind speed, waiting 20 seconds between each  pair of consecutive steps, up to a final wind speed of \SI{7}{\meter\per\second}.
 
-\begin{figure}[ht]
+\begin{figure}[ht!]
     \centering
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.9\columnwidth]{figures/boxplot.png}
     \caption{Statistical visualization of the hovering performance.}

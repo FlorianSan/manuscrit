@@ -1,3 +1,4 @@
+<!-- LTeX: enabled=false -->
 # Thesis Template (Université de Toulouse)
 
 This is a thesis template, clone and use it on local or server.

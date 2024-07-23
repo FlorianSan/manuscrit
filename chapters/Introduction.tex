@@ -53,7 +53,7 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
         \subsubsection*{\textit{Quadplanes}}
         Les \textit{quadplanes} résultent de la fusion d'un avion et d'un quadrirotor (comme visible sur la figure \ref{fig:quadplane}), ce qui permet un découplage de l'actionnement en fonction de la phase de vol. Le premier système de propulsion est composé de quatre hélices générant une force verticale permettant le contrôle lors de phase de décollage, d'atterrissage et stationnaire. Le second système de propulsion est composé d'une hélice propulsive supplémentaire afin de maintenir le vol d'avancement.
 
-        \begin{figure}[ht]
+        \begin{figure}[ht!]
             \centering
                 \includegraphics[width=0.6\columnwidth]{figures/Avy-Drone-quadplane.jpg}
                 \caption{Structure \textit{quadplanes} proposée par \cite{Avy_2023}.}
@@ -67,9 +67,9 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
 
         \subsubsection*{\textit{Tiltrotor}}
 
-        Les \textit{tiltrotor} nécessitent l'utilisation d'un actionneur dédié à la modification de l'orientation des moteurs. Les rotors sont montés sur des arbres basculants actionnés et la transition du vol stationnaire au vol d'avancement (ou inversement) s'effectue progressivement en fonction de l'inclinaison du rotor. {\color{blue}Les deux configurations sont représentés sur la figure \ref{fig:tiltrotor}.} Ainsi, l'angle entre le souffle des hélices et l'aile peut être ajusté à chaque instant. Cet angle joue un rôle important dans le contrôle des forces et des moments aérodynamiques : sa maîtrise permet de mieux gérer, non seulement, les performances aérodynamiques du vol lors des transitions, mais aussi la stabilité du système sur l'ensemble du domaine de vol. 
+        Les \textit{tiltrotors} nécessitent l'utilisation d'un actionneur dédié à la modification de l'orientation des moteurs. Les rotors sont montés sur des arbres basculants actionnés et la transition du vol stationnaire au vol d'avancement (ou inversement) s'effectue progressivement en fonction de l'inclinaison du rotor. {\color{blue}Les deux configurations sont représentés sur la figure \ref{fig:tiltrotor}.} Ainsi, l'angle entre le souffle des hélices et l'aile peut être ajusté à chaque instant. Cet angle joue un rôle important dans le contrôle des forces et des moments aérodynamiques : sa maîtrise permet de mieux gérer, non seulement, les performances aérodynamiques du vol lors des transitions, mais aussi la stabilité du système sur l'ensemble du domaine de vol. 
         Malgré le fait que les \textit{tiltrotor} embarquent un actionneur uniquement dédié à la transition, ce qui augmente la masse du drone, cette architecture est intéressante car elle permet d'utiliser les mêmes actionneurs pour assurer la sustentation en stationnaire et pour générer la traction en mode avion.
-        \begin{figure}[ht]
+        \begin{figure}[ht!]
             \centering
             \resizebox{.9\textwidth}{!}{%
             \includegraphics[height=3cm]{figures/tiltrotorhover.png}
@@ -86,7 +86,7 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
         \subsubsection*{\textit{Tailsitter}}
         Contrairement au \textit{tiltrotor} qui se pose sur le fuselage de l'avion (figure \ref{fig:tiltrotor}), les \textit{tailsitter} se posent à la verticale (voir figure centrale \ref{fig:tailsitter}). Durant la transition du mode stationnaire au vol d'avancement, la structure entière bascule vers l'avant modifiant l'angle d'incidence de la voiture. Selon la configuration du \textit{tailsitter}, la transition peut être réalisée soit par la génération du moment aérodynamique créé par les élevons, soit par le couple créé par le système de propulsion. Pendant le vol d'avancement, en position horizontale, le \textit{tailsitter} vole comme un avion conventionnel sans dérive. En utilisant des techniques aérodynamiques classiques, les concepteurs peuvent optimiser le profil de l'aile du \textit{tailsitter} pour le rendre plus endurant afin de réduire la consommation d'énergie. Grâce à ce processus d'optimisation aérodynamique, le \textit{tailsitter} peut effectuer des missions de vol de plus d'une heure.
 
-        \begin{figure}[ht]
+        \begin{figure}[ht!]
             \centering
             \resizebox{.9\textwidth}{!}{%
             \includegraphics[height=3cm]{figures/cyclone.png}
@@ -95,7 +95,7 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
             \quad
             \includegraphics[height=3cm]{figures/HoverEye.png}
             }
-            \caption{Structure \textit{tiltrotor}  proposée par \cite{Smeur_2020,fernandez:hal-04612206,pflimlin:tel-00132352}.}
+            \caption{Structure \textit{tiltrotor}  proposée par \cite{smeurINDITail,fernandez:hal-04612206,pflimlin:tel-00132352}.}
             \label{fig:tailsitter}
         \end{figure}
         
@@ -106,7 +106,7 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
         La particularité des \textit{tiltwings} réside dans le fait que les rotors sont inclinés en même temps que les ailes (voir figure \ref{fig:tiltwing}). Un actionneur supplémentaire et puissant est donc nécessaire pour surmonter le couple de l'aile afin de la positionner dans l'orientation souhaitée. La commande de cet actionneur doit être prise en compte lors de la conception des lois de commande. Pendant le décollage, l'atterrissage et les vols stationnaires, les ailes doivent être positionnées vers le haut afin de produire une force de poussée opposée au vecteur gravité. Dans ces phases de vol, lorsque les ailes sont orientées vers le haut, l'aéronef est plus vulnérable aux vents et les lois de commande doivent rejeter ces perturbations. Dans la littérature, il existe plusieurs configurations d'ailes basculantes et différentes approches de contrôle conçues pour stabiliser leur dynamique de vol.
         % \cite{}.
         \todo{cite}
-        \begin{figure}[ht]
+        \begin{figure}[ht!]
             \centering
             \resizebox{.9\textwidth}{!}{%
             \includegraphics[height=3cm]{figures/tiltwing_aero2.png}
@@ -161,7 +161,7 @@ où $w_{m}$ est le vent moyen sans perturbation, $t_{0,mex}$ représente l'insta
 
 \begin{figure}[ht!]
     \centerline{
-    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.8\columnwidth]{figures/mex_hat_morlet.png}}
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.9\columnwidth]{figures/mex_hat_morlet.png}}
     \caption{Représentation temporelle des modèles de perturbations de vent.}
     \label{fig:mexhat}
 \end{figure}
@@ -189,7 +189,7 @@ Le modèle de von Kármán
 
 \begin{figure}[ht!]
     \centerline{
-    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.8\columnwidth]{figures/imageActionnementDarko.png}}
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=1\columnwidth]{figures/actionnement.png}}
     \caption{Todo.}
     \label{fig:actionDarko}
 \end{figure}
