@@ -1,6 +1,7 @@
-\chapter{Généralités sur les drones}
-% \addstarredchapter{Introduction} %Sinon cela n'apparait pas dans la table des matières
-% \markboth{Introduction}{Introduction} % headers
+\chapter*{Introduction}
+\addstarredchapter{Introduction} %Sinon cela n'apparait pas dans la table des matières
+\markboth{Introduction}{Introduction} % headers
+
 
 % \chapter{}
 % \minitoc
@@ -130,7 +131,15 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
 
     Lors d'un vol d'avancement, ces architectures assurent le maintien du vol en palier, en générant une force de portance grâce à leur surface alaire. Cette portance, s'opposant au poids, permet de maintenir une trajectoire. La force de trainée engendrée par l'aile et le fuselage est compensée par la composante horizontale de la poussée. En vol stationnaire, le poids est compensé par la traction de l'hélice. La relation d'équilibre est plus complexe lorsque nous évaluons l'ensemble des points d'équilibre lors de la transition d'un mode à l'autre. La transition équilibrée est assurée par le mélange correct des forces aérodynamiques et de propulsion.
 
-    Les interactions aérodynamiques entre l'hélice et la surface de l'aile sont connues pour être complexes et difficiles à modéliser. La vitesse induite par le souffle de l'hélice entraîne une variation locale de l'angle d'attaque et des variations de pression dynamique au niveau des sections d'aile immergées, d'où une distribution différente de la portance. L'analyse de l'interaction entre l'hélice, l'aile et les élevons doit permettre d'obtenir de bonnes caractéristiques de vol et de tirer profit des combinaisons comme en témoigne les différents travaux  de recherche sur l'interaction hélice-aile. \todo{cite{}}
+    Les interactions aérodynamiques entre l'hélice et la surface de l'aile sont connues pour être complexes et difficiles à modéliser. La vitesse induite par le souffle de l'hélice entraîne une variation locale de l'angle d'attaque et des variations de pression dynamique au niveau des sections d'aile immergées, d'où une distribution différente de la portance. L'analyse de l'interaction entre l'hélice, l'aile et les élevons doit permettre d'obtenir de bonnes caractéristiques de vol et de tirer profit des combinaisons.
+
+    \begin{figure}[ht!]
+        \centering
+            \includegraphics[width=0.6\columnwidth]{figures/Darko-air-pressure.png}
+            \caption{Représentation de la pression dynamique sur la voilure de DarkO lors d'un vol d'avancement.}
+            \label{fig:darkoAirPress}
+    \end{figure}
+
      L'identification de ces effets aérodynamiques nécessite, pour chaque point de vol, les informations de l'air environnant, les valeurs des entrées de commande et les mesures des forces et moments aérodynamiques agissant sur le système. Le moyen le plus précis et le plus fiable d'identifier les phénomènes aérodynamiques est probablement de mener des campagnes en soufflerie, lesquelles sont particulièrement chronophages et coûteuses.
 
 
@@ -165,7 +174,8 @@ où $w_{m}$ est le vent moyen sans perturbation, $t_{0,mex}$ représente l'insta
     \label{fig:mexhat}
 \end{figure}
 
-Le modèle de Dryden est defini
+\todo{explication}
+Le modèle de Dryden est défini
 \begin{subequations}
     \begin{align}
         \Phi _{u_{g}}(\Omega )& =\sigma _{u}^{2}{\frac {2L_{u}}{\pi }}{\frac {1}{1+(L_{u}\Omega )^{2}}}\\
@@ -194,6 +204,50 @@ Le modèle de von Kármán
 \end{figure}
 \todo{add axes on picture}
 
-La figure \ref{fig:actionDarko} illustre les effets des actionneurs sur la dynamique de l'attitude des \textit{tailsitters}. L'angle de roulis  peut être contrôlé par des braquages de volets asymétriques, l'angle de tangage par des braquages de volets symétriques et la rotation autour de l'axe de lacet est contrôlée par un dispositif de poussée différentielle, ce qui permet d'obtenir un angle de tangage plus élevé. La rotation autour de l'axe de lacet est contrôlée par une configuration de poussée différentielle, qui crée un couple temporaire non nul autour de son axe. Le dispositif de poussée différentielle engendre une différence entre les rotations de l'hélice gauche et de l'hélice droite, et modifie ainsi la vitesse de rotation de l'avion et donc le comportement aérodynamique autour des volets.
+La figure \ref{fig:actionDarko} illustre les effets des actionneurs sur la dynamique de l'attitude des \textit{tailsitters}. La rotation autours de l'axe $x_{\text{b}}$ peut être contrôlé par des braquages de volets asymétriques, l'angle de tangage (axe $y_{\text{b}}$) par des braquages de volets symétriques et la rotation autour de l'axe $z_{\text{b}}$ est contrôlée par un dispositif de poussée différentielle, ce qui permet d'obtenir un angle de tangage plus élevé. La rotation autour de l'axe de lacet est contrôlée par une configuration de poussée différentielle, qui crée un couple temporaire non nul autour de son axe. Le dispositif de poussée différentielle engendre une différence entre les rotations de l'hélice gauche et de l'hélice droite, et modifie ainsi la vitesse de rotation de l'avion et donc le comportement aérodynamique autour des volets.
 
-\section{Systeme de drone : Paparazzi}
+\section{Système de drone : Paparazzi}
+
+Un drone est composé de plusieurs pièces assemblées entre elle pour former la structure sur laquelle sont fixé des actionneurs, un autopilote et une charge utile (colis, caméra, capteur, etc.). L'élément central est l'autopilote qui assure la communication entre tous les éléments. Nous pouvons décomposer l'autopilote en deux parties, la partie matérielle et la partie logicielle. Le matériel est constitué d'un circuit imprimé (PCB) sur lequel des composants sont installé pour assurer les tâches relatives au vol. Ainsi, nous pouvons détailler les capteurs embarqués et le microcontrôleur avec l'ensemble de ses ports de communication.
+
+ \subsection{Les capteurs d'un autopilote}
+ Un autopilote comporte généralement un accéléromètre, un gyroscope, un magnétomètre et un baromètre.
+ 
+ \paragraph{L'accéléromètre}à trois axes permet de mesurer l'ensemble de force appliqué sur le véhicule à l'exception du poids. Il est possible d'obtenir la position du drone par double intégration de la mesure de l'accéléromètre, toutefois la position dérive rapidement en raison des bruits de mesure.
+
+ \paragraph{Le gyroscope}à trois axes permet de mesurer les vitesses de rotation du véhicule. Il est possible d'obtenir l'orientation du drone par intégration de la mesure du gyroscope, toutefois l'orientation dérive rapidement en raison des bruits de mesure.
+
+ \paragraph{Le magnétomètre} à trois axes indique la direction du nord magnétique. Il permet de se diriger par rapport à une référence connu. Le principal inconvénient ce capteur est leur perturbation par les masses magnétiques environnantes ainsi que par les champs magnétiques parasites, induits par la proximité de moteurs électriques par exemple. Il est donc difficile de les utiliser à l'intérieur d'un bâtiment. L'influence magnétique de l'engin porteur et les perturbations dues à d'éventuels moteurs électriques peuvent être éliminées en qualifiant, de manière statique, les erreurs dues aux masses métalliques du véhicule et aux moteurs électriques (en fonction des tensions et courants d'alimentation).
+
+ \paragraph{Le baromètre}est un capteur d'altitude basée sur la mesure de la pression atmosphérique.
+
+ Il est courant de retrouver plusieurs capteurs dans un même boitier, que l'on nomme centrale inertielle (Inertial Measurement Units, IMU), \nomenclature[]{\(IMU\)}{Centrales inertielles (\textit{Inertial Measurement Units})}. Elles sont composées au minimum d'un accéléromètre 3-axes et d'un gyroscope 3-axes, mais il est courant de trouver avec un magnétomètre 3-axes. 
+
+
+ \paragraph{Le GPS}est monté en extérieur de l'autopilote, ce système de géo-positionnement par satellite (\textit{Global Positioning System}, GPS) \nomenclature[]{\(GPS\)}{Géo-positionnement par satellite (\textit{Global Positioning System})} permet d'obtenir un positionnement absolu du drone. 
+
+ \subsection{Le microcontrôleur d'un autopilote}
+
+ Le microcontrôleur (Microcontroller Unit, MCU) \nomenclature[]{\(MCU\)}{Microcontrôleurs (\textit{Microcontroller Unit})} est la pièce maitresse de l'autopilote ne ce qu'elle permet d'effectuer l'ensemble des traitements nécessaire à la conduite du vol.
+
+ De plus il possède plusieurs ports de communication pour récupérer les données de capteur ou envoyer des ordres aux actionneurs.
+ \todo{dshot}
+
+
+ \subsection{Les logiciels d'un autopilote}
+ Tout le fonctionnement d'un drone repose sur le logiciel qui permet de le faire voler, il se décompose en deux catégories, la partie sol et la partie embarquée.
+
+ \subsection{Le segment sol}
+
+ \subsection{Le logiciel embarqué}
+ Le logiciel embarqué 
+
+ fusion de donnée 
+ estimation d'état 
+
+ \begin{figure}[ht!]
+    \centerline{
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=1\columnwidth]{figures/PPRZ_Main_ap_loop.png}}
+    \caption{Todo.}
+    \label{fig:schedulingpaparazzi}
+\end{figure}

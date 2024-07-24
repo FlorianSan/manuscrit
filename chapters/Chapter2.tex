@@ -27,7 +27,7 @@ Les actionneurs de DarkO peuvent être décomposés en deux catégories. La prem
 
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=0.8\columnwidth]{figures/darko.pdf }
+    \includegraphics[width=0.8\columnwidth]{figures/darko.png}
     \caption{Repère de référence de DarkO avec une représentation schématique des actionneurs.}
     \label{fig:darko2}
 \end{figure}
@@ -93,9 +93,11 @@ En choisissant l'état global comme $\boldsymbol{x}:=(\boldsymbol{p},~ \boldsymb
 
 \begin{subequations}\label{eq:dyna_orig}
     \begin{empheq}[left=\empheqlbrace]{alignat=2}
-          % \boldsymbol{\dot p} & &= & \boldsymbol{v} \label{eq:dyna1}\\
-          m\boldsymbol{\dot v} &&=& - m\boldsymbol{g} +  \boldsymbol{R}(\boldsymbol{q})\boldsymbol{F}_{\text{b}},\\
+           \boldsymbol{\dot p} & &= & \boldsymbol{v} \label{eq:dyna_orig_a}\\
           \label{eq:dyna_orig_b}
+          m\boldsymbol{\dot v} &&=& - m\boldsymbol{g} +  \boldsymbol{R}(\boldsymbol{q})\boldsymbol{F}_{\text{b}},\\
+          \boldsymbol{\dot q} &&=& \frac{1}{2}\boldsymbol{q} \otimes \boldsymbol{\omega_{b}} \label{eq:dyna_orig_c}\\
+          \label{eq:dyna_orig_d}
           \boldsymbol{J} \boldsymbol{\dot \omega_{\text{b}}} &&= &  - \skewsym{\boldsymbol{\omega}_{\text{b}}}\boldsymbol{J}\boldsymbol{\omega}_{\text{b}} + \boldsymbol{M}_{\text{b}},
     \end{empheq}
   \end{subequations}
@@ -300,9 +302,10 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
         \end{align}
         \end{subequations}
         avec les matrices
-        \begin{align*}
+        \begin{align}
+            \label{eq:FandM}
             \left[ \begin{array}{c|c}\!\boldsymbol{F}\!&\!\boldsymbol{M}\!\end{array} \right] := \left[ \begin{array}{cccc | cccc} a_{\text{f}} & a_{\text{f}} & 0 & 0 & a_{\text{m}} & -a_{\text{m}} & b_{\text{m}} & -b_{\text{m}} \\  0 & 0 & 0 & 0 & 0 & 0 & c_{\text{m}} & c_{\text{m}} \\ 0 & 0 & b_{\text{f}} & b_{\text{f}} & d_{\text{m}} & -d_{\text{m}} & 0 & 0 \end{array} \right]
-        \end{align*}
+        \end{align}
         et les scalaires
             \begin{align*}
                 \left[\!\! \begin{array}{c|c} 
@@ -454,7 +457,7 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
         \begin{align}\label{eq:forcez}
             - \frac{S_{\text{wet}}}{2S_{\text{p}}}\xi_{\text{f}} C_{\ell} \tau \delta - \frac{1}{2}\rho S \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert C_{\ell} \left(w_{z}^{\text{b}} + \xi_{\text{f}} \delta w_{x}^{\text{b}} \right) + mg \cos(\theta) = 0
         \end{align}
-        De manière similaire, à partir de \eqref{eq:dyna_orig_b} et \eqref{eq:dyna4}, l'équilibre des moments autour de l'axe $y_{[\text{b}]}$ permet d'obtenir
+        De manière similaire, à partir de \eqref{eq:dyna_orig_d} et \eqref{eq:dyna4}, l'équilibre des moments autour de l'axe $y_{[\text{b}]}$ permet d'obtenir
         \begin{align}\label{eq:momenty}
             \frac{S_{\text{wet}}}{2S_{\text{p}}}  \Delta_{\text{r}} \xi_{\text{m}} C_{\ell} \tau \delta + \frac{1}{2}\rho S \Delta_{\text{r}} \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert C_{\ell} \left(w_{z}^{\text{b}} + \xi_{\text{m}} \delta w_{x}^{\text{b}} \right) = 0.
         \end{align}

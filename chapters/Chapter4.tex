@@ -1,115 +1,82 @@
 \chapter{Étude longitudinale sur une maquette à trois degrés de liberté}
 \minitoc
+\label{chap:3DOF}
 
-\section{Motivation}
+\section{Présentation de la maquette experimentale}
+\label{sec:test_bench}
+\subsection{Motivation de cette maquette}
+\label{subsec:motivation}
 
-\section{Schéma de commande linéaire proportionnel intégral}
+Des simulations en boucle fermée avec le contrôleur \eqref{eq:u_hybrid} développé dans \ref{sec:ctrl_hyste}, montrent qu'en présence d'un vent horizontal constant dans le plan $(x_{[b]},z_{[b]})$, le drone modifie son angle de tangage. Ce comportement a également été observé lors d'essais en soufflerie avec le dispositif expérimental \cite{olszaneckibarthHal-02542982}. Intuitivement, une réduction de l'angle d'attaque entraîne une diminution de la surface exposée au vent, de manière à réduire la force de traînée, ce qui a une forte incidence sur la position. Dans le même temps, le flux d'air dû au vent constant génère une portance, compensée par une réduction de la poussée de l'hélice et une réduction conséquente de la consommation du drone. L'objectif de la maquette décrite ici est d'évaluer expérimentalement l'effet du vent sur le dispositif DarkO.
 
-\section{Maquette expérimentale}
-
-\section{Test bench presentation}\label{sec:test_bench}
-\subsection{Motivation for the design}\label{subsec:motivation}
-Closed-loop simulations with the controller developed in \cite[]{sansouECC}, show that in the presence of constant horizontal wind in the $(x_{[B]},z_{[B]})$ plane, the UAV changes its pitch angle. This behaviour has also been observed in wind tunnel tests with the experimental device. Intuitively speaking, a reduced angle of attack leads to a smaller surface area facing the wind, so as to reduce the drag force, which strongly impacts the position. At the same time, the air flow due to the constant wind generates lift, compensated by a reduced propeller thrust and a consequent reduction of the UAV consumption. The goal of the prototype described here is to evaluate experimentally the effect of the wind on the DarkO device.
-
-% \begin{table}[ht]
-%   \centering
-%     \begin{tabular}{|l|c|c|}
-%       \hline
-%       \multicolumn{1}{|c|}{Parameter} & Value & Units  \\
-%       \hline
-%       $m$ (virtual drone mass)  & 0.492 & \SI{}{\kilogram} \\
-%       \hline
-%       $b$ (wingspan)  & 0.55 & \SI{}{\meter} \\
-%       \hline
-%       $c$ (aerodynamic cord)  & 0.13 & \SI{}{\meter} \\
-%       \hline
-%       $S$ (wing area) & 0.0743 & \SI{}{\square\meter}\\
-%       \hline
-%     \end{tabular}
-%     \vspace{0.5cm}
-%     \caption{\label{tab:pars} Numerical parameters of the DarkO virtual flight test rig.}
-% \end{table}
-
-\subsection{Physical description, sensing, and actuation}
-
-The developed prototype comprises 3D printed parts in Onyx and PLA (polylactic acid, a thermoplastic polyester). It is especially designed for running experiments in front of a wind tunnel with responses that resemble those of the DarkO due to the similar shape (see Fig. \ref{fig:real_test_bench}). The central part, which contains the onboard avionics (autopilot, GPS, etc.) in the DarkO, has been here replaced by a one-degree of freedom revolute joint (see Fig. \ref{fig:rotation}). The wings are the same as those of the DarkO, with the electronic speed controllers (ESC), governing the brushless motor speed, placed in the wings. As described in Section \ref{subsec:motivation}, we wish to represent and study the $y$-axis degree of freedom of the DarkO UAV. The main carbon tube linking the two wings is used as the rotation axis. This tube is fixed to two bearings placed 28.5 mm apart in order to obtain a solid fixation of the rig. This rotation axis is equipped with an optical quadrature rotary encoder to accurately measure the orientation of the device. The advantage of this sensor is that it does not produce torque on the rotation axis. This encoder offers 4000 edges per revolution, which results in a resolution of $0.09^\circ/pulse$.
-
-%TODO modif image plus d'explication
+\subsection{Description physique, capteur et actionnement}
+Le prototype développé comprend des pièces imprimées en 3D en Onyx et PLA (acide polylactique, un polyester thermoplastique). Il est spécialement conçu pour réaliser des expériences devant une soufflerie avec un comportment semblable à celui de DarkO en raison de leur forme similaire (voir Fig. \ref{fig:real_test_bench}). La partie centrale, qui contient l'avionique embarquée (pilote automatique, GPS, etc.) dans le DarkO, a été remplacée ici par un joint tournant à un degré de liberté (voir Fig. \ref{fig:rotation}). Les ailes sont les mêmes que celles du DarkO, avec les contrôleurs électroniques de vitesse (ESC), régissant la vitesse du moteur \textit{brushless}, placés dans les ailes. Comme décrit dans la section \ref{subsec:motivation}, nous souhaitons représenter et étudier le degré de liberté de l'axe $y_{\text{b}}$ du drone DarkO. Le tube principal en carbone reliant les deux ailes est utilisé comme axe de rotation. Ce tube est fixé sur deux roulements espacés de \SI{28.5}{\milli\meter} afin d'obtenir une fixation solide de l'ensemble. Cet axe de rotation est équipé d'un codeur optique rotatif en quadrature pour mesurer précisément l'orientation de l'appareil. L'avantage de ce capteur est qu'il ne produit pas de couple resitant sur l'axe de rotation. Ce codeur offre 4000 impulssions par tour, ce qui donne une résolution de $\SI{0.09}{\degree}/pulse$.
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.8\columnwidth]{figures/MontageSupport2.PNG}
-    \caption{The one degree-of-freedom joint.}
+    \caption{Montage à un degres de liberté.}
     \label{fig:rotation}
 \end{figure} 
-As shown in Fig. \ref{fig:rotation}, the indexer and the holder are drilled so that the rotation can be locked at known positions ($0^\circ$, $90^\circ$, etc.) by a screw on the indexer that fits into the holes of the holder. Locking the device allows for a correct initialization of the incremental encoder. Locking also allows placing the device in specific exact positions in order to identify the aerodynamic coefficients. 
-%TODO Expliquer le roulement, frottement etc
+\todo{traduire}
 
-The pivoting joint is also equipped with a 6 degrees of freedom (DOF) force-torque sensor, providing a measurement of the internal wrench exerted on the experimental device by the support. The experimental test bench is also equipped with a hot wire to measure the airspeed seen by the drone. 
+Comme le montre la figure \ref{fig:rotation}, l'indexeur et le support sont percés de manière à ce que la rotation puisse être bloquée à des positions connues ($0^\circ$, $90^\circ$, etc.) par une vis sur l'indexeur qui s'insère dans les trous du support. Le verrouillage de l'appareil permet une initialisation correcte de l'encodeur incrémental. Le verrouillage permet également de placer l'appareil dans des positions exactes spécifiques afin d'identifier les coefficients aérodynamiques. 
 
-% \begin{figure}[!ht]
-%         \includegraphics[width=\columnwidth]{picture/Complet.PNG}
-%     \caption{Sketch of the developed experimental device in the one DOF configuration.}
-%     \label{fig:model}
-% \end{figure}\\
+Le mecanisme est également équipée d'un capteur de force et de moment à 6 degrés de liberté (DOF), qui permet de mesurer la force exercée sur le dispositif expérimental par le support. Le banc d'essai expérimental est également équipé d'un fil chaud pour mesurer la vitesse de l'air affectant par la maquette. 
+
 \begin{figure}[!ht]
     \includegraphics[trim=0cm 5cm 0cm 6cm,clip,width=1\columnwidth]{figures/real_test_bench-min.jpg}
-    \caption{Single degree-of-freedom DarkO model in front of the WindShape.}
+    \caption{Modèle de DarkO à un seul degré de liberté devant le WindShape.}
     \label{fig:real_test_bench}
 \end{figure}
-The photo reported in Fig. \ref{fig:real_test_bench} shows the experimental device in its test environment. The drone is placed in front of an open wind tunnel, called WindShape, generating a horizontal wind between 2 and 16 \SI{}{\meter\per\second}. Thus, during our tests, we consider the vertical wind component to be zero. The drone is placed at the centre of the WindShape, in the most laminar flow area, while the hot wire sensor is placed as close as possible to the drone. 
+La photo de la figure \ref{fig:real_test_bench} montre le dispositif expérimental dans son environnement de test. Le drone est placé devant une soufflerie ouverte, appelée WindShape, qui génère un vent horizontal compris entre 2 et 16 \SI{}{\meter\per\second}. Ainsi, lors de nos tests, nous considérons que la composante verticale du vent est nulle. Le drone est placé au centre de la WindShape, dans la zone d'écoulement la plus laminaire, tandis que le capteur à fil chaud est placé aussi près que possible du drone. 
 
-The geometry of the experimental setup allows placing the power and signal cables close to the centre of rotation so as to minimize their frictional effects on the structure. Despite this fact, the rotation system inevitably interferes with the drone, by creating parasitic forces, notably drag. The projected surface of the joint is small compared to the wing surface, so that the drag generated by this support is low compared to the drag of the wing and the propellers, thus it can be neglected.
+La géométrie du dispositif expérimental permet de placer les câbles d'alimentation et de signal près du centre de rotation afin de minimiser leurs effets de friction sur la structure. Malgré cela, le système de rotation interfère inévitablement avec le drone, en créant des forces parasites, notamment de la traînée. La surface projetée de l'articulation étant faible par rapport à la surface de l'aile, la traînée générée par ce support est faible par rapport à la traînée de l'aile et des hélices, et peut donc être négligée.
+
 \begin{figure}[!ht]
     \includegraphics[width=\columnwidth]{figures/maquette-min.png}
-    \caption{Virtual flight testing architecture: WindShape (a); Airspeed sensor (b); Force/Torque sensor (c); Rotary encoder (d); Servomotor (e); Brussless motor + ESC (f); LabJack (g); Control computer (h)}
+    \caption{Architecture d'essai en vol virtuel : WindShape (a) ; capteur de vitesse (b) ; capteur de force et couple (c) ; encodeur rotatif (d) ; servomoteur (e) ; moteur \textit{brushless} + ESC (f) ; LabJack (g) ; ordinateur de contrôle (h)}
     \label{fig:archi}
 \end{figure}
+Un diagramme schématique des composants du dispositif expérimental et de leur interconnexion est présenté à la Fig. \ref{fig:archi}, qui est expliquée ci-dessous en se référant aux différents sous-systèmes avec leur lettre correspondante (a)-(i).
 
-A schematic diagram of the functional subcomponents of the experimental device and their interconnection is shown in Fig. \ref{fig:archi}, which is explained below by referring to the various subsystems with their corresponding letter (a)-(i).
+Les moteurs (f) sont alimentés par une batterie externe de 12v 20Ah et les servomoteurs (e) sont alimentés par 5v via un module d'acquisition LabJack T7 \cite[]{LabJack} (g). Le module LabJack (g) concentre la plupart des signaux des capteurs et des actionneurs : six entrées analogiques pour le capteur de force/couple (c), deux entrées numériques en quadrature pour l'encodeur rotatif (d), une entrée analogique (ou une liaison série selon le capteur) pour le capteur de vitesse (b), deux sorties numériques PWM (Pulse Width Modulation) \nomenclature[]{\(PWM\)}{Modulation de largeur d'impulsions (\textit{Pulse Width Modulation})} pour les moteurs (f) et deux sorties numériques PWM pour les servomoteurs (e). 
 
-The motors (f) are powered by an external 12v 20Ah battery and the servo motors (e) are powered by 5v via a LabJack T7 \cite[]{LabJack} acquisition module (g). The LabJack module (g) concentrates most of the sensing/actuating signals: six analog inputs for the force/torque sensor (c), two digital quadrature inputs for the rotary encoder (d), one analog input (or serial link depending on the sensor) for the airspeed sensor (b), two digital PWM (Pulse Width Modulation) outputs for the motors (f) and two digital PWM outputs for the servomotors (e). 
-%Finally, to measure the propeller's speed, we use the telemetry output of the motor controllers (ESC) (f). Such outputs provide the temperature of the ESCs, the supply voltage, the absorbed current and the speed of rotation of the motors. We retrieve the two telemetries on two serial links at 115200 bauds directly on the control computer by using serial-USB converters, because the LabJack (g) cannot handle such fast communications. It is interesting to note that the telemetry data are not sent continuously by the ESCs, but only as a result of a request sent to the PWM control pin. Therefore, we regularly send a 30µs pulse, to which the ESC responds with a 10 bytes frame containing the above described measurements.
-The elevons are driven by servomotors that do not provide a position measurement signal, therefore we use the setpoint, assuming a perfect actuator, which is reasonable, due to the software saturation imposed on the elevons commanded input and the correct sizing of the servomotors with respect to the involved forces.\\
-The LabJack  (g)  has an application programming interface (API), allowing for a remote connection with a computer. We have developed a Python code that communicates with the LabJack in order to retrieve the sensor values, compute the command to be applied to the actuators according to the control scheme presented below, and generate the output signals for the actuators. The data collected from the LabJack is recorded to be used for post-processing and generate the plot reported in Section \ref{sec:exp}. \\
-To generate the wind, we use a WindShape device, which also has an API, allowing it to be controlled through an Ethernet network. The developed Python code can assign the WindShape wind speed and therefore act on the model. It is thus possible to test a set of hovering configurations and their associated transients in the same test campaign, without any action on the model. 
-
+Les élévons sont commandées par des servomoteurs qui ne fournissent pas de signal de mesure de la position ; nous utilisons donc le point de consigne, en supposant que l'actionneur est parfait, ce qui est raisonnable, en raison de la saturation logicielle imposée à l'entrée commandée des gouvernes de profondeur et du dimensionnement correct des servomoteurs par rapport aux forces impliquées. Le LabJack (g) possède une interface de programmation d'application (API), permettant une connexion à distance avec un ordinateur.
+Le LabJack (g) possède une interface de programmation d'applications (API) \nomenclature[]{\(API\)}{Interface de programmation d'applications (\textit{Application Programming Interface})}, permettant une connexion avec un ordinateur. Nous avons développé un code Python qui communique avec le LabJack afin de récupérer les valeurs des capteurs, de calculer la commande à appliquer aux servomoteurs selon le schéma de contrôle présenté ci-dessous et de générer les signaux de sortie pour les servomoteurs. Les données collectées par le LabJack sont enregistrées afin d'être utilisées pour le post-traitement et de générer le graphique présenté dans la section \ref{sec:exp}. \\
+Pour générer le vent, nous utilisons un dispositif WindShape, qui dispose également d'une API lui permettant d'être contrôlé via un réseau Ethernet. Le code Python développé peut assigner la vitesse du vent WindShape et donc agir sur le modèle. Il est ainsi possible de tester un ensemble de configurations de vol stationnaire et leurs transitoires associés dans la même campagne d'essais, sans aucune action sur le modèle. 
 
 
-\subsection{Software-in-the-loop translational motion}
-Since the prototype is connected to the fixed support, it is not possible to experimentally reproduce the translational motion.  We have instead included a software-in-the-loop routine that simulates the translational motion by integrating the force measurements available at the joint. In particular, the translational velocity (resp. position) of the UAV is obtained by single (resp. double) integration of the data measured by the force sensor. We neglect the aerodynamic influence of the (simulated) speed on the wing for the sake of simplicity. In particular, from equations (\ref{eq:dyna1}) and (\ref{eq:dyna2}), we obtain the simplified model
+\subsection{Simulation des mouvmeents du drone}
+Le prototype étant relié à un support fixe, il n'est pas possible de reproduire expérimentalement le mouvement de translation.  Nous avons donc inclus une simulation logicielle du mouvement en intégrant les mesures de force disponibles au niveau de la fixation. En particulier, la vitesse de translation (respectivement la position) du drone est obtenue par intégration simple (respectivement double) des données mesurées par le capteur de force. Par souci de simplicité, nous négligeons l'influence aérodynamique de la vitesse (simulée) sur l'aile. En particulier, à partir des équations \eqref{eq:dyna_orig_a} et \eqref{eq:dyna_orig_b}, nous obtenons le modèle simplifié suivant
 \begin{subequations}\label{eq:accel_sensor}
-\begin{align}
-    \boldsymbol{\dot v} &= \boldsymbol{g} + \frac{1}{m}\left( R(\boldsymbol{q})(F\boldsymbol{u} +  D_{\text{f}}(\delta) R^\top(\boldsymbol{q})\lVert \boldsymbol{w} \rVert \boldsymbol{w}) \right)\\
-    &= \boldsymbol{g} + \frac{1}{m} \boldsymbol{F}_{meas} \label{eq:sub_accel_sensor},
-\end{align}
+    \begin{align}
+        \boldsymbol{\dot v} &= \boldsymbol{g} + \frac{1}{m}\left( R(\boldsymbol{q})(F\boldsymbol{u} +  D_{\text{f}}(\delta) R^\top(\boldsymbol{q})\lVert \boldsymbol{w} \rVert \boldsymbol{w}) \right)\\
+        &= \boldsymbol{g} + \frac{1}{m} \boldsymbol{F}_{meas} \label{eq:sub_accel_sensor},
+    \end{align}
 \end{subequations}
+où $\boldsymbol{F}_{meas}$ représente les forces mesurées par le capteur dans le repère inertiel corrigé du biais. Pour calibrer la correction du biais, lors de l'initialisation, les forces mesurées sont moyennées sur 6000 échantillons, le modèle étant bloqué dans une position stable (angle de tangage à 0°, c'est-à-dire orientation verticale). Pour éliminer le biais de la force mesurée à chaque mesure, nous soustrayons l'effet de la gravité sur le modèle de la mesure. Une masse artificielle $m$ est attribuée à la dynamique du logiciel dans la boucle conformément à \eqref{eq:sub_accel_sensor}, ce qui permet de tester plusieurs configurations afin de mieux apprécier l'influence de la masse du drone sur d'éventuels événements transitoires de saturation. Cela permet d'étudier des scénarios impliquant la masse non negligeable de la batterie, qui n'est pas présente dans notre modèle. Bien que cette manipulation soit aisée, elle ne représente pas parfaitement la réalité car nous ne tenons pas compte de la répartition des masses dans le drone et donc des modifications de l'inertie.
+La vitesse et la position transitoire du drone sont ensuite obtenues par intégration numérique simple et double de l'accélération comme dans \eqref{eq:accel_sensor}, en utilisant une intégration numérique trapézoïdale.
 
-where $\boldsymbol{F}_{meas}$  represents the forces measured by the sensor in the bias-corrected inertial reference frame. To calibrate the bias correction, at the initialization, the measured forces are averaged over 6000 samples, the model being blocked at a steady position (pitch angle at 0°, namely vertical orientation). Removing the bias from the measured force at each measurement, we subtract the gravity effect on the model from the measurement. An artificial mass $m$ is instead assigned to the software-in-the-loop dynamics according to (\ref{eq:sub_accel_sensor}), which allows testing several configurations to better appreciate the influence of the drone's mass on possible transient saturation events. This allows investigating scenarios involving the nontrivial mass of the battery, which is not present in our model. Although this manipulation is easy, it does not represent perfectly the reality because we do not take into account the distribution of the masses in the drone and thus the inertia modifications.
-The transitional velocity and position of the UAV are then obtained by single and double numerical integration of the acceleration as in (\ref{eq:accel_sensor}), using a trapezoidal numerical integration.
+\section{Contrôle linéaire, PI à 3 DOF}
+\label{sec:3dofcmd}
+Dans la section \ref{sec:ctrl_hyste}, nous avons proposé un bouclage proportionnel stabilisant une position de vol stationnaire en l'absence de vent (perturbation). Nous proposons ici une extension incluant une action intégrale, adaptée au fonctionnement avec une perturbation non mesurée représentée par un vent constant. L'objectif est de stabiliser le drone à la position de référence, en rejetant une perturbation de vent constant inconnue.
 
+\subsection{Description du schéma de contrôle}
+Nous expérimentons la situation avec le vent agissant uniquement le long de l'axe $x_{i}$, avec le drone orienté vers le vent, c'est-à-dire avec des angles de roulis et de lacet nuls. Dans cette configuration, le vent n'agit que sur la vitesse linéaire le long des axes $x_{b}$ et $z_{b}$, et ne génère qu'un moment autour de l'axe $y_{b}$. Un examen attentif de la commande et des matrices d'entrée des perturbations $F$, $M$ dans \eqref{eq:FandM} suggère une architecture de commande efficace pour rejeter une perturbation constante. En effet, les élévons et les hélices peuvent être utilisés symétriquement pour générer respectivement un moment autour de l'axe $y_{b}$ et une force le long de l'axe $x_{b}$, compensant ainsi l'effet de la perturbation. Néanmoins, il reste une force le long de l'axe $z_{b}$ à compenser, et une action intégrale peut converger asymptotiquement vers la force désirée, même avec une perturbation du vent non mesurée $\boldsymbol{w}$. Nous pouvons ainsi stabiliser le drone à une position de vol stationnaire, différente de l'équilibre sans vent. La solution de contrôle exploite le degré de liberté de l'angle de tangage pour compenser l'effet du vent.
 
-
-\section{Integral-based linear control}\label{sec:3dofcmd}
-In our previous work \cite[III.B]{sansouECC} we proposed a proportional feedback stabilizing a hovering position in the absence of wind (perturbation). We propose here an extension including integral action, suitable for operating with a non-measured perturbation represented by a constant wind. The objective is to stabilize the drone at the reference position, rejecting the unknown constant wind disturbance.
-
-\subsection{Description of the control scheme}
-We experiment the situation with the wind only acting along the $x_{[I]}$ axis, with the drone oriented towards the wind, i.e. with zero roll and yaw angles. In this configuration, the wind only acts on the linear velocity along the $x_{[B]}$ and $z_{[B]}$ axes, and it only generates a moment about the $y_{[B]}$ axis. A careful inspection of the control and the disturbance input matrices $F$, $M$ 
-in \eqref{eq:FandM} suggests an effective control architecture to reject a constant disturbance. Indeed, the ailerons and the propellers can be used symmetrically to generate respectively a moment about the $y_{[B]}$ axis and a force along the $x_{[B]}$ axis, thus compensating the disturbance effect. Nevertheless, there is still a force along the $z_{[B]}$ axis to be compensated, and an integral action can asymptotically converge to the desired force, even with a non-measured wind disturbance $w$. We may thus stabilize the UAV at a hovering position, different from the zero-wind equilibrium. The control solution exploits the pitch angle degree of freedom, for compensating the wind effect.
 \begin{figure}[ht!]
     \centering
     \includegraphics[trim=5cm 0cm 0cm 0cm,clip,width=1\columnwidth]{figures/commande_integrale_ACA-min.png}
     \caption{Proposed integral-based controller.}
     \label{fig:commande_int}
-\end{figure}\\
-The proposed controller, shown in Fig. \ref{fig:commande_int},  corresponds to 
-\begin{minipage}[t]{0.58\columnwidth}
+\end{figure}
+Le contrôleur proposé, représenté sur la figure \ref{fig:commande_int}, correspond à
+\todo{ameliorer les equations} 
     \begin{align}
         \dot{x_{c}} &= H(y-\begin{bmatrix}r_{p}\\\mathbb{0}_{8\times 1} \end{bmatrix}),\\
         y &= S x,\\
         u &= \Sigma x_{c} + K(y-\begin{bmatrix}r_{p}\\\mathbb{0}_{8\times 1} \end{bmatrix}),
     \end{align}
-\end{minipage}
-\begin{minipage}[t]{0.42\columnwidth}
     \begin{align}
         S =\begin{bmatrix} \mathbb{I}_{7} &  \mathbb{0}_{7\times 5} \\
          \mathbb{0}_{4\times 8} &  \mathbb{I}_{4}
@@ -118,18 +85,27 @@ The proposed controller, shown in Fig. \ref{fig:commande_int},  corresponds to
     \begin{align}
         \Sigma = \begin{bmatrix} 1 & 1 & 0 & 0\\ 0 & 0 & 1 & 1\end{bmatrix}^\top,
     \end{align}
-\end{minipage}
 
-where $x_{c} \in \mathbb{R}^{2}$ is the integrator state; $r_{p} \in \mathbb{R}^{3}$ is the constant reference comprising a target position for the translational motion; $S$ is an output selection matrix, which removes the pitch angle component from the measured output (impacting only the quaternion linearization) to form $y$; $\Sigma$ is an input allocation matrix that allows assigning the first component of the integrator state to the motor control and the second component to the elevon control. $K$, $H$ are constant stabilizing gains to be selected in such a way that the linear closed loop matrix 
+où $x_{c} \in \mathbb{R}^{2}$ est l'état de l'intégrateur ;$r_{p} \in \mathbb{R}^{3}$ est la référence constante comprenant une position cible pour le mouvement de translation ; $S$ est une matrice de sélection de sortie, qui supprime la composante de l'angle de tangage de la sortie mesurée (n'affectant que la linéarisation par quaternion) pour former $y$ ; $\Sigma$ est une matrice d'allocation d'entrée qui permet d'affecter la première composante de l'état de l'intégrateur à la commande du moteur et la seconde composante à la commande de la gouverne de profondeur. $K$, $H$ sont des gains constants à sélectionner de manière à ce que la matrice linéaire de la boucle fermée 
 \begin{align} \label{eq:close_matrix}
     \begin{gathered}
         A_{cl} \!= \!
         \begin{bmatrix}A & \mathbb{0}_{12\times 2} \\ HS & \mathbb{0}_{2\times 2}\end{bmatrix} \!- \!\begin{bmatrix}G \\ \mathbb{0}_{2\times 4}\end{bmatrix} \left( K \begin{bmatrix}S & \mathbb{0}_{11\times 2}\end{bmatrix} -  \begin{bmatrix}\mathbb{0}_{4\times 12} & \Sigma \end{bmatrix}\right),
     \end{gathered}
 \end{align}
-characterizing the linearized closed loop be Hurwitz, to ensure stabilization with the linearized dynamics related to the zero-wind scenario \eqref{eq:linearized}.
+caractérisant la boucle fermée linéaire soit Hurwitz, afin d'assurer la stabilisation avec la dynamique linéarisée liée au scénario sans vent \eqref{eq:withouwind}.
 
-In a nutshell, matrix (\ref{eq:close_matrix}), describes the closed loop shown in Fig. \ref{fig:commande_int}: an output feedback with 11 outputs, consisting of the three positions, the three linear velocities, two out of three angles ($\phi$ and $\psi$) and the three angular velocities. This structure can be seen as a MIMO proportional-integral solution resulting from a careful observation of the UAV linearized dynamics, which allows a minimal number of integrators embedded in the controller. This control should allow constant disturbances rejection while having a satisfactory robustness. The gain $K$ corresponds to the proportional  term and the gain $H$ weights the integral term, inducing convergence to the target. The allocation matrix $\Sigma$ leads to a symmetrical use of the propellers and ailerons. We must then tune $K$ and $H$ to obtain a satisfactory trade-off between robustness and disturbance rejection. We implement a multi-objective synthesis based on an $H_{\infty}$ optimization method, described next.
+De manièere synthetique, la matrice \eqref{eq:close_matrix} décrit la boucle fermée illustrée à la Fig.~\ref{fig:commande_int} : un retour de sortie avec 11 sorties, comprenant les trois positions, les trois vitesses linéaires, deux des trois angles ($\epsilon_{1}$ et $\epsilon_{3}$) et les trois vitesses angulaires. Cette structure peut être considérée comme une solution proportionnelle-intégrale MIMO résultant d'une observation attentive de la dynamique linéarisée du drone, ce qui permet un nombre minimal d'intégrateurs intégrés dans le contrôleur. Ce contrôle devrait permettre de rejeter les perturbations constantes tout en ayant une robustesse satisfaisante. Le gain $K$ correspond au terme proportionnel et le gain $H$ pondère le terme intégral, induisant une convergence vers la cible. La matrice d'allocation $\Sigma$ conduit à une utilisation symétrique des hélices et des ailerons. Il faut alors ajuster $K$ et $H$ pour obtenir un compromis satisfaisant entre robustesse et rejet des perturbations. Nous mettons en œuvre une synthèse multi-objectifs basée sur une méthode d'optimisation $H_{\infty}$, décrite ci-après.
+\todo{modifier la commande pour expliquer la commande à 3DOF}
+
+\subsection{Optimisation \texorpdfstring{$H_{\infty}$}{H {infty}}} \label{sec:h_inf}
+Pour effectuer une sélection robuste de $K$ et $H$, nous caractérisons d'abord plusieurs fonctions de transfert dans la figure \ref{fig:commande_int}.
+
+La sortie de mesure $y$ est utilisée pour la rétroaction, l'entrée $u$ est la somme de l'entrée intégrale $\Sigma x_{c}$ et de l'action proportionnelle $K e$. La sortie $z$ correspond aux signaux de performance de sortie à contrôler ($e$, $w$, $u$, $y$, $r_{p}$). Grâce aux fonctions de pondération $W=\diag (W_{1},..., W_{4})$, la conception de $H$ et $K$ vise à rejeter une perturbation ou un échelon à basse fréquence $w$ agissant sur $y$. En bref, l'objectif de la conception est d'amener $y$ à zéro malgré la perturbation à basse fréquence sur $w$.
+
+\section{Maquette expérimentale}
+
+
 
 \subsection{\texorpdfstring{$H_{\infty}$}{H {infty}}-based optimization} \label{sec:h_inf}
 

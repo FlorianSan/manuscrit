@@ -1,6 +1,7 @@
 % LTeX: enabled=true
 
 \chapter{Commande hybride}
+\label{chap:hybrid}
 \minitoc
 
 
@@ -9,161 +10,153 @@ Basée sur les capacités d'un \textit{tailsitter}, il est légitime de se poser
 
 Nous avons donc proposé une stratégie de commande pour stabiliser le drone en position stationnaire. Cette stratégie repose sur une dynamique discrète permettant le passage d'une loi de commande non-linéaire présenté dans \cite{2020e-MicCenZacFra} et qui fournit une grande région d'attraction et une seconde loi basée sur la dynamique linéarisée et fournissant une agressivité supérieure pour réaliser l'approche finale. Les deux contrôleurs sont réunis par un mécanisme hybride qui permet de conserver les performances en régime permanent de la conception linéarisée avec la grande région d'attraction garantie par la conception non linéaire. Notre solution est testée en simulant le modèle non linéaire complet.
 
-Nous allons nous concentré dans cette partie à la stabilisation stationnaire du drone ainsi nous nous appuyrons sur la dynamique simplifier décrite dans la section \ref{sec:model_NL_simp} avec la simplification $\boldsymbol{w} = 0$ qui permet d'obtenir la dynamique simplifier sans vent \eqref{eq:withouwind}. 
+Nous allons nous concentré dans cette partie à la stabilisation stationnaire du drone ainsi nous nous appuyons sur la dynamique simplifier décrite dans la section \ref{sec:model_NL_simp} avec la simplification $\boldsymbol{w} = 0$ qui permet d'obtenir la dynamique simplifier sans vent \eqref{eq:withouwind}. 
 
 
 
-\subsection{Contrôleur par retour d'état non-linéaire}
+\section{Contrôleur par retour d'état non-linéaire}
+\todo{bold}
 Nous illustrons dans cette section une loi de contrôle dynamique non linéaire inspirée du résultat de \cite{2020e-MicCenZacFra}. Pour que cette loi de contrôle non linéaire soit applicable, les matrices $F$ et $M$ mentionné dans \eqref{eq:withouwind} doit permettre de définir une direction dite de moment zéro $\boldsymbol{\bar u} \in \real^4$ garantissant
 $|F\boldsymbol{\bar u}| = 1$ et $M \boldsymbol{\bar u}=0$, et la matrice inverse à droite $M^r$ de $M$ satisfaisant $M M^r = I$ et $FM^r=0$. Dans notre cas, il est immédiat de voir que la direction du moment zéro $\boldsymbol{\bar u} = \frac{\sqrt{2}}{2a_{\text{f}}}\smallmat{1&1&0&0}^\top$ satisfait les conditions, alors que le fait que $\rank(F) = 2$ (donc que le noyau de $F$ ($\ker F$) est de dimension 2) rend impossible l'obtention de la matrice inverse à droite $M^r$ de $M$ entièrement contenu dans $\ker F$.
 
-En raison de cela, nous déterminons $M^r$ en paramétrisant (de manière conservatrice) les pseudoinverses droites de $M$ comme $M^r := KM^\top ( MKM^\top)^{-1}$ où la matrice $K \in \real^{4\times 4}$ est symétrique et satisfait $MKM^\top \geq I$ (pour assurer l'invertibilité). Avec cette paramétrisation, le but est de minimiser la norme de $FM^r = F KM^\top ( MKM^\top)^{-1}$, ce qui est bien réalisé en minimisant la norme de $F KM^\top$, du fait que la contrainte sur $MKM^\top \geq I$ garantissant que le facteur $( MKM^\top)^{-1}$ a une norme plus petite que 1.
+En raison de cela, nous déterminons $M^r$ en paramétrisant (de manière conservatrice) les  pseudo-inverses à droites de $M$ comme $M^r := KM^\top ( MKM^\top)^{-1}$ où la matrice $K \in \real^{4\times 4}$ est symétrique et satisfait $MKM^\top \geq I$ (pour assurer l'inversibilité). Avec cette paramétrisation, le but est de minimiser la norme de $FM^r = F KM^\top ( MKM^\top)^{-1}$, ce qui est bien réalisé en minimisant la norme de $F KM^\top$, du fait que la contrainte sur $MKM^\top \geq I$ garantissant que le facteur $( MKM^\top)^{-1}$ a une norme plus petite que 1.
+En effectuant un complément de Schur, cette minimisation est obtenue en résolvant le programme semi-défini suivant :
+\begin{align*}
+&  \min_{K, \kappa} \kappa, \; \mbox{subject to:}
+\;  M K M^\top\! \geq \!I, \; 
+  \begin{bmatrix}
+  \kappa I  &\! F K M^\top \\ 
+   M K^\top F^\top &\! \kappa I
+  \end{bmatrix}\! \geq\! 0,
+\end{align*}
+qui minimise $\kappa$ tout en assurant $F K M^\top M K^\top F^\top \leq \kappa^2 I$.  En résolvant cette optimisation, on obtient, pour les matrices spécifiques considérées,
+\begin{align*}
+  K \!=\! \smallmat{  0   &   -737   &    171   &   -171\\
+      -737  &  0   &  -171  &     171\\
+       171  &    -171    &   1583.5    &   -43.73\\
+      -171  &     171    &   -43.73    &   1583.5}\!, \,
+  M^r \!=\! \smallmat{0     &          0   &   -3.19\\
+                 0      &         0   &    3.19\\
+               -4.51    &  -27.75    &   -1.48\\
+                4.51    &  -27.75    &    1.48}
+\end{align*}
+conduisant à $\kappa = 39,7$. Avec cette sélection basée sur l'optimalité, la conception dynamique non linéaire de \cite{2020e-MicCenZacFra} peut être appliquée efficacement en obtenant des réponses qui sont presque impossibles à distinguer du cas entièrement découplé 
+$FM^r=0$. Il convient de noter qu'une approche similaire, négligeant essentiellement les termes supplémentaires agissant sur la dynamique de translation, est également suggérée dans l'étude \cite{hamel_minhduc}. 
+Sur la base du choix de $M^r$ et de $\boldsymbol{\bar u}$ décrit ci-dessus, en appliquant la loi de commande de \cite[eqn (19)]{2020e-MicCenZacFra}, l'entrée $\boldsymbol{u}$ devient :
+\begin{align}
+\label{eq:u_nonlin}
+    \boldsymbol{u} = \boldsymbol{u_{\text{nl}}} := M^r \boldsymbol{\tau_{r}} + \boldsymbol{\bar u} \boldsymbol{f},
+\end{align}
+où $\boldsymbol{\tau_{r}}$ et $\boldsymbol{f}$ sont fournis par le contrôleur proposé dans \cite{2020e-MicCenZacFra}.
 
-% Performing a Schur complement, this minimization is well obtained by solving the following semi-definite program:
-% \begin{align*}
-% &  \min_{K, \kappa} \kappa, \; \mbox{subject to:}
-% \;  M K M^\top\! \geq \!I, \; 
-%   \begin{bmatrix}
-%   \kappa I  &\! F K M^\top \\ 
-%    M K^\top F^\top &\! \kappa I
-%   \end{bmatrix}\! \geq\! 0,
-% \end{align*}
-% which minimizes $\kappa$ while ensuring $F K M^\top M K^\top F^\top \leq \kappa^2 I$. Solving this optimization, we obtain, for the specific matrices under consideration,
-% \begin{align*}
-%   K \!=\! \smallmat{  0   &   -737   &    171   &   -171\\
-%       -737  &  0   &  -171  &     171\\
-%        171  &    -171    &   1583.5    &   -43.73\\
-%       -171  &     171    &   -43.73    &   1583.5}\!, \,
-%   M^r \!=\! \smallmat{0     &          0   &   -3.19\\
-%                  0      &         0   &    3.19\\
-%                -4.51    &  -27.75    &   -1.48\\
-%                 4.51    &  -27.75    &    1.48}
-% \end{align*}
-% leading to $\kappa = 39.7$. With this optimality-based selection, the nonlinear dynamic design of \cite{2020e-MicCenZacFra} can be effectively applied by obtaining responses that are almost indistinguishable from the fully decoupled case 
-% $FM^r=0$. Note that a similar approach, essentially neglecting the extra terms acting on the translational dynamics is also suggested in the survey paper \cite{hamel_minhduc}. 
 
-% Based on the above-described choice of $M^r$ and $\boldsymbol{\bar u}$, applying the feedback law in \cite[eqn (19)]{2020e-MicCenZacFra}, the input $\boldsymbol{u}$ becomes : 
-% \begin{align}
-% \label{eq:u_nonlin}
-%     \boldsymbol{u} = \boldsymbol{u_{\text{nl}}} := M^r \boldsymbol{\tau_{r}} + \boldsymbol{\bar u} \boldsymbol{f},
-% \end{align}
-% where $\boldsymbol{\tau_{r}}$ and $\boldsymbol{f}$ are provided by the dynamic feedback controller proposed in \cite{2020e-MicCenZacFra}.
+La sélection de $M^r$ basée sur l'optimalité peut être interprété de manière intéressante lorsque l'on observe le produit $M^r \boldsymbol{\tau_{r}} = M^r \smallmat{\tau_{r,x} & \tau_{r,y} & \tau_{r,z}}^top$. Premièrement, pour obtenir un moment $\tau_{r,z}$ autour de l'axe $z_{\text{b}}$, nous utilisons principalement l'action différentielle de la poussée ; deuxièmement, un moment $\tau_{r,y}$ autour de l'axe $y_{\text{b}}$ est généré par une utilisation symétrique des deux volets, avec une grande efficacité ; enfin, un moment $\tau_{r,x}$ autour de l'axe $x_{\text{b}}$ provient d'une utilisation différentielle des volets. 
 
-% The optimality-based selection of $M^r$ is prone to a few interesting interpretations when observing the product 
-% $M^r \boldsymbol{\tau_{r}} = M^r \smallmat{\tau_{r,x} & \tau_{r,y} & \tau_{r,z}}^\top$. First, 
-% % Three observations can be made. Indeed, we observe that 
-% to produce a moment $\tau_{r,z}$ about the $z$-axis we mainly use the thrust differential action; secondly, a moment $\tau_{r,y}$ about the $y$-axis is generated by an equal (additive) use of the two flaps, with great efficiency; finally a moment $\tau_{r,x}$ about the $x$-axis comes from a differential use of the flaps. 
-
-% As a final remark, as compared to the solution proposed in \cite{2020e-MicCenZacFra}, to partially take into account the saturation effects highlighted in Remark~\ref{rem:saturation}, the error feedback interconnection of the outer loop in \cite{2020e-MicCenZacFra} has been augmented with a simple error governor strategy never allowing the translational position error $\boldsymbol{\rm e}_p$ 
-% entering \cite[eqn. (22)]{2020e-MicCenZacFra} to exceed the maximum value of 3 meters. 
-% The remaining tuning gains required in the solution of \cite{2020e-MicCenZacFra} have been selected
-% following an intuitive PD tuning procedure
-%  as  $k_{pp} = 0.5$, $k_{pd} = 1.2$, $k_{ap} = 0.08$, $k_{ad} = 0.1$ and $k_{\Delta} = 1$.
+Enfin, par rapport à la solution proposée dans \cite{2020e-MicCenZacFra}, pour prendre partiellement en compte les effets de saturation énoncé dans la section~\ref{sec:saturation}, le bouclage décrit dans \cite{2020e-MicCenZacFra} a été augmentée d'une stratégie de saturation d'erreur ne permettant jamais à l'erreur de position $\boldsymbol{\rm e}_p$ utilisé dans \cite[eqn. (22)]{2020e-MicCenZacFra} de dépasser la valeur maximale de 3 mètres. Les autres gains de réglage nécessaires à la solution de \cite{2020e-MicCenZacFra} ont été sélectionnés
+en suivant une procédure de réglage des gains proportionnel et dérivé qui a conduit à $k_{pp} = 0.5$, $k_{pd} = 1.2$, $k_{ap} = 0.08$, $k_{ad} = 0.1$ et $k_{\Delta} = 1$.
  
-% Figure~\ref{fig_global_contol} shows the response of the system in terms of linear and angular positions (top two rows) and actuators efforts (bottom two rows) when the system starts from the initial condition  $\boldsymbol{x(0)} = [\boldsymbol{p(0)}~ \boldsymbol{v(0)}~ \boldsymbol{q(0)}~ \boldsymbol{\omega_b(0)}]^\top = [0~0~0 ~ 0~0~0 ~0.9140 ~0.1134~ -0.3728~ 0.1134~ 0~ 0~ 0]^\top $ with a target equilibrium position of $\boldsymbol{p_{\text{eq}}} = [4~5~6]^\top$ and $\boldsymbol{q_{\text{eq}}} = [\frac{\sqrt{2}}{2}~0~-\frac{\sqrt{2}}{2}~0]^\top$. 
-% % (this is associated to a large initial error of ??????? ).
-% A graceful response can be seen, which remains quite far from the actuator saturations (see Remark~\ref{rem:saturation}). Increasing the tuning gains can speed up the response but provides undesired attitude oscillations. Therefore it is interesting to combine this nonlinear controller (providing a large region of attraction) with a more aggressive controller, designed based on the linearized dynamics \eqref{eq:linearized} and to be used to improve the fail of the response.
-% \begin{figure}[ht!]
-%     \centering
-%     \includegraphics[trim=0cm 0.6cm 0cm 0.6cm,clip,width=1\columnwidth, height=7cm]{figures/global2.eps}
-%     \vspace*{-6mm}
-%     \caption{Simulation with the nonlinear dynamic feedback controller.}
-%     \label{fig_global_contol}
-% \end{figure}
-% \subsection{Linear control design}
+La figure~\ref{fig_global_contol} montre la réponse du système en termes de positions et d'orientation (deux lignes du haut) et d'efforts des actionneurs (deux lignes du bas) lorsque le système part de la condition initiale $\boldsymbol{x(0)} = [\boldsymbol{p(0)}~ \boldsymbol{v(0)}~ \boldsymbol{q(0)}~ \boldsymbol{\omega_b(0)}]^\top = [0~0~0 ~ 0~0~0 ~0. 9140 ~0.1134~ -0.3728~ 0. 1134~ 0~ 0~ 0]^\top $ avec une position d'équilibre cible de $\boldsymbol{p_{\text{eq}}} = [4~5~6]^\top$ et $\boldsymbol{q_{\text{eq}}} = [\frac{\sqrt{2}}{2}~0~-\frac{\sqrt{2}}{2}~0]^\top$. 
+Une réponse adéquate peut être observée, qui reste assez éloignée des saturations des actionneurs (voir section~\ref{sec:saturation}). L'augmentation des gains peut accélérer la réponse, mais produit des oscillations d'attitude indésirables. Il est donc intéressant de combiner ce contrôleur non linéaire (qui fournit une grande région d'attraction) avec un contrôleur plus agressif, conçu sur la base de la dynamique linéarisée sans vent \eqref{eq:linearized}.
 
-% Based on the performance-oriented observations of the previous section, given a target position corresponding to an equilibrium $\boldsymbol{p_{\text{eq}}}, \boldsymbol{q_{\text{eq}}}$ as characterized in Proposition~\ref{prop:eqs}, we design here a local linear feedback controller capable of inducing a more aggressive response. To this end, we focus on the linearized dynamics \eqref{eq:linearized} and recognize that we can design 
-% a state feedback controller 
-% \begin{align}
-%   \boldsymbol{u_{\text{lin}}} := \boldsymbol{u_{\text{eq}}} - K \boldsymbol{\tilde x},
-% \label{eq:u_lin}
-% \end{align}
-% where $\boldsymbol{\tilde x}$ has been introduced in \eqref{eq:xtilde} and $K \in \real^{4 \times 12}$ is a state feedback gain that can be designed, based on the matrices $A$ and $G$ appearing in \eqref{eq:linearized}, in such a way that the closed-loop linear feedback $A_{\text{cl}}:=A-GK$ be exponentially stable. 
 
-% For our design, we have used an LQR selection, associated with the simplest possible weight matrices selection $Q = I_{12}$ and $R = I_{4}$, which gives desirable closed-loop responses. The LQR design also provides a positive definite Lyapunov certificate matrix $S \in \real^{12 \times 12}$ (solution of the algebraic Riccati equation) ensuring that $A_{\text{cl}}^\top S + S A_{\text{cl}} <0$. In particular, it is well known from the linear approximation theorem that function $V(\boldsymbol{\tilde x}) = \boldsymbol{\tilde x}^\top S \boldsymbol{\tilde x}$ is also a Lyapunov function certifying local exponential stability of $\boldsymbol{x_{\rm eq}}$ for the nonlinear dynamics. More specifically, there exits a positive scalar $\bar v \in \real$ such that, along dynamics \eqref{eq:dyna_simp}, we have :
-% \begin{align}
-% \label{eq:Vdecrease}
-%   V(\boldsymbol{\tilde x}) \leq \bar v \quad \Rightarrow \quad \dot V(\boldsymbol{\tilde x}) := \langle 
-% \nabla V(\boldsymbol{\tilde x}), \boldsymbol{\dot{\tilde x}}\rangle <0,
-% \end{align}
-% for all $\boldsymbol{\tilde x} \neq 0$; in other words, the sublevel set $V(\boldsymbol{\tilde x}) \leq \bar v$ is contained in the basin of attraction of the equilibrium $\boldsymbol{x_{\text{eq}}}$.
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[trim=0cm 0.6cm 0cm 0.6cm,clip,width=0.8\columnwidth]{figures/global2.eps}
+    \caption{Simulation de la loi de commande non-linéaire avec la dynamique de DarkO \eqref{eq:dyna_orig}.}
+    \label{fig_global_contol}
+\end{figure}
+
+
+\section{Contrôleur par retour d'état linéaire}
+Sur la base des observations de la section précédente et étant donné une position cible correspondant à un équilibre $\boldsymbol{p_{\text{eq}}}, \boldsymbol{q_{\text{eq}}}$ tel que caractérisé dans l'équation~\ref{eq:equilibria}, nous concevons ici un contrôleur par retour d'état linéaire capable de produire une réponse plus agressive. Pour cela, nous nous concentrons sur la dynamique linéarisée \eqref{eq:linearized} et proposons une loi de commande de la forme :
+\begin{align}
+  \boldsymbol{u_{\text{lin}}} := \boldsymbol{u_{\text{eq}}} - \boldsymbol{K} \boldsymbol{\tilde x},
+\label{eq:u_lin}
+\end{align}
+où $\boldsymbol{\tilde x}$ a été introduit dans \eqref{eq:linearized} et $\boldsymbol{K} \in \real^{4 \times 12}$ est un gain de retour d'état qui peut être sélectionné, sur la base des matrices $\boldsymbol{A}_{0}$ et $\boldsymbol{G}_{0}$ apparaissant dans \eqref{eq:linearized}, de telle sorte que la boucle fermée du retour d'état $A_{\text{cl}}:=\boldsymbol{A}_{0}-\boldsymbol{G}_{0}\boldsymbol{K}$ soit exponentiellement stable. 
+
+Dans notre cas, nous avons utilisé une sélection LQR, associée aux matrices de pondération $\boldsymbol{Q} = I_{12}$ et $\boldsymbol{R} = I_{4}$, qui donne une réponse en boucle fermée désirable. La conception LQR fournit également une matrice définie positive  $\boldsymbol{S} \in \real^{12 \times 12}$ (solution de l'équation algébrique de Riccati) garantissant que $\boldsymbol{A}_{\text{cl}}^\top \boldsymbol{S} + \boldsymbol{S} A_{text{cl}} <0$. Il est donc possible d'utiliser $\boldsymbol{S}$ pour former une fonction de Lyapunov.  En particulier, il est bien connu d'après le théorème d'approximation linéaire que la fonction $V(\boldsymbol{\tilde x}) = \boldsymbol{\tilde x}^\top S \boldsymbol{\tilde x}$ est également une fonction de Lyapunov certifiant la stabilité exponentielle locale de $\boldsymbol{x_{\text{eq}}}$ pour la dynamique non-linéaire. Plus précisément, il existe un scalaire positif $\bar v \in \real$ tel que, le long de la dynamique \eqref{eq:dyna_orig}, nous avons :
+\begin{align}
+\label{eq:Vdecrease}
+  V(\boldsymbol{\tilde x}) \leq \bar v \quad \Rightarrow \quad \dot V(\boldsymbol{\tilde x}) := \langle 
+\nabla V(\boldsymbol{\tilde x}), \boldsymbol{\dot{\tilde x}}\rangle <0,
+\end{align}
+pour tout $\boldsymbol{\tilde x} \neq 0$ ; en d'autres termes, le sous-ensemble de $V(\boldsymbol{\tilde x}) \leq \bar v$ est contenu dans le bassin d'attraction de l'équilibre $\boldsymbol{x_{\text{eq}}}$.
+
+La détermination du plus grand scalaire $\bar v$ assurant \eqref{eq:Vdecrease} est un problème complexe et des bornes inférieures conservatrices peuvent être déterminées en quantifiant l'effet des non-linéarités sur la dynamique. Puisque $\boldsymbol{\dot{\tilde x}}$ est une fonction de $\boldsymbol{x}$, il est assez facile d'évaluer algébriquement $\dot V(\boldsymbol{\tilde x})$ pour un grand nombre d'extractions aléatoires de la variable $\boldsymbol{\tilde x}$, afin d'obtenir une estimation probabiliste du plus grand scalaire $\bar v$. Des garanties rigoureuses sur ces sélections peuvent être obtenues en appliquant les résultats de \cite{tempo2013randomized}, mais une évaluation de 10000 échantillons a confirmé que la valeur $\bar v = 400$ est une bonne sélection satisfaisant \eqref{eq:Vdecrease}.
+
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[trim=0cm 0.6cm 0cm 1cm,clip,width=0.8\columnwidth]{figures/converge2.eps}
+    \caption{Simulation du modèle complet \eqref{eq:dyna_orig} (continue) et simplifié \eqref{eq:withouwind} (pointillé) avec $\boldsymbol{u} = \boldsymbol{u}_{\text{lin}}$ défini dans 
+    \eqref{eq:u_lin} et comme une condition initiale $\tilde{ \boldsymbol{x}}_0$ dans le bassin d'attraction.}
+    \label{fig_linearize_conv}
+\end{figure}
+
+La figure \ref{fig_linearize_conv} montre une simulation commençant à l'origine avec un drone vertical et des vitesses linéaires et angulaires initiales sont nulles. La position cible est $\boldsymbol{p_{\text{eq}}} = [4,~5,~6]$ avec une stabilisation en vol stationnaire (drone vertical) avec $\beta = 0$. La ligne pointillée représente la position de la cible sur chaque axe. Le dernier graphique montre la décroissance exponentielle souhaitable de $V$
+La figure \ref{fig_linearize_conv} montre à la fois la simulation du modèle complet (continue) \eqref{eq:dyna_orig} et du modèle non linéaire simplifié \eqref{eq:withouwind} (en pointillé), ce qui montre des différences dans la phase transitoire.
+Lorsqu'on fournit une position cible plus importante $\boldsymbol{p_{\text{eq}}} =[8,~9,~10]$(avec la même orientation), la condition initiale se situe en dehors du bassin d'attraction et une divergence apparait, comme le montre la figure~\ref{fig_linearize_div}.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.8\columnwidth]{figures/diverge2.eps}
+    \caption{Simulation divergente du modèle complet \eqref{eq:dyna_orig} avec $\boldsymbol{u} = \boldsymbol{u}_{\text{lin}}$ défini dans 
+    \eqref{eq:u_lin} et une condition initiale $\tilde{ \boldsymbol{x}}_0$ en dehors du bassin d'attraction.}
+    \label{fig_linearize_div}
+\end{figure}
+
+
+
+\section{Conception d'une commande locale-globale basée sur l'hystérésis}
+\label{sec:ctrl_hyste}
  
-% Determining the largest possible scalar $\bar v$ ensuring \eqref{eq:Vdecrease} is a challenging problem and conservative lower bounds of this quantity can be determined by quantifying the effect of the nonlinearities on the dynamics. Since $\boldsymbol{\dot{\tilde x}}$ is a function of $\boldsymbol{x}$, then it is fairly easy to algebraically evaluate $\dot V(\boldsymbol{\tilde x})$ for a large amount of random extractions of the variable $\boldsymbol{\tilde x}$, so as to get a probabilistic estimate of the largest $\bar v$. Rigorous guarantees about these selections can be obtained by applying the results in \cite{tempo2013randomized}, which is out of the scope of this paper, but an evaluation of 10000 samples confirmed that the value $\bar v = 400$  is a good candidate selection satisfying \eqref{eq:Vdecrease}.
+Inspirés par les stratégies locales-globales présentées dans \cite[Ex. 1. 7]{65}, similaire à la solution présentée dans \cite{AndreettoFZ16}, nous utilisons un mécanisme hybride pour basculer entre le contrôleur local agressif \eqref{eq:u_lin} (tant que l'état se trouve dans le bassin d'attraction de l'équilibre) et le contrôleur non linéaire moins agressif \eqref{eq:u_nonlin}, qui fournit une plus grande région d'attraction (et peut être appelé, par abus de langage, le « contrôleur global »). À cette fin, nous ajoutons à l'état du contrôleur une variable d'état logique $\ell \in \{0,1\}$, qui régit le choix de l'entrée de contrôle entre \eqref{eq:u_nonlin} et \eqref{eq:u_lin} tel que
+\begin{align}
+\label{eq:u_hybrid}
+  \boldsymbol{u}=\boldsymbol{u}_{\text{hyb}} := \ell \boldsymbol{u}_{\text{nl}} + (1-\ell) \boldsymbol{u}_{\text{lin}},
+\end{align}
+Nous nous assurons, grâce à la dynamique hybride, que $\ell$ ne peut prendre que des valeurs dans $\{0,1\}$. Sa dynamique est définie par : 
+\begin{align*}
+    \left\{
+        \begin{array}{ll}
+            \dot \ell = 0,& \chi \in \mathcal{C}\\
+            \ell^{+} = 1-\ell,& \chi \in \mathcal{D}
+        \end{array}
+    \right.
+\end{align*}
+où $\chi = \left[\boldsymbol{p},~ \boldsymbol{v},~ \boldsymbol{q},~  \boldsymbol{\omega},~ l\right]$ est l'état complet de la boucle fermée et $\mathcal{C}$ et $\mathcal{D}$ sont, respectivement, les ensembles continus et discret, définis par
+\begin{align*}
+    & \mathcal{C} := \mathcal{C}_{0} \cup \mathcal{C}_{1}, ~ \mathcal{D} := \mathcal{D}_{0} \cup \mathcal{D}_{1},\\
+   & \mathcal{C}_{0} :=\{\boldsymbol{\chi} \in \mathbb{R}^{14}:~ V(\boldsymbol{\tilde x}) \le \overline{v} \mbox{ and } \ell=0\}\\
+   & \mathcal{C}_{1} :=\left\{\boldsymbol{\chi} \in \mathbb{R}^{14}:~ V(\boldsymbol{\tilde x}) \ge \underline{v} \mbox{ and } \ell=1 \right\}\\
+   & \mathcal{D}_{0} :=\left\{\boldsymbol{\chi} \in \mathbb{R}^{14}:~ V(\boldsymbol{\tilde x}) \geq \overline{v}\mbox{ and } \ell=0 \right\}\\
+   & \mathcal{D}_{1} :=\left\{\boldsymbol{\chi} \in \mathbb{R}^{14}:~ V(\boldsymbol{\tilde x}) \leq \underline{v}\mbox{ and } \ell=1 \right\}
+\end{align*}
+où $V(\boldsymbol{\tilde x}) := \boldsymbol{\tilde x}^\top S \boldsymbol{\tilde x}$  a été défini dans la section précédente, $\overline{v}=400$ a été déterminé pour satisfaire \eqref{eq:Vdecrease} et $\underline{v}$ est toute constante positive satisfaisant $\underline{v}<\overline{v}$ (un choix plus grand de $\underline{v}$ augmente la marge d'hystérésis, mais retarde le changement de loi de commande). Dans notre cas, nous choisissons $\underline{v}= 350$.
 
-% \begin{figure}[ht!]
-%     \centering
-%     \includegraphics[trim=0cm 0.6cm 0cm 1cm,clip,width=1\columnwidth, height= 7cm]{figures/converge2.eps}
-%     \vspace*{-5mm}
-%     \caption{Simulation of the full model (solid) and \eqref{eq:dyna_simp} (dashed) with $\boldsymbol{u} = \boldsymbol{u}_{\text{lin}}$ as in 
-%     \eqref{eq:u_lin} from an initial condition $\boldsymbol{\tilde x_0}$ within the basin of attraction.}
-%     \label{fig_linearize_conv}
-% \end{figure}
-% Figure \ref{fig_linearize_conv} shows a simulation starting at the origin with a zero orientation on the three axes (horizontal UAV)
-% and zero initial velocities,
-% with a target position $\boldsymbol{p_{\text{eq}}} = [4,~5,~6]$ with a hovering stabilization (vertical UAV) with $\beta = 0$. The dotted line represents the target position on each axis. Note that the initial linear and angular velocities are zero.  The last graph shows the desirable exponential decay of $V$
-% Figure \ref{fig_linearize_conv} shows both the simulation of the full model (solid) of \cite{sansou:stage} and of the simplified nonlinear model \eqref{eq:dyna_simp} (dashed) showing some significant differences in the initial response.
-% When providing a larger target position $\boldsymbol{p_{\text{eq}}} =[8,~9,~10]$ (with the same orientation), the initial condition is outside the basin of attraction and diverging solutions are experienced as shown in Figure~\ref{fig_linearize_div}.
-% \vspace*{-4mm}
-% \begin{figure}[ht!]
-%     \centering
-%     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=\columnwidth, height=6cm]{figures/diverge2.eps}
-%     \vspace*{-7mm}
-%     \caption{Diverging simulation of the full model with $\boldsymbol{u} = \boldsymbol{u}_{\text{lin}}$ as in 
-%     \eqref{eq:u_lin} from an initial condition $\boldsymbol{\tilde x_0}$ outside the basin of attraction.}
-%     \label{fig_linearize_div}
-% \end{figure}
+Le résultat suivant est une conséquence immédiate des résultats de \cite[Ex. 1.7]{65} et des propriétés de nos modèles linéaires et non linéaires.
 
+\begin{proposition}
+    Avec l'action du bouclage hybride \eqref{eq:u_hybrid}, la boucle fermée présente le même bassin d'attraction que celui associé au contrôleur non linéaire \eqref{eq:u_nonlin}, quand elle utilise le contrôleur linéaire \eqref{eq:u_lin}.
+\end{proposition}
 
+Nous avons réalisé plusieurs simulations de la boucle fermée à l'aide de la \textit{toolbox} Matlab \cite{sanfelice_2017}. Les simulations sont effectuées avec le modèle complet du drone \eqref{eq:dyna_orig}, comprenant tous les effets aérodynamiques non linéaires. Un exemple de simulation est présenté dans la Figure~\ref{fig_sim}, où nous initialisons le drone à l'origine avec une orientation nulle sauf pour l'angle de tangage fixé à 45 degrés. L'orientation de la cible est en configuration de vol stationnaire vertical et la position de la cible est assignée à $\boldsymbol{p_{\text{eq}}} = [50,~25,~12.5]$.
 
-% \subsection{Hysteresis-based local-global control design}
- 
-% Inspired by the local/global strategies presented in \cite[Ex. 1.7]{65}, similar to the solution presented in \cite{DBLP:conf/IEEEcca/AndreettoFZ16}, we use a hybrid mechanism to switch between the high performance local feedback \eqref{eq:u_lin} (as long as the state is in the basin of attraction of the equilibrium) and the less aggressive nonlinear controller \eqref{eq:u_nonlin}, which provides a larger region of attraction (and can be called with an abuse of notation the ``global controller''). To this end, we augment the controller state with a logical state variable
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[trim=0cm 0cm 0cm 1.1cm,clip,width=0.8\columnwidth]{figures/switch_paper2.eps}
+    \caption{Simulation en boucle fermée avec le contrôleur hybride \eqref{eq:u_hybrid}.}
+    \label{fig_sim}
+\end{figure}
 
-% $\ell \in \{0,1\}$, governing the choice of the control input 
-% between \eqref{eq:u_nonlin} and \eqref{eq:u_lin} as
-% \begin{align}
-% \label{eq:u_hybrid}
-%   \boldsymbol{u}=\boldsymbol{u}_{\text{hyb}} := \ell \boldsymbol{u}_{\text{nl}} + (1-\ell) \boldsymbol{u}_{\text{lin}},
-% \end{align}
-% We ensure, through the hybrid dynamics, that $\ell$ can only take values in $\{0,1\}$. 
-% Its dynamics is defined by: 
-% \begin{align*}
-%     \left\{
-%         \begin{array}{ll}
-%             \dot \ell = 0,& \chi \in \mathcal{C}\\
-%             \ell^{+} = 1-\ell,& \chi \in \mathcal{D}
-%         \end{array}
-%     \right.
-% \end{align*}
-% where $\chi = \left[\boldsymbol{p},~ \boldsymbol{v},~ \boldsymbol{q},~  \boldsymbol{\omega},~ l\right]$ is the complete closed loop state and $\mathcal{C}$ and $\mathcal{D}$ are, respectively, the flow and the jump sets, defined as
-% \begin{align*}
-%     & \mathcal{C} := \mathcal{C}_{0} \cup \mathcal{C}_{1}, ~ \mathcal{D} := \mathcal{D}_{0} \cup \mathcal{D}_{1},\\
-%    & \mathcal{C}_{0} :=\{\boldsymbol{\chi} \in \mathbb{R}^{14}:~ V(\boldsymbol{\tilde x}) \le \overline{v} \mbox{ and } \ell=0\}\\
-%    & \mathcal{C}_{1} :=\left\{\boldsymbol{\chi} \in \mathbb{R}^{14}:~ V(\boldsymbol{\tilde x}) \ge \underline{v} \mbox{ and } \ell=1 \right\}\\
-%    & \mathcal{D}_{0} :=\left\{\boldsymbol{\chi} \in \mathbb{R}^{14}:~ V(\boldsymbol{\tilde x}) \geq \overline{v}\mbox{ and } \ell=0 \right\}\\
-%    & \mathcal{D}_{1} :=\left\{\boldsymbol{\chi} \in \mathbb{R}^{14}:~ V(\boldsymbol{\tilde x}) \leq \underline{v}\mbox{ and } \ell=1 \right\}
-% \end{align*}
-% where $V(\boldsymbol{\tilde x}) := \boldsymbol{\tilde x}^\top S \boldsymbol{\tilde x}$  has been defined in the previous section, $\overline{v}=400$ has been determined in the previous section to satisfy \eqref{eq:Vdecrease},
-%  and $\underline{v}$ is any positive constant satisfying $\underline{v}<\overline{v}$ (a smaller choice of $\underline{v}$ increases the hysteresis margin but postpones the desirable high performance tail of the feedback response). In our case we choose $\underline{v}= 350$.
-% %
-% The following result is an immediate consequence of the results in \cite[Ex. 1.7]{65} and the properties of our linear and nonlinear designs.
+Nous observons que sur la période $t \ dans \left[0,38\right]$, le drone
+présente une convergence élégante, mais lente vers la position cible souhaitée en utilisant le contrôleur global ($\ell=1$). À ce moment-là, l'état discret $\ell$ entre dans l'ensemble $\mathcal{D}_1$ et le contrôleur local plus agressif est activé jusqu'à la convergence vers l'équilibre souhaité.
 
-% \begin{proposition}
-%   Under the action of the hybrid feedback \eqref{eq:u_hybrid}, the closed loop exhibits the same basin of attraction as the one associated with the nonlinear controller \eqref{eq:u_nonlin}, while always using the high-performance linear feedback \eqref{eq:u_lin} in the tail of the response.
-% \end{proposition}
+Pour obtenir des simulations réalistes, les mesures sont affectées par 
+le bruit des capteurs. La robustesse intrinsèque de la rétroaction hybride, établie dans le [Chapitre 7]{65}, est confirmée par le maintient des performances malgré le bruit de mesure.
 
-% We performed several simulations of the closed loop using the Matlab toolbox \cite{sanfelice_2017}. The simulations are carried out with the complete model of the UAV \cite{sansou:stage}, including all the nonlinear aerodynamic effects. A sample simulation is reported in Figure~\ref{fig_sim}, where we initialize the UAV at the origin with zero roll and yaw orientation, and with a pitch angle of 45 degrees. The target orientation is in the vertical hovering configuration and the target position is assigned to $\boldsymbol{p_{\text{eq}}} = [50,~25,~12.5]$.
-
-% We observe that in the time phase $t \in \left[0,38\right]$, the UAV
-% exhibits a graceful but slow convergence to the desired target position using the global controller ($\ell=1$). At that time, the state enters set $\mathcal{D}_1$ and the more aggressive local controller is activated up to the convergence to the desired equilibrium.
-
-% To perform realistic simulations, the measurements are affected by 
-% sensors noise. The intrinsic robustness of the hybrid feedback, established in \cite[Chapter 7]{65} is confirmed by the graceful performance degradation as a function of the amplitude of the measurement noise.
-
-% \section{Schéma de commande hybride}
-
-% \section{Simulations}
-
+\section{Conclusion du Chapitre \ref{chap:hybrid}}
 
 
 
