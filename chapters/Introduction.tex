@@ -13,8 +13,9 @@ Ces dernières années, le domaine des drones s'est considérablement développ�
 
 La possibilité d'utiliser des systèmes de vols autonomes dans le secteur civil a été rendu possible par l'accessibilité croissante, proposée par l'industrie, de solutions à faible coût pour les applications d'imagerie aérienne. Ainsi, ce sont dans des domaines aussi variés que l'agriculture de précision,  l'inspection des infrastructures civiles ou encore les opérations de sécurité que les drones autonomes sont aujourd'hui mobilisés, devenant alors un riche sujet de recherche.
 
-La miniaturisation des équipements électroniques et mécaniques est à l'origine de l'essor d'une classe de drones de plus en plus petits. Souvent qualifiés de \textit{Micro Air Vehicle} (MAV), leur petite taille leur permet d'intervenir dans des espaces confinés ou contraints. Ils n'ont, cependant, qu'une charge utile restreinte, souvent limitée à l'emport d'une caméra ou d'un colis de faible masse. 
+La miniaturisation des équipements électroniques et mécaniques est à l'origine de l'essor d'une classe de drones de plus en plus petits. Souvent qualifiés de \textit{Micro Air Vehicle} (MAV) ou de \textit{Unmanned Aerial Vehicle} (UAV), leur petite taille leur permet d'intervenir dans des espaces confinés ou contraints. Ils n'ont, cependant, qu'une charge utile restreinte, souvent limitée à l'emport d'une caméra ou d'un colis de faible masse. 
 \nomenclature[]{\(MAV\)}{Micro drone (\textit{Micro Air Vehicle})}
+\nomenclature[]{\(UAV\)}{Drone autonomes (\textit{Unmanned Aerial Vehicle})}
 Leur faible autonomie restreignant leur usage, la recherche s'est alors concentrée sur une solution permettant d'optimiser leur utilisation. En cela, les drones à décollage et atterrissage verticaux (\textit{Vertical take-off and landing}; VTOL) répondent aux exigences.
 \nomenclature[]{\(VTOL\)}{Drones à décollage et atterrissage verticaux (\textit{Vertical Take-Off and landing})}
 
@@ -64,11 +65,11 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
 
         L'avantage de ce type d'architecture est sa grande robustesse. Effectivement, aucune pièce en mouvement n'est nécessaire pour réaliser la transition, ce que réduit le risque de défaillance mécanique. Toutefois, l'inconvénient réside dans son manque d'efficacité. Lors d'un vol d'avancement, la portance sera générée par l'aile. Ainsi, il est possible de désactiver les rotors qui génèrent des perturbations aérodynamiques et des trainées parasites. Les axes des moteurs se retrouvent orthogonaux au flux d'air généré par le déplacement du drone, ce qui correspond au cas le plus défavorable en termes de trainée. De plus, la surcharge engendrée par l'emport de moteurs supplémentaires se traduit par une diminution de la charge utile transportable. 
 
-        En termes de contrôle, un atout indéniable est la séparation des actionnements en fonction des phases de vols. Ainsi, l'architecture de commande sera basée sur un mécanisme de commutation permettant de choisir la loi de commande appropriée sur un critère de vitesse air. Ce critère est pertinent en ce qu'il est lié à la capacité de l'aile à générer de la portance induite par le flux d'air. Ainsi, à basse vitesse, le drone se stabilise avec l'actionnement quadrirotor et la loi de commande associée. Dans les vitesses plus importantes, la commutation de la loi permet de contrôler le drone en mode avion. Toutefois, le passage d'une loi à l'autre reste le point clé de la commande et demeure complexe et critique.
+        Pour ce qui est du contrôle, un atout indéniable est la séparation des actionnements en fonction des phases de vol. Ainsi, l'architecture de commande sera basée sur un mécanisme de commutation permettant de choisir la loi de commande appropriée sur un critère de vitesse air. Ce critère est pertinent en ce qu'il est lié à la capacité de l'aile à générer de la portance induite par le flux d'air. Ainsi, à basse vitesse, le drone se stabilise avec l'actionnement quadrirotor et la loi de commande associée. Dans les vitesses plus importantes, la commutation de la loi permet de contrôler le drone en mode avion. Toutefois, le passage d'une loi à l'autre reste le point clé de la commande et demeure complexe et critique.
 
         \subsubsection*{\textit{Tiltrotor}}
 
-        Les \textit{tiltrotors} nécessitent l'utilisation d'un actionneur dédié à la modification de l'orientation des moteurs. Les rotors sont montés sur des arbres basculants actionnés et la transition du vol stationnaire au vol d'avancement (ou inversement) s'effectue progressivement en fonction de l'inclinaison du rotor. Les deux configurations sont représentées sur la figure \ref{fig:tiltrotor}. Ainsi, l'angle entre le souffle des hélices et l'aile peut être ajusté à chaque instant. Cet angle joue un rôle important dans le contrôle des forces et des moments aérodynamiques : sa maîtrise permet de mieux gérer, non seulement, les performances aérodynamiques du vol lors des transitions, mais aussi la stabilité du système sur l'ensemble du domaine de vol. 
+        Les \textit{tiltrotors} nécessitent l'utilisation d'un actionneur dédié à la modification de l'orientation des moteurs. Les rotors sont montés sur des arbres basculants actionnés et la transition du vol stationnaire au vol d'avancement (ou inversement) s'effectue progressivement en fonction de l'inclinaison du rotor. Les deux configurations sont représentées sur la figure \ref{fig:tiltrotor}. Ainsi, l'angle entre le souffle des hélices et l'aile peut être ajusté à chaque instant. Cet angle joue un rôle important dans le contrôle des forces et des moments aérodynamiques : sa maîtrise permet, non seulement, de mieux gérer les performances aérodynamiques du vol lors des transitions, mais aussi la stabilité du système sur l'ensemble du domaine de vol. 
         Malgré le fait que les \textit{tiltrotor} embarquent un actionneur uniquement dédié à la transition, ce qui augmente la masse du drone, cette architecture est intéressante car elle permet d'utiliser les mêmes actionneurs pour assurer la sustentation en stationnaire et pour générer la traction en mode avion.
         \begin{figure}[ht!]
             \centering
@@ -85,7 +86,7 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
         
 
         \subsubsection*{\textit{Tailsitter}}
-        Contrairement au \textit{tiltrotor} qui se pose sur le fuselage de l'avion (figure \ref{fig:tiltrotor}), les \textit{tailsitter} se posent à la verticale (voir figure centrale \ref{fig:tailsitter}). Durant la transition du mode stationnaire au vol d'avancement, la structure entière bascule vers l'avant modifiant l'angle d'incidence de la voilure. Selon la configuration du \textit{tailsitter}, la transition peut être réalisée soit par la génération du moment aérodynamique créé par les élevons, soit par le couple créé par le système de propulsion. Pendant le vol d'avancement, en position horizontale, le \textit{tailsitter} vole comme un avion conventionnel sans dérive. En utilisant des techniques aérodynamiques classiques, les concepteurs peuvent optimiser le profil de l'aile du \textit{tailsitter} pour le rendre plus endurant afin de réduire la consommation d'énergie. Grâce à ce processus d'optimisation aérodynamique, le \textit{tailsitter} peut effectuer des missions de vol de plus d'une heure.
+        Contrairement aux \textit{tiltrotors} qui se posent sur le fuselage de l'avion (figure \ref{fig:tiltrotor}), les \textit{tailsitter} se posent à la verticale (voir figure centrale \ref{fig:tailsitter}). Durant la transition du mode stationnaire au vol d'avancement, la structure entière bascule vers l'avant, modifiant ainsi l'angle d'incidence de la voilure. Selon la configuration du \textit{tailsitter}, la transition peut être réalisée soit par la génération du moment aérodynamique créé par les élevons, soit par le couple créé par le système de propulsion. Pendant le vol d'avancement, en position horizontale, le \textit{tailsitter} vole comme un avion conventionnel sans dérive. En utilisant des techniques aérodynamiques classiques, les concepteurs peuvent optimiser le profil de l'aile du \textit{tailsitter} pour le rendre plus endurant afin de réduire la consommation d'énergie. Grâce à ce processus d'optimisation aérodynamique, le \textit{tailsitter} peut effectuer des missions de vol de plus d'une heure.
 
         \begin{figure}[ht!]
             \centering
@@ -105,8 +106,6 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
     
         \subsubsection*{\textit{Tiltwing}} 
         La particularité des \textit{tiltwings} réside dans le fait que les rotors sont inclinés en même temps que les ailes (voir figure \ref{fig:tiltwing}). Un actionneur supplémentaire et puissant est donc nécessaire pour surmonter le couple de l'aile afin de la positionner dans l'orientation souhaitée. La commande de cet actionneur doit être prise en compte lors de la conception des lois de commande. Pendant le décollage, l'atterrissage et les vols stationnaires, les ailes doivent être positionnées vers le haut afin de produire une force de poussée opposée au vecteur gravité. Dans ces phases de vol, lorsque les ailes sont orientées vers le haut, l'aéronef est plus vulnérable au vent et les lois de commande doivent rejeter ces perturbations. Dans la littérature, il existe plusieurs configurations d'ailes basculantes et différentes approches de contrôle conçues pour stabiliser leur dynamique de vol.
-        % \cite{}.
-        \todo{cite}
         \begin{figure}[ht!]
             \centering
             \resizebox{.9\textwidth}{!}{%
@@ -127,9 +126,11 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
     Dans ces deux architectures, il est courant de trouver des actionneurs basés sur des effets aérodynamiques. Ces actionneurs ont l'avantage d'être peu consommateurs en énergie. Ils sont mus par des servomoteurs qui consomment peu d'électricité proportionnellement au couple qu'ils génèrent. Dans le cas des ailes volantes, les surfaces aérodynamiques sont souvent placées sur la partie arrière des ailes et peuvent être utilisées symétriquement à l'instar de volets, ou anti-symétriquement comme des ailerons. 
     Dans les phases de décollage, de vol stationnaire ou d'atterrissage, la plateforme est maintenue en vol par les hélices : il est donc nécessaire de dimensionner les groupes moteurs-hélices pour qu'ils puissent générer assez de force. En fonction des configurations, les moments peuvent être obtenus par des différentiels sur l'utilisation des moteurs ou bien par des surfaces aérodynamiques. Dans le cas de surfaces soufflées par le flux d'air des hélices, il existe un couplage des actionneurs qui complexifie la modélisation et le contrôle de ces architectures.
 
+    \todo{sous actionnement}
+
     \subsection{Aérodynamique}
 
-    Lors d'un vol d'avancement, ces architectures assurent le maintien du vol en palier, en générant une force de portance grâce à leur surface alaire. Cette portance, s'opposant au poids, permet de maintenir une trajectoire. La force de trainée engendrée par l'aile et le fuselage est compensée par la composante horizontale de la poussée. En vol stationnaire, le poids est compensé par la traction de l'hélice. La relation d'équilibre est plus complexe lorsque nous évaluons l'ensemble des points d'équilibre lors de la transition d'un mode à l'autre. La transition équilibrée est assurée par le mélange correct des forces aérodynamiques et de propulsion.
+    Lors d'un vol d'avancement, les \textit{tailsitters} et les \textit{freewings} assurent le maintien du vol en palier, en générant une force de portance grâce à leur surface alaire. Cette portance, qui s'opposant au poids, permet de maintenir une trajectoire. La force de trainée engendrée par l'aile et le fuselage est compensée par la composante horizontale de la poussée. En vol stationnaire, le poids est compensé par la traction de l'hélice. La relation d'équilibre est plus complexe lorsque nous évaluons l'ensemble des points d'équilibre lors de la transition d'un mode à l'autre. La transition équilibrée est assurée par le mélange correct des forces aérodynamiques et de propulsion.
 
     Les interactions aérodynamiques entre l'hélice et la surface de l'aile sont connues pour être complexes et difficiles à modéliser. La vitesse induite par le souffle de l'hélice entraîne une variation locale de l'angle d'attaque et des variations de pression dynamique au niveau des sections d'aile immergées, d'où une distribution différente de la portance. L'analyse de l'interaction entre l'hélice, l'aile et les élevons doit permettre d'obtenir de bonnes caractéristiques de vol et de tirer profit des combinaisons.
 
@@ -150,7 +151,7 @@ Des fonctions non linéaires continues décrivant les coefficients de portance e
 
 Il existe de nombreuses conceptions possibles pour un drone convertible. Bien que tous les modèles aient une structure commune, il existe des différences majeures dans la formulation réelle des termes de force et de couple. Celles-ci dépendent de la disposition des moteurs ou des hélices, de l'existence ou non de surfaces de contrôle aérodynamiques et de la forme du véhicule.
 
-Un modèle précis est nécessaire pour les conceptions classiques de contrôle basées sur un modèle et en particulier pour les approches d'inversion dynamique ou de contrôle prédictif de modèle. Cependant, un modèle précis va nécessite une campagne d'identification approfondie en soufflerie ou en vol en environnement contraint. Il se peut également que la complexité du modèle ne permette pas une utilisation directe dans le contrôle à cause de limitation matérielle des calculateurs embarqué.
+Un modèle précis est nécessaire pour les conceptions classiques de contrôle basées sur un modèle et en particulier pour les approches d'inversion dynamique ou de contrôle prédictif de modèle. Cependant, une modélisation précise va nécessiter une campagne d'identification approfondie en soufflerie ou un vol en environnement contraint. Il se peut également que la complexité du modèle ne permette pas une utilisation directe dans le contrôle à cause de limitation matérielle des calculateurs embarqué.
 
 
 Dans notre cas, nous nous sommes intéressés à l'impact du vent sur les architectures mentionnées précédemment. Il est donc nécessaire de modéliser le vent. Dans le cas de vent constant ou de cisaillement de vent, un modèle à échelons semble tout à fait approprié pour représenter le changement brusque de vitesse de vent. 
@@ -160,7 +161,7 @@ La fonction définissant le chapeau mexicain est :
 \begin{align}
     \Psi_{mex}(t)= w_{m} - \frac{A_g}{2} \left(1-\cos(2 \pi f_g (t-t_{0,mex}))\right)\sin(3 \pi f_g (t-{0,mex}))
 \end{align}
-et la fonction ondelette de Morlet est défini par :
+et la fonction ondelettes de Morlet est défini par :
 \begin{align}
     \Psi_{mor}(t)=  w_{m} + A_g \exp(-(t+t_{0,mor})) \cos(5*(t-t_{0,mor}))
 \end{align}
@@ -174,8 +175,8 @@ où $w_{m}$ est le vent moyen sans perturbation, $t_{0,mex}$ représente l'insta
     \label{fig:mexhat}
 \end{figure}
 
-\todo{explication}
-Le modèle de Dryden est défini
+
+Le modèle de Dryden est défini :
 \begin{subequations}
     \begin{align}
         \Phi _{u_{g}}(\Omega )& =\sigma _{u}^{2}{\frac {2L_{u}}{\pi }}{\frac {1}{1+(L_{u}\Omega )^{2}}}\\
@@ -183,8 +184,8 @@ Le modèle de Dryden est défini
         \Phi _{w_{g}}(\Omega )& =\sigma _{w}^{2}{\frac {2L_{w}}{\pi }}{\frac {1+12(L_{w}\Omega )^{2}}{\left(1+4(L_{w}\Omega )^{2}\right)^{2}}}
     \end{align}
 \end{subequations}
-
-Le modèle de von Kármán
+\todo{explication}
+Le modèle de von Kármán :
 \begin{subequations}
     \begin{align}
         \Phi _{u_{g}}(\Omega )& =\sigma _{u}^{2}{\frac {2L_{u}}{\pi }}{\frac {1}{\left(1+(1.339L_{u}\Omega )^{2}\right)^{\frac {5}{6}}}}\\
@@ -250,4 +251,8 @@ Un drone est composé de plusieurs pièces assemblées entre elle pour former la
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=1\columnwidth]{figures/PPRZ_Main_ap_loop.png}}
     \caption{Todo.}
     \label{fig:schedulingpaparazzi}
+
+\section{AM32}
+
+
 \end{figure}
