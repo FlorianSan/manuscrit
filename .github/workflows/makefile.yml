@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Install xmllint
+      run: sudo apt -y install latexmk texlive-full
 
     - name: build main.pdf
       run: make
