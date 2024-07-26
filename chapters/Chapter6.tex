@@ -1,7 +1,16 @@
+% LTeX: language=fr enabled=false
+
 \chapter{Modélisation et commande d'un drone à aile libre rotation libre}
 \minitoc
+\label{chap:colibri}
+
+\section{Motivation}
+\label{sec:motivationcolibri}
+\todo{Explication sur l'interet d'avoir un fuselage, capteur, charge utile}
 
 \section{Design et modélisation d'un drone : Colibri}
+
+
 \section{Design and modelling of Colibri UAV}
 \label{sec:model_colibri}
 The Colibri drone is derived from a tail-sitter drone with a wing that generates lift during the forward flight. This wing has several actuators: four motors $u_{i}, ~i = 1,2,3,4$ and two elevons $\delta_{\text{l}}$ and $\delta_{\text{r}}$. We can define the control vector $u_{\text{W}}$ of the wing based on Figure~\ref{fig:world_body} as $u_{\text{W}} = [u_{1}~u_{2}~u_{3}~u_{4}~\delta_{\text{l}}~\delta_{\text{r}}]^\top$. A fuselage linked by a pivot is secured at the aerodynamic centre of the wing. This fuselage supports the autopilot, the battery, a motor and a tail to keep it horizontal. In Figure \ref{fig:world_body}, all the aerodynamic control surfaces are shown in pink and the propellers are shown in green.
@@ -345,8 +354,11 @@ About Figure \ref{fig:colibri_flight}, from \SI{0}{\second} to \SI{8}{\second}, 
 
 \section{Commande Udwadia-Kalaba}
 
+Mesure du vent, sonde 5 trous
+
 \section{Vols expérimentaux}
 
+\section{Conclusion du Chapitre \ref{chap:colibri}}
 
 
 

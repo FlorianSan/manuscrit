@@ -1,18 +1,22 @@
-\chapter{Étude longitudinale sur une maquette à trois degrés de liberté}
+\chapter{Étude longitudinale sur une maquette à 3 DOF}
 \minitoc
 \label{chap:3DOF}
 
+\section{Motivation}
+\label{sec:motivation3DOF}
+Des simulations en boucle fermée avec le contrôleur \eqref{eq:u_hybrid} développé dans \ref{sec:ctrl_hyste}, montrent qu'en présence d'un vent horizontal constant dans le plan $(x_{[b]},z_{[b]})$, le drone modifie son angle de tangage. Ce comportement a également été observé lors d'essais en soufflerie avec le dispositif expérimental \cite{olszaneckibarthHal-02542982}. Intuitivement, une réduction de l'angle d'attaque entraîne une diminution de la surface exposée au vent, de manière à réduire la force de traînée, ce qui a une forte incidence sur la position. Dans le même temps, le flux d'air dû au vent constant génère une portance, compensée par une réduction de la poussée de l'hélice, et une réduction conséquente de la consommation du drone. L'objectif de la maquette décrite ici est d'évaluer expérimentalement l'effet du vent sur le dispositif DarkO.
+
+\todo{explication de la non mesure du vent}
+
 \section{Présentation de la maquette experimentale}
 \label{sec:test_bench}
-\subsection{Motivation de cette maquette}
-\label{subsec:motivation}
 
-Des simulations en boucle fermée avec le contrôleur \eqref{eq:u_hybrid} développé dans \ref{sec:ctrl_hyste}, montrent qu'en présence d'un vent horizontal constant dans le plan $(x_{[b]},z_{[b]})$, le drone modifie son angle de tangage. Ce comportement a également été observé lors d'essais en soufflerie avec le dispositif expérimental \cite{olszaneckibarthHal-02542982}. Intuitivement, une réduction de l'angle d'attaque entraîne une diminution de la surface exposée au vent, de manière à réduire la force de traînée, ce qui a une forte incidence sur la position. Dans le même temps, le flux d'air dû au vent constant génère une portance, compensée par une réduction de la poussée de l'hélice, et une réduction conséquente de la consommation du drone. L'objectif de la maquette décrite ici est d'évaluer expérimentalement l'effet du vent sur le dispositif DarkO.
+
 
 \subsection{Description physique, capteur et actionnement}
 Le prototype développé comprend des pièces imprimées en 3D en Onyx et PLA  \nomenclature[]{\(PLA\)}{Thermoplastique : acide polylactique} (acide polylactique, un polyester thermoplastique). Le drone est spécialement conçu pour réaliser des expériences devant une soufflerie avec un comportment semblable à celui de DarkO en raison de leur forme similaire (voir Fig. \ref{fig:real_test_bench}). La partie centrale, qui contient l'avionique embarquée (pilote automatique, GPS, etc.) dans DarkO, a été remplacée ici par un joint tournant à un degré de liberté (voir Fig. \ref{fig:rotation}). Les ailes sont les mêmes que celles du DarkO, avec les contrôleurs électroniques de vitesse (ESC), régissant la vitesse du moteur \textit{brushless}, placés dans les ailes.
 
-Comme décrit dans la section \ref{subsec:motivation}, nous souhaitons représenter et étudier le degré de liberté de l'axe $y_{\text{b}}$ du drone DarkO. Le tube principal en carbone reliant les deux ailes est utilisé comme axe de rotation. Ce tube est fixé sur deux roulements espacés de \SI{28.5}{\milli\meter} afin d'obtenir une fixation solide de l'ensemble. Cet axe de rotation est équipé d'un codeur optique rotatif en quadrature pour mesurer précisément l'orientation de l'appareil. L'avantage de ce capteur est qu'il ne produit pas de couple residtant sur l'axe de rotation. Ce codeur offre 4000 impulssions par tour, ce qui donne une résolution de $\SI{0.09}{\degree}/pulse$.
+Comme décrit dans la section \ref{sec:motivation3DOF}, nous souhaitons représenter et étudier le degré de liberté de l'axe $y_{\text{b}}$ du drone DarkO. Le tube principal en carbone reliant les deux ailes est utilisé comme axe de rotation. Ce tube est fixé sur deux roulements espacés de \SI{28.5}{\milli\meter} afin d'obtenir une fixation solide de l'ensemble. Cet axe de rotation est équipé d'un codeur optique rotatif en quadrature pour mesurer précisément l'orientation de l'appareil. L'avantage de ce capteur est qu'il ne produit pas de couple residtant sur l'axe de rotation. Ce codeur offre 4000 impulssions par tour, ce qui donne une résolution de $\SI{0.09}{\degree}/pulse$.
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.8\columnwidth]{figures/MontageSupport2.PNG}
@@ -44,7 +48,7 @@ Un diagramme schématique des composants du dispositif expérimental et de leur 
 Les moteurs (f) sont alimentés par une batterie externe de 12v 20Ah et les servomoteurs (e) sont alimentés par du 5V, via un module d'acquisition LabJack T7 \cite[]{LabJack} (g). Le module LabJack (g) concentre la plupart des signaux des capteurs et des actionneurs : six entrées analogiques pour le capteur de force/couple (c), deux entrées numériques en quadrature pour l'encodeur rotatif (d), une entrée analogique (ou une liaison série selon le capteur) pour le capteur de vitesse (b), deux sorties numériques PWM (Pulse Width Modulation) \nomenclature[]{\(PWM\)}{Modulation de largeur d'impulsions (\textit{Pulse Width Modulation})} pour les moteurs (f) et deux sorties numériques PWM pour les servomoteurs (e). 
 
 Les élévons sont commandés par des servomoteurs qui ne fournissent pas de signal de mesure de la position. Nous utilisons donc le point de consigne, en supposant que l'actionneur est parfait. Cela est raisonnable en raison de la saturation logicielle imposée à l'entrée des élevons et du dimensionnement correct des servomoteurs par rapport aux forces impliquées. Le LabJack (g) possède une interface de programmation d'application (API), permettant une connexion à distance avec un ordinateur.
-Le LabJack (g) possède une interface de programmation d'application (API) \nomenclature[]{\(API\)}{Interface de programmation d'application (\textit{Application Programming Interface})}, permettant une connexion avec un ordinateur. Nous avons développé un code Python qui communique avec le LabJack afin de récupérer les valeurs des capteurs, de calculer la commande à appliquer aux servomoteurs selon le schéma de contrôle présenté ci-dessous et de générer les signaux de sortie pour les servomoteurs. Les données collectées par le LabJack sont enregistrées afin d'être utilisées pour le post-traitement et de générer le graphique présenté dans la section \ref{sec:exp}. \\
+Le LabJack (g) possède une interface de programmation d'application (API) \nomenclature[]{\(API\)}{Interface de programmation d'application (\textit{Application Programming Interface})}, permettant une connexion avec un ordinateur. Nous avons développé un code Python qui communique avec le LabJack afin de récupérer les valeurs des capteurs, de calculer la commande à appliquer aux servomoteurs selon le schéma de contrôle présenté ci-dessous et de générer les signaux de sortie pour les servomoteurs. Les données collectées par le LabJack sont enregistrées afin d'être utilisées pour le post-traitement et de générer le graphique présenté dans la section \ref{sec:exp3DOF}. \\
 Pour générer le vent, nous utilisons un dispositif WindShape, lequel dispose également d'une API lui permettant d'être contrôlé via un réseau Ethernet. Le code Python développé peut assigner la vitesse du vent WindShape et donc agir sur le modèle. Il est ainsi possible de tester un ensemble de configurations de vols stationnaires et leurs transitoires associés dans la même campagne d'essais, sans aucune action sur le modèle. 
 
 
@@ -70,9 +74,9 @@ Nous expérimentons la situation avec le vent agissant uniquement le long de l'a
     \centering
     \includegraphics[trim=5cm 0cm 0cm 0cm,clip,width=1\columnwidth]{figures/commande_integrale_ACA-min.png}
     \caption{Schéma de commande linéaire, proportionnel-integral.}
-    \label{fig:commande_int}
+    \label{fig:commande_int3DOF}
 \end{figure}
-Le contrôleur proposé, représenté sur la figure \ref{fig:commande_int}, correspond à
+Le contrôleur proposé, représenté sur la figure \ref{fig:commande_int3DOF}, correspond à
 \todo{ameliorer les equations} 
     \begin{align}
         \dot{x_{c}} &= H(y-\begin{bmatrix}r_{p}\\\mathbb{0}_{8\times 1} \end{bmatrix}),\\
@@ -97,55 +101,26 @@ où $x_{c} \in \mathbb{R}^{2}$ est l'état de l'intégrateur ;$r_{p} \in \mathbb
 \end{align}
 caractérisant la boucle fermée linéaire soit Hurwitz, afin d'assurer la stabilisation avec la dynamique linéarisée liée au scénario sans vent \eqref{eq:withouwind}.
 
-De manière synthétique, la matrice \eqref{eq:close_matrix} décrit la boucle fermée illustrée à la Fig.~\ref{fig:commande_int} : un retour de sortie avec 11 sorties, comprenant les trois positions, les trois vitesses linéaires, deux des trois angles ($\epsilon_{1}$ et $\epsilon_{3}$) et les trois vitesses angulaires. Cette structure peut être considérée comme une solution proportionnelle-intégrale MIMO \nomenclature[]{\(MIMO\)}{Entrées et sorties multiples  (\textit{Multiple-Input Multiple-Output})} résultant d'une observation attentive de la dynamique linéarisée du drone, ce qui permet un nombre minimal d'intégrateurs intégrés dans le contrôleur. Ce contrôle devrait permettre de rejeter les perturbations constantes tout en ayant une robustesse satisfaisante. Le gain $K$ correspond au terme proportionnel et le gain $H$ pondère le terme intégral, induisant une convergence vers la cible. La matrice d'allocation $\Sigma$ conduit à une utilisation symétrique des hélices et des ailerons. Il faut alors ajuster $K$ et $H$ pour obtenir un compromis satisfaisant entre robustesse et rejet des perturbations. Nous mettons en œuvre une synthèse multi-objectifs basée sur une méthode d'optimisation $H_{\infty}$, décrite ci-après.
+De manière synthétique, la matrice \eqref{eq:close_matrix} décrit la boucle fermée illustrée à la Fig.~\ref{fig:commande_int3DOF} : un retour de sortie avec 11 sorties, comprenant les trois positions, les trois vitesses linéaires, deux des trois angles ($\epsilon_{1}$ et $\epsilon_{3}$) et les trois vitesses angulaires. Cette structure peut être considérée comme une solution proportionnelle-intégrale MIMO \nomenclature[]{\(MIMO\)}{Entrées et sorties multiples  (\textit{Multiple-Input Multiple-Output})} résultant d'une observation attentive de la dynamique linéarisée du drone, ce qui permet un nombre minimal d'intégrateurs intégrés dans le contrôleur. Ce contrôle devrait permettre de rejeter les perturbations constantes tout en ayant une robustesse satisfaisante. Le gain $K$ correspond au terme proportionnel et le gain $H$ pondère le terme intégral, induisant une convergence vers la cible. La matrice d'allocation $\Sigma$ conduit à une utilisation symétrique des hélices et des ailerons. Il faut alors ajuster $K$ et $H$ pour obtenir un compromis satisfaisant entre robustesse et rejet des perturbations. Nous mettons en œuvre une synthèse multi-objectifs basée sur une méthode d'optimisation $H_{\infty}$, décrite ci-après.
 \todo{modifier la commande pour expliquer la commande à 3DOF}
 
-\subsection{Optimisation \texorpdfstring{$H_{\infty}$}{H {infty}}} \label{sec:h_inf}
-Pour effectuer une sélection robuste de $K$ et $H$, nous caractérisons d'abord plusieurs fonctions de transfert dans la figure \ref{fig:commande_int}.
+\subsection{Optimisation \texorpdfstring{$H_{\infty}$}{H {infty}}} \label{sec:h_inf3DOF}
+Pour effectuer une sélection robuste de $K$ et $H$, nous caractérisons d'abord plusieurs fonctions de transfert dans la figure \ref{fig:commande_int3DOF}.
 
 La sortie de mesure $y$ est utilisée pour la rétroaction, l'entrée $u$ est la somme de l'entrée intégrale $\Sigma x_{c}$ et de l'action proportionnelle $K e$. La sortie $z$ correspond aux signaux de performance de sortie à contrôler ($e$, $w$, $u$, $y$, $r_{p}$). Grâce aux fonctions de pondération $W=\diag (W_{1},..., W_{4})$, la conception de $H$ et $K$ vise à rejeter une perturbation ou un échelon à basse fréquence $w$ agissant sur $y$. En bref, l'objectif de la conception est d'amener $y$ à zéro malgré la perturbation à basse fréquence sur $w$.
 
-\section{Maquette expérimentale}
 
-
-
-\subsection{\texorpdfstring{$H_{\infty}$}{H {infty}}-based optimization} \label{sec:h_inf}
-
-To perform a robust selection of $K$ and $H$, we first characterize several transfers functions in Fig. \ref{fig:commande_int}.
-%To perform a robust selection of $K$ and $H$ we represent the scheme of Fig. \ref{fig:commande_int}
-%in the compact form of Fig. \ref{fig:lft}, where the augmented plant includes both the integral action and dynamics (\ref{eq:dyna_simp}). 
-The measurement output $y$ is used for feedback, the input $u$ is the sum of the integral input $\Sigma x_{c}$ and the proportional action $K e$. The output $z$ corresponds to the output performance signals to control ($e$, $w$, $u$, $y$, $r_{p}$). Thanks to weighting functions $W=\diag (W_{1},..., W_{4})$, the design of $H$ and $K$ aims to reject a low frequency perturbation or step $w$ acting on $y$. In short, the design goal is to bring $y$ to zero despite the low frequency disturbance on $w$. 
-
-From the Nyquist criterion, we know that the margin corresponds to the minimal distance between the singularity (real point -1) and the product between the controller (C) and the plant (P). Consequently, we define the input modulus margin as $MM_{u} =\min_{\omega\in R}|1-CP|$ and the output modulus margin as $MM_{y} =\min_{\omega\in R}| 1-PC |$ for a positive feedback. We first introduce the output sensitivity function  $T_{r \rightarrow \epsilon}=S_{y}=(1-PC)^{-1}$, so that $\lVert S_{y} \rVert_{\infty}=MM_{y}^{-1}$ and the input sensitivity function $T_{d \rightarrow u}=S_{u}=(1-CP)^{-1}$, so that $\lVert S_{u} \rVert_{\infty}=MM_{u}^{-1}$. Consequently, the minimization of the  $H_{\infty}$-norm of $S_{u}$ or $S_{y}$, leads to improving the input and output modulus margins. As our system is MIMO, we give importance to both the input and output sensitivity functions, because they do not commute. We also define the transfer functions $T_{r \rightarrow u}= CS_{y} = S_{u}C$ and $T_{w \rightarrow y}$. In order to guarantee a satisfactory trade-off between robustness and performance, we select the weighting functions $W_{1}$, $W_{2}$, $W_{3}$ and $W_{4}$ linked to $\lVert W_{1} T_{r \rightarrow \epsilon}(s)\rVert_{\infty} \leq 1 $ and $\lVert W_{2} T_{d \rightarrow u}(s)\rVert_{\infty} \leq 1 $, corresponding to robustness margins at the inputs and outputs, $\lVert W_{3} T_{r \rightarrow u}(s)\rVert_{\infty} \leq 1 $ limiting the control effort, $\lVert W_{4} T_{w \rightarrow y}(s)\rVert_{\infty} \leq 1 $ ensuring suitable wind disturbance rejection. Specifically, the weighting functions are tuned as
+Plus précisément, les constantes de pondération sont réglées comme suit
 \begin{align} \label{eq:weight_gain}
     &W_{1} =  0.5, \quad
     W_{2} = 0.5, \quad
-    W_{3} = 0.8, 
-    &W_{4} = 0.5.
+    W_{3} = 0.8, \quad 
+    W_{4} = 0.5.
 \end{align}
-The values of $W_{1}$ and $W_{2}$ ensure $MM_{u} >  6~dB$ and $MM_{y} >  6~dB$, $ W_{3}$ and $W_{4}$ are tuned to obtain a satisfactory trade-off between the different specifications. The weight $ W_{4} $  allows managing, among other things, the speed of the rejection.
-% \begin{figure}[ht!]
-%     \centering
-%     \includegraphics[width=0.9\columnwidth]{picture/Copie de lft.png}
-%     \caption{$H_{\infty}$-oriented plant-controller feedback representation.}
-%     \label{fig:lft}
-% \end{figure}
-
-% With these selections, we cast the design problem for $K$ and $H$ as a generalized mixed sensitivity problem providing good input and output specifications for the closed loop
-With selections \eqref{eq:weight_gain}, we cast the design problem for $K$ and $H$ as an $H_{\infty}$ synthesis under order constraint, providing good input and output specifications for the closed loop:
-\begin{align*} \label{eq:pb_optim}
-&\min_{C}\quad \begin{Vmatrix}
-    W_{1} T_{r \rightarrow \epsilon}(P,C)\\
-    W_{2} T_{d \rightarrow u}(P,C)\\
-    W_{3} T_{r \rightarrow u}(P,C)\\
-    W_{4} T_{w \rightarrow y}(P,C)
-    \end{Vmatrix}_{\infty}, \text{ subject to} \\ &C \in \mathbb{R}^{11 \times 4} \text{ stabilizes } P \text{ internally,} \numberthis
-\end{align*}
-
-where $P$ is the augmented plant containing the integral action and the linearized UAV dynamics. In addition, we impose constraints on the gains $K$ and $H$ ensuring that the closed loop with experimental device only evolves in the ($x$,$z$) plane, compatibly.
 
 
-We solved (\ref{eq:pb_optim}) using Systune \cite[]{1576856}. Based on non-smooth optimization, Systune dealing with several non-convex scenarios, such as the structured control architecture where we optimize the gain matrices $K$, $H$. The optimization algorithm returns optimized selections of 
+Nous avons résolu \eqref{eq:pb_optim} en utilisant le logiciel {\tt Systune} \cite{1576856}. Basé sur l'optimisation non lisse, {\tt Systune} traite plusieurs scénarios non convexes, tels que l'architecture de contrôle structurée où nous optimisons les matrices de gain $K$, $H$. L'algorithme d'optimisation renvoie des sélections optimisées de 
+
 \begin{align}\label{eq:HK}
 \begin{bmatrix}
 H\\ \hline K 
@@ -158,9 +133,55 @@ H\\ \hline K
 0.217  & 0 & \shortminus0.164  & 1.074 & 0 & \shortminus0.527 & 0 & 0 & 0 & \shortminus0.773 & 0  
 }
 \end{align}
-Introducing a closed-loop spectral abscissa $\alpha = -0.2381$ for $A_{cl}$ in (\ref{eq:close_matrix}).
+Lié à une abscisse spectrale en boucle fermée pour $A_{cl}$ dans \eqref{eq:close_matrix} valant  $\alpha = -0.2381$.
+
+
 
 \section{Résultats}
+\label{sec:exp3DOF}
+La figure~\ref{fig_exp_centrage_arr} montre le résultat de la boucle fermée de la figure~\ref{fig:commande_int3DOF} avec la sélection des gains \eqref{eq:HK} et une valeur constante et croissante par morceaux du vent horizontal $w$ (dernier graphique). 
+Malgré quelques oscillations, le drone maintient sa position en dépit du vent, en inclinant convenablement l'angle de tangage. Les oscillations expérimentales sont absentes de nos simulations, ce qui suggère la présence de phénomènes non modélisés.
+Nous observons également un comportement qui pourrait être important pour de futures recherches : le drone semble se stabiliser plus facilement le long de l'axe vertical que le long de l'axe horizontal. Comme prévu, lorsque le vent augmente, l'angle d'inclinaison diminue, ce qui modifie la poussée nécessaire et la déflexion des élevons. En effet, le vent génère de la portance sur les ailes, ce qui compense l'effet de la gravité, et donc la poussée nécessaire devient plus faible.
+Pour chaque valeur de $w$, le modèle converge vers un équilibre, dont la caractérisation mathématique précise est détaillé dans \ref{sec:eq_vent}. Il est donc nécessaire d'étendre la robustesse du contrôleur en effectuant une optimisation multimodèle du contrôleur (décrite dans \ref{sec:h_inf3DOF_multi}). Il est également possible de supprimer les contraintes sur la structure du contrôleur afin de lui donner plus de degrés de liberté dans l'optimisation.
+
+Le lien \url{https://youtu.be/ce4_FUzeVzI} montre une vidéo de la maquette avec les résultats expérimentaux.
+\begin{figure}[!ht]
+   \centering
+    \includegraphics[width=0.7\columnwidth]{figures/exp.png}
+    \caption{Experimental results.}
+    \label{fig_exp_centrage_arr}
+\end{figure}
+
+\section{Conclusion du Chapitre \ref{chap:3DOF}}
+Nous avons décrit une maquette permettant de simuler le vol d'un drone convertible, DarkO,en soufflerie. L'objectif de cette maquette est de tester le système de contrôle sur une représentation fidèle de la dynamique longitudinale, tout en simulant la dynamique de translation. Nous avons également présenté un contrôleur linéaire de sortie basé sur PI pour la stabilisation du vol stationnaire dans des conditions de vent constant. Les gains du contrôleur ont été obtenus à l'aide d'une optimisation non convexe. Les résultats des essais expérimentaux montrent qu'il est possible de stabiliser l'équilibre en vol stationnaire dans la plage de vitesse du vent testée, mais d'autres architectures de contrôle devraient être étudiées à l'avenir pour traiter les oscillations indésirables. Ces résultats indiquent qu'il est nécessaire de tester cette architecture de commande sur un modèle complet à six degrés de liberté dans des conditions similaires de vent.
+
+
+% \subsection{\texorpdfstring{$H_{\infty}$}{H {infty}}-based optimization}
+
+
+
+% From the Nyquist criterion, we know that the margin corresponds to the minimal distance between the singularity (real point -1) and the product between the controller (C) and the plant (P). Consequently, we define the input modulus margin as $MM_{u} =\min_{\omega\in R}|1-CP|$ and the output modulus margin as $MM_{y} =\min_{\omega\in R}| 1-PC |$ for a positive feedback. We first introduce the output sensitivity function  $T_{r \rightarrow \epsilon}=S_{y}=(1-PC)^{-1}$, so that $\lVert S_{y} \rVert_{\infty}=MM_{y}^{-1}$ and the input sensitivity function $T_{d \rightarrow u}=S_{u}=(1-CP)^{-1}$, so that $\lVert S_{u} \rVert_{\infty}=MM_{u}^{-1}$. Consequently, the minimization of the  $H_{\infty}$-norm of $S_{u}$ or $S_{y}$, leads to improving the input and output modulus margins. As our system is MIMO, we give importance to both the input and output sensitivity functions, because they do not commute. We also define the transfer functions $T_{r \rightarrow u}= CS_{y} = S_{u}C$ and $T_{w \rightarrow y}$. In order to guarantee a satisfactory trade-off between robustness and performance, we select the weighting functions $W_{1}$, $W_{2}$, $W_{3}$ and $W_{4}$ linked to $\lVert W_{1} T_{r \rightarrow \epsilon}(s)\rVert_{\infty} \leq 1 $ and $\lVert W_{2} T_{d \rightarrow u}(s)\rVert_{\infty} \leq 1 $, corresponding to robustness margins at the inputs and outputs, $\lVert W_{3} T_{r \rightarrow u}(s)\rVert_{\infty} \leq 1 $ limiting the control effort, $\lVert W_{4} T_{w \rightarrow y}(s)\rVert_{\infty} \leq 1 $ ensuring suitable wind disturbance rejection. Specifically, the weighting functions are tuned as
+% \begin{align}
+%     &W_{1} =  0.5, \quad
+%     W_{2} = 0.5, \quad
+%     W_{3} = 0.8, \quad 
+%     W_{4} = 0.5.
+% \end{align}
+% The values of $W_{1}$ and $W_{2}$ ensure $MM_{u} >  6~dB$ and $MM_{y} >  6~dB$, $ W_{3}$ and $W_{4}$ are tuned to obtain a satisfactory trade-off between the different specifications. The weight $ W_{4} $  allows managing, among other things, the speed of the rejection.
+% With selections \eqref{eq:weight_gain}, we cast the design problem for $K$ and $H$ as an $H_{\infty}$ synthesis under order constraint, providing good input and output specifications for the closed loop:
+% \begin{align*} \label{eq:pb_optim}
+% &\min_{C}\quad \begin{Vmatrix}
+%     W_{1} T_{r \rightarrow \epsilon}(P,C)\\
+%     W_{2} T_{d \rightarrow u}(P,C)\\
+%     W_{3} T_{r \rightarrow u}(P,C)\\
+%     W_{4} T_{w \rightarrow y}(P,C)
+%     \end{Vmatrix}_{\infty}, \text{ subject to} \\ &C \in \mathbb{R}^{11 \times 4} \text{ stabilizes } P \text{ internally,} \numberthis
+% \end{align*}
+
+% where $P$ is the augmented plant containing the integral action and the linearized UAV dynamics. In addition, we impose constraints on the gains $K$ and $H$ ensuring that the closed loop with experimental device only evolves in the ($x$,$z$) plane, compatibly.
+
+
+
 
 
 

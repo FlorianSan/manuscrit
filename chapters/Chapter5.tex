@@ -1,30 +1,34 @@
-\chapter{Commande proportionnelle intégrale d'un drone convertible à 6 degrés de liberté}
+\chapter{Commande proportionnelle intégrale à 6 DOF}
 \minitoc
+\label{chap:6DOF}
+
+\section{Motivation}
+\label{sec:motivation6DOF}
+Nous avons observé expérimentalement dans le chapitre \ref{chap:3DOF} qu'un drone \textit{tailsitter} pouvez se stabiliser en stationnaire face à du vent vers les points d'équilibre décrit dans la section \ref{sec:eq_vent} grâce à une architecture de commande linaire. Cette dernière est basée sur un retour de sortie, proportionnel intégral, libérant deux degrés de liberté sur l'orientation du drone 
+
 
 \section{Schéma de commande linéaire proportionnel intégral : 6 Dof}
-\section{Integral-based linear control}
 \label{sec:6dofcmd}
-\subsection{Description of the control scheme}
+\subsection{Description du schéma de contrôle}
 \label{sec:ctl_sche}
 
-A careful inspection of the control and the disturbance input matrices $\boldsymbol{G}_{w}$ and $\boldsymbol{E}_{w}$ in model \eqref{eq:lpv_linearisation} (see the output of Algorithm~\ref{alg:linea}) suggests an effective control architecture to reject a constant wind disturbance $\boldsymbol{w}$. Indeed, the ailerons and the propellers can be used symmetrically to generate respectively a moment about the $y_{[\text{b}]}$ axis, verifying equation \eqref{eq:momenty} and a force along the $x_{[\text{b}]}$ axis, verifying equation \eqref{eq:forcex}, thus compensating for the disturbance effect. Nevertheless, there is still a force along the $z_{[\text{b}]}$ axis to be compensated for by verifying equation \eqref{eq:forcez}, and an integral action can asymptotically converge to the desired force, even with a non-measured wind disturbance $\boldsymbol{w}$. We may thus stabilize the UAV at a hovering equilibrium as characterized in Theorem~\ref{thm:eqs}. Since we don't measure the wind $\boldsymbol{w}$, the values of $\psi$ and $\theta$ in Algorithm~\ref{alg:eq} are unknown. The proposed controller, shown in Fig.~\ref{fig:commande_int}, uses integral action to obtain these two unknown angles. Its feedback loop involves the following error variables output, which should converge to zero in any hovering position:
+Une inspection minutieuse des matrices de commande et d'entrée des perturbations $\boldsymbol{G}_{w}$ et $\boldsymbol{E}_{w}$ du modèle \eqref{eq:lpv_linearisation} (voir la sortie de l'Algorithme~\ref{alg:linea}) suggère une architecture de contrôle efficace pour rejeter une perturbation de vent constante $\boldsymbol{w}$. En effet, les ailerons et les hélices peuvent être utilisés symétriquement pour générer respectivement un moment autour de l'axe $y_{[\text{b}]}$, vérifiant l'équation \eqref{eq:momenty} et une force le long de l'axe $x_{[\text{b}]}$, vérifiant l'équation \eqref{eq:forcex}, compensant ainsi l'effet de la perturbation. Néanmoins, il reste une force le long de l'axe $z_{[\text{b}]}$ à compenser en vérifiant l'équation \eqref{eq:forcez}, et une action intégrale peut converger asymptotiquement vers la force désirée, même avec une perturbation du vent non mesurée $\boldsymbol{w}$. Nous pouvons donc stabiliser le drone à l'équilibre en vol stationnaire tel que caractérisé dans le Théorème~\ref{thm:eqs}. Comme nous ne mesurons pas le vent $\boldsymbol{w}$, les valeurs de $\psi$ et $\theta$ dans l'Algorithme~\ref{alg:eq} sont inconnues. Le contrôleur proposé, illustré à la Fig.~\ref{fig:commande_int6DOF}, utilise l'action intégrale pour faire converger ces angles vers leur valeur d'équilibre. Le bouclage utilise les variables d'erreur suivante : 
 \begin{align}
-  \boldsymbol{e}_{p}= \boldsymbol{r}_{p} - \boldsymbol{p}, \; \boldsymbol{e}_{v \epsilon \omega} = -  
-     \left[ \begin{smallmatrix} \mathbb{I}_{3}  & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 2} & \mathbb{0}_{3}\\
-     \mathbb{0}_{1\times 3}  & 1 & \mathbb{0}_{1\times 2} & \mathbb{0}_{1 \times 3} \\
-         \mathbb{0}_{3}  & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 2} &   \mathbb{I}_{3}
-         \end{smallmatrix} \right]
-  \smallmat{
-         \tilde{\boldsymbol{v}} \\
-         \tilde{\boldsymbol{\epsilon}} \\
-         \tilde{\boldsymbol{\omega}}_{\text{b}} 
-     },
-\label{eq:error_var}
-\end{align}    
-where $\boldsymbol{r}_{p} \in \mathbb{R}^{3}$ is the constant position reference comprising a target position for the translational motion (note that $\boldsymbol{r}_{p}$ is the reference input to the control scheme).
+    \boldsymbol{e}_{p}= \boldsymbol{r}_{p} - \boldsymbol{p}, \; \boldsymbol{e}_{v \epsilon \omega} = -  
+       \left[ \begin{smallmatrix} \mathbb{I}_{3}  & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 2} & \mathbb{0}_{3}\\
+       \mathbb{0}_{1\times 3}  & 1 & \mathbb{0}_{1\times 2} & \mathbb{0}_{1 \times 3} \\
+           \mathbb{0}_{3}  & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 2} &   \mathbb{I}_{3}
+           \end{smallmatrix} \right]
+    \smallmat{
+           \tilde{\boldsymbol{v}} \\
+           \tilde{\boldsymbol{\epsilon}} \\
+           \tilde{\boldsymbol{\omega}}_{\text{b}} 
+    }.
+  \label{eq:error_var}
+  \end{align} 
+Elles doivent converger vers zéro dans le cas de vol stationnaire et pour n'importe quelle position de référence constante $\boldsymbol{r}_{p} \in \mathbb{R}^{3}$. Notons que $\boldsymbol{r}_{p}$ est l'entrée de référence du schéma de contrôle.
 
-The error variables in \eqref{eq:error_var} can be represented as in the block diagram of Fig.~\ref{fig:commande_int} by defining 
-the output $\boldsymbol{y}\in \real^{10}$ of the linearized plant dynamics \eqref{eq:lpv_linearisation}, having the incremental state vector $\boldsymbol{\tilde{x}} \in \real^{10 \times 1}$, as follows
+Les variables d'erreur dans \eqref{eq:error_var} peuvent être représentées comme dans le schéma  de la Fig.~\ref{fig:commande_int6DOF} en définissant la sortie $\boldsymbol{y}\in \real^{10}$ de la dynamique du système linéarisée \eqref{eq:lpv_linearisation}, ayant le vecteur d'état incrémental $\boldsymbol{\tilde{x}} \in \real^{10 \times 1}$ défini ci-dessous : 
 \begin{align}
     \label{eq:output_lin}
     \boldsymbol{y} = \boldsymbol{C} \boldsymbol{\tilde{x}} + \smallmat{\boldsymbol{p}_{\mathrm{eq}} \\ \mathbb{0}_{7 \times 1}}, \quad
@@ -33,57 +37,30 @@ the output $\boldsymbol{y}\in \real^{10}$ of the linearized plant dynamics \eqre
     \mathbb{0}_{3\times 6} & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 2} &  \mathbb{I}_{3}
 },
 \end{align}
-where  the output matrix $\boldsymbol{C} \in \real^{10\times12}$ removes the $\tilde{\epsilon}_{2}$ and $\tilde{\epsilon}_{3}$ components from the state vector $\tilde{\boldsymbol{x}}$. 
-% \begin{align*}
-%      \boldsymbol{S} = \left[ \begin{smallmatrix} \mathbb{I}_{3} & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 2} & \mathbb{0}_{3}\\
-%      \mathbb{0}_{1\times 3} & 0 & 1 & \mathbb{0}_{1\times 2} & \mathbb{0}_{1 \times 3} \\
-%          \mathbb{0}_{3} & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 2} &   \mathbb{I}_{3}
-%          \end{smallmatrix} \right], 
-% \end{align*}
+où la matrice de sortie $\boldsymbol{C} \in \real^{10\times12}$ enlève la composante $\tilde{\epsilon}_{2}$ et $\tilde{\epsilon}_{3}$ du vecteur d'état $\tilde{\boldsymbol{x}}$. 
 
-
-
-% \begin{align*}
-%      \boldsymbol{e}_{p}= \boldsymbol{r}_{p} - \boldsymbol{p}, \quad \boldsymbol{e}_{v \epsilon \omega} = -\boldsymbol{S} \smallmat{
-%          \boldsymbol{v} \\
-%          \boldsymbol{q} \\
-%          \boldsymbol{\omega}_{\text{b}} 
-%      }, \\
-%      \boldsymbol{S} = \left[ \begin{smallmatrix} \mathbb{I}_{3} & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 2} & \mathbb{0}_{3}\\
-%      \mathbb{0}_{1\times 3} & 0 & 1 & \mathbb{0}_{1\times 2} & \mathbb{0}_{1 \times 3} \\
-%          \mathbb{0}_{3} & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 2} &   \mathbb{I}_{3}
-%          \end{smallmatrix} \right], 
-% \end{align*}
- % $\boldsymbol{S} \in \real^{7 \times 10}$ is an output selection matrix, which removes $\eta$, $\epsilon_{2}$ and $\epsilon_{3}$ component from the measured output. 
-% We introduce $\boldsymbol{r} \in \real^{10 \times 1}$ as an input disturbance vector defined by $\boldsymbol{r} = \smallmat{\boldsymbol{r}_{p} \\ \boldsymbol{r}_{v \epsilon \omega}}$.
 \begin{figure}[t!]
     \centering
-    %\includegraphics[trim=7cm 0cm 2.5cm 1cm,clip,width=1\columnwidth]{figure/commande_integrale.png}
     \includegraphics[width=1\columnwidth]{figures/commande_integrale.png}
-    \caption{Proposed integral-based controller with the wind perturbation $\boldsymbol{w}$, a plant-input perturbation $\boldsymbol{d}$ and a plant-output perturbation $\nu$.}
-    \label{fig:commande_int}
+    \caption{Schéma de commande intégralle avec la perturbation de vent $\boldsymbol{w}$, la perturbation du système à l'entrée $\boldsymbol{d}$ et à la sortie $\nu$.}
+    \label{fig:commande_int6DOF}
 \end{figure}
-As shown in Fig.~\ref{fig:commande_int}, the controller dynamic equations are based on the measured error $\boldsymbol{e}$ as follows
-\begin{multline}
-\label{eq:contoller}
-    \boldsymbol{e} = \smallmat{
-        \boldsymbol{e}_{p}^\top & \boldsymbol{e}_{v\epsilon\omega}^\top}^\top, \quad \dot{\boldsymbol{x}}_{c} = \boldsymbol{H} \boldsymbol{e}, \quad    \boldsymbol{u} = \boldsymbol{\Sigma} \boldsymbol{x}_{c} + \boldsymbol{u}_{K},\\
-    \boldsymbol{\Sigma} := \begin{bmatrix} \! 1 \!&\! 1\! & \!0\! &\! 0\!\\ \!0\! & \!0\! & \!1 \!& \!1\!\end{bmatrix}^\top, \quad
-    \boldsymbol{u}_{K} = \frac{n_1 s+n_0}{d_2 s^{2}+d_1 s + d_0}\boldsymbol{K} \boldsymbol{e} ,
-\end{multline}
-where $\boldsymbol{x}_{c} \in \mathbb{R}^{2}$ is the integral action state; $\boldsymbol{\Sigma}$ is an input allocation matrix that allows assigning the first component of the integrator state to the propellers action and the second component to the elevons action. Scalars $n_1$, $n_0$,  $d_2$,  $d_1$,  $d_0$ are respectively the numerator and denominator coefficients of a filter used to avoid a direct input-output transmission that would amplify high-frequency measurement noise. This filter induces a strictly proper controller, for increased robustness to additive uncertainties. We define the controller $\boldsymbol{F}$ having dimensions 4\texttimes10 having transfer matrix $\boldsymbol{F}(s) = T_{\boldsymbol{e} \rightarrow \boldsymbol{u}}(s)$ as described in \eqref{eq:contoller} and interconected as in Fig.~\ref{fig:commande_int}. The plant $\boldsymbol{P}$ having dimensions 10\texttimes4 represents the linearized DarkO dynamics. The output of the plant $\boldsymbol{y} \in \real^{10\times1}$ is used as the input of controller $\boldsymbol{F}$.
 
-% According to the discussions in Section~\ref{subsec:LinWind}, the quaternion linearization evolves in ${\mathbb R}^3$, therefore when $\boldsymbol{P}$ represents the linearized plant dynamics \eqref{eq:lpv_linearisation}, having the incremental state vector $\boldsymbol{\tilde{x}} \in \real^{10 \times 1}$, the output $\boldsymbol{y}$ can be obtained by 
-% \begin{align}
-%     \label{eq:output_lin}
-%     \boldsymbol{y} = \smallmat{\mathbb{I}_{6} & \mathbb{0}_{6\times 1} & \mathbb{0}_{6\times 2} &\mathbb{0}_{6\times 3}\\
-%     \mathbb{0}_{1\times 6} & 1 & \mathbb{0}_{1\times 2} &\mathbb{0}_{1\times 3}\\
-%     \mathbb{0}_{3\times 6} & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 2} &  \mathbb{I}_{3}
-% } = \boldsymbol{C} \boldsymbol{\tilde{x}}.
-% \end{align}
-% where $\boldsymbol{C} \in \real^{10\times12}$ is the output matrix.
+Comme le montre la figure~\ref{fig:commande_int6DOF}, les équations de la dynamique du contrôleur sont basées sur l'erreur $\boldsymbol{e}$ suivante :
 
-In view of the symmetries of the actuators on the UAV, we have constrained the structure of matrix $\boldsymbol{K}$ in \eqref{eq:contoller}, associated with the controller's proportional action, in order to use the actuators in a physically meaningful way as follows:
+\begin{subequations}
+    \label{eq:contoller}
+    \begin{align}
+        \boldsymbol{e} = \smallmat{
+        \boldsymbol{e}_{p}^\top & \boldsymbol{e}_{v\epsilon\omega}^\top}^\top, \quad \dot{\boldsymbol{x}}_{c} = \boldsymbol{H} \boldsymbol{e}, \quad    \boldsymbol{u} = \boldsymbol{\Sigma} \boldsymbol{x}_{c} + \boldsymbol{u}_{K},
+        \\
+        \boldsymbol{\Sigma} := \begin{bmatrix} \! 1 \!&\! 1\! & \!0\! &\! 0\!\\ \!0\! & \!0\! & \!1 \!& \!1\!\end{bmatrix}^\top, \quad
+        \boldsymbol{u}_{K} = \frac{n_1 s+n_0}{d_2 s^{2}+d_1 s + d_0}\boldsymbol{K} \boldsymbol{e} ,
+    \end{align}
+\end{subequations}
+où $\boldsymbol{x}_{c} \in \mathbb{R}^{2}$ est l'état intégral, $\boldsymbol{\Sigma}$ est une matrice d'allocation des entrées qui permet d'affecter la première composante de l'état de l'intégrateur à l'action des hélices et la deuxième composante à l'action des élevons. Les scalaires $n_1$, $n_0$,  $d_2$,  $d_1$,  $d_0$ sont respectivement les coefficients du numérateur et du dénominateur d'un filtre utilisé pour éviter une transmission directe entrée-sortie qui amplifierait le bruit de mesure à haute fréquence. Ce filtre induit un contrôleur strictement propre, pour une robustesse accrue aux incertitudes additives. Nous définissons le contrôleur $\boldsymbol{F}$ ayant pour dimensions 4\texttimes10 avec la matrice de transfert $\boldsymbol{F}(s) = T_{\boldsymbol{e} \rightarrow \boldsymbol{u}}(s)$ telle que décrite dans \eqref{eq:contoller} et l'interconnexion détaillé dans la figure~\ref{fig:commande_int6DOF}. Le système $\boldsymbol{P}$ de dimensions 10\texttimes4 représente la dynamique linéarisé de DarkO. La sortie du système $\boldsymbol{y} \in \real^{10\times1}$ est utilise comme entrée du controleur $\boldsymbol{F}$.
+
+Compte tenu des symétries des actionneurs du drone, nous avons contraint la structure de la matrice $\boldsymbol{K}$ dans \eqref{eq:contoller}, associée à l'action proportionnelle du contrôleur, afin d'utiliser les actionneurs selon leur action physique. Ainsi, $\boldsymbol{K}$ prend la forme : 
 \begin{align}
 \label{eq:k_struct}
     \!\!\!\boldsymbol{K}_{\text{struct}} \!=\!  \smallmat{
@@ -93,43 +70,42 @@ In view of the symmetries of the actuators on the UAV, we have constrained the s
             \shortminus k_{11}&  k_{12}& k_{13}& \shortminus k_{14}&  k_{15}&  k_{16}&   \shortminus k_{17}&  k_{18}&  k_{19}&  k_{20} 
          }.
 \end{align}
-In particular, a position error on the $z_{[\text{i}]}$ axis of the NED world frame (see Fig.~\ref{fig:darko2}) results in a symmetric use of the two propellers that generates a force along the $x_{[\text{b}]}$ axis of the UAV. The symmetric use of the two motors is reflected by the same-sign in coefficients $k_{3}$ and $k_{6}$ on columns 3 and 6 of $\boldsymbol{K}$, corresponding respectively to the position and velocity errors on the $z_{[\text{i}]}$ axis. Similarly, a position or speed error along the drone's lateral axis $y_{[\text{b}]}$ will be compensated for by an antisymmetric use of the motors, as reflected by the coefficients $k_{2}$ and $k_{5}$ and their opposite signs on columns 2 and 5 of $\boldsymbol{K}$. An angular velocity error about the  $x_{[\text{b}]}$ axis must be compensated for by an antisymmetric use of the elevons, as reflected by coefficient $k_{18}$ having opposite signs on column 8 of $\boldsymbol{K}$. Parallel arguments explain the remaining coefficients of matrix $\boldsymbol{K}$ in \eqref{eq:k_struct}. An advantage of the structure in \eqref{eq:k_struct} is the reduction of the number of variables to be optimized, from 40 to 20 scalar gains.
+
+La structure précédente s'explique par le comportement physique du drone, une erreur de position sur l'axe $z_{[\text{i}]}$ du repère inertiel NED (voir Fig.~\ref{fig:darko2}) entraîne une utilisation symétrique des deux hélices qui génère une force le long de l'axe $x_{[\text{b}]}$ du drone. L'utilisation symétrique des deux moteurs se traduit par le même signe dans les coefficients $k_{3}$ et $k_{6}$ des colonnes 3 et 6 de $\boldsymbol{K}$, correspondant respectivement aux erreurs de position et de vitesse sur l'axe $z_{[\text{i}]}$. De même, une erreur de position ou de vitesse le long de l'axe latéral du drone $y_{[\text{b}]}$ sera compensée par une utilisation antisymétrique des moteurs, comme le montrent les coefficients $k_{2}$ et $k_{5}$ et leurs signes opposés dans les colonnes 2 et 5 de $\boldsymbol{K}$. Une erreur de vitesse angulaire autour de l'axe $x_{[\text{b}]}$ doit être compensée par une utilisation antisymétrique des élevons, comme le montre le coefficient $k_{18}$ de signe opposé dans la colonne 8 de $\boldsymbol{K}$. Des arguments parallèles expliquent les coefficients restants de la matrice $\boldsymbol{K}$ dans \eqref{eq:k_struct}. Toute ces explications ne sont valable que dans un voisinage de l'équilibre, où le drone se trouve etre à la verticale. On comprends aisaiement que dans d'autre configuration, ces contraintes d'actionnement ne sont plus valable. Un avantage de la structure de \eqref{eq:k_struct} est la réduction du nombre de variables à optimiser, de 40 à 20 gains scalaires, cela traduisant pas une diminution du temps necessaire à l'optimisation.
+
+La boucle fermée illustrée à la Fig.~\ref{fig:commande_int6DOF}, est un retour de sortie à 10 elements, comprenant les trois positions, les trois vitesses linéaires, l'un des trois angles d'attitude ($\epsilon_{1}$) et les trois vitesses angulaires. Cette structure peut être considérée comme un bouclage proportionnel-intégral MIMO. Les paramètres à régler dans le contrôleur $\boldsymbol{F}$ \eqref{eq:contoller} sont le gain proportionnel $\boldsymbol{K} \in \real^{4\times10}$ dans \eqref{eq:k_struct}, le gain intégral $\boldsymbol{H} \in \real^{2\times10}$ et les paramètres du filtre $n_1$, $n_0$, $d_2$, $d_1$, $d_0$, comme coloré en jaune sur la Fig.~\ref{fig:commande_int6DOF}. Une méthode de réglage appropriée doit garantir une rejection adéquate des perturbations et une robustesse satisfaisante aux dynamiques non modélisées. Ces deux objectifs conduisent à un compromis car le rejet des perturbations nécessite un réglage agressif tandis que les propriétés de robustesse sont assurées par une stratégie d'atténuation des hautes fréquences. Nous examinons ensuite deux méthodes de réglage basées sur l'optimisation. 
+\todo{citer le paragphe précédent}
+La première est issue des idées proposées dans \cite{SANSOUACA}, qui ne nécessitaient pas la dynamique linéarisée des Théorèmes~\ref{thm:eqs} et~\ref{th:lin}, et est résumée dans la section~\ref{sec:zerowind}. Il s'agit d'une synthèse multi-objectifs avec des contraintes $H_{\infty}$ basée sur le modèle de vent nul discuté dans la section~\ref{sec:eq_nowind} et~\ref{sec:nowind_lin} et dérivé dans \cite{SANSOUACA}.
 
 
-The closed loop shown in Fig.~\ref{fig:commande_int}, is an output feedback with 10 outputs, consisting of the three linear positions, the three linear velocities, one of the three attitude angles ($\epsilon_{1}$) and the three angular velocities. This structure can be seen as a MIMO proportional-integral feedback. The parameters to be tuned in controller $\boldsymbol{F}$ \eqref{eq:contoller} are the proportional gain $\boldsymbol{K} \in \real^{4\times10}$ in \eqref{eq:k_struct}, the integral gain $\boldsymbol{H} \in \real^{2\times10}$ and the filter parameters $n_1$, $n_0$,  $d_2$,  $d_1$,  $d_0$, as highlighted in yellow in Fig.~\ref{fig:commande_int}. A suitable tuning method should ensure desirable disturbance rejection and satisfactory robustness to unmodeled dynamics. These two goals lead to a trade-off because disturbance rejection requires an aggressive tuning while robustness properties are ensured by a frequency roll-off strategy. We discuss next two optimization-based tuning methods. The first one is issued from the ideas proposed in \cite{SANSOUACA}, which did not need the linearized dynamics of Theorems~\ref{thm:eqs} and~\ref{th:lin}, and is summarized in Section~\ref{sec:zerowind}. It is a multi-objective synthesis with $H_{\infty}$ constraints based on the zero-wind model discussed in Remarks~\ref{rk:zerowindmodel} and~\ref{rk:zerolin} and derived in \cite{SANSOUACA}. We will show that this first method fails to stabilize the drone in certain wind ranges, due to the lack of knowledge of the dynamics characterized in Theorems~\ref{thm:eqs} ans~\ref{th:lin}. The second tuning method, presented in Sec.\ref{sec:h_inf_multi}, is an iterative multi-objective synthesis with $H_{\infty}$ constraints, based on a collection of models associated with different wind conditions and derived based on Theorems~\ref{thm:eqs} and~\ref{th:lin}, through Algorithms~\ref{alg:eq} and~\ref{alg:linea}.
+Nous montrerons que cette première méthode ne permet pas de stabiliser le drone dans certaines plages de vent, en raison de la méconnaissance de la dynamique caractérisée par les Théorèmes~\ref{thm:eqs} et~\ref{th:lin}. La deuxième méthode de réglage, présentée à la section \ref{sec:h_inf6DOF_multi}, est une synthèse itérative multi-objectifs avec des contraintes $H_{\infty}$, basée sur un ensemble de modèles associés à différentes conditions de vent et dérivés des Théorèmes~\ref{thm:eqs} et~\ref{th:lin}, par le biais des Algorithmes~\ref{alg:eq} et~\ref{alg:linea}.
+
+
+Dans notre validation numérique, présentée dans les sections~\ref{sec:zerowind} et~\ref{sec:h_inf6DOF_multi} (voir en particulier les Fig.~\ref{fig:SimSytuneStruct_zero} et Fig.~\ref{fig:SimSytuneStruct_lpv}), un bruit de mesure est ajouté à la sortie pour produire des résultats numériques semblable aux expérimentaux. Les écarts types des niveaux de bruit adoptés sont indiqués dans le tableau~\ref{tab:noise}.
 \begin{table}[ht]
-\centering
-\begin{tabular}{|c|c|c|} 
-\hline
-Measurement & Value & Units\\
- \hline
- $\boldsymbol{p}$ & \SI{2.5e-4}{} & \SI{}{\meter}  \\ 
- \hline
-  $\tilde{\boldsymbol{v}}$  & \SI{1.2e-3}{} &  \SI{}{\meter\per\second}  \\ 
-  \hline
-  $\tilde{\boldsymbol{\epsilon}}$ & \SI{4.7e-4}{} &  \\
-  \hline
-  $\tilde{\boldsymbol{\omega}}_{\text{b}}$ & \SI{2.7e-3}{} &\SI{}{\radian\per\second}\\
- \hline
-\end{tabular}
-\caption{\label{tab:sim_noise} Standard deviation of the modeled sensor noise added to the simulated measurements.}
-\label{tab:noise}
+    \centering
+    \begin{tabular}{|c|c|c|} 
+        \hline
+        Measurement & Value & Units\\
+        \hline
+        $\boldsymbol{p}$ & \SI{2.5e-4}{} & \SI{}{\meter}  \\ 
+        \hline
+        $\tilde{\boldsymbol{v}}$  & \SI{1.2e-3}{} &  \SI{}{\meter\per\second}  \\ 
+        \hline
+        $\tilde{\boldsymbol{\epsilon}}$ & \SI{4.7e-4}{} &  \\
+        \hline
+        $\tilde{\boldsymbol{\omega}}_{\text{b}}$ & \SI{2.7e-3}{} &\SI{}{\radian\per\second}\\
+        \hline
+    \end{tabular}
+    \caption{ Écart-type du bruit pour la modélisation des capteur en simulation.}
+    \label{tab:noise}
 \end{table}
-In our numerical validation, reported in Sections~\ref{sec:zerowind} and~\ref{sec:h_inf_multi} (see in particular Fig.~\ref{fig:SimSytuneStruct_zero} and Fig.~\ref{fig:SimSytuneStruct_lpv}),
-measurement noise is added to the output to produce practically reasonable numerical results.
-%all the sensors used to obtain the UAV's output vector $\boldsymbol{y}$. 
-The standard deviations of the adopted noise levels are reported in Table~\ref{tab:noise}.
-Moreover,
-in addition to reporting the simulation results of the linear feedback of Fig.~\ref{fig:commande_int} with the linearized model \eqref{eq:lpv_linearisation}, 
-in Sections~\ref{sec:zerowind} and~\ref{sec:h_inf_multi},
-we also simulate the closed loop by replacing the linearized plant $\boldsymbol{P}$ with the 
-% Simulations (Fig.~\ref{fig:SimSytuneStruct_zero} and Fig.~\ref{fig:SimSytuneStruct_lpv}) were performed with the 
-nonlinear model \eqref{eq:dyna_orig} including many real-world effects.
-When replacing the linearized plant with the nonlinear dynamics \eqref{eq:dyna_orig}, whose state is $\boldsymbol{x} = (\boldsymbol{p}, \boldsymbol{v},
-         \boldsymbol{q},
-         \boldsymbol{\omega}_{\text{b}}) \in \real^{13} $,
-we replace the linear output $\boldsymbol{y}$ with the following surrogate nonlinear version
-% We derive the output vector $\boldsymbol{y}_{\text{NL}} \in \real^{10 \times 1}$ from the non-linear state vector $\boldsymbol{x}$  to feedback the nonlinear model \eqref{eq:dyna_orig} with the controller \eqref{eq:contoller}.
+
+En plus de présenter les résultats de la simulation du bouclage linéaire de la Fig. ~\ref{fig:commande_int6DOF} avec le modèle linéarisé \eqref{eq:lpv_linearisation}, dans les sections~\ref{sec:zerowind} et~\ref{sec:h_inf6DOF_multi}, nous simulons également la boucle fermée en remplaçant le modèle linéarisée $\boldsymbol{P}$ par le modèle non linéaire \eqref{eq:dyna_orig}, comprennant la dynamique réélle du drone.
+
+Lorsque l'on remplace le modèle linéarisée par la dynamique non linéaire \eqref{eq:dyna_orig}, dont l'état est $\boldsymbol{x} = (\boldsymbol{p}, \boldsymbol{v}, \boldsymbol{q},\boldsymbol{\omega}_{\text{b}}) \in \real^{13} $,
+nous remplaçons la sortie linéaire $\boldsymbol{y}$ par la version non linéaire suivante $\boldsymbol{x} = (\boldsymbol{p}, \boldsymbol{v},\boldsymbol{q},\boldsymbol{\omega}_{\text{b}}) \in \real^{13} $. 
+De plus, nous remplaçons la sortie lineaire $\boldsymbol{y}$ avec la version non linéaire suivante:
 \begin{align}
 \label{eq:output}
     \boldsymbol{y}_{\text{NL}} \!=\! \smallmat{\boldsymbol{p}\\
@@ -143,12 +119,27 @@ we replace the linear output $\boldsymbol{y}$ with the following surrogate nonli
 \boldsymbol{q}_{\mathrm{eq}\psi}^{-1} \otimes \boldsymbol{q} \\
          \boldsymbol{\omega}_{\text{b}}  }.
 \end{align}
-% However, it is not possible to form the output vector $\boldsymbol{y}$ without knowledge of the wind direction in the horizontal plane linked to the rotation $\boldsymbol{R}^\top_{\psi}$ ensuring that the drone is facing into the wind. As we don't have access to the wind measurement, we chose to use the drone's current orientation along the $z_{[\text{i}]}$ axis to rotate the $\boldsymbol{p}$ position and $\boldsymbol{v}$ velocity measurements. To do this, we have $\boldsymbol{R}^\top_{\psi} = \boldsymbol{R}(\smallmat{\cos(\frac{\psi}{2}) & 0 & 0 & \sin(\frac{\psi}{2})})$ where { \color{red}$\psi$ doit on garder cette nottation} is the UAV's orientation along the $z_{[\text{i}]}$ axis. We don't need to worry about quaternion rotation $\boldsymbol{q}_{\mathrm{eq}\psi}^{-1}$, as the selection matrix (see \eqref{eq:output}) removes the quaternion components linked to rotation around $z_{[\text{i}]}$ axis. 
-% { \color{red}This solution is linked to the fact that the controller has a certain stability domain, so the drone must be close enough to the equilibrium point for the control law to converge.}
 
 
-In the next sections we denote the modulus margin of a transfer matrix $s \mapsto T_{v \rightarrow z}$ as $\Delta_m(T_{v \rightarrow z}) = \min\limits_{\omega\in R} \sigma_{\min}(T_{v \rightarrow z}(j\omega))$.
+Dans les sections suivantes, nous notons la marge de module d'une matrice de transfert $s \mapsto T_{v \rightarrow z}$ as $\Delta_m(T_{v \rightarrow z}) = \min\limits_{\omega\in R} \sigma_{\min}(T_{v \rightarrow z}(j\omega))$.
 
+
+
+\subsection{Controleur optimisé sous contrainte $H_{\infty}$, cas sans vent}
+\label{sec:zerowind}
+
+Pour régler le controleur dans le cas sans vent, nous utilisons le modèle linéaire du système décrit dans la section~\ref{sec:nowind_lin}, $\boldsymbol{P}(s) = T_{\boldsymbol{u} \rightarrow \boldsymbol{y}}(s)$, obtenue à partir des équations \eqref{eq:linearized} et \eqref{eq:output_lin} tel que :
+
+\begin{align*}
+    \boldsymbol{P}(s) = \boldsymbol{C} (s \mathbb{I}_{12} - \boldsymbol{A}_{0})^{-1} \boldsymbol{G}_{0}.
+\end{align*} 
+
+En lien avec la figure~\ref{fig:commande_int6DOF}, nous introduisons des matrices de transfert qui correspondent aux objectifs de robustesse : la fonction de sensibilité en sortie définie par $T_{\nu \rightarrow e}=(\mathbb{I}_{10}+\boldsymbol{P}\boldsymbol{F})^{-1}$ de dimension 10\texttimes10, telle que $\lVert T_{\nu \rightarrow e} \rVert _{\infty}=\Delta_m(T_{\nu \rightarrow e})^{-1} $ et la fonction de sensibilité en entrée $T_{d \rightarrow u}=(\mathbb{I}_{4}+\boldsymbol{F}\boldsymbol{P})^{-1}$ de dimension 4\texttimes4, définie par $\lVert T_{d \rightarrow u} \rVert _{\infty}=\Delta_m(T_{d \rightarrow u})^{-1}$.
+Par conséquent, la minimisation de la norme $H_{\infty}$ de $T_{\nu \rightarrow e}$ ou de $T_{d \rightarrow u}$ correspond à l'augmentation des marges de module en entrée et en sortie. Étant donné que le système $\boldsymbol{P}$ est MIMO, nous accordons de l'importance aux fonctions de sensibilité en entrée et en sortie qui ne coïncident pas, car $\boldsymbol{P}$ et $\boldsymbol{F}$ ne commute pas.
+
+Nous definnisons aussi la mtrice de tranfert $T_{\nu \rightarrow u}$ de dimensions 4\texttimes10 lié à l'impact du bruit de mesure $\nu$ sur la commande $\boldsymbol{u}$, e $T_{d \rightarrow y}$ de dimensions 10\texttimes4 représentant l'impact de la perturbation en entrée $\boldsymbol{d}$ sur la sortie du systeme $\boldsymbol{y}$. 
+
+Nous résolvons le même problème que dans notre travail précédent \ref{eq:pb_optim} en utilisant le logiciel {\tt Systune} \cite{1576856}, mais nous utilisons le diagramme de contrôle présenté dans la section~\ref{sec:ctl_sche} qui comprend un filtre sur l'action proportionnelle et un nombre différent de sorties. Nous incluons également dans le système $\boldsymbol{P}$ la dynamique des actionneurs linéaires discutée dans la section~\ref{sec:saturation}.
 \begin{figure}[b!]
     \centering
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.9\columnwidth]{figures/sim_systune_zero_wind.png}
@@ -156,26 +147,17 @@ In the next sections we denote the modulus margin of a transfer matrix $s \mapst
     \label{fig:SimSytuneStruct_zero}
 \end{figure}
 
-\subsection{\texorpdfstring{Zero-wind $H_{\infty}$}{H {infty}}-based controller tuning }
-\label{sec:zerowind}
-For tuning the controller based on the zero wind, we use the linear plant model detailed in Remark~\ref{rk:zerolin}, $\boldsymbol{P}(s) = T_{\boldsymbol{u} \rightarrow \boldsymbol{y}}(s)$, obtained from equations \eqref{eq:linearized} and \eqref{eq:output_lin} as
-\begin{align*}
-    \boldsymbol{P}(s) = \boldsymbol{C} (s \mathbb{I}_{12} - \boldsymbol{A}_{0})^{-1} \boldsymbol{G}_{0}.
-\end{align*} 
-With reference to Fig.~\ref{fig:commande_int}, we introduce transfer matrices that correspond to robustness objectives: the output sensitivity function as $T_{\nu \rightarrow e}=(\mathbb{I}_{10}+\boldsymbol{P}\boldsymbol{F})^{-1}$ having dimensions 10\texttimes10, so that, $\lVert T_{\nu \rightarrow e} \rVert_{\infty}=\Delta_m(T_{\nu \rightarrow e})^{-1} $
-and the input sensitivity function $T_{d \rightarrow u}=(\mathbb{I}_{4}+\boldsymbol{F}\boldsymbol{P})^{-1}$ having dimensions 4\texttimes4, so that $\lVert T_{d \rightarrow u} \rVert_{\infty}=\Delta_m(T_{d \rightarrow u})^{-1}$.
-Consequently, the minimization of the  $H_{\infty}$-norm of $T_{\nu \rightarrow e}$ or $T_{d \rightarrow u}$, corresponds to increasing the input and output modulus margins. Since plant $\boldsymbol{P}$ is MIMO, we give importance to both the input and the output sensitivity functions which do not coincide, because $\boldsymbol{P}$ and $\boldsymbol{F}$ do not commute.
-%
-We also define the transfer matrix $T_{\nu \rightarrow u}$ having dimensions 4\texttimes10 linked to the impact of the measurement noise $\nu$ on the control input $\boldsymbol{u}$, and $T_{d \rightarrow y}$ having dimensions 10\texttimes4 representing the impact of the input disturbance $\boldsymbol{d}$ on the plant output $\boldsymbol{y}$. 
-We solve the same problem as in our preliminary work \cite[eqn. (13)]{SANSOUACA} using the {\tt Systune} software \cite{1576856}, however we use the control diagram presented in section~\ref{sec:ctl_sche} which includes a filter on the proportional action and a different number of outputs. We also include in the plant $\boldsymbol{P}$ the linear actuators dynamics discussed in Remark~\ref{rem:saturation}.
+Une augmentation successive de l'intensité horizontale et verticale du vent (allant de zéro à \SI{-6}{\meter\per\second}) sont appliquées, comme le montre le tracé inférieur de la Fig.~\ref{fig:SimSytuneStruct_zero}. Les couples de vents sélectionnées $(w_{x}, w_{z})$ sont représentées par des points rouges sur les surfaces de la figure~\ref{fig:saturation}, où l'on peut voir que l'équilibre $(\boldsymbol{u}_{\text{eq}}, \boldsymbol{x}_{\text{eq}})$ est atteint sans que les actionneurs ne soient saturés. Nous ne nous intéressons qu'à la partie négative de la vitesse verticale du vent car elle est la plus limitante. En effet, le drone est soulevé par le vent vertical ascendant (dont le signe est négatif dans le cadre de la NED), il a donc besoin de moins de traction sur les hélices pour compenser la gravité. Les moteurs génèrent moins de flux d'air sur les élevons, ce qui réduit leur efficacité, conduit à la saturation et déstabilise le drone.
+L'objectif du système de contrôle est de maintenir le drone en position de vol stationnaire (définie comme $\boldsymbol{r}_{p} = [0,0,0]^\top$), malgré l'augmentation du vent horizontal et vertical $w_{x}$ et $w_{z}$. 
 
-Successive steps of increasing horizontal and vertical wind intensity (ranging from zero to \SI{-6}{\meter\per\second}) are applied, as shown in the lower plot of Fig.~\ref{fig:SimSytuneStruct_zero}. The selected wind pairs $(w_{x}, w_{z})$ are represented by red dots on the surfaces in Fig.~\ref{fig:saturation}, where we can see that the equilibrium $(\boldsymbol{u}_{\text{eq}}, \boldsymbol{x}_{\text{eq}})$ is reached without saturating the actuators. We only focus on the negative part of the vertical wind speed because it is the most limiting one. Indeed, the drone is lifted by the rising vertical wind (whose sign is negative in the NED frame), so it needs less traction on the propellers to compensate for the gravity. The motors generate less airflow over the elevons, which reduces their efficiency, leads to saturation, and destabilizes the drone.
-The aim of the control system is to keep the UAV at the hovering position (defined as $\boldsymbol{r}_{p} = [0,0,0]^\top$), despite the increasing horizontal and vertical wind $w_{x}$ and $w_{z}$. Fig.~\ref{fig:SimSytuneStruct_zero} both linear simulations with the linearized plant dynamics \eqref{eq:lpv_linearisation} (dashed) and nonlinear simulations with the accurate model \eqref{eq:dyna_orig} (solid). Both the linear and nonlinear simulations consistently show that the controller performs well at low wind speed (in fact, the tuning is performed based on the zero-wind model). However, when the wind speed $w_{x}$ and $w_{z}$ exceed \SI{-5}{\meter\per\second}, the hovering position becomes unstable and the drone oscillates and diverges. The tilt angles $\theta$ are used to represent the attitude to give a better insight of the vehicle behavior, however the nonlinear simulation of the nonlinear dynamics \eqref{eq:dyna_orig} is carried out with unit quaternions. The instability observed in the simulation results of Fig.~\ref{fig:SimSytuneStruct_zero} confirms the experimental instabilities reported in \cite{SANSOUACA} where we used this same tuning method, and confirms the importance of Theorems~\ref{thm:eqs} and~\ref{th:lin} in Section~\ref{sec:model}, for an appropriate tuning of the controller gains, which is performed in the next section.
 
-\subsection{\texorpdfstring{Multimodel $H_{\infty}$}{H {infty}}-based controller tuning}
-\label{sec:h_inf_multi}
+La figure~\ref{fig:SimSytuneStruct_zero} présente à la fois des simulations linéaires avec la dynamique linéarisée \eqref{eq:lpv_linearisation} (en traits pointillés) et des simulations non linéaires avec le modèle non-linéaire \eqref{eq:dyna_orig} (en traits pleins). Les simulations linéaires et non linéaires montrent systématiquement que le contrôleur fonctionne bien à faible vitesse de vent (effectivement, le réglage est effectué sur la base du modèle de vent nul). Cependant, lorsque la vitesse du vent $w_{x}$ et $w_{z}$ dépasse \SI{-5}{\meter\per\second}, la position de vol stationnaire devient instable et le drone oscille et diverge. Les angles d'inclinaison $\theta$ sont utilisés pour représenter l'attitude afin de donner un meilleur aperçu du comportement du véhicule, mais la simulation de la dynamique non linéaire \eqref{eq:dyna_orig} est effectuée avec un quaternion unitaire. L'instabilité observée dans les résultats de la simulation de la figure~\ref{fig:SimSytuneStruct_zero} confirme les instabilités expérimentales rapportées dans la section \ref{sec:exp3DOF} où nous avons utilisé cette même méthode de réglage, et confirme l'importance des Théorèmes~\ref{thm:eqs} et~\ref{th:lin} dans la Section~\ref{sec:model}, pour un réglage approprié des gains du contrôleur, ce qui est effectué dans la section suivante.
 
-The simulation results obtained with the zero-wind tuning method (see Fig.~\ref{fig:SimSytuneStruct_zero}) together with the experimental instabilities observed in \cite{SANSOUACA} confirm the need for a controller gain tuning procedure exploiting the parametrized non-zero wind linearizations of Theorems~\ref{thm:eqs} and~\ref{th:lin}. Focusing again on the control scheme of Fig.~\ref{fig:commande_int}, we now explicitly consider the (linearized) wind effect on the plant, and we consider the linearized plant dynamics \eqref{eq:lpv_linearisation} with output \eqref{eq:output_lin} and with the selections in Algorithm~\ref{alg:linea} as
+
+\subsection{\texorpdfstring{Controleur optimisé sous contrainte $H_{\infty}$}{H {infty}}, cas multimodèle}
+\label{sec:h_inf6DOF_multi}
+
+The simulation results obtained with the zero-wind tuning method (see Fig.~\ref{fig:SimSytuneStruct_zero}) together with the experimental instabilities observed in \cite{SANSOUACA} confirm the need for a controller gain tuning procedure exploiting the parametrized non-zero wind linearizations of Theorems~\ref{thm:eqs} and~\ref{th:lin}. Focusing again on the control scheme of Fig.~\ref{fig:commande_int6DOF}, we now explicitly consider the (linearized) wind effect on the plant, and we consider the linearized plant dynamics \eqref{eq:lpv_linearisation} with output \eqref{eq:output_lin} and with the selections in Algorithm~\ref{alg:linea} as
 \begin{align*}
 \label{eq:Pw_synthesis}
 \numberthis
@@ -187,7 +169,7 @@ whose input is the concatenation of the control input $\boldsymbol{u}$ and the w
 %
 With the set of transfers matrices defined in Sec.~\ref{sec:zerowind} and the new transfer matrix $T_{w \rightarrow y}$, we use the algorithmic 
 approach in \cite{1576856,ApkarianMulti}, named ``{\tt systune}'', which uses non-smooth optimization techniques to deal with non-convex tuning problems, 
-such as our structured control architecture where we optimize the gain matrices $\boldsymbol{K}$, $\boldsymbol{H}$ and the filter parameters $n_1$, $n_0$,  $d_2$,  $d_1$,  $d_0$ (in yellow on the figure~\ref{fig:commande_int}).
+such as our structured control architecture where we optimize the gain matrices $\boldsymbol{K}$, $\boldsymbol{H}$ and the filter parameters $n_1$, $n_0$,  $d_2$,  $d_1$,  $d_0$ (in yellow on the figure~\ref{fig:commande_int6DOF}).
 As reported in  \cite[eq. (2)]{ApkarianMulti}, 
 we solve a multi-objective optimization problem,
 by exploiting the Matlab implementation well explained in \cite[\S 3]{ApkarianMulti}.
@@ -211,7 +193,7 @@ and performance (associated with $W_1$ and $W_5$) %(bring $\boldsymbol{e}$ to ze
     &\qquad \boldsymbol{F}
     \text{ stabilizes internally } {\mathcal F}_\ell (\boldsymbol{P}_w,\boldsymbol{F}), \forall w \in {\mathcal W},
 \end{align*}
-where ${\mathcal F}_\ell(\boldsymbol{P}_w,\boldsymbol{F})$ denotes the linear feedback interconnection of Fig.~\ref{fig:commande_int}
+where ${\mathcal F}_\ell(\boldsymbol{P}_w,\boldsymbol{F})$ denotes the linear feedback interconnection of Fig.~\ref{fig:commande_int6DOF}
 for a specific value of $w$ (this is consistent with the classical robust control notation \cite{1576856,ApkarianMulti}).
 %
 Notice that, with reference to \cite[eq. (2)]{ApkarianMulti}, we only specify soft constraints and we do not specify any hard constraint.
@@ -226,7 +208,7 @@ Notice that, with reference to \cite[eq. (2)]{ApkarianMulti}, we only specify so
 %     W_{5} T_{w \rightarrow y}(\boldsymbol{P}_w,\boldsymbol{F})
 %     \end{Vmatrix}_{\infty}, \text{ subject to} \\ & \boldsymbol{F} \in \mathbb{R}^{10 \times 4} \text{ stabilizes } \boldsymbol{P}_w \text{ internally,} \numberthis
 % \end{align*}
-% where $\boldsymbol{P}_w$ parametrizes a finite set of linear models evaluated at the points $w_{x} \in \{0,~2,~4,~6,~8\}~\SI{}{\meter\per\second}$ and $ w_{z} \in \{\shortminus 4,~\shortminus2,~0,~2,~4\}~\SI{}{\meter\per\second}$. We determined the linearisation of the model for each wind condition using equation~\eqref{eq:lpv_linearisation} to create $\boldsymbol{P}_w$, connected in feedback with controller $\boldsymbol{F}$ as in Fig.~\ref{fig:commande_int} and \eqref{eq:output_lin} \eqref{eq:contoller}. The 
+% where $\boldsymbol{P}_w$ parametrizes a finite set of linear models evaluated at the points $w_{x} \in \{0,~2,~4,~6,~8\}~\SI{}{\meter\per\second}$ and $ w_{z} \in \{\shortminus 4,~\shortminus2,~0,~2,~4\}~\SI{}{\meter\per\second}$. We determined the linearisation of the model for each wind condition using equation~\eqref{eq:lpv_linearisation} to create $\boldsymbol{P}_w$, connected in feedback with controller $\boldsymbol{F}$ as in Fig.~\ref{fig:commande_int6DOF} and \eqref{eq:output_lin} \eqref{eq:contoller}. The 
 
 \begin{algorithm}
   \caption{Iterative multimodel controller gain tuning.}
@@ -273,14 +255,14 @@ Step 3 identifies the violating points by using a finer validation grid ${\mathc
 the optimization set ${\mathcal W}$. The algorithm terminates after some iterations, when no points of the validation grid violate the constraints.
 
 \begin{table}
-\centering
-\begin{tabular}{|l|c|c|c|c|c|} 
-\hline
- Weighting scalars & $W_1$ & $W_2$ & $W_3$ & $W_4$ & $W_5$ \\ \hline
-Values &18 & 16 & 11 & 26 & 5 \\ \hline
-\end{tabular}
-\label{tab:W1-W5}
-\caption{Values of the positive weighting scalars $W_1$--$W_5$ used in the execution of Algorithm~\ref{alg:iterativeOptimisation}.}
+    \centering
+    \begin{tabular}{|l|c|c|c|c|c|} 
+    \hline
+    Weighting scalars & $W_1$ & $W_2$ & $W_3$ & $W_4$ & $W_5$ \\ \hline
+    Values &18 & 16 & 11 & 26 & 5 \\ \hline
+    \end{tabular}
+    \label{tab:W1-W5}
+    \caption{Values of the positive weighting scalars $W_1$--$W_5$ used in the execution of Algorithm~\ref{alg:iterativeOptimisation}.}
 \end{table}
 
 Executing Algorithm~\ref{alg:iterativeOptimisation} for the DarkO models of Theorems~\ref{thm:eqs} and~\ref{th:lin} with the selection
@@ -357,7 +339,7 @@ The singular values of the output and the input sensitivity function (respective
 \begin{figure}[ht!]
     \centering
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.9\columnwidth]{figures/sim_systune_lpv_noise.png}
-    \caption{Simulation of the non-linear model \eqref{eq:dyna_orig} (solid line) and the linearized model  \eqref{eq:lpv_linearisation} (dashed line) with increasing constant wind steps with the controller tuned using the multimodel optimization of Algorithm~\ref{alg:iterativeOptimisation} in  Section~\ref{sec:h_inf_multi}.}
+    \caption{Simulation of the non-linear model \eqref{eq:dyna_orig} (solid line) and the linearized model  \eqref{eq:lpv_linearisation} (dashed line) with increasing constant wind steps with the controller tuned using the multimodel optimization of Algorithm~\ref{alg:iterativeOptimisation} in  Section~\ref{sec:h_inf6DOF_multi}.}
     \label{fig:SimSytuneStruct_lpv}
 \end{figure}
 
@@ -371,7 +353,7 @@ The effectiveness of the control scheme tuned on the basis of Algorithm~\ref{alg
 
 
 \section{Experimental flight with open wind tunnel} 
-\label{sec:exp}
+\label{sec:exp6DOF}
 DarkO's experimental flight took place in a dedicated space (see Fig.~\ref{fig:flight_windshape}) with an Optitrack localization system based on a NED convention as per Figure~\ref{fig:darko2}. We used an open-vein wind generator to obtain wind steps that we measured with a hot-wire probe (the vertical bar in Fig.~\ref{fig:flight_windshape}). 
 \begin{figure}[ht!]
     \centering
@@ -380,7 +362,7 @@ DarkO's experimental flight took place in a dedicated space (see Fig.~\ref{fig:f
     \label{fig:flight_windshape}
 \end{figure}
 Although this wind information is recorded on board the drone to synchronize the data, we do not use this measurement in the control law. The measurement frequency of this wind probe is only 0.5 Hz, so we only have one measurement every two seconds. 
-The state estimation is carried out using an inertial navigation system to merge the Inertial Measurement Unit (IMU) + Optitrack sensor data in order to obtain an accurate estimation of the output $\boldsymbol{y}$ in Fig.~\ref{fig:commande_int}. However, the drone's angular velocity $\boldsymbol{\omega}_{\text{b}}$ is measured based on the IMU's gyrometer, which provides noisy measurements, therefore we added a second order Butterworth low-pass filter with cut-off frequency of 20 Hz to smoothen out the output $\boldsymbol{\omega}_{\text{b}}$. The Butterworth filter is considered in the linearized dynamics when optimizing the controller gains following Algorithm~\ref{alg:iterativeOptimisation}. 
+The state estimation is carried out using an inertial navigation system to merge the Inertial Measurement Unit (IMU) + Optitrack sensor data in order to obtain an accurate estimation of the output $\boldsymbol{y}$ in Fig.~\ref{fig:commande_int6DOF}. However, the drone's angular velocity $\boldsymbol{\omega}_{\text{b}}$ is measured based on the IMU's gyrometer, which provides noisy measurements, therefore we added a second order Butterworth low-pass filter with cut-off frequency of 20 Hz to smoothen out the output $\boldsymbol{\omega}_{\text{b}}$. The Butterworth filter is considered in the linearized dynamics when optimizing the controller gains following Algorithm~\ref{alg:iterativeOptimisation}. 
 \todo{comparaison lineaire}
 \begin{figure}[ht!]
     \centering
@@ -390,9 +372,9 @@ The state estimation is carried out using an inertial navigation system to merge
     \label{fig:ExpSytuneStruct}
 \end{figure}
 
-We also used the ESCs associated with the performance shown in Figure~\ref{fig:IOmot} for the propellers actuation. The two ESCs were flashed with the open-source code available in the GitHub repository AM32-MultiRotor-ESC-firmware\footnote{\url{https://github.com/FlorianSan/AM32-MultiRotor-ESC-firmware}}. The advantage of this firmware, as compared with the commercial code, is that it exploits a low-level PID feedback of the speed of rotation of the motor, which is calculated at the same speed as the motor phase commutation. We adapted the speed loop code in the firmware, following the approach of \cite{franchi2017}, featuring an adaptive bias and adaptive gain algorithm (ABAG). In this way, we compensate the battery discharge effects and obtain an accurate realization of the commanded speed. Before this modification, the integral action of the stabilizing feedback of Fig.~\ref{fig:commande_int} compensated for the motor speed loss caused by the battery voltage reduction during flight. This integral compensation was indirectly generated by the altitude loss of the UAV caused by the reduced traction. The advantages of the ABAG solution are high responsiveness and adaptability, as the propeller dimensions can be changed without needing to modify the actuation gains.
+We also used the ESCs associated with the performance shown in Figure~\ref{fig:IOmot} for the propellers actuation. The two ESCs were flashed with the open-source code available in the GitHub repository AM32-MultiRotor-ESC-firmware\footnote{\url{https://github.com/FlorianSan/AM32-MultiRotor-ESC-firmware}}. The advantage of this firmware, as compared with the commercial code, is that it exploits a low-level PID feedback of the speed of rotation of the motor, which is calculated at the same speed as the motor phase commutation. We adapted the speed loop code in the firmware, following the approach of \cite{franchi2017}, featuring an adaptive bias and adaptive gain algorithm (ABAG). In this way, we compensate the battery discharge effects and obtain an accurate realization of the commanded speed. Before this modification, the integral action of the stabilizing feedback of Fig.~\ref{fig:commande_int6DOF} compensated for the motor speed loss caused by the battery voltage reduction during flight. This integral compensation was indirectly generated by the altitude loss of the UAV caused by the reduced traction. The advantages of the ABAG solution are high responsiveness and adaptability, as the propeller dimensions can be changed without needing to modify the actuation gains.
 
-We carried out a flight experiment where DarkO was manually put into a stabilized hovering mode in front of the wind tunnel, then we switched on the control law of Algorithm~\ref{alg:iterativeOptimisation}. As the drone had to be stabilized at least \SI{30}{\centi\meter} away from the wind tunnel, a manual command was gradually applied to avoid overshooting, which could damage the wind tunnel. Once DarkO was close enough to the setpoint $\boldsymbol{r}_{p}$ of Fig.~\ref{fig:commande_int}, we switched on the proposed controller, obtaining the results in Fig.~\ref{fig:ExpSytuneStruct}. During the follow-up experimentation phase, as shown in the lower plot of Fig.~\ref{fig:ExpSytuneStruct}, we stepwise increased the wind speed, waiting 20 seconds between each  pair of consecutive steps, up to a final wind speed of \SI{7}{\meter\per\second}.
+We carried out a flight experiment where DarkO was manually put into a stabilized hovering mode in front of the wind tunnel, then we switched on the control law of Algorithm~\ref{alg:iterativeOptimisation}. As the drone had to be stabilized at least \SI{30}{\centi\meter} away from the wind tunnel, a manual command was gradually applied to avoid overshooting, which could damage the wind tunnel. Once DarkO was close enough to the setpoint $\boldsymbol{r}_{p}$ of Fig.~\ref{fig:commande_int6DOF}, we switched on the proposed controller, obtaining the results in Fig.~\ref{fig:ExpSytuneStruct}. During the follow-up experimentation phase, as shown in the lower plot of Fig.~\ref{fig:ExpSytuneStruct}, we stepwise increased the wind speed, waiting 20 seconds between each  pair of consecutive steps, up to a final wind speed of \SI{7}{\meter\per\second}.
 
 \begin{figure}[ht!]
     \centering
@@ -406,7 +388,7 @@ We also notice a slight asymmetry of the effectiveness of the actuators, which i
 
 \section{Résultats}
 
-
+\section{Conclusion du Chapitre \ref{chap:6DOF}}
 
 
 
