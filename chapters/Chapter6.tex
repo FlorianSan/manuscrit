@@ -1,4 +1,4 @@
-% LTeX: language=fr enabled=false
+% LTeX: language=fr enabled=true
 
 \chapter{Modélisation et commande d'un drone à aile libre rotation libre}
 \minitoc
@@ -6,52 +6,34 @@
 
 \section{Motivation}
 \label{sec:motivationcolibri}
-\todo{Explication sur l'interet d'avoir un fuselage, capteur, charge utile}
+\todo{Explication sur l'intérêt d'avoir un fuselage, capteur, charge utile}
 
 \section{Design et modélisation d'un drone : Colibri}
-
-
-\section{Design and modelling of Colibri UAV}
 \label{sec:model_colibri}
-The Colibri drone is derived from a tail-sitter drone with a wing that generates lift during the forward flight. This wing has several actuators: four motors $u_{i}, ~i = 1,2,3,4$ and two elevons $\delta_{\text{l}}$ and $\delta_{\text{r}}$. We can define the control vector $u_{\text{W}}$ of the wing based on Figure~\ref{fig:world_body} as $u_{\text{W}} = [u_{1}~u_{2}~u_{3}~u_{4}~\delta_{\text{l}}~\delta_{\text{r}}]^\top$. A fuselage linked by a pivot is secured at the aerodynamic centre of the wing. This fuselage supports the autopilot, the battery, a motor and a tail to keep it horizontal. In Figure \ref{fig:world_body}, all the aerodynamic control surfaces are shown in pink and the propellers are shown in green.
-There are three reference frames attach to the drone. (I) is a NED inertial reference frame (or world frame) linked to the earth's surface, (W) is a wing reference frame attached to the drone wing and (F) is a fuselage reference frame attached to the drone fuselage.
-% Deux configurations sont étudiées pour la position des moteurs. 
 
-% \begin{figure}[h]
-% \centering
-%     \includegraphics[width=1\columnwidth,angle=0]{picture/colibriH.jpg}
-%     \caption{The Colibri convertible UAV, H version. }
-%     \label{fig:colibri_h}
-% \end{figure}
+Le drone Colibri est dérivé d'un drone \textit{tailsitter} qui génère de la portance pendant le vol d'avancement. Cette aile possède plusieurs actionneurs : quatre moteurs $u_{i}, ~i = 1,2,3,4$ et deux élevons $\delta_{\text{l}}$ et $\delta_{\text{r}}$. Nous pouvons définir le vecteur de contrôle $u_{\text{W}}$ de l'aile d'après la Figure~\ref{fig:world_body} comme $u_{\text{W}} = [u_{1}~u_{2}~u_{3}~u_{4}~\delta_{\text{l}}~\delta_{\text{r}}]^\top$. Un fuselage relié par un pivot est fixé au centre aérodynamique de l'aile. Ce fuselage supporte l'autopilote, la batterie, un moteur et un empennage pour le maintenir horizontal. Dans la Figure~\ref{fig:world_body}, toutes les surfaces de contrôle aérodynamiques sont représentées en rose et les hélices en vert.
+Trois repère sont attachés au drone. (I) est un repère inertiel NED lié à la surface de la terre, (W) est un repère attaché à l'aile du drone et (F) est un repère attaché au fuselage du drone.
 
-% L'architecture en H offre un actionnement important 
 
-% \begin{figure}[h]
-% \centering
-%     \includegraphics[width=1\columnwidth,angle=0]{picture/ColibriV2.png}
-%     \caption{The Colibri convertible UAV, motor on the wing. }
-%     \label{fig:colibriv2}
-% \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht!]
 \centering
-    \includegraphics[width=1\columnwidth,angle=0,trim={0 0 0 0.5cm},clip]{figures/wold_body.png}
-    \caption{Inertial (I) and wing (W) reference frames and the Colibri architecture. }
+    \includegraphics[width=0.6\columnwidth,angle=0,trim={0 0 0 0.5cm},clip]{figures/wold_body.png}
+    \caption{Les repères, inertiel (I) et aile (W), attaché à l'architecture de Colibri.}
     \label{fig:world_body}
 \end{figure}
-% \todo{he reference frames could be introduced
-% and detailed at the beginning of the section}
 
-Some of the characteristic dimensions are shown in Table~\ref{tab:pars_colibri}. Note that the motors are positioned symmetrically on the wing, which means that the position can be described by focusing on one side. 
+Certaines des dimensions caractéristiques sont indiquées dans le Tableau~\ref{tab:pars_colibri}. Notons que les moteurs sont positionnés symétriquement sur l'aile, ce qui signifie que la position peut être décrite en se concentrant sur un seul côté. 
+
 \begin{table}[ht]
   \centering
     \begin{tabular}{|l|c|c|}
       \hline
-      \multicolumn{1}{|c|}{Parameter} & Value & Units  \\
+      \multicolumn{1}{|c|}{Paramètres} & Valeur & Unités  \\
       \hline
-      $m_{\text{W}}$ (wing mass)  & 0.53& \SI{}{\kilogram} \\
+      $m_{\text{W}}$ (masse de l'aile)  & 0.53& \SI{}{\kilogram} \\
       \hline
-      $m_{\text{F}}$ (fuselage mass)  & 1.17& \SI{}{\kilogram} \\
+      $m_{\text{F}}$ (masse du fuselage)  & 1.17& \SI{}{\kilogram} \\
       \hline
     %   $b$ (wingspan)  & 1.17 & \SI{}{\meter} \\
     %   \hline
@@ -67,34 +49,14 @@ Some of the characteristic dimensions are shown in Table~\ref{tab:pars_colibri}.
       \hline
       $J_{\text{F}}=diag(J_{x}^{\text{F}}, J_{y}^{\text{F}}, J_{z}^{\text{F}})$ & \!\! $\diag(0.0191,0.0161,0.0343)$\!\! & \SI{}{\kilogram\square\meter}\\
       \hline
-      $k_{\text{f}}$ (propeller thrust coeff.) & 1.7800e-8 & \SI{}{\kilogram\meter}\\
+      $k_{\text{f}}$ (coefficient de poussée de l'hélice) & 1.7800e-8 & \SI{}{\kilogram\meter}\\
       \hline
-    %   $k_{\text{m}}$(propeller torque coeff.) & 2.1065e-10 & \SI{}{\kilogram\square\meter}\\
-    %   \hline
-    %   $p_{z}^{int}$ (propeller $z$ location) & 0.037 & \SI{}{\meter}\\
-    %   \hline
-    %   $p_{y}^{int}$ (propeller $y$ location) & 0.145 & \SI{}{\meter}\\
-    %   \hline
-    %   $p_{z}^{ext}$ (propeller $z$ location) & 0.028 & \SI{}{\meter}\\
-    %   \hline
-    %   $p_{y}^{ext}$ (propeller $y$ location) & 0.325 & \SI{}{\meter}\\
-    %   \hline
-    %   $\xi_{\text{f}}$ (elevons lift coeff.) & 0.2 & --\\
-    %   \hline
-    %   $\xi_{\text{m}}$ (elevons torque coeff.) & 1.4 & --\\
-    %   \hline
-    %   $\rho$ (air density) & 1.225 & \SI{}{\kilogram\per\cubic\meter}\\
-    %   \hline
-    %   $C_{\text{d0}}$ (drag coeff.) & 0.1644 & --\\
-    %   \hline
-    %   $C_{\text{l0}}$ (lift coeff.) & 5.4001 & --\\
-    %   \hline
        $d_{\text{M}O_{\text{W}}}$  & $[0.383,0,-0.167]^\top$ & \SI{}{\meter}\\
       \hline
        $d_{\text{G}O_{\text{W}}}$  & $[0.052,0,-0.171]^\top$ & \SI{}{\meter}\\
       \hline
     \end{tabular}
-    \caption{ Numerical parameters of the Colibri model.}
+    \caption{Paramètres numériques du modèle Colibri.}
     \label{tab:pars_colibri}
 \end{table}
 
@@ -102,31 +64,36 @@ Some of the characteristic dimensions are shown in Table~\ref{tab:pars_colibri}.
 % the M matrix, A, Q matrix, etc. In Equation 1, both Q and B
 % are matrices and do not include the location x. Where are
 % the state variables located?}
-The modelling is based on the results of \cite[Section 2.15]{udwadia-phohomsiri}. The algorithm for computing matrices $M$, $A$, $Q$ and $B$ is in \cite{udwadia-schutte}, which provides us the equations of motion of a constrained multibody system: 
+La modélisation est basée sur les résultats de \cite[Section 2.15]{udwadia-phohomsiri}. L'algorithme de calcul des matrices $M$, $A$, $Q$ et $B$ se trouve dans \cite{udwadia-schutte}, qui nous fournit les équations de mouvement d'un système multicorps contraint : 
 \begin{align}
 \label{eq:udwadia}
     \ddot{x} = \hat{M}^{\dag} \begin{bmatrix} Q \\ B \end{bmatrix}  = \begin{bmatrix} (I - A^{\dag}A)M \\ A \end{bmatrix}^{\dag} \begin{bmatrix} Q \\ B \end{bmatrix}
 \end{align}
-whose expression is valid as long as $\hat{M}$ has full rank and where $A$, $M$, $Q$ and $B$ are described next.\\
-\begin{figure}[h]
-\centering
-    \includegraphics[width=1\columnwidth,angle=0,trim={0 0 0 0.5cm},clip]{figures/fram_side_colibri.png}
-    \caption{Inertial (I), fuselage (F) and wing (W) reference frames and forces acting on the Colibri UAV.}
+dont l'expression est valide tant que $\hat{M}$ a un rang complet et où $A$, $M$, $Q$ et $B$ sont décrits par la suite.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.6\columnwidth,angle=0,trim={0 0 0 0.5cm},clip]{figures/fram_side_colibri.png}
+    \caption{Repère inertiel (I), du fuselage (F) et de l'aile (W) et forces agissant sur le drone Colibri.}
     \label{fig:colibri_frame_side}
 \end{figure}
-We will use quaternions $q = \left [ \eta ~ \epsilon^\top \right]^\top  \in {\mathbb S}^3:=\{ q\in \real^4: |q| = 1\}$ to represent the orientations of the two bodies.  The ensuing rotation matrix $R(q) \in SO(3): = \{R\in \real^{3\times 3}: \; 
- R^\top R = I, \det (R)=1\}$ is uniquely defined as 
-$R(q) := I +2\eta \skewsym{\epsilon} + 2\skewsym{\epsilon}^{2} = [R_{1}~R_{2}~R_{3}]$. \\
-According to Figure \ref{fig:world_body} and \ref{fig:colibri_frame_side}, define the vectors $p_{\text{F}} = \overrightarrow{O_{\text{I}} O_{\text{F}}} $, $p_{\text{W}} = \overrightarrow{O_{\text{I}} O_{\text{W}}} $, $d_{\text{FW}} = \overrightarrow{O_{\text{F}} O_{\text{W}}} $ satisfying $d_{\text{FW}} = p_{\text{W}} - p_{\text{F}}$ and $d_{\text{M}O_{\text{W}}} = \overrightarrow{\text{M} O_{\text{W}} }$, $d_{\text{G}O_{\text{W}}} = \overrightarrow{\text{G} O_{\text{W}} }$.
+Nous utiliserons les quaternions $q = \left[ \eta ~ \epsilon^\top \right]^\top  \in {\mathbb S}^3:=\{ q\in \real^4: |q| = 1\}$ pour représenter les orientations des deux corps. La matrice de rotation qui en résulte $R(q) \in SO(3): = \{R\in \real^{3\times 3}: R^\top R = I,~\det(R)=1\}$ est définie de manière unique comme $R(q) := I +2\eta \skewsym{\epsilon} + 2\skewsym{\epsilon}^{2} = [R_{1}~R_{2}~R_{3}]$.
 
-The overall state vector is $(x,v) \in \real^{28}$ with $x=(p_{\text{W}},~q_{\text{W}},~p_{\text{F}},~q_{\text{F}}) \in \real^{14}$ and $v=(v_{\text{W}},~\dot{q}_{\text{W}},~v_{\text{F}},~\dot{q}_{\text{F}}) = (\dot{p}_{\text{W}},~\dot{q}_{\text{W}},~\dot{p}_{\text{F}},~\dot{q}_{\text{F}})=\dot{x} \in \real^{14}$, where $v_{\text{W}} = \dot{p}_{\text{W}} \in \real^{3}$ represents the linear velocity of the wing in the inertial reference frame, $\dot{q}_{\text{W}} \in \real^{4}$ is the derivative of the quaternion, $q_{\text{W}} \in \real^{4}$ representing the orientation of the wing, $v_{\text{F}} =p_{\text{F}} \in \real^{3}$ is the linear velocity of the fuselage in the inertial reference frame and $\dot{q}_{\text{F}} \in \real^{4}$ is the derivative of the quaternion $q_{\text{F}} \in \real^{4}$ representing the fuselage orientation. It can be seen that the state vector is not minimal. It should be noted that the angular velocity $\omega \in \real^{3}$ can be obtained from the quaternion derivative $\dot{q}$ using equation  \cite[equation (2.7)]{udwadia-schutte} recalled here: 
+D'après les Figures~\ref{fig:world_body} et \ref{fig:colibri_frame_side}, nous définissons les vecteurs $p_{\text{F}} = \overrightarrow{O_{\text{I}} O_{\text{F}}} $, $p_{\text{W}} = \overrightarrow{O_{\text{I}} O_{\text{W}}} $, $d_{\text{FW}} = \overrightarrow{O_{\text{F}} O_{\text{W}}} $ satisfaisant $d_{\text{FW}} = p_{\text{W}} - p_{\text{F}}$ and $d_{\text{M}O_{\text{W}}} = \overrightarrow{\text{M} O_{\text{W}} }$, $d_{\text{G}O_{\text{W}}} = \overrightarrow{\text{G} O_{\text{W}} }$.
+
+Le vecteur d'état global est $(x,v) \in \real^{28}$ avec $x=(p_{\text{W}},~q_{\text{W}},~p_{\text{F}},~q_{\text{F}}) \in \real^{14}$ et $v=(v_{\text{W}},~\dot{q}_{\text{W}},~v_{\text{F}},~\dot{q}_{\text{F}}) = (\dot{p}_{\text{W}},~\dot{q}_{\text{W}},~\dot{p}_{\text{F}},~\dot{q}_{\text{F}})=\dot{x} \in \real^{14}$, où $v_{\text{W}} = \dot{p}_{\text{W}} \in \real^{3}$ représente la vitesse linéaire de l'aile dans le repère inertiel, $\dot{q}_{\text{W}} \in \real^{4}$  est la dérivée du quaternion, $q_{\text{W}} \in \real^{4}$ représentant l'orientation de l'aile, $v_{\text{F}} =p_{\text{F}} \in \real^{3}$  est la vitesse linéaire du fuselage dans le repère inertiel et $\dot{q}_{\text{F}} \in \real^{4}$  est la dérivée du quaternion, $q_{\text{F}} \in \real^{4}$ représentant l'orientation du fuselage. Nous observons que le vecteur d'état n'est pas minimal.
+\todo{Minimalité du vecteur}
+Il convient de noter que la vitesse angulaire $\omega \in \real^{3}$ peut être obtenue à partir de la dérivée du quaternion $\dot{q}$ en utilisant l'équation \cite[équation (2.7)]{udwadia-schutte} rappelée ici : 
 \begin{align*}
     \omega = H(q) \dot{q} 
 \end{align*}
-where $H(q) \in \real^{3\times4}$ is a matrix defined by $H(q) = 2\begin{bmatrix}-\epsilon & \eta I_{3} - \skewsym{\epsilon}\end{bmatrix}$.
-For deriving the equations of motion, recalling that $R_{i}(q) \in \real^{3}, i = 1,2,3$ are the three columns of a rotation matrix associated with quaternion $q$, define matrices  $L_{\text{i}}^{\text{W}} \left( q_{\text{W}} \right) = \frac{\partial R_{i}}{\partial q}(q_{\text{W}}) \in \real^{3\times4}$, 
-$L_{\text{i}}^{\text{F}} \left( q_{\text{F}} \right) = \frac{\partial R_{i}}{\partial q}(q_{\text{F}}) \in \real^{3\times4}$ and
-$L_{O_{\text{F}}^{\text{W}}} = \sum_{i=1}^{3} d_{\text{FW}}(i) L_{\text{i}}^{\text{F}} (q_{\text{F}})$, $i \in {1,2,3}$, where $d_{\text{FW}}(i)$ denotes the i-th component of vector $d_{\text{FW}} = p_{\text{W}} - p_{\text{F}}$. Since $O_{\text{W}}$ is located at the wing's center of rotation, the distance $d_{\text{FW}}$ is a constant, since $O_{\text{W}}$ and $O_{\text{F}}$ can be assumed to belong to the same solid (the fuselage). We deduce, with homogeneity, $\dot{L}_{O_{\text{F}}^{\text{W}}} = \sum_{i=1}^{3} d_{\text{FW}}(i) L_{\text{i}}^{\text{F}} (\dot{q}_{\text{F}})$. With these definitions, select the matrices in (\ref{eq:udwadia}) as
+où $H(q) \in \real^{3\times4}$ est une matrice définie par $H(q) = 2\begin{bmatrix}-\epsilon & \eta I_{3} - \skewsym{\epsilon}\end{bmatrix}$.
+Pour dériver les équations du mouvement, rappelons que  $R_{i}(q) \in \real^{3}, i = 1,2,3$ sont les trois colonnes d'une matrice de rotation associée au quaternion $q$, définissent les matrices $L_{\text{i}}^{\text{W}} \left( q_{\text{W}} \right) = \frac{\partial R_{i}}{\partial q}(q_{\text{W}}) \in \real^{3\times4}$, 
+$L_{\text{i}}^{\text{F}} \left( q_{\text{F}} \right) = \frac{\partial R_{i}}{\partial q}(q_{\text{F}}) \in \real^{3\times4}$ et
+$L_{O_{\text{F}}^{\text{W}}} = \sum_{i=1}^{3} d_{\text{FW}}(i) L_{\text{i}}^{\text{F}} (q_{\text{F}})$, $i \in {1,2,3}$, où $d_{\text{FW}}(i)$ désigne la i-ème composante du vecteur $d_{\text{FW}} = p_{\text{W}} - p_{\text{F}}$. Comme $O_{\text{W}}$ est situé au centre de rotation de l'aile, la distance $d_{\text{FW}}$ est une constante, puisque $O_{\text{W}}$ et $O_{\text{F}}$ appartiennent au même solide (le fuselage).
+
+On en déduit, avec homogénéité, $\dot{L}_{O_{\text{F}}^{\text{W}}} = \sum_{i=1}^{3} d_{\text{FW}}(i) L_{\text{i}}^{\text{F}} (\dot{q}_{\text{F}})$. Avec ces définitions, les matrices de \eqref{eq:udwadia} sont
+
 \begin{align}
     M = \begin{bmatrix}
         m_{\text{W}} I_{3} & \mathbb{0}_{3 \times 4} & \mathbb{0}_{3} & \mathbb{0}_{3 \times 4}\\
@@ -134,7 +101,7 @@ $L_{O_{\text{F}}^{\text{W}}} = \sum_{i=1}^{3} d_{\text{FW}}(i) L_{\text{i}}^{\te
         \mathbb{0}_{3} & \mathbb{0}_{3 \times 4} & m_{\text{F}} I_{3} & \mathbb{0}_{3 \times 4} \\
         \mathbb{0}_{4 \times 3} & \mathbb{0}_{4 } & \mathbb{0}_{4 \times 3} & H_{\text{F}}^\top J_{\text{F}} H_{\text{F}}    \end{bmatrix}\in \real^{14\times14},
 \end{align}
-where we denoted $H_{\text{W}} = H(q_{\text{W}})$, $H_{\text{F}} = H(q_{\text{F}})$, and
+où nous avons noté $H_{\text{W}} = H(q_{\text{W}})$, $H_{\text{F}} = H(q_{\text{F}})$, et
 \begin{align}
     Q = \begin{bmatrix}
             m_{\text{W}} g e_3 + R(q_{\text{W}}) F_{\text{b}}\\
@@ -146,13 +113,17 @@ where we denoted $H_{\text{W}} = H(q_{\text{W}})$, $H_{\text{F}} = H(q_{\text{F}
 % \todo{Details of forces and moments generated while the wing
 % transits its position should be given in detail as this is
 % the key distinct feature of this aircraft.}
-where $\dot{H}_{\text{W}}$ denote $H(\dot{q}_{\text{W}})$, coinciding with the time derivative of $H(q_{\text{W}})$ and $\dot{H}_{\text{F}}$ denote $H(\dot{q}_{\text{F}})$, coinciding with the time derivative of $H(q_{\text{F}})$. Moreover, $F_{\text{b}}$ and $M_{\text{b}}$ represent, respectively,  all the forces and moments acting on the wing. The expressions of $M$ and $Q$ are taken from  \cite[equations (45) and (57)]{lustosaHal-03035938} where the $\phi$ theory is developed, a parametrisation that allows the classical angles of incidence and sideslip to be subtracted and the hover singularity to be avoided. For lack of space, they will not be more detailed. Finally, $F_{\text{F}} =  F_{m}$ et $M_{\text{F}}$ represent respectively the set of non-gravitational forces and moments acting on the fuselage expressed in the frame $O_{\text{W}}$. In particular, $F_{m} = - k_{f} {u_{\text{tail}}}^{2}$ is the force generated by the motor located at the tail of the fuselage and $u_{\text{tail}}$ is the motor rotation speed, while
+
+où $\dot{H}_{\text{W}}$ désigne $H(\dot{q}_{\text{W}})$, coïncidant avec la dérivée temporelle de $H(q_{\text{W}})$ et $\dot{H}_{\text{F}}$ désigne $H(\dot{q}_{\text{F}})$, coïncidant avec la dérivée temporelle de $H(q_{\text{F}})$. De plus, $F_{\text{b}}$ et $M_{\text{b}}$ représentent respectivement toutes les forces et tous les moments agissant sur l'aile. Les expressions de $M$ et $Q$ sont tirées de \cite[équations (45) et (57)]{lustosaHal-03035938} où est développée la $\phi$-théorie, paramétrage qui permet de soustraire les angles classiques d'incidence et de dérapage et d'éviter la singularité du vol stationnaire. 
+
+Enfin, $F_{\text{F}} = F_{m}$ et $M_{\text{F}}$ représentent respectivement l'ensemble des forces et moments non gravitationnels agissant sur le fuselage exprimé dans le repère $O_{\text{W}}$. En particulier, $F_{m} = - k_{f} {u_{\text{tail}}}^{2}$ est la force générée par le moteur situé à l'arrière du fuselage et $u_{\text{tail}}$ est la vitesse de rotation du moteur telle que :
 \begin{align}
     M_{\text{F}} =  m_{\text{F}} g e_3 \times d_{\text{G}O_{\text{W}}} + F_{m} \times d_{\text{M}O_{\text{W}}},
 \end{align}
-where $d_{\text{M}O_{\text{W}}}$ is the distance between the motor location and the center of rotation and $d_{\text{G}O_{\text{W}}}$ is the distance between the location of the fuselage's center of gravity and the center of rotation.
+où $d_{\text{M}O_{\text{W}}}$ est la distance entre l'emplacement du moteur et le centre de rotation et $d_{\text{G}O_{\text{W}}}$ est la distance entre l'emplacement du centre de gravité du fuselage et le centre de rotation.
 
-The set of constraints associated with the nonminimality or the state $(x,v)$ and by the pivot connection between the two bodies is given by:
+
+L'ensemble des contraintes, associées à la non-minimalité de l'état $(x,v)$ et à la liaison pivot entre les deux corps, est donné par :
 \begin{align}
     \label{eq:contraintes}
     \left\{
@@ -166,13 +137,14 @@ The set of constraints associated with the nonminimality or the state $(x,v)$ an
     \right.
 \end{align}
 
-The first two constraints impose the unit norm of the quaternions $q_{\text{F}}$ and $q_{\text{W}}$.
-The third and fourth constraints are related to a moving pivot constraint, i.e. the orthogonality of two vectors is imposed. The last one is a positional constraint so that the point of the centre of rotation belonging to the wing coincides with the point defined in the fuselage. This constraint is based on a three-dimensional geometric closure.\\
-It is more convenient to express the set of constraints as a stable dynamical system converging to zero, so we convert each one of the constraints in the form:
+Les deux premières contraintes imposent la norme unitaire des quaternions $q_{\text{F}}$ et $q_{\text{W}}$.
+Les troisième et quatrième contraintes sont liées à une contrainte pivot, c'est-à-dire que l'orthogonalité de deux vecteurs est imposée. La dernière est une contrainte de position, de sorte que le point du centre de rotation de l'aile coïncide avec le point défini dans le fuselage. Cette contrainte est basée sur une fermeture géométrique tridimensionnelle.
+Il est plus commode d'exprimer l'ensemble des contraintes sous la forme d'un système dynamique stable convergeant vers zéro, et nous convertissons donc chacune des contraintes sous la forme suivante :
 \begin{align}
     \ddot{\varphi_{i}} + \delta_{1} \dot{\varphi_{i}}  + \delta_{2} \varphi_{i} = 0, i \in {1,2,3,4,5},
 \end{align}
-with the selections $(\delta_{1}, \delta_{2}) = (0.5,~8)$ being the coefficients of a stable polynomial, so that, regardless of the selection $\varphi_{i}(0) = 0$, we have $\lim\limits_{t \to \infty} \varphi_{i}(t) = 0$. By differentiating constraints (\ref{eq:contraintes}) twice and factoring them out in the form $ A(x,\dot{x}) \ddot{x} = B(x,\dot{x})$, we obtain the expression of $A(x,\dot{x})$ reported in equation  (\ref{eq:A_contraint}) and $B(x,\dot{x})$ reported in the equation  (\ref{eq:b_contraint}) at the start of the next page.
+
+avec les sélections $(\delta_{1}, \delta_{2}) = (0.5,~8)$ étant les coefficients d'un polynôme stable, de sorte que, quelle que soit la sélection $\varphi_{i}(0) = 0$, nous avons $\lim\limits_{t \to \infty} \varphi_{i}(t) = 0$. En différenciant deux fois les contraintes \eqref{eq:contraintes} et en les factorisant sous la forme $ A(x,\dot{x}) \ddot{x} = B(x,\dot{x})$, nous obtenons l'expression de $A(x,\dot{x})$ reportée dans l'équation \eqref{eq : A_contraint} et de $B(x,\dot{x})$ reportée dans l'équation \eqref{eq:b_contraint}.
 
 \begin{align}
 \label{eq:A_contraint}
@@ -185,18 +157,8 @@ with the selections $(\delta_{1}, \delta_{2}) = (0.5,~8)$ being the coefficients
         \end{bmatrix}
 \end{align}
 
-The simulation of a drone remains complex, as it is naturally unstable. We have chosen to use the control law proposed in \cite{SANSOUACA} extended to 6 DOF dynamics to stabilize the system. This PI-based control stabilises the wing. Another control law based on a proportional-derivative feedback stabilises the fuselage to keep it horizontal. The closed-loop simulation results are shown in Figure \ref{fig:sim_colibri}.
-\begin{figure}[!h]
-\centering
-    \includegraphics[width=1\columnwidth,angle=0]{figures/colibri_sim.png}
-    \caption{Position and orientation simulation of the multi-body UAV Colibri in closed loop with a simple double-loop controller. }
-    \label{fig:sim_colibri}
-\end{figure}
-Considering the degrees of freedom of the pivot link, the coupling between the two bodies is clearly visible from the lower three plots. Indeed, the roll and yaw angles $(\phi_{\text{F}}, \psi_{\text{F}})$ and $(\phi_{\text{W}}, \psi_{\text{W}})$ of the fuselage and wing coincide perfectly, while the pitch angles $(\theta{\text{F}}, \theta{\text{F}})$ are radically different.
-
-\begin{figure*} [!h]
 \begin{align}
-\label{eq:b_contraint}
+    \label{eq:b_contraint}
     B = \begin{bmatrix}
             -\delta_{1} q_{\text{W}}^\top \dot{q}_{\text{W}} - \frac{\delta_{2}}{2} (q_{\text{W}}^\top q_{\text{W}} -1) - \dot{q}_{\text{W}}^\top \dot{q}_{\text{W}} \\
             -\delta_{1} q_{\text{F}}^\top \dot{q}_{\text{F}} - \frac{\delta_{2}}{2} (q_{\text{F}}^\top q_{\text{F}} -1) - \dot{q}_{\text{F}}^\top \dot{q}_{\text{F}} \\
@@ -205,8 +167,21 @@ Considering the degrees of freedom of the pivot link, the coupling between the t
             \dot{L}_{O_{\text{F}}^{\text{W}}} \dot{q}_{\text{F}}  - \delta_{1}( v_{\text{W}} + \dot{L}_{O_{\text{F}}^{\text{W}}} \dot{q}_{\text{W}} - v_{\text{F}}) - \delta_{1}\varphi_{5}
         \end{bmatrix}
 \end{align}
-  \hrulefill\par
-\end{figure*}
+
+La simulation d'un drone reste complexe, car il est naturellement instable. Nous avons choisi d'utiliser la loi de contrôle proposée dans \ref{sec:h_inf6DOF_multi} pour stabiliser le système. Ce contrôle stabilise l'aile. Une autre loi de contrôle basée sur une rétroaction proportionnelle-dérivée stabilise le fuselage pour le maintenir horizontal. Les résultats de la simulation en boucle fermée sont présentés à la Figure~\ref{fig:sim_colibri}.
+
+\begin{figure}[ht!]
+\centering
+    \includegraphics[width=0.6\columnwidth,angle=0]{figures/colibri_sim.png}
+    \caption{Simulation de la position et de l'orientation du drone multicorps Colibri en boucle fermée avec un contrôleur à double boucle. }
+    \label{fig:sim_colibri}
+\end{figure}
+
+En considérant les degrés de liberté de la liaison pivot, le couplage entre les deux corps est clairement visible sur les trois graphiques du bas. En effet, les angles de roulis et de lacet $(\phi_{\text{F}}, \psi_{\text{F}})$ et $(\phi_{\text{W}}, \psi_{\text{W}})$ du fuselage et de l'aile coïncident parfaitement, alors que les angles de tangage $(\theta{\text{F}}, \theta{\text{F}})$ sont différents.
+
+
+
+
 
 
 
@@ -218,92 +193,108 @@ Considering the degrees of freedom of the pivot link, the coupling between the t
 % compared to existing technologies? It is difficult to
 % discern the theoretical contribution to the angular
 % velocity estimation part.}
-In order to stabilise this two-body UAV system, it is necessary to know the position and orientation of the two bodies. Due to the pivot link between the wing and the fuselage, the difference between the orientation of the wing and the orientation of the fuselage is simply a rotation about the pitch axis of the wing. The two other orientations (roll and yaw) coincide. The position of the fuselage's centre of gravity can be deduced from the position of the wing's centre of gravity and the angle between the fuselage and the wing. This angle is measured by a quadrature rotary encoder (CUI Devices AMT22, Absolute Encoders, 12 bit, SPI), which returns a quantized angular measurement with a step size of \SI{0.09}{\degree}. Given this angular measurement, we discuss below the estimation of the speed information, so as to reconstruct the state of the UAV. 
 
-\subsection{Sensors placement}
+Pour stabiliser ce système de drone à deux corps, il est nécessaire de connaître la position et l'orientation des deux corps. Grâce à la liaison pivot entre l'aile et le fuselage, la différence entre l'orientation de l'aile et l'orientation du fuselage est simplement une rotation autour de l'axe de tangage de l'aile. Les deux autres orientations (roulis et lacet) coïncident. La position du centre de gravité du fuselage peut être déduite de la position du centre de gravité de l'aile et de l'angle entre le fuselage et l'aile. Cet angle est mesuré par un codeur rotatif en quadrature (CUI Devices AMT22, codeurs absolus, 12 bits, SPI), qui renvoie une mesure angulaire quantifiée avec un pas de \SI{0,09}{\degree}. Compte tenu de cette mesure angulaire, nous examinons ci-dessous l'estimation des informations relatives à la vitesse, afin de reconstruire l'état du drone.
+
+\subsection{Placement des capteurs}
 \label{subsec:sens_pos}
-A first question pertains to the sensors placements: the IMU (accelerometer, gyroscope and magnetometer) can be installed on the fuselage or on the wing. 
-Installing the IMU on the wing means that the measurements can be taken directly in the desired reference frame, but the measurements are noisier because the IMU is attached to the structure supporting the motors. Given the size of the wing, their flexibility can generate resonances and can perturb the measurements. 
-%In addition, wiring the IMU is not easy as the cables must pass through the pivot link, which generates resistive torques.
-Installing the IMU on the fuselage reduces vibrations, but means that the measurements must be transformed in the wing reference frame. The corresponding transformation can be computed from the rotary encoder measurement, providing the angle between the wing and the fuselage, and also from the measurements taken with the CAD software, providing precise information about the distances between the wing and fuselage frames. Our final choice is to attach the IMU to the fuselage. Another consideration is that the autopilot board, which already have an integrated IMU, is also supposed to be connected to the payload and other sensors attached to the fuselage. It is thus limiting the number of cables at the pivot point to the actuators commands and power supply.
+Une première question concerne l'emplacement des capteurs : l'IMU (accéléromètre, gyroscope et magnétomètre) peut être installé sur le fuselage ou sur l'aile. 
+L'installation de l'IMU sur l'aile permet d'effectuer les mesures directement dans le référentiel souhaité, mais les mesures sont plus bruitées car l'IMU est attaché à la structure supportant les moteurs. Compte tenu de la taille des ailes, leur flexibilité peut générer des résonances et perturber les mesures. 
 
-\subsection{Angular speed estimation}
-As explained above, we can measure the angle $\kappa \in \real$ between the wing and the fuselage using the rotary encoder. Then, to estimate the angular velocity we use the high-gain observer proposed in \cite{203613} (see also \cite{1032320} for the use of high-gain observers to estimate time derivatives). This method is preferable to a finite difference derivative, as the quantized information generated by the rotary encoder can result in bursts in the estimated angular velocity values.\\ 
-Denote by $\kappa \in \real$ the measured position variable, by $\omega_{\kappa} := \dot \kappa  \in \real$ its derivative, to be estimated, and by $\xi = [\kappa,~\omega_{\kappa}]^\top \in \mathbb{R}^2$ their juxtaposition in a single vector. Denote also $\hat{\xi}$ the estimate of $\xi$ as follows:
+L'installation de l'IMU sur le fuselage réduit les vibrations, mais implique que les mesures soient transformées dans le référentiel de l'aile. La transformation correspondante peut être calculée à partir de la mesure de l'encodeur rotatif, qui fournit l'angle entre l'aile et le fuselage, ainsi qu'à partir des mesures prises avec le logiciel de CAO, qui fournissent des informations précises sur les distances entre les référentiels de l'aile et du fuselage. Notre choix final est de fixer l'IMU au fuselage. Une autre considération est que la carte de pilotage automatique, qui a déjà une IMU intégrée, est également supposée être connectée à la charge utile et à d'autres capteurs fixés sur fuselage. Il s'agit donc de limiter le nombre de câbles au point de pivot pour les commandes des actionneurs et l'alimentation électrique.
+
+
+\subsection{Estimation de la vitesse angulaire}
+
+Comme expliqué ci-dessus, nous pouvons mesurer l'angle $\kappa \in \real$ entre l'aile et le fuselage à l'aide de l'encodeur rotatif. Ensuite, pour estimer la vitesse angulaire, nous utilisons un observateur grand gain proposé dans \cite{203613} (voir également \cite{1032320} pour l'utilisation d'observateurs grand gain pour estimer les dérivées temporelles). Cette méthode est préférable à une dérivée par différence finie, car les informations quantifiées générées par l'encodeur rotatif peuvent donner lieu à du bruit numérique dans les valeurs estimées de vitesse angulaire.
+
+
+Désignons par $\kappa \in \real$ l'angle mesuré, par $\omega_{\kappa} := \dot \kappa  \in \real$ sa dérivée, à estimer, et par $\xi = [\kappa,~\omega_{\kappa}]^\top \in \mathbb{R}^2$ leur juxtaposition en un seul vecteur. Notons également $\hat{\xi}$ l'estimation de $\xi$ définie par :
 %\todo{GH: il y a pas un peu de répétitions dans les notations ?}
 %\xi = [\kappa,~\omega_{\kappa}]^\top \in \mathbb{R}^2, \quad 
 \begin{align*}
     \hat{\xi} = [\hat{\kappa},~\hat{\omega}_{\kappa}]^\top \in \mathbb{R}^2.
 \end{align*}
-Following \cite{203613}, the estimator dynamics is given by
+Suivant \cite{203613}, la dynamique de l'estimateur est donnée par :
 \begin{align}
 \label{eq:high_dyn}
     \dot{\hat{\xi}} =  \begin{bmatrix}0 & 1 \\ 0 & 0 \end{bmatrix} \hat{\xi}+ \begin{bmatrix}\frac{k_{p}}{\epsilon_{\kappa}}  \\ \frac{k_{v}}{\epsilon_{\kappa}^{2}}  \end{bmatrix} (\kappa - \hat{\kappa}),
 \end{align}
-where $\kappa$ is the angular measurement recovering from the sensors, $k_{p}$ and $k_{v}$ are two positive scalars gains such that the characteristic equation $s^{2} + k_{v} s + k_{p} = 0$ has roots with negative real part. For our estimators, we have selected $k_{p} = 1$ and $k_{v} = 1.3$ so as to get a damping factor $\zeta = 0.65$ leading to a slightly underdamped response as a suitable trade-off between a fast rise time and a mildly oscillatory response. The high-gain scaling factor
-$\epsilon_{\kappa}$ can be conveniently adjusted in order to obtain a trade-off between smoothing action (obtained by increasing $\epsilon_{\kappa}$) and reduction of the time lag
-of the estimator (obtained by reducing $\epsilon_{\kappa}$). Moreover, the smoothing action of the proposed approach mitigates the effect of the quantized position measurements. We have selected $\epsilon_{\kappa} = 0.05$ for our experiments. Figure \ref{fig:high_gain} shows the experimental results obtained after implementation of the high-gain filter (\ref{eq:high_dyn}) in the case of a flight generating high-amplitude angular oscillations.
-\begin{figure}[h]
+où $\kappa$ est la mesure angulaire récupérée du capteur, $k_{p}$ et $k_{v}$ sont deux gains scalaires positifs tels que l'équation caractéristique $s^{2} + k_{v} s + k_{p} = 0$ ait des racines à partie réelle négative. Pour notre estimateur, nous avons choisi $k_{p} = 1$ et $k_{v} = 1,3$ de manière à obtenir un facteur d'amortissement $\zeta = 0,65$ conduisant à une réponse légèrement sous-amortie comme compromis approprié entre un temps de montée rapide et une réponse légèrement oscillatoire. Le gain $\epsilon_{\kappa}$ peut être ajusté de manière pratique afin d'obtenir un compromis entre l'action de lissage (obtenue en augmentant $\epsilon_{\kappa}$) et la réduction du retard temporel
+de l'estimateur (obtenue en réduisant $\epsilon_{\kappa}$). En outre, l'action de lissage de l'approche proposée atténue l'effet de la quantification de la mesure angulaire. Nous avons choisi $\epsilon_{\kappa} = 0,05$ pour nos expériences. La Figure~\ref{fig:high_gain} montre les résultats expérimentaux obtenus après la mise en œuvre du filtre grand gain \eqref{eq:high_dyn} dans le cas d'un vol générant des oscillations angulaires de grande amplitude.
+
+Nous avons effectué une dérivation par différence finie (en vert) en post-traitement pour comparer les résultats. En raison de la nature quantifiée de l'encodeur rotatif, nous observons que la vitesse angulaire obtenue par différence finie est très bruitée. On constate que le filtre grand gain permet d'estimer la vitesse angulaire avec plus de précision (en rouge), bien qu'avec un léger retard. Grâce à l'ajout d'une IMU supplémentaire sur l'aile lors d'un essai en vol, il est possible de comparer l'estimation de la vitesse avec les mesures du gyroscope de l'aile (MPU9250), visibles sur le graphique du bas de la Figure~\ref{fig:high_gain} (trace bleue). On constate que les mesures du gyroscope sont quelque peu bruitées, notamment en raison des vibrations générées par les moteurs. 
+
+\begin{figure}[ht!]
 \centering
-    \includegraphics[width=1\columnwidth,angle=0]{figures/highGainFilter.png}
-    \caption{Angular position measurement (black,top plot), wing gyro velocity measurement (blue,bottom plot), finite difference velocity estimation (green, bottom plot) and high-gain estimates (red curves)}
+    \includegraphics[width=0.6\columnwidth,angle=0]{figures/highGainFilter.png}
+    \caption{Mesure de l'angle (noir, graphique du haut), mesure de la vitesse angulaire avec le gyroscope de l'aile (bleu, graphique du bas), estimation de la vitesse angulaire par différence finie (vert, graphique du bas) et estimation avec le filtre grand gain (courbes rouges).}
     \label{fig:high_gain}
 \end{figure}
-%\todo{GH: c'est pas très lisible comme figure}
-We carried out differentiation by finite difference (in green) in post-treatment to compare the results. Due to the quantized nature of the rotary encoder, we observe that the angular velocity obtained by finite difference is very noisy. We can see that the high-gain filter makes it possible to estimate the angular velocity more accurately (in red), albeit with a slight delay. Thanks to the addition of an extra IMU on the wing in a specific flight test, it is possible to compare the velocity estimate with the wing's gyroscope (MPU9250) measurements, visible on the bottom graph of Figure \ref{fig:high_gain} (blue trace). We can see that the gyroscope readings are somewhat noisy, due in particular to the vibrations generated by the motors.  %\todo{GH: ref à la figure est trop tard par rapport au texte}
-\\
-In order to perform the necessary transformation among the reference frames, define the quaternion $q_{\hat{\kappa}} \in {\mathbb S}^3$ as follows:
+\todo{Ce n'est pas très lisible comme figure}
+
+Afin d'effectuer la transformation nécessaire entre les repères, nous définissons le quaternion $q_{\hat{\kappa}} \in {\mathbb S}^3$ suivant :
 \begin{align}
 \label{eq:rot_quat}
-    q_{\hat{\kappa}} =  \left [\cos\left(\frac{\hat{\kappa}}{2}\right) ~ 0 ~ \sin\left(\frac{\hat{\kappa}}{2}\right) ~ 0 \right]^\top
+    q_{\hat{\kappa}} =  \left[\cos\left(\frac{\hat{\kappa}}{2}\right) ~ 0 ~ \sin\left(\frac{\hat{\kappa}}{2}\right) ~ 0 \right]^\top
 \end{align}
 
 
-\subsection{Wing state estimation}
-Based on the estimated angle $\hat{\kappa}$ and the estimated angular velocity $\hat{\omega}_{\kappa}$, it is possible to transform the measurements from the fuselage to the wing frame. All the sensors are installed on the autopilot board, which is itself attached to the fuselage. However, as mention in introduction, we want to use INDI to stabilize the wing. So this control law requires the state information in the wing reference frame, where all the forces are applied (aerodynamic and traction).
-Then, two viable solution are possible: perform the state estimation in the fuselage reference frame and rotate the estimation, using the estimate of the angle $\hat{\kappa}$, or rotate the raw measurements in advance to express them in the wing reference frame, and then perform the state estimation on the latter. 
-Given the current architecture of the software in the Paparazzi\footnote{\url{https://github.com/enacuavlab/paparazzi/tree/rot_state_est}} system, it is cumbersome to have two joint state estimation structures, so it is difficult to implement the first solution, where the controller directly retrieves the current state estimation. For this reason, we have chosen to estimate the state of the wing from data measured on the fuselage. To this end, we detail below the coordinate transformation for the three sensors: gyroscope, accelerometer and magnetometer. \\
-\indent For the gyroscope-based angular rate measurements, we may compute the angular velocity of the wing expressed in the wing frame as
+\subsection{Estimation de l'état de l'aile}
+
+Sur la base de l'angle estimé $\hat{\kappa}$ et de la vitesse angulaire estimée $\hat{\omega}_{\kappa}$, il est possible de transformer les mesures réalisées dans le repère du fuselage vers le repère de l'aile. Tous les capteurs sont installés sur la carte de l'autopilote, qui est elle-même fixée au fuselage. Cependant, nous voulons utiliser INDI pour stabiliser l'aile. Cette loi de contrôle nécessite donc des informations sur l'état du drone dans repère de l'aile, où toutes les forces sont appliquées (aérodynamiques et de traction).
+Deux solutions viables sont alors possibles : effectuer l'estimation d'état dans le repère du fuselage et faire pivoter l'estimation, en utilisant l'estimation de l'angle $\hat{\kappa}$, ou faire pivoter les mesures brutes à l'avance pour les exprimer dans le repère l'aile, et ensuite effectuer l'estimation d'état dans ce dernier. 
+Compte tenu de l'architecture actuelle du logiciel du système Paparazzi (voir Annexe \ref{sec:logiciel}), il est impossible d'avoir deux structures conjointes d'estimation de l'état, et il est donc complexe de mettre en œuvre la première solution, dans laquelle le contrôleur récupère directement l'estimation de l'état actuel. C'est pourquoi nous avons choisi d'estimer l'état de l'aile à partir des données mesurées sur le fuselage. À cette fin, nous détaillons ci-dessous les transformations pour les trois capteurs : gyroscope, accéléromètre et magnétomètre. 
+
+Pour les mesures de la vitesse angulaire basées sur le gyroscope, nous pouvons calculer la vitesse angulaire de l'aile exprimée dans le repère de l'aile :
 \begin{align}
     \label{eq:gyro_deplacement}
     \omega_{\text{W}} = R(q_{\hat{\kappa}}) \left( \omega_{gyro}^{\text{F}} + \begin{bmatrix}
     0\\ \omega_{\kappa} \\ 0
     \end{bmatrix}  \right) 
 \end{align}
-where $\omega_{gyro}^{\text{F}}$ is the angular velocity measured by the gyro on the fuselage, expressed in the fuselage frame, $\hat{\omega}_{\kappa}$ is the estimated angular velocity of the wing relative to the fuselage, as per (\ref{eq:high_dyn}), and $q_{\hat{\kappa}}$ is the quaternion defined in (\ref{eq:rot_quat}).
-Expression (\ref{eq:gyro_deplacement}) is similar to a composition of angular velocities and a reference frame transformation.\\
-\indent For the acceleration measurement with the accelerometer, we may use the following relation
-Expression (\ref{eq:accel_deplacement}) is obtained from the rate of change transport theorem \cite{brizard2004motion}, where we find the Euler acceleration term $\dot{\omega_{\text{F}}} \times d_{AF}$ and the centripetal acceleration term $\omega_{\text{F}} \times ( \omega_{\text{F}} \times  d_{AF})$. Coriolis Acceleration $2\omega_{\text{F}} \times \frac{d (d_{\text{FW}})}{d t}\Bigr|_{O_{\text{F}}}$ and the rate of acceleration $\frac{d^{2} (d_{\text{FW}})}{d^{2} t}\Bigr|_{O_{\text{F}}}$ are zero because $d_{\text{FW}}$ is contant.
+où $\omega_{gyro}^{\text{F}}$ est la vitesse angulaire mesurée par le gyroscope sur le fuselage, exprimée dans le repère du fuselage, $\hat{\omega}_{\kappa}$ est la vitesse angulaire estimée de l'aile par rapport au fuselage, conformément à \eqref{eq:high_dyn}, et $q_{\hat{\kappa}}$ est le quaternion défini dans \eqref{eq:rot_quat}.
+L'expression \eqref{eq:gyro_deplacement} est similaire à une composition de vitesses angulaires et à un changement du repère.
+
+Pour la mesure de l'accélération avec l'accéléromètre, nous pouvons utiliser la relation de l'équation \eqref{eq:accel_deplacement}, qui est obtenue à partir du théorème de transport du taux de variation \cite{brizard2004motion}, où nous trouvons le terme d'accélération d'Euler $\dot{\omega_{\text{F}}} \times d_{AF}$  et le terme d'accélération centripète $\omega_{\text{F}} \times ( \omega_{\text{F}} \times  d_{AF})$. L'accélération de Coriolis $2\omega_{\text{F}} \times \frac{d (d_{\text{FW}})}{d t}\Bigr|_{O_{\text{F}}}$ et le taux d'accélération $\frac{d^{2} (d_{\text{FW}})}{d^{2} t}\Bigr|_{O_{\text{F}}}$ sont nuls car $d_{\text{FW}}$ est constant.
+
 \begin{align}
     \label{eq:accel_deplacement}
     a_{\text{W}} = R(q_{\hat{\kappa}}) \left( a_{acc}^{F} + \dot{\omega}_{gyro}^{F} \times d_{\text{FW}} + \omega_{gyro}^{F} \times ( \omega_{gyro}^{F} \times  d_{\text{FW}}) \right) 
 \end{align}
-where $a_{acc}^{F} \in \real^{3}$ is the acceleration measured by the accelerometer on the fuselage, expressed in the fuselage frame and $\omega_{gyro}^{F}$, the angular velocity of the fuselage, same as the equation (\ref{eq:gyro_deplacement}). The angular acceleration $\dot{\omega}_{gyro}^{F}$ in (\ref{eq:accel_deplacement}) is computed by a finite difference.\\
-\indent For the magnetometer measurements, we have
+où $a_{acc}^{F} \in \real^{3}$ est l'accélération mesurée par l'accéléromètre sur le fuselage, exprimée dans le repère du fuselage et $\omega_{gyro}^{F}$ est la vitesse angulaire du fuselage, identique à l'équation \eqref{eq:gyro_deplacement}. L'accélération angulaire $\dot{\omega}_{gyro}^{F}$ dans \eqref{eq:accel_deplacement} est calculée par différence finie.
+
+
+Pour les mesures du magnétomètre, nous avons
 \begin{align}
     \label{eq:mag_deplacement}
     E_{\text{W}} = R(q_{\hat{\kappa}}) E_{mag}
 \end{align}
-where $E_{mag} \in \real^{3}$ is the magnetometer output, expressed in the fuselage frame and  $ E_{\text{W}} \in \real^{3}$ is the computed measurement expressed in the wing frame.\\
-\indent To obtain the wing state estimate, we use a sensor measurement fusion algorithm: extended Kalman filter\footnote{\url{https://github.com/PX4/PX4-ECL/tree/master}} (EKF) which provide an estimate of the following states: $p_{\text{W}}$, $v_{\text{W}}$, $q_{\text{W}}$ from measurements transformed in the wing reference frame $\omega_{\text{W}}$ (eq. (\ref{eq:gyro_deplacement})), $a_{\text{W}}$ (eq. (\ref{eq:accel_deplacement})), $E_{\text{W}}$ (eq. (\ref{eq:mag_deplacement})) and external vision system pose data, which provides a precise measurement of the drone's position $p_{\text{W}}$ and speed $v_{\text{W}}$ in the inertial reference frame (I).
+où $E_{mag} \in \real^{3}$ est la sortie du magnétomètre, exprimée dans le repère du fuselage et $ E_{\text{W}} \in \real^{3}$ est la mesure exprimée dans le repère de l'aile.
 
-\subsection{Fuselage orientation estimation}
-To determine the orientation of the fuselage, we may perform a composition between the quaternion representing the orientation of the wing $q_{\text{W}}$ result of EKF and the quaternion constructed from the filtered measurement of the rotary encoder $q_{\hat{\kappa}}$ in (\ref{eq:rot_quat}),
+Pour obtenir une estimation de l'état de l'aile, nous utilisons un algorithme de fusion des mesures des capteurs : le filtre de Kalman étendu (EKF)  \nomenclature[]{\(EKF\)}{Filtre de Kalman étendu (\textit{Extended Kalman Filter})} qui fournit une estimation des états suivants : $p_{\text{W}}$, $v_{\text{W}}$, $q_{\text{W}}$ à partir de mesures transformées dans le repère de l'aile $\omega_{\text{W}}$ (équation \eqref{eq:gyro_deplacement}), $a_{\text{W}}$ (équation \eqref{eq:accel_deplacement}), $E_{\text{W}}$ (équation \eqref{eq:mag_deplacement}) et les données du système de vision externe, qui fournissent une mesure précise de la position $p_{text{W}}$ et de la vitesse $v_{text{W}}$ du drone dans le repère inertiel (I).
+
+
+\subsection{Estimation de l'orientation du fuselage}
+Pour déterminer l'orientation du fuselage, nous pouvons effectuer une composition entre le quaternion représentant l'orientation de l'aile $q_{text{W}}$ résultat de l'EKF et le quaternion construit à partir de la mesure filtrée de l'encodeur rotatif $q_{\hat{\kappa}}$ dans \eqref{eq:rot_quat},
 \begin{align}
 \label{eq:quat_fuselage}
     q_{\text{F}} = q_{\text{W}} \otimes q_{\hat{\kappa}}
 \end{align}
-where the operator $\otimes$ denotes the qaternion product. The knowledge of $q_{\text{F}}$ is needed to keep the fuselage perfectly horizontal. 
+où l'opérateur $\otimes$ désigne le produit hamiltonien. La connaissance de $q_{\text{F}}$ est nécessaire pour maintenir le fuselage parfaitement horizontal. 
 
 \section{Inversion non linéaire incrémentale de la dynamique du drone}
-The theory of Incremental Nonlinear Dynamic Inversion (INDI) used in the context of micro-UAVs is presented in \cite{smeurINDI}. We use the notation proposed in \cite{smeurINDITail}, without providing extra details, due to length constraints. The central underlying assumption is that the so-called timescale separation principle holds w.r.t. the actuator dynamics and the dynamics of aerodynamic forces and moments. The control signal can then be computed incrementally using the actuator effectiveness matrix $G$.
+
+\todo{Détails}
+La théorie de l'inversion dynamique non linéaire incrémentale (INDI) utilisée dans le contexte des micro-drones est présentée dans \cite{smeurINDI}. Nous utilisons la notation proposée dans \cite{smeurINDITail}. L'hypothèse centrale sous-jacente est que le principe de séparation des échelles de temps s'applique à la dynamique de l'actionneur et à la dynamique des forces et des moments aérodynamiques. Le signal de commande peut alors être calculé de manière incrémentale en utilisant la matrice d'efficacité de l'actionneur $G$.
+
 \begin{align}
     u_{\text{W}} = u_{\text{W}} + G^{\dag} (\nu - \begin{bmatrix}
     \dot{\omega}_{\text{W}} \\
     T_{\text{W}}
     \end{bmatrix})
 \end{align}
-where $ \dot{\omega}_{\text{W}} \in \real^{3}$ is the measured angular acceleration obtain by finite difference from equation (\ref{eq:gyro_deplacement}), $T_{\text{W}} \in \real$ is the current thrust, $\nu$ is define in \cite[equation (4)]{smeurINDITail} and $G$ is the control effectiveness matrix, determined as follows :
+où  $ \dot{\omega}_{\text{W}} \in \real^{3}$ est l'accélération angulaire obtenue par différence finie à partir de l'équation \eqref{eq:gyro_deplacement},  $T_{\text{W}} \in \real$ est la poussée actuelle, $\nu$ est défini dans \cite[équation (4)]{smeurINDITail} et $G$ est la matrice d'efficacité du contrôle, défini par :
 \begin{align*}
     \begin{bmatrix}
     \partial \phi \\
@@ -319,16 +310,18 @@ where $ \dot{\omega}_{\text{W}} \in \real^{3}$ is the measured angular accelerat
     \end{bmatrix}
     u_{f}
 \end{align*}
-This selection of efficiency matrix has been determined for the hovering flights, but it is necessary to carry out a different study for the forward flight.
+Cette sélection de la matrice d'efficacité a été déterminée pour les vols stationnaires, mais il est nécessaire d'effectuer une étude différente pour le vol vers l'avant.
 
-
-To stabilise the fuselage, we use a PD feedback from the angle $\theta_{\text{F}}$ formed between the fuselage and the horizontal, which we want to keep at zero. This is obtained by converting the quaternion $q_{\text{F}}$ of equation (\ref{eq:quat_fuselage}) into an Euler angle by following the 'ZYX' Euler convention. The PD feedback provides the reference $u_{\text{tail}}$ for the angular speed of the motor generating the force $F_{m}$ (see Figure  \ref{fig:colibri_frame_side}), as follows
+Pour stabiliser le fuselage, nous utilisons un bouclage proportionnel-dérivé de l'angle $\theta_{\text{F}}$ formé entre le fuselage et l'horizontale, que nous voulons maintenir à zéro. Cet angle est obtenu en convertissant le quaternion $q_{\text{F}}$ de l'équation \eqref{eq:quat_fuselage} en un angle d'Euler en suivant la convention d'Euler 'ZYX'. Le bouclage fournit la commande $u_{text{tail}}$ pour la vitesse angulaire du moteur générant la force $F_{m}$ (voir Figure~\ref{fig:colibri_frame_side}), suivant l'expression :
 \begin{align*}
     u_{\text{tail}} = u_{eq} + k_{p} \theta_{\text{F}} + k_{d} \dot{\theta_{\text{F}}},
 \end{align*}
-where $u_{eq}$ is the equilibrium motor command to keep the fuselage horizontal in the absence of disturbance and $k_{p}$, $k_{d}$ are tunable scalar gains. The value $u_{eq}$ was obtained by applying a moment theorem to the fuselage at the point $O_{\text{W}}$. In fact, the two moments that come into effect on the fuselage are the torque due to the thrust force of the tail motor and the torque due to the position of the fuselage's centre of gravity.
-The gains $k_{p}$ et $k_{d}$ were adjusted in flight to ensure satisfactory flight behaviour. We obtain $\dot{\theta_{\text{F}}}$ from $\omega_{gyro}^{F} = [\dot{\phi_{\text{F}}}~\dot{\theta_{\text{F}}}~\dot{\psi_{\text{F}}}]^\top$.
-\section{Experimentation}
+où $u_{eq}$ est la commande, à l'équilibre, du moteur pour maintenir le fuselage horizontal en l'absence de perturbation et $k_{p}$, $k_{d}$ sont des gains scalaires ajustables. La valeur $u_{eq}$ a été obtenue en appliquant le théorème des moments au fuselage au point $O_{\text{W}}$. En effet, les deux moments qui agissent sur le fuselage sont le couple dû à la force de poussée du moteur et le couple dû à la position du centre de gravité du fuselage.
+\todo{Expliquer les moments}
+
+Les gains $k_{p}$ et $k_{d}$ ont été ajustés en vol pour assurer un comportement satisfaisant. On obtient $\dot{\theta_{\text{F}}}$ à partir de $\omega_{gyro}^{F} = [\dot{\phi_{\text{F}}}~\dot{\theta_{\text{F}}}~\dot{\psi_{\text{F}}}]^\top$.
+
+\section{Expérimentations}
 \label{sec:exp}
 % \todo{Photo de la volière: It is difficult to understand the experimental results
 % due to the absence of snapshots, detailed explanations, or
@@ -336,19 +329,23 @@ The gains $k_{p}$ et $k_{d}$ were adjusted in flight to ensure satisfactory flig
 % explanations of the experimental structure, actual flight
 % photos, and the design structure of the entire flight
 % system must be added.}
-An experimental prototype was developed, as shown in Figure~\ref{fig:colibri_real}. A selection of the experimental results in controlled flight is shown in Figure \ref{fig:colibri_flight}.\\
-\begin{figure}[!h]
+Un prototype a été mis au point, comme le montre la Figure~\ref{fig:colibri_real}. La Figure~\ref{fig:colibri_flight} présente une sélection des résultats expérimentaux en environnement contrôlé.
+
+
+\begin{figure}[ht!]
     \centering
-    \includegraphics[trim={0 15cm 0 25cm},clip, width=\columnwidth]{figures/colibri_real.jpg}
-    \caption{Colibri experimental prototype.}
+    \includegraphics[trim={0 15cm 0 25cm},clip, width=0.6\columnwidth]{figures/colibri_real.jpg}
+    \caption{Prototype : Colibri.}
     \label{fig:colibri_real}
 \end{figure}
-About Figure \ref{fig:colibri_flight}, from \SI{0}{\second} to \SI{8}{\second}, the drone is on the ground. From \SI{8}{\second} to \SI{16}{\second}, the drone takes off to reach a height of 2 metres visible from the third plot. This height is reached after a 10 \% overshoot. The drone is held in this position for \SI{54}{\second}. Incidence oscillations are observed in the fifth and last plot, generating oscillations in the drone's horizontal position. This is due to the coupling between the two bodies, which is not properly stabilized. From \SI{70}{\second}, the UAV starts heading towards the point $p_{c} = \begin{bmatrix} 3 & 0.9 & -1.5 \end{bmatrix}^\top$ and $\psi_{c}=\SI{90}{\degree}$.
+
+Sur la Figure~\ref{fig:colibri_flight}, de \SI{0}{\second} à \SI{8}{\second}, le drone est au sol. De \SI{8}{\second} à \SI{16}{\second}, le drone décolle pour atteindre une hauteur de 2 mètres visible sur le troisième graphique. Cette hauteur est atteinte après un dépassement de 10 \%. Le drone est maintenu dans cette position pendant \SI{54}{\second}. Des oscillations d'incidence sont observées dans le cinquième et le dernier graphique, générant des oscillations dans la position horizontale du drone. Ce phénomène est dû au couplage entre les deux corps, qui n'est pas correctement stabilisé. À partir de \SI{70}{\second}, le drone commence à se diriger vers le point $p_{c} = \begin{bmatrix} 3 & 0.9 & -1.5 \end{bmatrix}^\top$ et $\psi_{c}=\SI{90}{\degree}$.
+
 %This brings the drone in front of the WindShape open wind tunnel. The wind generator is switched on at \SI{95}{\second} at a speed of \SI{1}{\per\second}. This disturbance destabilises the drone, which is not shown here. \todo{GH: ça fait beaucoup d'info qui ne seront pas détaillés, est-ce qu'il faut tout garder ?}
-\begin{figure}[h]
+\begin{figure}[ht!]
 \centering
-    \includegraphics[width=1\columnwidth,angle=0]{figures/colibri_flight.png}
-    \caption{Position and orientation of the reference frame wing in the first six graphs and pivot angle measurement on the last graph below during real flight. }
+    \includegraphics[width=0.6\columnwidth,angle=0]{figures/colibri_flight.png}
+    \caption{Position et orientation de l'aile dans les six premiers graphiques et mesure de l'angle entre l'aile et le fuselage sur le dernier graphique lors d'un vol réel. }
     \label{fig:colibri_flight}
 \end{figure}
 
