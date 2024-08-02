@@ -2,12 +2,7 @@
 \minitoc
 \label{chap:generalites}
 
-% \chapter{}
-% \minitoc
-% \newacronym{gcd}{GCD}{Greatest Common Divisor}
-% \todo{contexte}
 
-% \section{Drones autonomes}
 \section{Micros drones convertibles}
 
     \subsection{Domaine de vol} 
@@ -91,7 +86,7 @@
             \label{fig:tailsitter}
         \end{figure}
         
-        \todo{modifier trop subjectif}
+ 
         Ce modèle semble être la configuration la plus intéressante énergétiquement, car il utilise les mêmes actionneurs dans tout le domaine de vol. Ainsi, aucune masse superflue n'est embarquée.
 
     
@@ -117,7 +112,9 @@
     Dans ces deux architectures, il est courant de trouver des actionneurs basés sur des effets aérodynamiques. Ces actionneurs ont l'avantage d'être peu consommateurs en énergie. Ils sont mus par des servomoteurs qui consomment peu d'électricité proportionnellement au couple qu'ils génèrent. Dans le cas des ailes volantes, les surfaces aérodynamiques sont souvent placées sur la partie arrière des ailes et peuvent être utilisées symétriquement à l'instar de volets, ou anti-symétriquement comme des ailerons. 
     Dans les phases de décollage, de vol stationnaire ou d'atterrissage, la plateforme est maintenue en vol par les hélices : il est donc nécessaire de dimensionner les groupes moteurs-hélices pour qu'ils puissent générer assez de force. En fonction des configurations, les moments peuvent être obtenus par des différentiels sur l'utilisation des moteurs ou bien par des surfaces aérodynamiques. Dans le cas de surfaces soufflées par le flux d'air des hélices, il existe un couplage des actionneurs qui complexifie la modélisation et le contrôle de ces architectures.
 
-    \todo{sous actionnement}
+    \todo{Sous actionnement}
+
+    
 
     \subsection{Aérodynamique}
 
@@ -195,15 +192,54 @@ Le modèle de von Kármán :
     \caption{Todo.}
     \label{fig:actionDarko}
 \end{figure}
-\todo{add axes on picture}
 
 La figure \ref{fig:actionDarko} illustre les effets des actionneurs sur la dynamique de l'attitude des \textit{tailsitters}. La rotation autours de l'axe $x_{\text{b}}$ peut être contrôlé par des braquages de volets asymétriques, l'angle de tangage (axe $y_{\text{b}}$) par des braquages de volets symétriques et la rotation autour de l'axe $z_{\text{b}}$ est contrôlée par un dispositif de poussée différentielle, ce qui permet d'obtenir un angle de tangage plus élevé. La rotation autour de l'axe de lacet est contrôlée par une configuration de poussée différentielle, qui crée un couple temporaire non nul autour de son axe. Le dispositif de poussée différentielle engendre une différence entre les rotations de l'hélice gauche et de l'hélice droite, et modifie ainsi la vitesse de rotation de l'avion et donc le comportement aérodynamique autour des volets.
 
 
-\section{Commandes}
+\section{Architectures de commande de vol}
+
+
+Une approche en cascade est une méthode couramment utilisée dans le cadre de la commande de drone. Cette approche est basée sur l'imbrication de boucle de  commande illustrée sur la Figure \ref{fig:schemahiera}. 
+Cette architecture s'appuyer sur la séparation des dynamiques d'un drone sous actionné. Effectivement, comme le drone est obligé de modifier son orientation pour changer de position, le schéma de contrôle prend en compte cette spécificité. Ainsi la boucle interne est réglé pour avoir un temps de réponse faible vis-à-vis des autres lois. Cette boucle interne stabilise l'attitude du drone $att_{m}$ en la faisant converger vers l'attitude de consigne $att_{c}$. Cette attitude de consigne est le résultat de la boucle de vitesse qui fait converger la vitesse du drone $vel_{m}$ vers la vitesse de consigne $vel_{c}$. La vitesse de consigne est la résultante de la boucle de position qui fait converge la position du drone $pos_{m}$ vers la position de consigne défini par le pilote $pos_{c}$.
+\begin{figure}[ht!]
+    \centerline{
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.8\columnwidth]{figures/controlhierachique.png}}
+    \caption{Architecture classique de contrôle hiérarchique pour les drones.}
+    \label{fig:schemahiera}
+\end{figure}
+
+
+\section{Méthodes de commande}
+\begin{figure}[ht!]
+    \centerline{
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.8\columnwidth]{figures/contole_methode.png}}
+    \caption{Méthodes de commande utilisées sur les architectures \textit{tailsitters} et \textit{freewings}.}
+    \label{fig:methodecmd}
+\end{figure}
+
 Faire un schéma avec les méthodes de commande et encadré en rouge nos lois
 état de l'art
+
+\subsection*{Contrôleur PID}
+Le contrôle Proportionnel Intégral Dérivé (PID) (ou P/PD/PI) est couramment utilisé, car son réglage est intuitif et ne nécessite qu'une connaissance limitée du système. Le contrôle PID donne souvent de très bons résultats et constitue un excellent point de départ pour la conception de contrôleurs plus avancés.
+
+La forme générale d'un contrôleur PID est la suivante :
+\begin{align}
+    u_{PID}(t) = K_{p} e(t) + K_{i} \int_{0}^{t} e(\tau) \,d\tau + K_{d} \frac{d e(t)}{dt}
+\end{align}
+\subsection*{Contrôleur LQR}
+
+
+\subsection*{Contrôleur $H_{\infty}$}
+
+\subsection*{Contrôleur non linéaire}
+
+\subsection*{Contrôleur séquencé}
+
+\subsection*{Contrôleur adaptatif}
 
 \section{Technologies et réalisations}
 \todo{Quelques lignes sur les contributions dans paparazzi et am32}
 Faire un schéma des composants avec nos contributions
+
+\todo{Conclusion }

@@ -50,11 +50,11 @@ Les deux architectures sur lesquelles se sont concentré nos recherches sont cel
 
 
 
-\todo{rejet de perturbation et metrique de maintient de position }
+\todo{Rejet de perturbation et métrique de maintien de position }
 
 
 \section*{Question de recherche}
-Contrôleur unifié d'une architecture de drone fortement non-linéaire et couplé sur l'intégralité du domaine de vol en environnement perturbé.
+Notre travail se concentre sur la recherche d'un contrôleur de vol unifié, pour une architecture de drone fortement non-linéaire et couplé, sur l'intégralité du domaine de vol en environnement perturbé.
 
 \section*{Plan et contribution}
 Notre exposé commencera par une description générale des architectures de drone convertible (\ref{chap:generalites}) avec une description des avantages et des inconvénients ainsi que leur mode de fonctionnement. Une description générale de la modélisation, de l'actionnement et des lois de commande proposé sur les \textit{tailsitters} et les \textit{freewings} ouvrira nos propos sur ces architectures.
@@ -63,15 +63,15 @@ Le chapitre \ref{chap:model} détaillera le modèle non-linéaire d'un drone \te
 
 Le chapitre \ref{chap:3DOF} fera l'objet d'une proposition de loi de commande hybride permettant d'augmenter le domaine de stabilité d'une loi linéaire avec une loi de commande non-linéaire basée sur une direction de zéro moment. Ces travaux ont été publiés dans  \cite{sansouStage} et \cite{sansouECC}.
 
-Le chapitre \ref{chap:3DOF} permet de décrire une maquette expérimentale utilisée pour tester une loi de commande basée sur une architecture proportionnelle dérivative sur un retour de sortie proposé pour stabiliser une position stationnaire en présence de vent. Cette maquette restreint les degrés de liberté classique d'un drone pour se concentrer sur la réjection de perturbation de vent grâce à un changement d'incidence de la maquette. La description de la loi de commande, son optimisation et les résultats sont disponibles dans \cite{SANSOUACA}.
+Le chapitre \ref{chap:3DOF} permet de décrire une maquette expérimentale utilisée pour évaluer les performances d'une loi de commande basée sur une architecture proportionnelle dérivative. Cette loi est un retour de sortie permettant de stabiliser une position stationnaire en présence de vent. Cette maquette restreint les degrés de liberté classique d'un drone pour se concentrer sur la réjection de perturbation de vent grâce à un changement d'incidence de la maquette. La description de la loi de commande, son optimisation et les résultats sont disponibles dans \cite{SANSOUACA}.
 
-Le chapitre \ref{chap:6DOF} \cite{sansouTCST}
+Le chapitre \ref{chap:6DOF} étend le contrôleur proposé dans le chapitre précédent (chapitre \ref{chap:3DOF}) pour stabiliser la dynamique complète d'un drone \textit{tailsitter}. La méthode d'obtention des gains du contrôleur est basée sur un algorithme itératif permettant de   \cite{sansouTCST}
 
 Le chapitre \ref{chap:colibri} \cite{sansouICUAS}
 
 Publications
 
-\section*{Objectif fixé pour la thèse}
+\section*{Objectifs fixés pour la thèse}
 
 Étudier le comportement d'un drone \textit{tailsitters} en environnement perturbé, saturation des actionneurs, dynamique linéarisé, impact des non-linéarité et cycle limite.
 
