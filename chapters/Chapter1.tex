@@ -9,7 +9,6 @@
     Tout l'intérêt d'un drone convertible réside dans sa capacité à décoller et atterrir verticalement, tout en conservant une bonne efficacité énergétique en vol d'avancement, grâce à une aile. Cette aile a l'avantage de générer de la portance, laquelle s'oppose au poids du drone et permet d'assurer sa sustentation. La contrepartie de la génération de la portance est la traînée qui s'oppose à l'avancement et doit être contrée par une force de traction générée par les hélices. Nous pouvons définir l'efficacité énergétique comme le ratio entre le temps de vol et l'énergie électrique nécessaire pour effectuer ce vol.
     
     Afin de souligner la prééminence de l'efficacité énergétique de ce modèle convertible, il convient de la comparer avec celle d'un drone quadrirotor qui assure sa sustentation uniquement grâce à des hélices (à l'instar d'un hélicoptère), et à celle d'un drone à voilure fixe.
-    \todo{Completer}
     \begin{table}[ht]
         \centering
         \begin{tabular}{|c|c|c|c|c|}
@@ -25,9 +24,6 @@
         \end{tabular}
         \caption{Comparaison des architectures de drone.}
     \end{table}
-    % Drone à voilure fixe, stationnaire impossible, grande efficité ernegetique vitesse mini et max
-    % Quadrirotor, grande manouvrabilité, faible efficaité energetique
-    % Convertible, dommaine de vol important, sensibilité aux pertubation, grand efficaticté energetique en vol d'avancement, faible en stationnaire 
 
     Nous observons qu'un drone convertible possède un domaine de vol bien plus important qu'un drone à voilure fixe, lequel ne sera pas en mesure de voler à très basse vitesse, et qu'un quadrirotor, dont l'autonomie va être limitée par sa consommation.
     En alliant autonomie et vol stationnaire, le modèle convertible répond aux exigences des missions civiles et militaires.
@@ -50,11 +46,11 @@
 
         L'avantage de ce type d'architecture est sa grande robustesse. Effectivement, aucune pièce en mouvement n'est nécessaire pour réaliser la transition, ce que réduit le risque de défaillance mécanique. Toutefois, l'inconvénient réside dans son manque d'efficacité. Lors d'un vol d'avancement, la portance sera générée par l'aile. Ainsi, il est possible de désactiver les rotors qui génèrent des perturbations aérodynamiques et des trainées parasites. Les axes des moteurs se retrouvent orthogonaux au flux d'air généré par le déplacement du drone, ce qui correspond au cas le plus défavorable en termes de trainée. De plus, la surcharge engendrée par l'emport de moteurs supplémentaires se traduit par une diminution de la charge utile transportable. 
 
-        Pour ce qui est du contrôle, un atout indéniable est la séparation des actionnements en fonction des phases de vol. Ainsi, l'architecture de commande sera basée sur un mécanisme de commutation permettant de choisir la loi de commande appropriée sur un critère de vitesse air. Ce critère est pertinent en ce qu'il est lié à la capacité de l'aile à générer de la portance induite par le flux d'air. Ainsi, à basse vitesse, le drone se stabilise avec l'actionnement quadrirotor et la loi de commande associée. Dans les vitesses plus importantes, la commutation de la loi permet de contrôler le drone en mode avion. Toutefois, le passage d'une loi à l'autre reste le point clé de la commande et demeure complexe et critique.
+        Pour ce qui est du contrôle, un atout indéniable est la séparation des actionnements en fonction des phases de vol. Ainsi, l'architecture de commande sera basée sur un mécanisme de commutation permettant de choisir la loi de commande appropriée sur un critère de vitesse air \cite{LiSongZhang2021, MathurAtkins2021, okulski2022small}. Ce critère est pertinent en ce qu'il est lié à la capacité de l'aile à générer de la portance induite par le flux d'air. Ainsi, à basse vitesse, le drone se stabilise avec l'actionnement quadrirotor et la loi de commande associée. Dans les vitesses plus importantes, la commutation de la loi permet de contrôler le drone en mode avion. Toutefois, le passage d'une loi à l'autre reste le point clé de la commande et demeure complexe et critique.
 
         \subsubsection*{\textit{Tiltrotor}}
 
-        Les \textit{tiltrotors} nécessitent l'utilisation d'un actionneur dédié à la modification de l'orientation des moteurs. Les rotors sont montés sur des arbres basculants actionnés et la transition du vol stationnaire au vol d'avancement (ou inversement) s'effectue progressivement en fonction de l'inclinaison du rotor. Les deux configurations sont représentées sur la figure \ref{fig:tiltrotor}. Ainsi, l'angle entre le souffle des hélices et l'aile peut être ajusté à chaque instant. Cet angle joue un rôle important dans le contrôle des forces et des moments aérodynamiques : sa maîtrise permet, non seulement, de mieux gérer les performances aérodynamiques du vol lors des transitions, mais aussi la stabilité du système sur l'ensemble du domaine de vol. 
+        Les \textit{tiltrotors} nécessitent l'utilisation d'un actionneur dédié à la modification de l'orientation des moteurs. Les rotors sont montés sur des arbres basculants actionnés et la transition du vol stationnaire au vol d'avancement (ou inversement) s'effectue progressivement en fonction de l'inclinaison du rotor. Les deux configurations sont représentées sur la figure \ref{fig:tiltrotor}. Ainsi, l'angle entre le souffle des hélices et l'aile peut être ajusté à chaque instant \cite{9836063, du2024numerical, nie2024hierarchical, schlatter2024longitudinal}. Cet angle joue un rôle important dans le contrôle des forces et des moments aérodynamiques : sa maîtrise permet, non seulement, de mieux gérer les performances aérodynamiques du vol lors des transitions, mais aussi la stabilité du système sur l'ensemble du domaine de vol. 
         Malgré le fait que les \textit{tiltrotor} embarquent un actionneur uniquement dédié à la transition, ce qui augmente la masse du drone, cette architecture est intéressante car elle permet d'utiliser les mêmes actionneurs pour assurer la sustentation en stationnaire et pour générer la traction en mode avion.
         \begin{figure}[ht!]
             \centering
@@ -71,7 +67,7 @@
         
 
         \subsubsection*{\textit{Tailsitter}}
-        Contrairement aux \textit{tiltrotors} qui se posent sur le fuselage de l'avion (figure \ref{fig:tiltrotor}), les \textit{tailsitter} se posent à la verticale (voir figure centrale \ref{fig:tailsitter}). Durant la transition du mode stationnaire au vol d'avancement, la structure entière bascule vers l'avant, modifiant ainsi l'angle d'incidence de la voilure. Selon la configuration du \textit{tailsitter}, la transition peut être réalisée soit par la génération du moment aérodynamique créé par les élevons, soit par le couple créé par le système de propulsion. Pendant le vol d'avancement, en position horizontale, le \textit{tailsitter} vole comme un avion conventionnel sans dérive. En utilisant des techniques aérodynamiques classiques, les concepteurs peuvent optimiser le profil de l'aile du \textit{tailsitter} pour le rendre plus endurant afin de réduire la consommation d'énergie. Grâce à ce processus d'optimisation aérodynamique, le \textit{tailsitter} peut effectuer des missions de vol de plus d'une heure.
+        Contrairement aux \textit{tiltrotors} qui se posent sur le fuselage de l'avion (figure \ref{fig:tiltrotor}), les \textit{tailsitter} se posent à la verticale (voir figure centrale \ref{fig:tailsitter}). Durant la transition du mode stationnaire au vol d'avancement, la structure entière bascule vers l'avant, modifiant ainsi l'angle d'incidence de la voilure \cite{RobinRaffaello2017, VerlingWeibelSiegwart2016,smeurINDITail, ChiappinelliNahon2018, tal2022global}. Selon la configuration du \textit{tailsitter}, la transition peut être réalisée soit par la génération du moment aérodynamique créé par les élevons, soit par le couple créé par le système de propulsion. Pendant le vol d'avancement, en position horizontale, le \textit{tailsitter} vole comme un avion conventionnel sans dérive. En utilisant des techniques aérodynamiques classiques, les concepteurs peuvent optimiser le profil de l'aile du \textit{tailsitter} pour le rendre plus endurant afin de réduire la consommation d'énergie. Grâce à ce processus d'optimisation aérodynamique, le \textit{tailsitter} peut effectuer des missions de vol de plus d'une heure.
 
         \begin{figure}[ht!]
             \centering
@@ -91,7 +87,7 @@
 
     
         \subsubsection*{\textit{Tiltwing}} 
-        La particularité des \textit{tiltwings} réside dans le fait que les rotors sont inclinés en même temps que les ailes (voir figure \ref{fig:tiltwing}). Un actionneur supplémentaire et puissant est donc nécessaire pour surmonter le couple de l'aile afin de la positionner dans l'orientation souhaitée. La commande de cet actionneur doit être prise en compte lors de la conception des lois de commande. Pendant le décollage, l'atterrissage et les vols stationnaires, les ailes doivent être positionnées vers le haut afin de produire une force de poussée opposée au vecteur gravité. Dans ces phases de vol, lorsque les ailes sont orientées vers le haut, l'aéronef est plus vulnérable au vent et les lois de commande doivent rejeter ces perturbations. Dans la littérature, il existe plusieurs configurations d'ailes basculantes et différentes approches de contrôle conçues pour stabiliser leur dynamique de vol.
+        La particularité des \textit{tiltwings} réside dans le fait que les rotors sont inclinés en même temps que les ailes (voir figure \ref{fig:tiltwing}). Un actionneur supplémentaire et puissant est donc nécessaire pour surmonter le couple de l'aile afin de la positionner dans l'orientation souhaitée \cite{holsten2011design, rohr2019attitude, ccetinsoy2012design}. La commande de cet actionneur doit être prise en compte lors de la conception des lois de commande. Pendant le décollage, l'atterrissage et les vols stationnaires, les ailes doivent être positionnées vers le haut afin de produire une force de poussée opposée au vecteur gravité. Dans ces phases de vol, lorsque les ailes sont orientées vers le haut, l'aéronef est plus vulnérable au vent et les lois de commande doivent rejeter ces perturbations. Dans la littérature, il existe plusieurs configurations d'ailes basculantes et différentes approches de contrôle conçues pour stabiliser leur dynamique de vol.
         \begin{figure}[ht!]
             \centering
             \resizebox{.9\textwidth}{!}{%
@@ -114,7 +110,18 @@
 
     \todo{Sous actionnement}
 
-    
+    \begin{definition}[Sous-actionnement]
+        Considérons la dynamique d'un système décrite par l'équation différentielle du second ordre :
+        \begin{align*}
+            \ddot{\boldsymbol{q}} = f_1(\boldsymbol{q}, \dot{\boldsymbol{q}}, t) + f_2(\boldsymbol{q}, \dot{\boldsymbol{q}}, t) \boldsymbol{u}
+        \end{align*}
+        où $\boldsymbol{q} \in \real^{n}$ est le vecteur d'état de dimension $n$, $\boldsymbol{u} \in \real^{m}$ est le vecteur de commande de dimension $m$ et $t$ le temps. 
+
+        Lorsque le rang de $f_2$ est inférieur à la dimension du vecteur $\boldsymbol{q}$, on dit que le système est sous-actionné :
+        \begin{align*}
+            rank[f_2(\boldsymbol{q}, \dot{\boldsymbol{q}}, t)] < dim[\boldsymbol{q}]
+        \end{align*}
+    \end{definition}
 
     \subsection{Aérodynamique}
 
@@ -164,23 +171,23 @@ où $w_{m}$ est le vent moyen sans perturbation, $t_{0,mex}$ représente l'insta
 \end{figure}
 
 
-Le modèle de Dryden est défini :
-\begin{subequations}
-    \begin{align}
-        \Phi _{u_{g}}(\Omega )& =\sigma _{u}^{2}{\frac {2L_{u}}{\pi }}{\frac {1}{1+(L_{u}\Omega )^{2}}}\\
-        \Phi _{v_{g}}(\Omega )& =\sigma _{v}^{2}{\frac {2L_{v}}{\pi }}{\frac {1+12(L_{v}\Omega )^{2}}{\left(1+4(L_{v}\Omega )^{2}\right)^{2}}}\\
-        \Phi _{w_{g}}(\Omega )& =\sigma _{w}^{2}{\frac {2L_{w}}{\pi }}{\frac {1+12(L_{w}\Omega )^{2}}{\left(1+4(L_{w}\Omega )^{2}\right)^{2}}}
-    \end{align}
-\end{subequations}
-\todo{explication}
-Le modèle de von Kármán :
-\begin{subequations}
-    \begin{align}
-        \Phi _{u_{g}}(\Omega )& =\sigma _{u}^{2}{\frac {2L_{u}}{\pi }}{\frac {1}{\left(1+(1.339L_{u}\Omega )^{2}\right)^{\frac {5}{6}}}}\\
-        \Phi _{v_{g}}(\Omega )& =\sigma _{v}^{2}{\frac {2L_{v}}{\pi }}{\frac {1+{\frac {8}{3}}(2.678L_{v}\Omega )^{2}}{\left(1+(2.678L_{v}\Omega )^{2}\right)^{\frac {11}{6}}}}\\
-        \Phi _{w_{g}}(\Omega )& =\sigma _{w}^{2}{\frac {2L_{w}}{\pi }}{\frac {1+{\frac {8}{3}}(2.678L_{w}\Omega )^{2}}{\left(1+(2.678L_{w}\Omega )^{2}\right)^{\frac {11}{6}}}}
-    \end{align}
-\end{subequations}
+% Le modèle de Dryden est défini :
+% \begin{subequations}
+%     \begin{align}
+%         \Phi _{u_{g}}(\Omega )& =\sigma _{u}^{2}{\frac {2L_{u}}{\pi }}{\frac {1}{1+(L_{u}\Omega )^{2}}}\\
+%         \Phi _{v_{g}}(\Omega )& =\sigma _{v}^{2}{\frac {2L_{v}}{\pi }}{\frac {1+12(L_{v}\Omega )^{2}}{\left(1+4(L_{v}\Omega )^{2}\right)^{2}}}\\
+%         \Phi _{w_{g}}(\Omega )& =\sigma _{w}^{2}{\frac {2L_{w}}{\pi }}{\frac {1+12(L_{w}\Omega )^{2}}{\left(1+4(L_{w}\Omega )^{2}\right)^{2}}}
+%     \end{align}
+% \end{subequations}
+% \todo{explication}
+% Le modèle de von Kármán :
+% \begin{subequations}
+%     \begin{align}
+%         \Phi _{u_{g}}(\Omega )& =\sigma _{u}^{2}{\frac {2L_{u}}{\pi }}{\frac {1}{\left(1+(1.339L_{u}\Omega )^{2}\right)^{\frac {5}{6}}}}\\
+%         \Phi _{v_{g}}(\Omega )& =\sigma _{v}^{2}{\frac {2L_{v}}{\pi }}{\frac {1+{\frac {8}{3}}(2.678L_{v}\Omega )^{2}}{\left(1+(2.678L_{v}\Omega )^{2}\right)^{\frac {11}{6}}}}\\
+%         \Phi _{w_{g}}(\Omega )& =\sigma _{w}^{2}{\frac {2L_{w}}{\pi }}{\frac {1+{\frac {8}{3}}(2.678L_{w}\Omega )^{2}}{\left(1+(2.678L_{w}\Omega )^{2}\right)^{\frac {11}{6}}}}
+%     \end{align}
+% \end{subequations}
 
 
 
@@ -189,7 +196,7 @@ Le modèle de von Kármán :
 \begin{figure}[ht!]
     \centerline{
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=1\columnwidth]{figures/actionnement.png}}
-    \caption{Todo.}
+    \caption{Actionneurs d'un \text{tailsitter} et leurs actions sur les axes principaux.}
     \label{fig:actionDarko}
 \end{figure}
 
@@ -228,10 +235,35 @@ La forme générale d'un contrôleur PID est la suivante :
     u_{PID}(t) = K_{p} e(t) + K_{i} \int_{0}^{t} e(\tau) \,d\tau + K_{d} \frac{d e(t)}{dt}
 \end{align}
 \subsection*{Contrôleur LQR}
-
+Les contrôleurs LQR sont un type de contrôle linéaire basée sur les systèmes linéarisés de la forme $\dot{x} = Ax+Bu$. La commande $u$ est
+choisie comme :
+\begin{align*}
+    u = -Kx.
+\end{align*}
+Ainsi, la matrice de gain K est optimisée pour obtenir de bonnes performances pour le système en boucle fermée par rapport à la fonction de coût
+\begin{align*}
+    J = \int_{0}^{\infty} x^{\top}(\tau)Q x(\tau) + u^{\top}(\tau)R u(\tau) \,d\tau
+\end{align*}
+où Q et R sont, respectivement, les matrices de pondération de l'état et des commandes. Bien que le contrôleur LQR présente généralement de bonnes propriétés de robustesse, l'optimalité n'est plus assurée si des erreurs de modélisation et des perturbations sont présentes dans le système. Une discussion détaillée et une comparaison entre le contrôle PID sans modèle et le contrôle LQR basé sur le modèle d'un \textit{tailsitters} est disponible dans \cite{BarthCondomines2018}.
+Les auteurs de \cite{Lustosa2017LaP} ont proposé l'approche de séquencement des gains obtenu pour un ensemble de modèle linéaire. Cette architecture de contrôle optimise le gain K en boucle fermée afin de répondre aux exigences de contrôle de la vitesse et de l'attitude définies par l'utilisateur. Grâce à des simulations de vol et à des vols expérimentaux, l'auteur souligne et prouve qu'une seule matrice de gains LQR n'est pas suffisante pour stabiliser le \textit{tailsitters} dans toute son enveloppe de vol, ce qui justifie l'utilisation de méthodes de séquencement des gains.
 
 \subsection*{Contrôleur $H_{\infty}$}
+La synthèse $H_{\infty}$ est une méthode qui sert à la conception de commandes optimales, en imposant des contraintes sur la norme $H_{\infty}$ d'un système. En se basant sur une synthèse $H_{\infty}$, les auteurs de \cite{SunYang2009} ont obtenu la stabilisation longitudinale d'un \textit{tiltrotor}. En combinant une synthèse $H_{\infty}$ à une approche de séquencement des gains, les auteurs de \cite{DickesonMix2005, DickesonCifdaloz2006,DickesonMiles2007} ont proposé la stabilisation d'un \textit{tiltwing} sur l'ensemble de son enveloppe de vol. 
 
+\begin{figure}[ht!]
+    \centerline{
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\columnwidth]{figures/lft.png}}
+    \caption{Architecture d'un contrôleur $H_{\infty}$ .}
+    \label{fig:schemalft}
+\end{figure}
+
+La structure classique d'un contrôleur $H_{\infty}$ est représenté sur la figure \ref{fig:schemalft}. L'objectif est de minimiser l'effet de la perturbation (pire cas) possible $w$ sur la variable de performance $z$ par le biais d'un contrôleur par retour de sortie de la forme $u = K(s) y$. En d'autres termes, K est choisi de telle sorte que $\| F(P, K)\|_{\infty}$  soit minimisé, où $F(P, K)$ est la fonction de transfert de la perturbation $w$ vers le signal d'erreur $z$. 
+
+Nous pouvons aussi citer le travail de \cite{SNYDER2021106621} qui utilise une approche de contrôle $H_{\infty}$ ainsi qu'une représentation du système \textit{Linear Parameter Varying} (LPV). Cette représentation permet d'avoir la dynamique linéaire du drone sur l'ensemble du domaine de vol par interpolation de dynamique parametre par la vitesse totale du drone.
+\nomenclature[]{\(LPV\)}{Système linéaire à paramètres variant (\textit{Linear Parameter Varying})}
+
+Enfin, il existe une extension non-linéaire \cite{CardosoEsteban2019}
+\todo{lire le papier}
 \subsection*{Contrôleur non linéaire}
 
 \subsection*{Contrôleur séquencé}

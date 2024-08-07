@@ -29,8 +29,11 @@ La partie matérielle est constituée d'un circuit imprimé (PCB) sur lequel des
  Le microcontrôleur (Microcontroller Unit, MCU) \nomenclature[]{\(MCU\)}{Microcontrôleurs (\textit{Microcontroller Unit})} est la pièce maitresse de l'autopilote en ce qu'elle permet d'effectuer l'ensemble des traitements nécessaires à la conduite du vol.
 
  De plus il possède plusieurs ports de communication pour récupérer les données de capteur ou envoyer des ordres aux actionneurs.
- \todo{dshot}
 
+
+ Nous pouvons citer le dshot qui est un protocole de communication défini entre l'autopilote et l'ESC pour envoyer les commandes des moteurs. Les avancées sur ce protocole ont notamment permis la communication bidirectionnelle, permettant d'obtenir la vitesse des moteurs, leurs consommations.
+
+ \todo{Autre protocole can, serial, I2c }
 
  \subsection{Évolutions}
  Les nombreux progrès dans les systèmes d'estimation état permettent de connaître précisément l'orientation et la position des drones pour assurer la stabilisation, le guidage et la navigation. Les progrès sont liés à l'amélioration continue des capteurs, notamment des centrales inertielles constituées d'un accéléromètre, d'un gyroscope et d'un magnétomètre.
@@ -67,7 +70,7 @@ Ces évolutions continues permettent une amélioration de l'estimation du drone 
  Tout le fonctionnement d'un drone repose sur le logiciel qui permet de le faire voler. Il se décompose en deux catégories : la partie sol et la partie embarquée.
 
  \subsection{Le segment sol}
-
+\todo{remplir}
  \subsection{Le logiciel embarqué}
  Le logiciel embarqué 
 
