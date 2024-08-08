@@ -219,7 +219,7 @@ Cette architecture s'appuyer sur la séparation des dynamiques d'un drone sous a
 \section{Méthodes de commande}
 \begin{figure}[ht!]
     \centerline{
-    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.8\columnwidth]{figures/contole_methode.png}}
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.8\columnwidth]{figures/controle_methode.png}}
     \caption{Méthodes de commande utilisées sur les architectures \textit{tailsitters} et \textit{freewings}.}
     \label{fig:methodecmd}
 \end{figure}
@@ -245,7 +245,7 @@ Ainsi, la matrice de gain K est optimisée pour obtenir de bonnes performances p
     J = \int_{0}^{\infty} x^{\top}(\tau)Q x(\tau) + u^{\top}(\tau)R u(\tau) \,d\tau
 \end{align*}
 où Q et R sont, respectivement, les matrices de pondération de l'état et des commandes. Bien que le contrôleur LQR présente généralement de bonnes propriétés de robustesse, l'optimalité n'est plus assurée si des erreurs de modélisation et des perturbations sont présentes dans le système. Une discussion détaillée et une comparaison entre le contrôle PID sans modèle et le contrôle LQR basé sur le modèle d'un \textit{tailsitters} est disponible dans \cite{BarthCondomines2018}.
-Les auteurs de \cite{Lustosa2017LaP} ont proposé l'approche de séquencement des gains obtenu pour un ensemble de modèle linéaire. Cette architecture de contrôle optimise le gain K en boucle fermée afin de répondre aux exigences de contrôle de la vitesse et de l'attitude définies par l'utilisateur. Grâce à des simulations de vol et à des vols expérimentaux, l'auteur souligne et prouve qu'une seule matrice de gains LQR n'est pas suffisante pour stabiliser le \textit{tailsitters} dans toute son enveloppe de vol, ce qui justifie l'utilisation de méthodes de séquencement des gains.
+Les auteurs de \cite{Lustosa2017LaP} ont proposé l'approche de séquencement des gains obtenu pour un ensemble de modèle linéaire. Cette architecture de contrôle optimise le gain K en boucle fermée afin de répondre aux exigences de contrôle de la vitesse et de l'attitude définies par l'utilisateur. Grâce à des simulations de vol et à des vols expérimentaux, l'auteur souligne et prouve qu'une seule matrice de gains LQR n'est pas suffisante pour stabiliser le \textit{tailsitter} dans toute son enveloppe de vol, ce qui justifie l'utilisation de méthodes de séquencement des gains.
 
 \subsection*{Contrôleur $H_{\infty}$}
 La synthèse $H_{\infty}$ est une méthode qui sert à la conception de commandes optimales, en imposant des contraintes sur la norme $H_{\infty}$ d'un système. En se basant sur une synthèse $H_{\infty}$, les auteurs de \cite{SunYang2009} ont obtenu la stabilisation longitudinale d'un \textit{tiltrotor}. En combinant une synthèse $H_{\infty}$ à une approche de séquencement des gains, les auteurs de \cite{DickesonMix2005, DickesonCifdaloz2006,DickesonMiles2007} ont proposé la stabilisation d'un \textit{tiltwing} sur l'ensemble de son enveloppe de vol. 
@@ -262,13 +262,35 @@ La structure classique d'un contrôleur $H_{\infty}$ est représenté sur la fig
 Nous pouvons aussi citer le travail de \cite{SNYDER2021106621} qui utilise une approche de contrôle $H_{\infty}$ ainsi qu'une représentation du système \textit{Linear Parameter Varying} (LPV). Cette représentation permet d'avoir la dynamique linéaire du drone sur l'ensemble du domaine de vol par interpolation de dynamique parametre par la vitesse totale du drone.
 \nomenclature[]{\(LPV\)}{Système linéaire à paramètres variant (\textit{Linear Parameter Varying})}
 
-Enfin, il existe une extension non-linéaire \cite{CardosoEsteban2019}
-\todo{lire le papier}
+Enfin, il existe une extension non-linéaire de l'approche approches $H_{\infty}$ en utilisant l'espace de Sobolev pondéré $W_{\infty}$ \cite{cardoso2018nonlinear, CardosoEsteban2019, cardoso2021robust, cardoso2024robust}. Cette méthode s'appuis sur la norme de Sobolev $W_{m,p}$  d'un signal, laquelle est définie par :
+\begin{align*}
+    \|\boldsymbol{z(t)}\|_{W_{m,p}} = \left( \int_{t_{0}}^{\infty}(\|\boldsymbol{z(t)}\|^{p} + \|\frac{d \boldsymbol{z(t)}}{dt}\|^{p} + ... + \|\frac{d^{m} \boldsymbol{z(t)}}{dt^{m}}\|^{p}) dt \right)^{\frac{1}{p}}.
+\end{align*}  
+
+Grâce à la nature de la norme $W_{m,p}$, la variable de coût et ses dérivées temporelles sont prises en compte dans la fonction de coût, ce qui permet d'obtenir des contrôleurs offrant de meilleures performances en régime transitoire et en régime permanent.
+
 \subsection*{Contrôleur non linéaire}
 
 \subsection*{Contrôleur séquencé}
+L'approche Diviser et Conquérir permet de passer discrètement d'une loi de contrôle à l'autre, de sorte qu'un seul contrôleur fonctionne à la fois. Un exemple d'un contrôle séquencé hybride de \textit{tailsitters} est donnée dans \cite{Casau2011}.
+
+Contrairement à Diviser et Conquérir, la pondération de contrôle fusionne en continu les commandes de deux contrôleurs, sur la base d'un poids dépendant d'une variable de sélection. Les auteurs de \cite{Liang2016} ont développé deux contrôleurs, un pour le mode VTOL et un second pour la croisière. Ils fonctionnent simultanément et la commande globale est calculée comme  :
+\begin{align*}
+    u(\Delta t) = (1 - \frac{\Delta t}{T_[T]})u_{VTOL}(\Delta t) + \frac{\Delta t}{T_[T]}u_{cruise}(\Delta t).
+\end{align*}
+Cet exemple est une transition entre le mode vol stationnaire et le mode croisière. Dans ce cas, $T_[T]$ est le paramètre de durée de la transition et $\Delta t$ est le temps écoulé depuis le début de la manœuvre.
 
 \subsection*{Contrôleur adaptatif}
+\nomenclature[]{\(MRAC\)}{Commande adaptative à référence de modèle (\textit{ Model Reference Adaptive Control})}
+La commande adaptative à référence de modèle (MRAC) utilise un modèle de référence avec les performances de suivi souhaitées et adapte le contrôleur en fonction de la différence entre le modèle réel et le modèle de référence.
+
+\begin{figure}[ht!]
+    \centerline{
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\columnwidth]{figures/Mrac.png}}
+    \caption{Architecture d'un contrôleur MRAC .}
+    \label{fig:schemaMRAC}
+\end{figure}
+
 
 \section{Technologies et réalisations}
 \todo{Quelques lignes sur les contributions dans paparazzi et am32}
