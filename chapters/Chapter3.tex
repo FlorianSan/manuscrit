@@ -6,11 +6,12 @@
 
 
 \section{Motivation}
-En prenant en compte les capacités d'un \textit{tailsitter}, il est légitime de se poser la question du mode de vol utilise pour rejoindre un point. Effectivement, le drone a la possibilité de se déplacer en stationnaire ou bien en vol d'avancement. Lors d'un déplacement en stationnaire, le drone est vertical donc il se retrouve fortement sujet aux perturbations. Il est donc nécessaire d'avoir une grande région d'attraction autour de la position d'équilibre pour assurer un rejet des perturbations et une stabilisation.
+En prenant en compte les capacités d'un \textit{tailsitter}, il est légitime de se poser la question du mode de vol devant être utilisé pour rejoindre un point. Effectivement, le drone a la possibilité de se déplacer en stationnaire ou bien en vol d'avancement. Lors d'un déplacement en stationnaire, le drone est vertical donc il se retrouve fortement sujet aux perturbations. Il est donc nécessaire d'avoir une grande région d'attraction autour de la position d'équilibre pour assurer un rejet des perturbations et une stabilisation.
+\todo{ajouter un texte sur le vol d'avancement}
 
-Nous avons donc proposé une stratégie de commande pour stabiliser le drone en position stationnaire. Cette stratégie repose sur une dynamique discrète permettant le passage d'une loi de commande non-linéaire présentée dans \cite{2020e-MicCenZacFra} et qui fournit une grande région d'attraction et une seconde loi basée sur la dynamique linéarisée et fournissant une agressivité supérieure pour réaliser l'approche finale. Les deux contrôleurs sont réunis par un mécanisme hybride qui permet de conserver les performances en régime permanent de la conception linéarisée avec la grande région d'attraction garantie par la conception non linéaire. Notre solution est testée en simulant le modèle non linéaire complet.
+Nous avons donc proposé une stratégie de commande pour stabiliser le drone en position stationnaire. Cette stratégie repose sur une dynamique discrète définissant l'usage d'une première loi de commande non-linéaire présentée dans \cite{2020e-MicCenZacFra} et qui fournit une grande région d'attraction et d'une seconde loi basée sur la dynamique linéarisée et fournissant une agressivité supérieure pour réaliser l'approche finale. Les deux contrôleurs sont réunis par un mécanisme hybride qui permet de conserver les performances en régime permanent de la conception linéarisée, avec la grande région d'attraction garantie par la conception non linéaire. Notre solution est testée en simulant le modèle non linéaire complet.
 
-Nous allons nous concentrer, dans cette partie, à la stabilisation stationnaire du drone. Ainsi nous nous appuyons sur la dynamique simplifiée décrite dans la section \ref{sec:model_NL_simp}, avec la simplification $\boldsymbol{w} = 0$ qui permet d'obtenir la dynamique simplifiée sans vent \eqref{eq:withouwind}. 
+Dans cette partie, nous allons nous concentrer sur la stabilisation stationnaire du drone. Ainsi nous nous appuyons sur la dynamique simplifiée décrite dans la section \ref{sec:model_NL_simp}, avec la simplification $\boldsymbol{w} = 0$ qui permet d'obtenir la dynamique simplifiée sans vent \eqref{eq:withouwind}. 
 
 
 
@@ -19,9 +20,9 @@ Nous allons nous concentrer, dans cette partie, à la stabilisation stationnaire
 Nous illustrons dans cette section une loi de contrôle dynamique non linéaire inspirée du résultat de \cite{2020e-MicCenZacFra}. Pour que cette loi de contrôle non linéaire soit applicable, les matrices $F$ et $M$ mentionnées dans \eqref{eq:withouwind} doivent permettre de définir une direction dite de zéro moment $\boldsymbol{\bar u} \in \real^4$ garantissant
 $|F\boldsymbol{\bar u}| = 1$ et $M \boldsymbol{\bar u}=0$, et la matrice inverse à droite $M^r$ de $M$ doit satisfaire $M M^r = I$ et $FM^r=0$. 
 
-Dans notre cas, il est immédiat de voir que la direction du moment zéro $\boldsymbol{\bar u} = \frac{\sqrt{2}}{2a_{\text{f}}}\smallmat{1&1&0&0}^\top$ satisfait les conditions, alors que le fait que $\rank(F) = 2$ (donc que le noyau de $F$ ($\ker F$) soit de dimension 2) rend impossible l'obtention de la matrice inverse à droite $M^r$ de $M$ entièrement contenue dans $\ker F$.
+Dans notre cas, nous constatons que la direction du moment zéro $\boldsymbol{\bar u} = \frac{\sqrt{2}}{2a_{\text{f}}}\smallmat{1&1&0&0}^\top$ satisfait les conditions, alors que le fait que $\rank(F) = 2$ (donc que le noyau de $F$ ($\ker F$) soit de dimension 2) rend impossible l'obtention de la matrice inverse à droite $M^r$ de $M$, laquelle est entièrement contenue dans $\ker F$.
 
-Nous déterminons $M^r$ en paramétrisant (de manière conservatrice) les  pseudo-inverses à droites de $M$ comme $M^r := KM^\top ( MKM^\top)^{-1}$, où la matrice $K \in \real^{4\times 4}$ est symétrique et satisfait $MKM^\top \geq I$ (pour assurer l'inversibilité). Avec cette paramétrisation, le but est de minimiser la norme de $FM^r = F KM^\top ( MKM^\top)^{-1}$, ce qui est bien réalisé en minimisant la norme de $F KM^\top$, du fait que la contrainte sur $MKM^\top \geq I$ garantisse que le facteur $( MKM^\top)^{-1}$ ait une norme plus petite que 1.
+Nous déterminons $M^r$ en paramétrant (de manière conservatrice) les  pseudo-inverses à droite de $M$ comme $M^r := KM^\top ( MKM^\top)^{-1}$, où la matrice $K \in \real^{4\times 4}$ est symétrique et satisfait $MKM^\top \geq I$ (pour assurer l'inversibilité). Avec ce paramétrage, le but est de minimiser la norme de $FM^r = F KM^\top ( MKM^\top)^{-1}$, ce qui est bien réalisé en minimisant la norme de $F KM^\top$, du fait que la contrainte sur $MKM^\top \geq I$ garantisse que le facteur $( MKM^\top)^{-1}$ ait une norme plus petite que 1.
 En effectuant un complément de Schur, cette minimisation est obtenue en résolvant le programme semi-défini suivant :
 \begin{align*}
 &  \min_{K, \kappa} \kappa, \; \mbox{subject to:}
@@ -93,14 +94,14 @@ La détermination du plus grand scalaire $\bar v$ assurant \eqref{eq:Vdecrease} 
 \begin{figure}[ht!]
     \centering
     \includegraphics[trim=0cm 0.6cm 0cm 1cm,clip,width=0.8\columnwidth]{figures/converge2.eps}
-    \caption{Simulation du modèle complet \eqref{eq:dyna_orig} (ligne continue) et simplifié \eqref{eq:withouwind} (ligne pointillée) avec $\boldsymbol{u} = \boldsymbol{u}_{\text{lin}}$ défini dans 
-    \eqref{eq:u_lin} et comme une condition initiale $\tilde{ \boldsymbol{x}}_0$ dans le bassin d'attraction.}
+    \caption{Simulation du modèle complet \eqref{eq:dyna_orig} (ligne continue) et simplifié \eqref{eq:withouwind} (ligne en pointillé) avec $\boldsymbol{u} = \boldsymbol{u}_{\text{lin}}$ défini dans 
+    \eqref{eq:u_lin} et comme condition initiale $\tilde{ \boldsymbol{x}}_0$ dans le bassin d'attraction.}
     \label{fig_linearize_conv}
 \end{figure}
 
 La figure \ref{fig_linearize_conv} montre une simulation commençant à l'origine avec un drone vertical et des vitesses linéaires et angulaires initiales sont nulles. La position cible est $\boldsymbol{p_{\text{eq}}} = [4,~5,~6]$ avec une stabilisation en vol stationnaire (drone vertical) avec $\beta = 0$. La ligne pointillée représente la position de la cible sur chaque axe. Le dernier graphique montre la décroissance exponentielle souhaitable de $V$.
 La figure \ref{fig_linearize_conv} montre, à la fois, la simulation du modèle complet (continue) \eqref{eq:dyna_orig} et du modèle non linéaire simplifié \eqref{eq:withouwind} (en pointillé), ce qui met en évidence des différences dans la phase transitoire.
-Lorsqu'on fournit une position cible plus importante $\boldsymbol{p_{\text{eq}}} =[8,~9,~10]$(avec la même orientation), la condition initiale se situe en dehors du bassin d'attraction et une divergence apparait, comme le montre la figure~\ref{fig_linearize_div}.
+Lorsqu'on fournit une position cible plus importante $\boldsymbol{p_{\text{eq}}} =[8,~9,~10]$(avec la même orientation), la condition initiale se situe en dehors du bassin d'attraction et une divergence apparaît, comme le montre la figure~\ref{fig_linearize_div}.
 
 \begin{figure}[ht!]
     \centering
@@ -112,13 +113,13 @@ Lorsqu'on fournit une position cible plus importante $\boldsymbol{p_{\text{eq}}}
 
 
 
-\section{Conception d'une commande locale-globale basée sur l'hystérésis}
+\section{Conception d'une commande locale-globale }
 \label{sec:ctrl_hyste}
  
-Considérant les stratégies locales-globales présentées dans \cite[Ex. 1. 7]{65}, similaires à la solution présentée dans \cite{AndreettoFZ16}, nous utilisons un mécanisme hybride sélectionnant le contrôleur local agressif \eqref{eq:u_lin} (tant que l'état se trouve dans le bassin d'attraction de l'équilibre) ou le contrôleur non linéaire moins agressif \eqref{eq:u_nonlin}, qui fournit une plus grande région d'attraction (et peut être appelé, par abus de langage, le "contrôleur global"). À cette fin, nous ajoutons à l'état du contrôleur une variable d'état logique $\ell \in \{0,1\}$, qui régit le choix de l'entrée de contrôle entre \eqref{eq:u_nonlin} et \eqref{eq:u_lin} tel que
+Considérant les stratégies locales-globales présentées dans \cite[Ex. 1. 7]{65}, similaires à la solution présentée dans \cite{AndreettoFZ16}, nous utilisons un mécanisme hybride sélectionnant le contrôleur local agressif \eqref{eq:u_lin} (tant que l'état se trouve dans le bassin d'attraction de l'équilibre) ou le contrôleur non linéaire moins agressif \eqref{eq:u_nonlin}, qui fournit une plus grande région d'attraction (et peut être appelé, par abus de langage, le "contrôleur global"). À cette fin, nous ajoutons à l'état du contrôleur une variable d'état logique $\ell \in \{0,1\}$, qui régit le choix de l'entrée de contrôle entre \eqref{eq:u_nonlin} et \eqref{eq:u_lin} tel que :
 \begin{align}
 \label{eq:u_hybrid}
-  \boldsymbol{u}=\boldsymbol{u}_{\text{hyb}} := \ell \boldsymbol{u}_{\text{nl}} + (1-\ell) \boldsymbol{u}_{\text{lin}},
+  \boldsymbol{u}=\boldsymbol{u}_{\text{hyb}} := \ell \boldsymbol{u}_{\text{nl}} + (1-\ell) \boldsymbol{u}_{\text{lin}}.
 \end{align}
 Nous nous assurons, grâce à la dynamique hybride, que $\ell$ ne puisse prendre que des valeurs dans $\{0,1\}$. Sa dynamique est définie par : 
 \begin{align*}
@@ -129,7 +130,7 @@ Nous nous assurons, grâce à la dynamique hybride, que $\ell$ ne puisse prendre
         \end{array}
     \right.
 \end{align*}
-où $\chi = \left[\boldsymbol{p},~ \boldsymbol{v},~ \boldsymbol{q},~  \boldsymbol{\omega},~ l\right]$ est l'état complet de la boucle fermée et $\mathcal{C}$ et $\mathcal{D}$ sont, respectivement, les ensembles continus et discrets, définis par
+où $\chi = \left[\boldsymbol{p},~ \boldsymbol{v},~ \boldsymbol{q},~  \boldsymbol{\omega},~ l\right]$ est l'état complet de la boucle fermée et $\mathcal{C}$ et $\mathcal{D}$ sont, respectivement, les ensembles continus et discrets, définis par :
 \begin{align*}
     & \mathcal{C} := \mathcal{C}_{0} \cup \mathcal{C}_{1}, ~ \mathcal{D} := \mathcal{D}_{0} \cup \mathcal{D}_{1},\\
    & \mathcal{C}_{0} :=\{\boldsymbol{\chi} \in \mathbb{R}^{14}:~ V(\boldsymbol{\tilde x}) \le \overline{v} \mbox{ and } \ell=0\}\\
@@ -158,7 +159,7 @@ Nous observons que sur la période $t \ dans \left[0,38\right]$, le drone
 présente une convergence élégante mais lente vers la position cible souhaitée, en utilisant le contrôleur global ($\ell=1$). Dès lors, l'état discret $\ell$ entre dans l'ensemble $\mathcal{D}_1$ et le contrôleur local plus agressif est activé jusqu'à la convergence vers l'équilibre souhaité.
 
 Pour obtenir des simulations réalistes, les mesures sont affectées par 
-le bruit des capteurs. La robustesse intrinsèque de la rétroaction hybride, établie dans le \cite[Chapitre 7]{65}, est confirmée par le maintien des performances, malgré le bruit de mesure.
+le bruit des capteurs. La robustesse intrinsèque de la rétroaction hybride, établie dans \cite[Chapitre 7]{65}, est confirmée par le maintien des performances, malgré le bruit de mesure.
 
 \section{Conclusion du Chapitre \ref{chap:hybrid}}
 

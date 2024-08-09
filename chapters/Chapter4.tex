@@ -14,7 +14,7 @@ Des simulations en boucle fermée avec le contrôleur \eqref{eq:u_hybrid} dével
 
 
 \subsection{Description physique, capteurs et actionnements}
-Le prototype développé comprend des pièces imprimées en 3D, en Onyx et PLA  \nomenclature[]{\(PLA\)}{Thermoplastique : acide polylactique} (acide polylactique, un polyester thermoplastique). Le drone est spécialement conçu pour réaliser des expériences devant une soufflerie avec un comportement semblable à celui de DarkO en raison de leur forme similaire (voir Fig. \ref{fig:real_test_bench}). La partie centrale, qui contient l'avionique embarquée (pilote automatique, GPS, etc.) dans DarkO, a été remplacée ici par un joint tournant à un degré de liberté (voir Fig. \ref{fig:rotation}). Les ailes sont les mêmes que celles du DarkO, avec les contrôleurs électroniques de vitesse (ESC), régissant la vitesse du moteur \textit{brushless}, placés dans les ailes.
+Le prototype développé comprend des pièces imprimées en 3D, en Onyx et PLA  \nomenclature[]{\(PLA\)}{Thermoplastique : acide polylactique} (acide polylactique, un polyester thermoplastique). Le drone est spécialement conçu pour réaliser des expériences devant une soufflerie avec un comportement semblable à celui de DarkO en raison de leur forme similaire (voir Fig. \ref{fig:real_test_bench}). La partie centrale, qui contient l'avionique embarqué (pilote automatique, GPS, etc.) dans DarkO, a été remplacée ici par un joint tournant à un degré de liberté (voir Fig. \ref{fig:rotation}). Les ailes sont les mêmes que celles du DarkO, avec les contrôleurs électroniques de vitesse (ESC), régissant la vitesse du moteur \textit{brushless}, placés dans les ailes.
 
 Comme décrit dans la section \ref{sec:motivation3DOF}, nous souhaitons représenter et étudier le degré de liberté de l'axe $y_{\text{b}}$ du drone DarkO. Le tube principal en carbone reliant les deux ailes est utilisé comme axe de rotation. Ce tube est fixé sur deux roulements espacés de \SI{28.5}{\milli\meter} afin d'obtenir une fixation solide de l'ensemble. Cet axe de rotation est équipé d'un codeur optique rotatif en quadrature pour mesurer précisément l'orientation de l'appareil. L'avantage de ce capteur est qu'il ne produit pas de couple résistant sur l'axe de rotation. Ce codeur offre 4000 impulsions par tour, ce qui donne une résolution de $\SI{0.09}{\degree}/pulse$.
 \begin{figure}[!ht]
@@ -25,22 +25,22 @@ Comme décrit dans la section \ref{sec:motivation3DOF}, nous souhaitons représe
 \end{figure} 
 \todo{traduire}
 
-Comme le montre la figure \ref{fig:rotation}, l'indexer et le support sont percés de manière à ce que la rotation puisse être bloquée à des positions connues ($0^\circ$, $90^\circ$, etc.) par une vis sur l'indexer qui s'insère dans les trous du support. Le verrouillage de l'appareil permet une initialisation correcte de l'encodeur incrémental. Le verrouillage permet également de placer l'appareil dans des positions exactes spécifiques afin d'identifier les coefficients aérodynamiques. 
+Comme le montre la figure \ref{fig:rotation}, l'indexeur et le support sont percés de manière à ce que la rotation puisse être bloquée à des positions connues ($0^\circ$, $90^\circ$, etc.) par une vis sur l'indexeur qui s'insère dans les trous du support. Le verrouillage de l'appareil permet une initialisation correcte de l'encodeur incrémental. Le verrouillage permet également de placer l'appareil dans des positions exactes spécifiques afin d'identifier les coefficients aérodynamiques. 
 
 Le mécanisme est également équipé d'un capteur de forces et de moments à 6 degrés de liberté (DOF), qui permet de mesurer la force exercée sur le dispositif expérimental par le support. Le banc d'essai expérimental est également équipé d'un fil chaud pour mesurer la vitesse de l'air affectant la maquette. 
 
 \begin{figure}[!ht]
     \includegraphics[trim=0cm 5cm 0cm 6cm,clip,width=1\columnwidth]{figures/real_test_bench-min.jpg}
-    \caption{Modèle de DarkO à un seul degré de liberté devant le WindShape.}
+    \caption{Modèle de DarkO à un seul degré de liberté devant le \textit{WindShape}.}
     \label{fig:real_test_bench}
 \end{figure}
-La photo de la figure \ref{fig:real_test_bench} montre le dispositif expérimental dans son environnement de test. Le drone est placé devant une soufflerie ouverte, appelée WindShape, qui génère un vent horizontal compris entre 2 et 16 \SI{}{\meter\per\second}. Ainsi, lors de nos tests, nous considérons que la composante verticale du vent est nulle. Le drone est placé au centre du WindShape, dans la zone d'écoulement la plus laminaire, tandis que le capteur à fil chaud est placé aussi près que possible du drone. 
+La photo de la figure \ref{fig:real_test_bench} montre le dispositif expérimental dans son environnement de test. Le drone est placé devant une soufflerie ouverte, appelée \textit{WindShape}, qui génère un vent horizontal compris entre 2 et 16 \SI{}{\meter\per\second}. Ainsi, lors de nos tests, nous considérons que la composante verticale du vent est nulle. Le drone est placé au centre du \textit{WindShape}, dans la zone d'écoulement la plus laminaire, tandis que le capteur à fil chaud est placé aussi près que possible du drone. 
 
 La géométrie du dispositif expérimental permet de placer les câbles d'alimentation et de signal près du centre de rotation afin de minimiser leurs effets de friction sur la structure. Malgré cela, le système de rotation interfère inévitablement avec le drone, en créant des forces parasites, notamment de la traînée. La surface projetée de l'articulation étant faible par rapport à la surface de l'aile, la traînée générée par ce support est faible par rapport à la traînée de l'aile et des hélices, et peut donc être négligée.
 
 \begin{figure}[!ht]
     \includegraphics[width=\columnwidth]{figures/maquette-min.png}
-    \caption{Architecture d'essai en vol virtuel : WindShape (a) ; capteur de vitesse (b) ; capteur de forces et moments (c) ; encodeur rotatif (d) ; servomoteur (e) ; moteur \textit{brushless} + ESC (f) ; LabJack (g) ; ordinateur de contrôle (h)}
+    \caption{Architecture d'essai en vol virtuel : \textit{WindShape} (a) ; capteur de vitesse (b) ; capteur de forces et moments (c) ; encodeur rotatif (d) ; servomoteur (e) ; moteur \textit{brushless} + ESC (f) ; LabJack (g) ; ordinateur de contrôle (h)}
     \label{fig:archi}
 \end{figure}
 Un diagramme schématique des composants du dispositif expérimental et de leur interconnexion est présenté à la Fig. \ref{fig:archi}.
@@ -50,7 +50,7 @@ Les moteurs (f) sont alimentés par une batterie externe de 12v 20Ah et les serv
 Les élevons sont commandés par des servomoteurs qui ne fournissent pas de signal de mesure de la position. Nous utilisons donc le point de consigne, en supposant que l'actionneur est parfait. Cela est raisonnable en raison de la saturation logicielle imposée à l'entrée des élevons et du dimensionnement correct des servomoteurs par rapport aux forces impliquées. 
 Le LabJack (g) possède une interface de programmation d'application (API) \nomenclature[]{\(API\)}{Interface de programmation d'application (\textit{Application Programming Interface})}, permettant une connexion avec un ordinateur. Nous avons développé un code Python qui communique avec le LabJack afin de récupérer les valeurs des capteurs, de calculer la commande à appliquer aux servomoteurs selon le schéma de contrôle présenté ci-dessous et de générer les signaux de sortie pour les servomoteurs. Les données collectées par le LabJack sont enregistrées afin d'être utilisées pour le post-traitement et de générer le graphique présenté dans la section \ref{sec:exp3DOF}. 
 
-Pour générer le vent, nous utilisons un dispositif WindShape, lequel dispose également d'une API lui permettant d'être contrôlé via un réseau Ethernet. Le code Python développé peut assigner la vitesse du vent générée par le WindShape et donc agir sur le modèle. Il est ainsi possible de tester un ensemble de configurations de vols stationnaires et leurs transitoires associés dans la même campagne d'essais, sans aucune action sur le modèle. 
+Pour générer le vent, nous utilisons un dispositif \textit{WindShape}, lequel dispose également d'une API lui permettant d'être contrôlé via un réseau Ethernet. Le code Python développé peut assigner la vitesse du vent générée par le \textit{WindShape} et donc agir sur le modèle. Il est ainsi possible de tester un ensemble de configurations de vols stationnaires et les transitoires associés dans la même campagne d'essais, sans aucune action sur le modèle. 
 
 
 \subsection{Simulation des mouvements du drone}
@@ -95,15 +95,17 @@ Le contrôleur proposé, représenté sur la figure \ref{fig:commande_int3DOF}, 
 
 où $x_{c} \in \mathbb{R}^{2}$ est l'état de l'intégrateur ; $r_{p} \in \mathbb{R}^{3}$ est la référence constante comprenant une position cible pour le mouvement de translation ; $S$ est une matrice de sélection de sortie, qui supprime la composante de l'angle de tangage de la sortie mesurée (n'affectant que la linéarisation par quaternion) pour former $y$ ; $\Sigma$ est une matrice d'allocation d'entrée qui permet d'affecter la première composante de l'état de l'intégrateur à la commande du moteur et la seconde composante à la commande de la gouverne de profondeur. $K$, $H$ sont des gains constants à sélectionner pour que la matrice linéaire de la boucle fermée $A_{cl}$ caractérisant la boucle fermée linéaire soit Hurwitz, afin d'assurer la stabilisation avec la dynamique linéarisée liée au scénario sans vent \eqref{eq:withouwind}.
 
+
+
+
+De manière synthétique, la matrice \eqref{eq:close_matrix} décrit la boucle fermée illustrée à la Fig.~\ref{fig:commande_int3DOF} : un retour de sortie avec 11 sorties, comprenant les trois positions, les trois vitesses linéaires, deux des trois angles ($\epsilon_{1}$ et $\epsilon_{3}$) et les trois vitesses angulaires.
 \begin{align} \label{eq:close_matrix}
     \begin{gathered}
         A_{cl} \!= \!
         \begin{bmatrix}A & \mathbb{0}_{12\times 2} \\ HS & \mathbb{0}_{2\times 2}\end{bmatrix} \!- \!\begin{bmatrix}G \\ \mathbb{0}_{2\times 4}\end{bmatrix} \left( K \begin{bmatrix}S & \mathbb{0}_{11\times 2}\end{bmatrix} -  \begin{bmatrix}\mathbb{0}_{4\times 12} & \Sigma \end{bmatrix}\right),
     \end{gathered}
 \end{align}
-
-
-De manière synthétique, la matrice \eqref{eq:close_matrix} décrit la boucle fermée illustrée à la Fig.~\ref{fig:commande_int3DOF} : un retour de sortie avec 11 sorties, comprenant les trois positions, les trois vitesses linéaires, deux des trois angles ($\epsilon_{1}$ et $\epsilon_{3}$) et les trois vitesses angulaires. Cette structure peut être considérée comme une solution proportionnelle-intégrale MIMO \nomenclature[]{\(MIMO\)}{Entrées et sorties multiples  (\textit{Multiple-Input Multiple-Output})} résultant d'une observation attentive de la dynamique linéarisée du drone, ce qui permet un nombre minimal d'intégrateurs intégrés dans le contrôleur. Ce contrôle devrait permettre de rejeter les perturbations constantes tout en ayant une robustesse satisfaisante. Le gain $K$ correspond au terme proportionnel et le gain $H$ pondère le terme intégral, induisant une convergence vers la cible. La matrice d'allocation $\Sigma$ conduit à une utilisation symétrique des hélices et des ailerons. Il faut alors ajuster $K$ et $H$ pour obtenir un compromis satisfaisant entre robustesse et rejet des perturbations. Nous mettons en œuvre une synthèse multiobjectifs basée sur une méthode d'optimisation $H_{\infty}$, décrite ci-après.
+Cette structure peut être considérée comme une solution proportionnelle-intégrale MIMO \nomenclature[]{\(MIMO\)}{Entrées et sorties multiples  (\textit{Multiple-Input Multiple-Output})} résultant d'une observation attentive de la dynamique linéarisée du drone, ce qui permet un nombre minimal d'intégrateurs dans le contrôleur. Ce contrôle devrait permettre de rejeter les perturbations constantes tout en ayant une robustesse satisfaisante. Le gain $K$ correspond au terme proportionnel et le gain $H$ pondère le terme intégral, induisant une convergence vers la cible. La matrice d'allocation $\Sigma$ conduit à une utilisation symétrique des hélices et des ailerons. Il faut alors ajuster $K$ et $H$ pour obtenir un compromis satisfaisant entre robustesse et rejet des perturbations. Nous mettons en œuvre une synthèse multiobjectifs basée sur une méthode d'optimisation $H_{\infty}$, décrite ci-après.
 \todo{Modifier la commande pour expliquer la commande à 3 DOF}
 
 \subsection{Optimisation $H_{\infty}$}
@@ -127,7 +129,7 @@ Plus précisément, les constantes de pondération sont réglées comme suit
     W_{2} T_{d \rightarrow u}(P,C)\\
     W_{3} T_{r \rightarrow u}(P,C)\\
     W_{4} T_{w \rightarrow y}(P,C)
-    \end{Vmatrix}_{\infty}, \text{ sous condition que } \\ &C \in \mathbb{R}^{11 \times 4} \text{ stabilise } P \text{ en interne,} \numberthis
+    \end{Vmatrix}_{\infty}, \text{ sous condition que } \\ &C \in \mathbb{R}^{11 \times 4} \text{ stabilise } P \text{ en interne.} \numberthis
 \end{align*}
 
 Nous avons résolu \eqref{eq:pb_optim} en utilisant le logiciel {\tt Systune} \cite{1576856}. Basé sur l'optimisation non lisse, {\tt Systune} traite plusieurs scénarios non convexes, tels que l'architecture de contrôle structurée où nous optimisons les matrices de gain $K$, $H$. L'algorithme d'optimisation renvoie la sélection optimisée de suivante :
@@ -155,7 +157,7 @@ Nous observons également un comportement qui pourrait être important pour de f
 Comme prévu, lorsque le vent augmente, l'angle d'inclinaison diminue, ce qui modifie la poussée nécessaire et la déflexion des élevons. En effet, le vent génère de la portance sur les ailes, ce qui compense l'effet de la gravité, et donc la poussée nécessaire devient plus faible.
 Pour chaque valeur de $w$, le modèle converge vers un équilibre, dont la caractérisation mathématique précise est détaillée dans \ref{sec:eq_vent}. Il est donc nécessaire d'étendre la robustesse du contrôleur en effectuant une optimisation multimodèle du contrôleur (décrite dans \ref{sec:h_inf6DOF_multi}). Il est également possible de supprimer les contraintes sur la structure du contrôleur afin de lui donner plus de degrés de liberté dans l'optimisation.
 
-La vidéo de la maquette avec les résultats expérimentaux est disponible via le lien  \url{https://youtu.be/ce4_FUzeVzI}.
+La vidéo de la maquette, avec les résultats expérimentaux est, disponible via le lien : \url{https://youtu.be/ce4_FUzeVzI}.
 
 \begin{figure}[!ht]
    \centering
@@ -165,7 +167,9 @@ La vidéo de la maquette avec les résultats expérimentaux est disponible via l
 \end{figure}
 
 \section{Conclusion du Chapitre \ref{chap:3DOF}}
-Nous avons décrit une maquette permettant de simuler le vol d'un drone convertible, DarkO, en soufflerie. L'objectif de cette maquette est de tester le système de contrôle sur une représentation fidèle de la dynamique longitudinale, tout en simulant la dynamique de translation. Nous avons également présenté un contrôleur linéaire de sortie basé sur une architecture proportionnelle-intégrale pour la stabilisation du vol stationnaire dans des conditions de vent constant. Les gains du contrôleur ont été obtenus à l'aide d'une optimisation non convexe. Les résultats des essais expérimentaux montrent qu'il est possible de stabiliser l'équilibre en vol stationnaire dans la plage de vitesse du vent testée. Toutefois, d'autres architectures de contrôle devraient être étudiées à l'avenir pour traiter les oscillations indésirables. Ces résultats indiquent qu'il est nécessaire de tester cette architecture de commande sur un modèle complet à six degrés de liberté, dans des conditions similaires de vent.
+Nous avons décrit une maquette permettant de simuler le vol d'un drone convertible, DarkO, en soufflerie. L'objectif de cette maquette est de tester le système de contrôle sur une représentation fidèle de la dynamique longitudinale, tout en simulant la dynamique de translation. Nous avons également présenté un contrôleur linéaire de sortie basé sur une architecture proportionnelle-intégrale pour la stabilisation du vol stationnaire dans des conditions de vent constant. Les gains du contrôleur ont été obtenus à l'aide d'une optimisation non convexe. Les résultats des essais expérimentaux montrent qu'il est possible de stabiliser l'équilibre en vol stationnaire dans la plage de vitesse du vent testée. 
+
+Toutefois, d'autres architectures de contrôle devraient être étudiées à l'avenir pour traiter les oscillations indésirables. Ces résultats indiquent qu'il est nécessaire de tester cette architecture de commande sur un modèle complet à six degrés de liberté, dans des conditions similaires de vent.
 
 
 % \subsection{\texorpdfstring{$H_{\infty}$}{H {infty}}-based optimization}
