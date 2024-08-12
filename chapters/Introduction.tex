@@ -16,7 +16,7 @@ Leur faible autonomie restreignant leur usage, la recherche s'est alors concentr
 
 Dans l'ensemble des VTOL, plusieurs architectures existent et seront détaillées dans la section \ref{sec:archConvertible}. Toutefois, nos travaux se sont concentrés sur les classes des \textit{tailsitters} et des \textit{freewings}.
 
-\todo{subsection et transition}
+\subsection*{Phases d'un vol}
 De nombreux travaux ont été menés sur les \textit{tailsitters}, avec l'objectif de couvrir l'intégralité du domaine de vol. Ce dernier est constitué des phases de vol suivantes :
 \begin{enumerate}
     \item Décollage vertical
@@ -36,20 +36,34 @@ Le vecteur $\overrightarrow{W}$ représente la perturbation de vent qui peut aff
         \label{fig:darko_flight}
 \end{figure}
 
-Ainsi, citon en exemples le \textit{tailsitter} à double rotors appelé «~T-Wing~» \cite{Stone2002PreliminaryDO, TWing2008}, le tail-sitter appelé «~MavIon~» \cite{oatao14575}, ou le «~JLion~» et le «~KH-Lion~» \cite{8003167}. Ces drones partagent une architecture similaire basée sur une aile supportant deux moteurs sur le bord d'attaque et soufflant deux élevons situés sur le bord de fuite. Cette architecture offre une plus grande robustesse que les \textit{tiltrotors}, composés de pièces mobiles (ce qui les rend plus fragiles) et d'un actionneur puissant pour faire tourner l'ensemble moteur-hélice.
+\subsection*{Maquettes}
+
+De nombreuse maquette réelle ont été assembler dans le but de réaliser des vols expérimentaux. Citons en exemples le \textit{tailsitter} à doubles rotors appelé «~T-Wing~» \cite{Stone2002PreliminaryDO, TWing2008}, le \textit{tailsitter} appelé «~MavIon~» \cite{oatao14575}, ou le «~JLion~» et le «~KH-Lion~» \cite{8003167}. Ces trois maquettes sont illustrées sur la figure \ref{fig:maquettetailsitter}.
+
+\begin{figure}[ht!]
+    \centering
+    \resizebox{.9\textwidth}{!}{%
+    \includegraphics[height=3cm]{figures/T-Wing.png}
+    \quad
+    \includegraphics[height=3cm]{figures/mavionWindtunel.png}
+    \quad
+    \includegraphics[height=3cm]{figures/KHlion.png}
+    }
+    \caption{Maquette «~T-Wing~», «~MavIon~» et «~KH-Lion~».}
+    \label{fig:maquettetailsitter}
+\end{figure}
+
+Ces drones partagent une architecture similaire basée sur une aile supportant deux moteurs sur le bord d'attaque et soufflant deux élevons situés sur le bord de fuite. Cette architecture offre une plus grande robustesse que les \textit{tiltrotors}, composés de pièces mobiles (ce qui les rend plus fragiles) et d'un actionneur puissant pour faire tourner l'ensemble moteur-hélice.
 La complexité inhérente à ces architectures nécessite un travail de modélisation en raison des nombreuses non-linéarités et couplages impliqués, en particulier en termes de modélisation des effets aérodynamiques. Dans ce contexte, l'interférence aérodynamique entre l'aile fixe et les rotors a été modélisée dans \cite{droandi_zanotti_gibertini_grassi_campanardi_2015, Simmons2022, aerospace5030079}, et les forces et moments d'hélice générés à des angles d'attaque élevés sont abordés dans \cite{Fernandez2023}. Cependant, ces modèles sont complexes algorithmiquement et ne sont que partiellement utilisables pour la conception des commandes. 
 
 Un autre point important est la représentation de l'attitude du drone. Aussi, il est possible de représenter son orientation par des angles d'Euler \cite{4177650, 5415267, 8003165}, ce qui permet une compréhension intuitive. Toutefois, une singularité apparaît dans certaines phases de vol. Compte tenu de la grande manœuvrabilité, il est préférable de représenter l'attitude par un quaternion unitaire, ce qui élimine toute singularité \cite{8027691}. De nombreuses publications modélisent les effets aérodynamiques générés par les hélices en fonction de l'angle d'attaque et l'angle de dérapage \cite{Escareno07, ChiappinelliNahon2018}. 
 Il est possible de choisir un autre modèle pour les interactions aérodynamiques entre les moteurs, les ailes et les élevons, comme présenté dans \cite{lustosaHal-03035938}. La technique de modélisation présentée dans \cite{lustosaHal-03035938} permet de disposer d'un modèle global couvrant l'ensemble de l'enveloppe de vol, grâce à ce que l'on appelle l'approche $\Phi$-théorie. Bien que cette dernière ne permette pas de prédire la chute brutale de la force de portance avec un angle d'attaque (AoA) croissant (qui est causée par un flux d'air turbulent) \cite{tal2022global}, elle permet de représenter le drone avec suffisamment de précision pour capturer le comportement lors de manœuvres agressives. 
 
+Comme expliqué précédemment, lors des phases de décollage et d'atterrissage, le drone est vertical (voir figure~\ref{fig:darko_flight}) ce qui engendre une grande sensibilité aux perturbations. Il semble pertinent de ce concentré nos travaux sur l'étude de la robustesse des drones convertible face au vent.
 
-Actuellement, nous pouvons mentionner deux types d'architectures de commande ayant fonctionné sur ce tailsitter. La première est basée sur une inversion incrémentale non-linéaire de la dynamique du drone (\textit{Incremental Non-linear Dynamic Inversion}, INDI) \nomenclature[]{\(INDI\)}{Inversion incrémentale non-linéaire  (\textit{Incremental Non-linear Dynamic Inversion})} et la seconde est basée sur une technique sans modèle (\textit{Model free control}, MFC). \nomenclature[]{\(MFC\)}{Commande sans modèle (\textit{Model free control})}
+% Actuellement, nous pouvons mentionner deux types d'architectures de commande ayant fonctionné sur ce tailsitter. La première est basée sur une inversion incrémentale non-linéaire de la dynamique du drone (\textit{Incremental Non-linear Dynamic Inversion}, INDI) \nomenclature[]{\(INDI\)}{Inversion incrémentale non-linéaire  (\textit{Incremental Non-linear Dynamic Inversion})} et la seconde est basée sur une technique sans modèle (\textit{Model free control}, MFC). \nomenclature[]{\(MFC\)}{Commande sans modèle (\textit{Model free control})}
 
 Les deux architectures sur lesquelles se sont concentrées nos recherches sont celles de DarkO, un \textit{tailsitters} et de Colibri, un \textit{freewings} basé sur une aile inspirée de DarkO, en rotation libre autour d'un fuselage qui sera maintenu horizontal.
-
-
-
-\todo{Rejet de perturbation et métrique de maintien de position }
 
 
 \section*{Question de recherche}
@@ -71,6 +85,5 @@ Le chapitre \ref{chap:colibri} propose une nouvelle architecture de \textit{free
 
 \section*{Objectifs fixés pour la thèse}
 
-\todo{Améliorer}
 Les objectifs fixés sont pluriels : 
 il s'agira d'étudier le comportement d'un drone \textit{tailsitters} en environnement perturbé, saturations des actionneurs, dynamiques linéarisées, impact des non-linéarités et cycles limites. De proposer des architectures de commande basées modèle pour un drone \textit{tailsitters} permettant d'assurer une robustesse aux perturbations de vent, ouvrant la possibilité de certification de ce type d'architecture. Enfin d'utiliser des capteurs pour mesurer les perturbations en avance de phase pour les rejeter (sonde 5 trous, micro, Pitot, etc.), ce qui implique de développer une nouvelle architecture.

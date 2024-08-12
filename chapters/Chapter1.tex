@@ -31,8 +31,9 @@
     \subsection{Types d'architectures des drones convertibles}
     \label{sec:archConvertible}
     La conception structurelle et aérodynamique d'un drone est le facteur principal permettant des transitions stables et fluides. De plus, il est nécessaire d'optimiser l'architecture pour une mission, de manière à être le plus efficace. Au vu de la diversité des tâches à réaliser, un grand nombre de modèles ont été proposés, lesquels sont généralement catégorisables en trois classes : \textit{tiltrotor}, \textit{tailsitter}, \textit{tiltwing}. 
-    En ce qu'il s'agit des prémices des convertibles, il parait opportun d'ajouter aux trois grandes catégories précédemment citées dans les états de l'art \cite{saeed_survey_2018,ducard_review_2021, review_2022}, la catégorie \textit{quadplanes}.
+    En ce qu'il s'agit des prémices des convertibles, il parait opportun d'ajouter aux trois grandes catégories précédemment citées dans les états de l'art \cite{saeed_survey_2018,ducard_review_2021, review_2022}, la catégorie \textit{quadplane}.
 
+    
         \subsubsection*{\textit{Quadplane}}
         Les \textit{quadplanes} résultent de la fusion d'un avion et d'un quadrirotor (comme visible sur la figure \ref{fig:quadplane}), ce qui permet un découplage de l'actionnement en fonction de la phase de vol. Le premier système de propulsion est composé de quatre hélices générant une force verticale permettant le contrôle lors des phases de décollage, d'atterrissage et stationnaire. Le second système de propulsion est composé d'une hélice propulsive supplémentaire afin de maintenir le vol d'avancement.
 
@@ -108,9 +109,9 @@
     Dans ces deux architectures, il est courant de trouver des actionneurs basés sur des effets aérodynamiques. Ces actionneurs ont l'avantage d'être peu consommateurs en énergie. Ils sont mus par des servomoteurs qui consomment peu d'électricité proportionnellement au couple qu'ils génèrent. Dans le cas des ailes volantes, les surfaces aérodynamiques sont souvent placées sur la partie arrière des ailes et peuvent être utilisées symétriquement à l'instar de volets, ou anti-symétriquement comme des ailerons. 
     Dans les phases de décollage, de vol stationnaire ou d'atterrissage, la plateforme est maintenue en vol par les hélices : il est donc nécessaire de dimensionner les groupes moteurs-hélices pour qu'ils puissent générer assez de force. En fonction des configurations, les moments peuvent être obtenus par des différentiels sur l'utilisation des moteurs ou bien par des surfaces aérodynamiques. Dans le cas de surfaces soufflées par le flux d'air des hélices, il existe un couplage des actionneurs qui complexifie la modélisation et le contrôle de ces architectures.
 
-    \todo{Sous actionnement}
 
     \begin{definition}[Sous-actionnement]
+        \label{def:sousacctionnement}
         Considérons la dynamique d'un système décrite par l'équation différentielle du second ordre :
         \begin{align*}
             \ddot{\boldsymbol{q}} = f_1(\boldsymbol{q}, \dot{\boldsymbol{q}}, t) + f_2(\boldsymbol{q}, \dot{\boldsymbol{q}}, t) \boldsymbol{u}
@@ -122,6 +123,9 @@
             rank[f_2(\boldsymbol{q}, \dot{\boldsymbol{q}}, t)] < dim[\boldsymbol{q}]
         \end{align*}
     \end{definition}
+
+    Nous observons au vu de la définition \ref{def:sousacctionnement} que beaucoup d'architecture présentée dans les catégories précédente (\textit{tiltrotor}, \textit{tailsitter}, \textit{tiltwing}, \textit{quadplane}) sont sous-actionnées. La principale conséquence du sous-actionnement est l'impossibilité de générer de déplacement sans modifier l'orientation du drone ou de manière similaire tout déplacement sera engendré par un changement d'orientation du drone.
+    
 
     \subsection{Aérodynamique}
 
@@ -140,6 +144,8 @@
 
 
 \section{Modélisations}
+
+\subsection{Dynamique du système}
 Dans le cas des drones convertibles basculant, le modèle aérodynamique doit être correct dans les phases de transition. Cela nécessite l'extension de l'aérodynamique classique (faible incidence) à un angle d'attaque élevé et à un fonctionnement à faible vitesse. En outre, l'effet du souffle de l'hélice sur les profils aérodynamiques du véhicule doit être compris et pris en compte dans le modèle du système. Par exemple, les travaux de \cite{9444145} sur un \textit{tiltwing} identifient les zones d'interaction entre l'hélice et l'aile. Ils séparent clairement la génération de force et de couple, lesquelles sont obtenues par la partir soufflée et non-soufflée de l'aile.
 
 Des fonctions non linéaires continues décrivant les coefficients de portance et de traînée aérodynamiques sur toute la plage de l'angle d'attaque pour les  \textit{tiltrotors} ont été dérivées dans \cite{6981467} et pour les \textit{tiltwings} dans \cite{Lustosa2017LaP, lustosaHal-03035938}.
@@ -148,7 +154,7 @@ Il existe de nombreuses conceptions possibles pour un drone convertible. Bien qu
 
 Un modèle précis est nécessaire pour les conceptions classiques de contrôle basées sur un modèle et en particulier pour les approches d'inversion dynamique ou de contrôle prédictif de modèle. Cependant, une modélisation précise va nécessiter une campagne d'identification approfondie en soufflerie ou un vol en environnement contraint. Il se peut également que la complexité du modèle ne permette pas une utilisation directe dans le contrôle à cause de limitation matérielle des calculateurs embarqués.
 
-\todo{transition}
+\subsection{Modèle de perturbation}
 
 Dans notre cas, nous nous sommes intéressés à l'impact du vent sur les architectures mentionnées précédemment. Il est donc nécessaire de modéliser le vent. Dans le cas de vent constant ou de cisaillement de vent, un modèle à échelons semble tout à fait approprié pour représenter le changement brusque de vitesse de vent. 
 Pour les rafales, nous utiliserons plusieurs modèles, tel que le modèle "Chapeau mexicain" ou les "ondelettes de Morlet".
@@ -180,7 +186,6 @@ où $w_{m}$ est le vent moyen sans perturbation, $t_{0,mex}$ représente l'insta
 %         \Phi _{w_{g}}(\Omega )& =\sigma _{w}^{2}{\frac {2L_{w}}{\pi }}{\frac {1+12(L_{w}\Omega )^{2}}{\left(1+4(L_{w}\Omega )^{2}\right)^{2}}}
 %     \end{align}
 % \end{subequations}
-% \todo{explication}
 % Le modèle de von Kármán :
 % \begin{subequations}
 %     \begin{align}
@@ -194,21 +199,21 @@ où $w_{m}$ est le vent moyen sans perturbation, $t_{0,mex}$ représente l'insta
 
 \section{Actionnements}
 
+La figure \ref{fig:actionDarko} illustre les effets des actionneurs sur l'attitude d'un \textit{tailsitter}.
 \begin{figure}[ht!]
     \centerline{
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=1\columnwidth]{figures/actionnement.png}}
     \caption{Actionneurs d'un \textit{tailsitter} et leurs actions sur les axes principaux.}
     \label{fig:actionDarko}
 \end{figure}
-
-La figure \ref{fig:actionDarko} illustre les effets des actionneurs sur l'attitude d'un \textit{tailsitter}. La rotation autour de l'axe $x_{\text{b}}$ peut être contrôlée par des braquages de volets asymétriques, l'angle de tangage (axe $y_{\text{b}}$) par des braquages de volets symétriques et la rotation autour de l'axe $z_{\text{b}}$ est contrôlée par un dispositif de poussée différentielle, ce qui permet d'obtenir un angle de tangage plus élevé. La rotation autour de l'axe de lacet est contrôlée par une configuration de poussée différentielle, qui créé un couple temporaire non nul autour de son axe. Le dispositif de poussée différentielle engendre une différence entre les rotations de l'hélice gauche et de l'hélice droite, et modifie ainsi la vitesse de rotation de l'avion et donc le comportement aérodynamique autour des volets.
+La rotation autour de l'axe $x_{\text{b}}$ peut être contrôlée par des braquages de volets asymétriques, l'angle de tangage (axe $y_{\text{b}}$) par des braquages de volets symétriques et la rotation autour de l'axe $z_{\text{b}}$ est contrôlée par un dispositif de poussée différentielle, ce qui permet d'obtenir un angle de tangage plus élevé. La rotation autour de l'axe de lacet est contrôlée par une configuration de poussée différentielle, qui créé un couple temporaire non nul autour de son axe. Le dispositif de poussée différentielle engendre une différence entre les rotations de l'hélice gauche et de l'hélice droite, et modifie ainsi la vitesse de rotation de l'avion et donc le comportement aérodynamique autour des volets.
 
 
 \section{Architectures de commande de vol}
 
 
 Une approche en cascade est une méthode couramment utilisée dans le cadre de la commande de drone. Cette approche est basée sur l'imbrication de boucles de  commande, telle qu'illustrée sur la Figure \ref{fig:schemahiera}. 
-Cette architecture s'appuie sur la séparation des dynamiques d'un drone sous actionné. Effectivement, le drone étant obligé de modifier son orientation pour changer de position, le schéma de contrôle prend en compte cette spécificité. Ainsi, la boucle interne est réglée pour avoir un temps de réponse faible vis-à-vis des autres lois. Cette boucle interne stabilise l'attitude du drone $att_{m}$ en la faisant converger vers l'attitude de consigne $att_{c}$. Cette attitude de consigne est le résultat de la boucle de vitesse faisant converger la vitesse du drone $vel_{m}$ vers la vitesse de consigne $vel_{c}$. La vitesse de consigne est la résultante de la boucle de position faisant converger la position du drone $pos_{m}$ vers la position de consigne défini par le pilote $pos_{c}$.
+Cette architecture s'appuie sur la séparation des dynamiques d'un drone sous actionné. Effectivement, le drone étant obligé de modifier son orientation pour changer de position, le schéma de contrôle prend en compte cette spécificité. Ainsi, la boucle interne est réglée pour avoir un temps de réponse faible vis-à-vis des autres lois. Cette boucle interne stabilise l'attitude du drone ($att_{m}$) en la faisant converger vers l'attitude de consigne ($att_{c}$). Cette attitude de consigne est le résultat de la boucle de vitesse faisant converger la vitesse du drone ($vel_{m}$) vers la vitesse de consigne ($vel_{c}$). La vitesse de consigne est la résultante de la boucle de position faisant converger la position du drone ($pos_{m}$) vers la position de consigne définie par le pilote ($pos_{c}$).
 \begin{figure}[ht!]
     \centerline{
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.8\columnwidth]{figures/controlhierachique.png}}
@@ -256,7 +261,7 @@ La synthèse $H_{\infty}$ est une méthode qui sert à la conception de commande
 \begin{figure}[ht!]
     \centerline{
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\columnwidth]{figures/lft.png}}
-    \caption{Architecture d'un contrôleur $H_{\infty}$ .}
+    \caption{Architecture d'un contrôleur $H_{\infty}$.}
     \label{fig:schemalft}
 \end{figure}
 
@@ -274,9 +279,13 @@ Enfin, il existe une extension non-linéaire de l'approche approches $H_{\infty}
 Grâce à la nature de la norme $W_{m,p}$, la variable de coût et ses dérivées temporelles sont prises en compte dans la fonction de coût, ce qui permet d'obtenir des contrôleurs offrant de meilleures performances en régime transitoire et en régime permanent.
 
 \subsection*{Contrôleur non linéaire}
+L'approche, inversion dynamique non linéaire incrémentale (INDI), utilise la connaissance de la dynamique d'un système et son inversion incrémentale permet d'obtenir les accélérations angulaires cible. Théoriquement, le bouclage des accélérations angulaires élimine la sensibilité aux imperfections du modèle, ce qui augmente considérablement la robustesse du système par rapport à l'inversion dynamique non linéaire conventionnelle. Cependant, les accélérations angulaires ne sont pas disponibles.
+
+\cite{Sieberling2010, Binz2019, smeurINDI,smeurINDITail}
+\todo{NL}
 
 \subsection*{Contrôleur séquencé}
-L'approche Diviser et Conquérir permet de passer discrètement d'une loi de contrôle à l'autre, de sorte qu'un seul contrôleur fonctionne à la fois. Un exemple d'un contrôle séquencé hybride de \textit{tailsitters} est donnée dans \cite{Casau2011}.
+L'approche Diviser et Conquérir permet de modifier l'usage d'une loi de contrôle à une autre, de manière discrète, de sorte qu'un seul contrôleur fonctionne à la fois. Un exemple d'un contrôle séquencé hybride de \textit{tailsitters} est donnée dans \cite{Casau2011}.
 
 Contrairement à Diviser et Conquérir, la pondération de contrôle fusionne en continu les commandes de deux contrôleurs, sur la base d'un poids dépendant d'une variable de sélection. Les auteurs de \cite{Liang2016} ont développé deux contrôleurs, un pour le mode VTOL et un second pour la croisière. Ils fonctionnent simultanément et la commande globale est calculée comme  :
 \begin{align*}
@@ -291,7 +300,7 @@ La commande adaptative à référence de modèle (MRAC) utilise un modèle de r�
 \begin{figure}[ht!]
     \centerline{
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\columnwidth]{figures/Mrac.png}}
-    \caption{Architecture d'un contrôleur MRAC .}
+    \caption{Architecture d'un contrôleur MRAC.}
     \label{fig:schemaMRAC}
 \end{figure}
 
@@ -300,4 +309,16 @@ La commande adaptative à référence de modèle (MRAC) utilise un modèle de r�
 \todo{Quelques lignes sur les contributions dans paparazzi et am32}
 Faire un schéma des composants avec nos contributions
 
+\begin{figure}[ht!]
+    \centerline{
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\columnwidth]{figures/arch_materiel.png}}
+    \caption{Architecture d'un autopilote et son environnement.}
+    \label{fig:schemaComposent}
+\end{figure}
+ESC AM32
+Servo STS3032
+Dshot bidirectionnel
+
+\section{Conclusion}
 \todo{Conclusion }
+Le domaine des drones convertible est vaste et chaque architecture cherche à répondre à une mission. Les diverses complexités engendrées sont autant de challenges pour assurer la stabilité du drone. Nous allons donc nous focaliser sur un drone \textit{tailsitter} et plus précisément sa modélisation dans le but de comprendre les effets des perturbations sur sa dynamique.
