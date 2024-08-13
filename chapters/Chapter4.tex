@@ -6,7 +6,9 @@
 \label{sec:motivation3DOF}
 Des simulations en boucle fermée avec le contrôleur \eqref{eq:u_hybrid} développé dans \ref{sec:ctrl_hyste} montrent qu'en présence d'un vent horizontal constant dans le plan $(x_{[b]},z_{[b]})$, le drone modifie son angle de tangage. Ce comportement a également été observé lors d'essais en soufflerie avec le dispositif expérimental \cite{olszaneckibarthHal-02542982}. Intuitivement, une réduction de l'angle d'attaque entraîne une diminution de la surface exposée au vent, de manière à réduire la force de traînée, ce qui a une forte incidence sur la position. Dans le même temps, le flux d'air dû au vent constant génère une portance, compensée par une réduction de la poussée de l'hélice et une réduction conséquente de la consommation du drone. L'objectif de la maquette décrite ici est d'évaluer expérimentalement l'effet du vent sur le dispositif DarkO.
 
-\todo{Explication de la non mesure du vent}
+De plus, il faut noter que le changement de l'angle d'attaque du drone a un impact sur la mesure du vent. Comme la sonde de Pitot est fixé sur le corps du drone, cette dernière se trouve être en rotation lors de la transition. On comprend donc que la mesure du vent ne sera valide qu'en vol d'avancement, à haute vitesse. En vol stationnaire ou lors de la transition, nous n'avons pas de mesure du vent, ni des rafales impactant le drone.
+
+Nous allons donc proposer dans ce chapitre une méthode de commande n'utilisant pas de mesure de vent pour stabiliser le drone à une position de l'espace. Toutefois, nous commencerons par une stabilisation longitudinale sur une dynamique à trois degrés de liberté pour tester notre loi de commande.
 
 \section{Présentation de la maquette expérimentale}
 \label{sec:test_bench}
@@ -19,13 +21,12 @@ Le prototype développé comprend des pièces imprimées en 3D, en Onyx et PLA  
 Comme décrit dans la section \ref{sec:motivation3DOF}, nous souhaitons représenter et étudier le degré de liberté de l'axe $y_{\text{b}}$ du drone DarkO. Le tube principal en carbone reliant les deux ailes est utilisé comme axe de rotation. Ce tube est fixé sur deux roulements espacés de \SI{28.5}{\milli\meter} afin d'obtenir une fixation solide de l'ensemble. Cet axe de rotation est équipé d'un codeur optique rotatif en quadrature pour mesurer précisément l'orientation de l'appareil. L'avantage de ce capteur est qu'il ne produit pas de couple résistant sur l'axe de rotation. Ce codeur offre 4000 impulsions par tour, ce qui donne une résolution de $\SI{0.09}{\degree}/pulse$.
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=0.8\columnwidth]{figures/MontageSupport2.PNG}
+    \includegraphics[width=0.8\columnwidth]{figures/MontageSupport2.png}
     \caption{Montage à un degré de liberté.}
     \label{fig:rotation}
 \end{figure} 
-\todo{traduire}
 
-Comme le montre la figure \ref{fig:rotation}, l'indexeur et le support sont percés de manière à ce que la rotation puisse être bloquée à des positions connues ($0^\circ$, $90^\circ$, etc.) par une vis sur l'indexeur qui s'insère dans les trous du support. Le verrouillage de l'appareil permet une initialisation correcte de l'encodeur incrémental. Le verrouillage permet également de placer l'appareil dans des positions exactes spécifiques afin d'identifier les coefficients aérodynamiques. 
+Comme le montre la figure \ref{fig:rotation}, l'indexeur et le support sont percés pour que la rotation puisse être bloquée à des positions connues ($0^\circ$, $90^\circ$, etc.) par une vis sur l'indexeur qui s'insère dans les trous du support. Le verrouillage de l'appareil permet une initialisation correcte de l'encodeur incrémental. Le verrouillage permet également de placer l'appareil dans des positions exactes spécifiques afin d'identifier les coefficients aérodynamiques. 
 
 Le mécanisme est également équipé d'un capteur de forces et de moments à 6 degrés de liberté (DOF), qui permet de mesurer la force exercée sur le dispositif expérimental par le support. Le banc d'essai expérimental est également équipé d'un fil chaud pour mesurer la vitesse de l'air affectant la maquette. 
 
@@ -69,7 +70,7 @@ La vitesse et la position transitoire du drone sont ensuite obtenues par intégr
 Dans la section \ref{sec:ctrl_hyste}, nous avons proposé un bouclage proportionnel stabilisant une position de vol stationnaire en l'absence de vent (sans perturbation). Nous proposons ici une extension incluant une action intégrale, adaptée au fonctionnement avec une perturbation non mesurée représentée par un vent constant. L'objectif est de stabiliser le drone à la position de référence, en rejetant une perturbation de vent constant inconnue.
 
 \subsection{Description du schéma de contrôle}
-Nous expérimentons la situation avec le vent agissant uniquement le long de l'axe $x_{i}$, avec le drone orienté vers le vent, c'est-à-dire avec des angles de roulis et de lacet nuls. Dans cette configuration, le vent n'agit que sur la vitesse linéaire le long des axes $x_{b}$ et $z_{b}$, et ne génère qu'un moment autour de l'axe $y_{b}$. Un examen attentif de la commande et des matrices d'entrée des perturbations $F$, $M$ dans \eqref{eq:FandM} suggère une architecture de commande efficace pour rejeter une perturbation constante. En effet, les élevons et les hélices peuvent être utilisés symétriquement pour générer respectivement un moment autour de l'axe $y_{b}$ et une force le long de l'axe $x_{b}$, compensant ainsi l'effet de la perturbation. Néanmoins, il reste une force le long de l'axe $z_{b}$ à compenser et une action intégrale peut converger asymptotiquement vers la force désirée, même avec une perturbation du vent non mesurée $\boldsymbol{w}$. Nous pouvons ainsi stabiliser le drone à une position de vol stationnaire, différente de l'équilibre sans vent. La solution de contrôle exploite le degré de liberté de l'angle de tangage pour compenser l'effet du vent.
+Nous expérimentons la situation avec le vent agissant uniquement le long de l'axe $x_{i}$, avec le drone orienté vers le vent, c'est-à-dire avec des angles de roulis et de lacet nuls. Dans cette configuration, le vent n'agit que sur la vitesse linéaire le long des axes $x_{b}$ et $z_{b}$, et ne génère qu'un moment autour de l'axe $y_{b}$. Un examen attentif de la commande et des matrices d'entrée des perturbations $\boldsymbol{F}$, $\boldsymbol{M}$ dans \eqref{eq:FandM} suggère une architecture de commande efficace pour rejeter une perturbation constante. En effet, les élevons et les hélices peuvent être utilisés symétriquement pour générer respectivement un moment autour de l'axe $y_{b}$ et une force le long de l'axe $x_{b}$, compensant ainsi l'effet de la perturbation. Néanmoins, il reste une force le long de l'axe $z_{b}$ à compenser et une action intégrale peut converger asymptotiquement vers la force désirée, même avec une perturbation du vent non mesurée $\boldsymbol{w}$. Nous pouvons ainsi stabiliser le drone à une position de vol stationnaire, différente de l'équilibre sans vent. La solution de contrôle exploite le degré de liberté de l'angle de tangage pour compenser l'effet du vent.
 
 \begin{figure}[ht!]
     \centering
@@ -77,42 +78,35 @@ Nous expérimentons la situation avec le vent agissant uniquement le long de l'a
     \caption{Schéma de commande linéaire, proportionnel-intégral.}
     \label{fig:commande_int3DOF}
 \end{figure}
-Le contrôleur proposé, représenté sur la figure \ref{fig:commande_int3DOF}, correspond à
-\todo{Améliorer les équations} 
+Le contrôleur proposé, représenté sur la figure \ref{fig:commande_int3DOF}, correspond à :
+\begin{subequations}
     \begin{align}
-        \dot{x_{c}} &= H(y-\begin{bmatrix}r_{p}\\\mathbb{0}_{8\times 1} \end{bmatrix}),\\
-        y &= S x,\\
-        u &= \Sigma x_{c} + K(y-\begin{bmatrix}r_{p}\\\mathbb{0}_{8\times 1} \end{bmatrix}),
-    \end{align}
-    \begin{align}
-        S =\begin{bmatrix} \mathbb{I}_{7} &  \mathbb{0}_{7\times 5} \\
+        \label{eq:ctrl3dof}
+        \dot{\boldsymbol{x}_{c}} = \boldsymbol{H}(\boldsymbol{y}-\begin{bmatrix}\boldsymbol{r}_{p}\\\mathbb{0}_{8\times 1} \end{bmatrix}), \quad
+        \boldsymbol{y} = \boldsymbol{S} \boldsymbol{x},\quad
+        \boldsymbol{u} = \Sigma \boldsymbol{x}_{c} + \boldsymbol{K}(\boldsymbol{y}-\begin{bmatrix}\boldsymbol{r}_{p}\\\mathbb{0}_{8\times 1} \end{bmatrix}),\\
+        \boldsymbol{S} =\begin{bmatrix} \mathbb{I}_{7} &  \mathbb{0}_{7\times 5} \\
          \mathbb{0}_{4\times 8} &  \mathbb{I}_{4}
-          \end{bmatrix}, 
+          \end{bmatrix}, \quad
+          \boldsymbol{\Sigma} = \begin{bmatrix} 1 & 1 & 0 & 0\\ 0 & 0 & 1 & 1\end{bmatrix}^\top,
     \end{align}
-    \begin{align}
-        \Sigma = \begin{bmatrix} 1 & 1 & 0 & 0\\ 0 & 0 & 1 & 1\end{bmatrix}^\top,
-    \end{align}
+\end{subequations}
+où $\boldsymbol{x}_{c} \in \mathbb{R}^{2}$ est l'état de l'intégrateur ; $\boldsymbol{r}_{p} \in \mathbb{R}^{3}$ est la référence constante comprenant une position cible pour le mouvement de translation ; $\boldsymbol{S}$ est une matrice de sélection de sortie, qui supprime la composante de l'angle de tangage de la sortie mesurée (n'affectant que la linéarisation par quaternion) pour former $\boldsymbol{y}$ ; $\boldsymbol{\Sigma}$ est une matrice d'allocation d'entrée qui permet d'affecter la première composante de l'état de l'intégrateur à la commande du moteur et la seconde composante à la commande de la gouverne de profondeur. $\boldsymbol{K}$, $\boldsymbol{H}$ sont des gains constants à sélectionner pour que la matrice linéaire de la boucle fermée $\boldsymbol{A}_{cl}$ caractérisant la boucle fermée linéaire soit Hurwitz, afin d'assurer la stabilisation avec la dynamique linéarisée liée au scénario sans vent \eqref{eq:withouwind}.
 
-où $x_{c} \in \mathbb{R}^{2}$ est l'état de l'intégrateur ; $r_{p} \in \mathbb{R}^{3}$ est la référence constante comprenant une position cible pour le mouvement de translation ; $S$ est une matrice de sélection de sortie, qui supprime la composante de l'angle de tangage de la sortie mesurée (n'affectant que la linéarisation par quaternion) pour former $y$ ; $\Sigma$ est une matrice d'allocation d'entrée qui permet d'affecter la première composante de l'état de l'intégrateur à la commande du moteur et la seconde composante à la commande de la gouverne de profondeur. $K$, $H$ sont des gains constants à sélectionner pour que la matrice linéaire de la boucle fermée $A_{cl}$ caractérisant la boucle fermée linéaire soit Hurwitz, afin d'assurer la stabilisation avec la dynamique linéarisée liée au scénario sans vent \eqref{eq:withouwind}.
-
-
-
-
-De manière synthétique, la matrice \eqref{eq:close_matrix} décrit la boucle fermée illustrée à la Fig.~\ref{fig:commande_int3DOF} : un retour de sortie avec 11 sorties, comprenant les trois positions, les trois vitesses linéaires, deux des trois angles ($\epsilon_{1}$ et $\epsilon_{3}$) et les trois vitesses angulaires.
+De manière synthétique, la matrice \eqref{eq:close_matrix} décrit la boucle fermée illustrée à la Fig.~\ref{fig:commande_int3DOF} avec \eqref{eq:ctrl3dof} : un retour de sortie avec 11 sorties, comprenant les trois positions, les trois vitesses linéaires, deux des trois angles ($\epsilon_{1}$ et $\epsilon_{3}$) et les trois vitesses angulaires.
 \begin{align} \label{eq:close_matrix}
     \begin{gathered}
-        A_{cl} \!= \!
-        \begin{bmatrix}A & \mathbb{0}_{12\times 2} \\ HS & \mathbb{0}_{2\times 2}\end{bmatrix} \!- \!\begin{bmatrix}G \\ \mathbb{0}_{2\times 4}\end{bmatrix} \left( K \begin{bmatrix}S & \mathbb{0}_{11\times 2}\end{bmatrix} -  \begin{bmatrix}\mathbb{0}_{4\times 12} & \Sigma \end{bmatrix}\right),
+        \boldsymbol{A}_{cl} \!= \!
+        \begin{bmatrix}\boldsymbol{A} & \mathbb{0}_{12\times 2} \\ \boldsymbol{H}\boldsymbol{S} & \mathbb{0}_{2\times 2}\end{bmatrix} \!- \!\begin{bmatrix}\boldsymbol{G} \\ \mathbb{0}_{2\times 4}\end{bmatrix} \left( \boldsymbol{K} \begin{bmatrix}\boldsymbol{S} & \mathbb{0}_{11\times 2}\end{bmatrix} -  \begin{bmatrix}\mathbb{0}_{4\times 12} & \boldsymbol{\Sigma} \end{bmatrix}\right),
     \end{gathered}
 \end{align}
-Cette structure peut être considérée comme une solution proportionnelle-intégrale MIMO \nomenclature[]{\(MIMO\)}{Entrées et sorties multiples  (\textit{Multiple-Input Multiple-Output})} résultant d'une observation attentive de la dynamique linéarisée du drone, ce qui permet un nombre minimal d'intégrateurs dans le contrôleur. Ce contrôle devrait permettre de rejeter les perturbations constantes tout en ayant une robustesse satisfaisante. Le gain $K$ correspond au terme proportionnel et le gain $H$ pondère le terme intégral, induisant une convergence vers la cible. La matrice d'allocation $\Sigma$ conduit à une utilisation symétrique des hélices et des ailerons. Il faut alors ajuster $K$ et $H$ pour obtenir un compromis satisfaisant entre robustesse et rejet des perturbations. Nous mettons en œuvre une synthèse multiobjectifs basée sur une méthode d'optimisation $H_{\infty}$, décrite ci-après.
-\todo{Modifier la commande pour expliquer la commande à 3 DOF}
+Cette structure peut être considérée comme une solution proportionnelle-intégrale MIMO \nomenclature[]{\(MIMO\)}{Entrées et sorties multiples  (\textit{Multiple-Input Multiple-Output})} résultant d'une observation attentive de la dynamique linéarisée du drone, ce qui permet un nombre minimal d'intégrateurs dans le contrôleur. Ce contrôle devrait permettre de rejeter les perturbations constantes tout en ayant une robustesse satisfaisante. Le gain $\boldsymbol{K}$ correspond au terme proportionnel et le gain $\boldsymbol{H}$ pondère le terme intégral, induisant une convergence vers la cible. La matrice d'allocation $\boldsymbol{\Sigma}$ conduit à une utilisation symétrique des hélices et des ailerons. Il faut alors ajuster $\boldsymbol{K}$ et $\boldsymbol{H}$ pour obtenir un compromis satisfaisant entre robustesse et rejet des perturbations. Nous mettons en œuvre une synthèse multiobjectifs basée sur une méthode d'optimisation $H_{\infty}$, décrite ci-après.
 
 \subsection{Optimisation $H_{\infty}$}
  \label{sec:h_inf3DOF}
-Pour effectuer une sélection robuste de $K$ et $H$, nous caractérisons d'abord plusieurs fonctions de transfert dans la figure \ref{fig:commande_int3DOF}.
+Pour effectuer une sélection robuste de $\boldsymbol{K}$ et $\boldsymbol{H}$, nous caractérisons d'abord plusieurs fonctions de transfert dans la figure \ref{fig:commande_int3DOF}.
 
-La sortie de mesure $y$ est utilisée pour la rétroaction, l'entrée $u$ est la somme de l'entrée intégrale $\Sigma x_{c}$ et de l'action proportionnelle $K e$. La sortie $z$ correspond aux signaux de performance de sortie à contrôler ($e$, $w$, $u$, $y$, $r_{p}$). Grâce aux fonctions de pondération $W=\diag (W_{1},..., W_{4})$, la conception de $H$ et $K$ vise à rejeter une perturbation ou un échelon à basse fréquence $w$ agissant sur $y$. L'objectif de la conception est d'amener $y$ à zéro, malgré la perturbation à basse fréquence sur $w$.
+La sortie de mesure $\boldsymbol{y}$ est utilisée pour la rétroaction, l'entrée $\boldsymbol{u}$ est la somme de l'entrée intégrale $\boldsymbol{\Sigma} \boldsymbol{x}_{c}$ et de l'action proportionnelle $\boldsymbol{K} \boldsymbol{e}$. La sortie $\boldsymbol{z}$ correspond aux signaux de performance de sortie à contrôler ($\boldsymbol{e}$, $\boldsymbol{w}$, $\boldsymbol{u}$, $\boldsymbol{y}$, $\boldsymbol{r}_{p}$). Grâce aux fonctions de pondération $W=\diag (W_{1},..., W_{4})$, la conception de $\boldsymbol{H}$ et $\boldsymbol{K}$ vise à rejeter une perturbation ou un échelon à basse fréquence $\boldsymbol{w}$ agissant sur $\boldsymbol{y}$. L'objectif de la conception est d'amener $\boldsymbol{y}$ à zéro, malgré la perturbation à basse fréquence sur $\boldsymbol{w}$.
 
 
 Plus précisément, les constantes de pondération sont réglées comme suit
@@ -124,19 +118,19 @@ Plus précisément, les constantes de pondération sont réglées comme suit
 \end{align}
 
 \begin{align*} \label{eq:pb_optim}
-&\min_{C}\quad \begin{Vmatrix}
-    W_{1} T_{r \rightarrow \epsilon}(P,C)\\
-    W_{2} T_{d \rightarrow u}(P,C)\\
-    W_{3} T_{r \rightarrow u}(P,C)\\
-    W_{4} T_{w \rightarrow y}(P,C)
-    \end{Vmatrix}_{\infty}, \text{ sous condition que } \\ &C \in \mathbb{R}^{11 \times 4} \text{ stabilise } P \text{ en interne.} \numberthis
+&\min_{C}\quad \begin{vmatrix}
+    \|W_{1} T_{\boldsymbol{r} \rightarrow \boldsymbol{\epsilon}}(P,C)\|\\
+    \|W_{2} T_{\boldsymbol{d} \rightarrow \boldsymbol{u}}(P,C)\|\\
+    \|W_{3} T_{\boldsymbol{r} \rightarrow \boldsymbol{u}}(P,C)\|\\
+    \|W_{4} T_{\boldsymbol{w} \rightarrow \boldsymbol{y}}(P,C)\|
+    \end{vmatrix}_{\infty}, \text{ sous condition que } \\ &C \in \mathbb{R}^{11 \times 4} \text{ stabilise } P \text{ en interne.} \numberthis
 \end{align*}
 
-Nous avons résolu \eqref{eq:pb_optim} en utilisant le logiciel {\tt Systune} \cite{1576856}. Basé sur l'optimisation non lisse, {\tt Systune} traite plusieurs scénarios non convexes, tels que l'architecture de contrôle structurée où nous optimisons les matrices de gain $K$, $H$. L'algorithme d'optimisation renvoie la sélection optimisée de suivante :
+Nous avons résolu \eqref{eq:pb_optim} en utilisant le logiciel {\tt Systune} \cite{1576856}. Basé sur l'optimisation non lisse, {\tt Systune} traite plusieurs scénarios non convexes, tels que l'architecture de contrôle structurée où nous optimisons les matrices de gain $\boldsymbol{K}$, $\boldsymbol{H}$. L'algorithme d'optimisation renvoie la sélection optimisée de suivante :
 
 \begin{align}\label{eq:HK}
 \begin{bmatrix}
-H\\ \hline K 
+    \boldsymbol{H}\\ \hline \boldsymbol{K }
 \end{bmatrix} = \smallmat{
 \shortminus1.902 & 0 & 7.201 & \shortminus9.043  & 0 & 33.244 & 0 & 0 & 0 & 4.696  & 0 \\ 
 0.425 & 0 & \shortminus1.620 & 2.024  & 0 & \shortminus7.480 & 0 & 0 & 0 & \shortminus1.045  & 0 \\  \hline
@@ -146,7 +140,7 @@ H\\ \hline K
 0.217  & 0 & \shortminus0.164  & 1.074 & 0 & \shortminus0.527 & 0 & 0 & 0 & \shortminus0.773 & 0  
 }.
 \end{align}
-Nous obtenons une abscisse spectrale en boucle fermée pour $A_{cl}$ dans \eqref{eq:close_matrix} valant $\alpha = -0.2381$.
+Nous obtenons une abscisse spectrale en boucle fermée pour $\boldsymbol{A}_{cl}$ dans \eqref{eq:close_matrix} valant $\alpha = -0.2381$.
 
 \section{Résultats}
 \label{sec:exp3DOF}

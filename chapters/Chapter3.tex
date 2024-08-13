@@ -6,8 +6,9 @@
 
 
 \section{Motivation}
-En prenant en compte les capacités d'un \textit{tailsitter}, il est légitime de se poser la question du mode de vol devant être utilisé pour rejoindre un point. Effectivement, le drone a la possibilité de se déplacer en stationnaire ou bien en vol d'avancement. Lors d'un déplacement en stationnaire, le drone est vertical donc il se retrouve fortement sujet aux perturbations. Il est donc nécessaire d'avoir une grande région d'attraction autour de la position d'équilibre pour assurer un rejet des perturbations et une stabilisation.
-\todo{ajouter un texte sur le vol d'avancement}
+En prenant en compte les capacités d'un \textit{tailsitter}, il est légitime de se poser la question du mode de vol devant être utilisé pour rejoindre un point. Effectivement, le drone a la possibilité de se déplacer en stationnaire ou bien en vol d'avancement. Lors d'un déplacement en stationnaire, le drone est vertical donc il se retrouve fortement sujet aux perturbations. Il est donc nécessaire d'avoir une grande région d'attraction autour de la position d'équilibre pour assurer un rejet des perturbations et une stabilisation. Lors d'un vol d'avancement, le drone se trouve dans une configuration proche d'une aile volante. Ainsi, il se trouve moins perturbé par les turbulences, comme la surface projetée d'aile impactée par le flux d'air est plus faible. Toutefois, le drone doit voler à une vitesse assez importante pour être dans cette configuration donc il ne peut pas maintenir une position, mais seulement effectué des cercles autours. 
+
+Nous nous concentrons dans ce chapitre uniquement au vol stationnaire.
 
 Nous avons donc proposé une stratégie de commande pour stabiliser le drone en position stationnaire. Cette stratégie repose sur une dynamique discrète définissant l'usage d'une première loi de commande non-linéaire présentée dans \cite{2020e-MicCenZacFra} et qui fournit une grande région d'attraction et d'une seconde loi basée sur la dynamique linéarisée et fournissant une agressivité supérieure pour réaliser l'approche finale. Les deux contrôleurs sont réunis par un mécanisme hybride qui permet de conserver les performances en régime permanent de la conception linéarisée, avec la grande région d'attraction garantie par la conception non linéaire. Notre solution est testée en simulant le modèle non linéaire complet.
 
@@ -16,44 +17,43 @@ Dans cette partie, nous allons nous concentrer sur la stabilisation stationnaire
 
 
 \section{Contrôleur par retour d'état non-linéaire}
-\todo{bold}
-Nous illustrons dans cette section une loi de contrôle dynamique non linéaire inspirée du résultat de \cite{2020e-MicCenZacFra}. Pour que cette loi de contrôle non linéaire soit applicable, les matrices $F$ et $M$ mentionnées dans \eqref{eq:withouwind} doivent permettre de définir une direction dite de zéro moment $\boldsymbol{\bar u} \in \real^4$ garantissant
-$|F\boldsymbol{\bar u}| = 1$ et $M \boldsymbol{\bar u}=0$, et la matrice inverse à droite $M^r$ de $M$ doit satisfaire $M M^r = I$ et $FM^r=0$. 
+Nous illustrons dans cette section une loi de contrôle dynamique non linéaire inspirée du résultat de \cite{2020e-MicCenZacFra}. Pour que cette loi de contrôle non linéaire soit applicable, les matrices $\boldsymbol{F}$ et $\boldsymbol{M}$ mentionnées dans \eqref{eq:withouwind} doivent permettre de définir une direction dite de zéro moment $\boldsymbol{\bar u} \in \real^4$ garantissant
+$|\boldsymbol{F}\boldsymbol{\bar u}| = 1$ et $\boldsymbol{M} \boldsymbol{\bar u}=0$, et la matrice inverse à droite $\boldsymbol{M}^r$ de $\boldsymbol{M}$ doit satisfaire $\boldsymbol{M} \boldsymbol{M}^r = \mathbb{I}_3$ et $\boldsymbol{F}\boldsymbol{M}^r=0$. 
 
-Dans notre cas, nous constatons que la direction du moment zéro $\boldsymbol{\bar u} = \frac{\sqrt{2}}{2a_{\text{f}}}\smallmat{1&1&0&0}^\top$ satisfait les conditions, alors que le fait que $\rank(F) = 2$ (donc que le noyau de $F$ ($\ker F$) soit de dimension 2) rend impossible l'obtention de la matrice inverse à droite $M^r$ de $M$, laquelle est entièrement contenue dans $\ker F$.
+Dans notre cas, nous constatons que la direction du moment zéro $\boldsymbol{\bar u} = \frac{\sqrt{2}}{2a_{\text{f}}}\smallmat{1&1&0&0}^\top$ satisfait les conditions, alors que le fait que $\rank(\boldsymbol{F}) = 2$ (donc que le noyau de $\boldsymbol{F}$ ($\ker \boldsymbol{F}$) soit de dimension 2) rend impossible l'obtention de la matrice inverse à droite $\boldsymbol{M}^r$ de $\boldsymbol{M}$, laquelle est entièrement contenue dans $\ker \boldsymbol{F}$.
 
-Nous déterminons $M^r$ en paramétrant (de manière conservatrice) les  pseudo-inverses à droite de $M$ comme $M^r := KM^\top ( MKM^\top)^{-1}$, où la matrice $K \in \real^{4\times 4}$ est symétrique et satisfait $MKM^\top \geq I$ (pour assurer l'inversibilité). Avec ce paramétrage, le but est de minimiser la norme de $FM^r = F KM^\top ( MKM^\top)^{-1}$, ce qui est bien réalisé en minimisant la norme de $F KM^\top$, du fait que la contrainte sur $MKM^\top \geq I$ garantisse que le facteur $( MKM^\top)^{-1}$ ait une norme plus petite que 1.
+Nous déterminons $\boldsymbol{M}^r$ en paramétrant (de manière conservatrice) les  pseudo-inverses à droite de $\boldsymbol{M}$ comme $\boldsymbol{M}^r := \boldsymbol{K}\boldsymbol{M}^\top ( \boldsymbol{M}\boldsymbol{K}\boldsymbol{M}^\top)^{-1}$, où la matrice $\boldsymbol{K} \in \real^{4\times 4}$ est symétrique et satisfait $\boldsymbol{M}\boldsymbol{K}\boldsymbol{M}^\top \geq \mathbb{I}_3$ (pour assurer l'inversibilité). Avec ce paramétrage, le but est de minimiser la norme de $\boldsymbol{F}\boldsymbol{M}^r = \boldsymbol{F} \boldsymbol{K}\boldsymbol{M}^\top ( \boldsymbol{M}\boldsymbol{K}\boldsymbol{M}^\top)^{-1}$, ce qui est bien réalisé en minimisant la norme de $\boldsymbol{F} \boldsymbol{K}\boldsymbol{M}^\top$, du fait que la contrainte sur $\boldsymbol{M}\boldsymbol{K}\boldsymbol{M}^\top \geq \mathbb{I}_3$ garantisse que le facteur $( \boldsymbol{M}\boldsymbol{K}\boldsymbol{M}^\top)^{-1}$ ait une norme plus petite que 1.
 En effectuant un complément de Schur, cette minimisation est obtenue en résolvant le programme semi-défini suivant :
 \begin{align*}
-&  \min_{K, \kappa} \kappa, \; \mbox{subject to:}
-\;  M K M^\top\! \geq \!I, \; 
+&  \min_{\boldsymbol{K}, \kappa} \kappa, \; \mbox{subject to:}
+\;  \boldsymbol{M} \boldsymbol{K} \boldsymbol{M}^\top\! \geq \!\mathbb{I}_3, \; 
   \begin{bmatrix}
-  \kappa I  &\! F K M^\top \\ 
-   M K^\top F^\top &\! \kappa I
+  \kappa \mathbb{I}_3  &\! \boldsymbol{F} \boldsymbol{K} \boldsymbol{M}^\top \\ 
+  \boldsymbol{M} \boldsymbol{K}^\top \boldsymbol{F}^\top &\! \kappa \mathbb{I}_3
   \end{bmatrix}\! \geq\! 0,
 \end{align*}
-lequel minimise $\kappa$ tout en assurant $F K M^\top M K^\top F^\top \leq \kappa^2 I$.  En résolvant cette optimisation, on obtient, pour les matrices spécifiques considérées,
+lequel minimise $\kappa$ tout en assurant $\boldsymbol{F} \boldsymbol{K} \boldsymbol{M}^\top \boldsymbol{M} \boldsymbol{K}^\top \boldsymbol{F}^\top \leq \kappa^2 \mathbb{I}_3$.  En résolvant cette optimisation, on obtient, pour les matrices spécifiques considérées,
 \begin{align*}
-  K \!=\! \smallmat{  0   &   -737   &    171   &   -171\\
+    \boldsymbol{K} \!=\! \smallmat{  0   &   -737   &    171   &   -171\\
       -737  &  0   &  -171  &     171\\
        171  &    -171    &   1583.5    &   -43.73\\
       -171  &     171    &   -43.73    &   1583.5}\!, \,
-  M^r \!=\! \smallmat{0     &          0   &   -3.19\\
+      \boldsymbol{M}^r \!=\! \smallmat{0     &          0   &   -3.19\\
                  0      &         0   &    3.19\\
                -4.51    &  -27.75    &   -1.48\\
                 4.51    &  -27.75    &    1.48}
 \end{align*}
 conduisant à $\kappa = 39,7$. Avec cette sélection basée sur l'optimalité, la conception dynamique non linéaire de \cite{2020e-MicCenZacFra} peut être appliquée efficacement en obtenant des réponses qui sont presque impossibles à distinguer du cas entièrement découplé 
-$FM^r=0$. Il convient de noter qu'une approche similaire, négligeant essentiellement les termes supplémentaires agissant sur la dynamique de translation, est également suggérée dans l'étude \cite{hamel_minhduc}. 
-Sur la base du choix de $M^r$ et de $\boldsymbol{\bar u}$ décrit ci-dessus, en appliquant la loi de commande de \cite[eqn (19)]{2020e-MicCenZacFra}, l'entrée $\boldsymbol{u}$ devient :
+$\boldsymbol{F}\boldsymbol{M}^r=0$. Il convient de noter qu'une approche similaire, négligeant essentiellement les termes supplémentaires agissant sur la dynamique de translation, est également suggérée dans l'étude \cite{hamel_minhduc}. 
+Sur la base du choix de $\boldsymbol{M}^r$ et de $\boldsymbol{\bar u}$ décrit ci-dessus, en appliquant la loi de commande de \cite[eqn (19)]{2020e-MicCenZacFra}, l'entrée $\boldsymbol{u}$ devient :
 \begin{align}
 \label{eq:u_nonlin}
-    \boldsymbol{u} = \boldsymbol{u_{\text{nl}}} := M^r \boldsymbol{\tau_{r}} + \boldsymbol{\bar u} \boldsymbol{f},
+    \boldsymbol{u} = \boldsymbol{u_{\text{nl}}} := \boldsymbol{M}^r \boldsymbol{\tau_{r}} + \boldsymbol{\bar u} \boldsymbol{f},
 \end{align}
 où $\boldsymbol{\tau_{r}}$ et $\boldsymbol{f}$ sont fournis par le contrôleur proposé dans \cite{2020e-MicCenZacFra}.
 
 
-La sélection de $M^r$ basée sur l'optimalité peut être interprétée de manière intéressante lorsqu'on observe le produit $M^r \boldsymbol{\tau_{r}} = M^r \smallmat{\tau_{r,x} & \tau_{r,y} & \tau_{r,z}}^top$. 
+La sélection de $\boldsymbol{M}^r$ basée sur l'optimalité peut être interprétée de manière intéressante lorsqu'on observe le produit $\boldsymbol{M}^r \boldsymbol{\tau_{r}} = \boldsymbol{M}^r \smallmat{\tau_{r,x} & \tau_{r,y} & \tau_{r,z}}^top$. 
 
 Premièrement, pour obtenir un moment $\tau_{r,z}$ autour de l'axe $z_{\text{b}}$, nous utilisons principalement l'action différentielle de la poussée ; deuxièmement, un moment $\tau_{r,y}$ autour de l'axe $y_{\text{b}}$ est généré par une utilisation symétrique des deux volets, avec une grande efficacité ; enfin, un moment $\tau_{r,x}$ autour de l'axe $x_{\text{b}}$ provient d'une utilisation différentielle des volets. 
 
