@@ -3,6 +3,7 @@
 \chapter{Modélisation et commande d'un drone à aile libre rotation libre}
 \minitoc
 \label{chap:colibri}
+\todo{bold}
 
 \section{Motivation}
 \label{sec:motivationcolibri}
@@ -63,7 +64,7 @@ Certaines des dimensions caractéristiques sont indiquées dans la Table~\ref{ta
     \label{tab:pars_colibri}
 \end{table}
 
-
+\todo{Doit-on expliquer l'origine de cette équation}
 La modélisation est basée sur les résultats de \cite[Section 2.15]{udwadia-phohomsiri}. L'algorithme de calcul des matrices $M$, $A$, $Q$ et $B$ se trouve dans \cite{udwadia-schutte}, qui nous fournit les équations de mouvement d'un système multicorps contraint : 
 \begin{align}
 \label{eq:udwadia}
@@ -90,6 +91,8 @@ D'après \cite{Tangirala2015}, nous avons une définition d'une réalisation min
 
 Le vecteur d'état global est $(x,v) \in \real^{28}$ avec $x=(p_{\text{W}},~q_{\text{W}},~p_{\text{F}},~q_{\text{F}}) \in \real^{14}$ et $v=(v_{\text{W}},~\dot{q}_{\text{W}},~v_{\text{F}},~\dot{q}_{\text{F}}) = (\dot{p}_{\text{W}},~\dot{q}_{\text{W}},~\dot{p}_{\text{F}},~\dot{q}_{\text{F}})=\dot{x} \in \real^{14}$. Nous avons $v_{\text{W}} = \dot{p}_{\text{W}} \in \real^{3}$ qui représente la vitesse linéaire de l'aile dans le repère inertiel ; $\dot{q}_{\text{W}} \in \real^{4}$  est la dérivée du quaternion. $q_{\text{W}} \in \real^{4}$ représentant l'orientation de l'aile ; $v_{\text{F}} =p_{\text{F}} \in \real^{3}$  est la vitesse linéaire du fuselage dans le repère inertiel et $\dot{q}_{\text{F}} \in \real^{4}$  est la dérivée du quaternion. $q_{\text{F}} \in \real^{4}$ représentant l'orientation du fuselage. Nous observons que le vecteur d'état n'est pas minimal d'après la définition \ref{def:reaMini}. Effectivement, le système possède sept degrés de liberté (six degrés pour l'aile et un degré pour le fuselage) et nous le représentons avec un vecteur d'état de dimension quatorze.
 
+Nous devons aussi définir le vecteur de commande de dimension huit $u = (u_{1},u_{2},u_{3},u_{4},\delta_{\text{l}},\delta_{\text{r}},u_{\text{tail}},\delta_{\text{tail}})$, où les actionneurs sont repéré en vert et rose sur la figure \ref{fig:world_body}. Les actionneurs verts sont des groupes moteurs-hélices et les actionneurs roses sont des surfaces aérodynamiques. 
+
 Il convient de noter que la vitesse angulaire $\omega \in \real^{3}$ peut être obtenue à partir de la dérivée du quaternion $\dot{q}$ en utilisant l'équation \cite[équation (2.7)]{udwadia-schutte} rappelée ici : 
 \begin{align*}
     \omega = H(q) \dot{q} 
@@ -115,18 +118,79 @@ On en déduit, avec homogénéité, $\dot{L}_{O_{\text{F}}^{\text{W}}} = \sum_{i
 \end{align}
 où nous avons noté $H_{\text{W}} = H(q_{\text{W}})$, $H_{\text{F}} = H(q_{\text{F}})$, et
 \begin{align}
+    \label{eq:Q}
     Q = \begin{bmatrix}
-            m_{\text{W}} g e_3 + R(q_{\text{W}}) F_{\text{b}}\\
-            -2\dot{H}_{\text{W}}^\top J_{\text{W}} \dot{H}_{\text{W}} \dot{q}_{\text{W}} + H_{\text{W}}^\top M_{\text{W}}\\
-            m_{\text{F}} g e_3 + R(q_{\text{F}}) F_{\text{F}}\\
-            -2\dot{H}_{\text{F}}^\top J_{\text{F}} \dot{H}_{\text{F}} \dot{q}_{\text{F}} + H_{\text{F}}^\top M_{\text{F}}\\
+            m_{\text{W}} g e_3 + R(q_{\text{W}}) F_{\text{W}}(x, u)\\
+            -2\dot{H}_{\text{W}}^\top J_{\text{W}} \dot{H}_{\text{W}} \dot{q}_{\text{W}} + H_{\text{W}}^\top M_{\text{W}}(x, u)\\
+            m_{\text{F}} g e_3 + R(q_{\text{F}}) F_{\text{F}}(u)\\
+            -2\dot{H}_{\text{F}}^\top J_{\text{F}} \dot{H}_{\text{F}} \dot{q}_{\text{F}} + H_{\text{F}}^\top M_{\text{F}}(u)\\
         \end{bmatrix} \in \real^{14},
 \end{align}
-% \todo{Details of forces and moments generated while the wing
-% transits its position should be given in detail as this is
-% the key distinct feature of this aircraft.}
 
-où $\dot{H}_{\text{W}}$ désigne $H(\dot{q}_{\text{W}})$, coïncidant avec la dérivée temporelle de $H(q_{\text{W}})$ et $\dot{H}_{\text{F}}$ désigne $H(\dot{q}_{\text{F}})$, coïncidant avec la dérivée temporelle de $H(q_{\text{F}})$. De plus, $F_{\text{b}}$ et $M_{\text{b}}$ représentent respectivement toutes les forces et tous les moments agissant sur l'aile. Les expressions de $M$ et $Q$ sont tirées de \cite[équations (45) et (57)]{lustosaHal-03035938} où est développée la $\phi$-théorie, paramétrage qui permet de soustraire les angles classiques d'incidence et de dérapage et d'éviter la singularité du vol stationnaire. 
+
+où $\dot{H}_{\text{W}}$ désigne $H(\dot{q}_{\text{W}})$, coïncidant avec la dérivée temporelle de $H(q_{\text{W}})$ et $\dot{H}_{\text{F}}$ désigne $H(\dot{q}_{\text{F}})$, coïncidant avec la dérivée temporelle de $H(q_{\text{F}})$. De plus, $F_{\text{W}}(x)$ et $M_{\text{b}}(x)$ représentent respectivement toutes les forces et tous les moments agissant sur l'aile. Leur expression est tirée de \cite[équations (45) et (57)]{lustosaHal-03035938} où est développée la $\phi$-théorie, paramétrage qui permet de soustraire les angles classiques d'incidence et de dérapage et d'éviter la singularité du vol stationnaire. De manière similaire aux équations \eqref{eq:Fbdarko} et \eqref{eq:Mbdarko} exprimant les forces et les moments agissant sur DarkO, nous pouvons exprimer $F_{\text{W}}(x)$ et $M_{\text{b}}(x)$ relatif à l'aile de Colibri.
+
+Chaque hélice génère une poussée $\boldsymbol{T}_i$ orientée dans la direction $-z{\text{W}}$ du repère de l'aile et un moment $\boldsymbol{N}_i$ selon le même axe :
+\begin{align}
+\label{eq:thrustcolibri}
+\boldsymbol{T}_{i} \!:=\! \begin{bmatrix} \tau_{i} \\ 0 \\ 0 \end{bmatrix} \!:=\!
+\begin{bmatrix} k_{\text{f}}\omega_{i}^{2} \\ 0 \\ 0 \end{bmatrix}\! , \;
+\boldsymbol{N}_{i} \!:=\! (-1)^{i}  \frac{k_{\text{m}} }{k_{\text{f}}}\boldsymbol{T}_{i}, \quad i=1,2,3,4,\text{tail} .
+\end{align}  
+
+La position de chaque élevon $\delta_i \in \real$ est assignée par un servomoteur qui impose un niveau d'efficacité (en termes de déviation du courant d'air) quantifié par deux matrices antisymétriques :
+\begin{align}
+\label{eq:elevons_efficiency_colibri}
+    \boldsymbol{\Delta}^{\text{f}}_{i} \!:=\! \begin{bmatrix} 0 & 0 & \xi_{\text{f}}\delta_{i} \\ 0 & 0 & 0 \\ -\xi_{\text{f}}\delta_{i} & 0 & 0 \end{bmatrix}\! ,\;
+    \boldsymbol{\Delta}^{\text{m}}_{i} \!:=\! \begin{bmatrix} 0 & 0 & \xi_{\text{m}}\delta_{i} \\ 0 & 0 & 0 \\ -\xi_{\text{m}}\delta_{i} & 0 & 0 \end{bmatrix} \!, \quad i=\text{l},\text{r}.
+\end{align}
+ Les paramètres constants $k_{\text{f}}$, $k_{\text{m}}$, $\xi_{\text{f}}$, $\xi_{\text{m}}$ apparaissant dans \eqref{eq:thrust} et \eqref{eq:elevons_efficiency} sont listés dans la Table~\ref{tab:pars_colibri}.
+
+ \todo{ajouter les parametres}
+
+Avec les quantités ci-dessus, nous pouvons nous inspiré de la dynamique donnée dans  \cite[eqns (97),~(98)]{lustosaHal-03035938} et exprimer $\boldsymbol{F}_{\text{W}}(x,u)$ et $\boldsymbol{M}_{\text{W}}(x,u)$ dans \eqref{eq:Q} comme :
+
+\begin{align}
+\nonumber
+\boldsymbol{F}_{\text{W}}(x,u) :={}&  \boldsymbol{T}_{1} + \boldsymbol{T}_{2} + \boldsymbol{T}_{3} + \boldsymbol{T}_{4} + \frac{S_{\text{wet}}}{4S_{\text{p}}} \boldsymbol{\Phi}^{\text{(fv)}} \Big( (\boldsymbol{\Delta}^{\text{f}}_1 - \mathbb{I}_{3} ) (\boldsymbol{T}_{1}+\boldsymbol{T}_{2}) + ( \boldsymbol{\Delta}^{\text{f}}_2 - \mathbb{I}_{3}) (\boldsymbol{T}_{3}+\boldsymbol{T}_{4})\Big) \\ 
+     \label{eq:FbColibri}
+    &+ \frac{1}{4} \rho S  \boldsymbol{\Phi}^{\text{(fv)}} \Big(\boldsymbol{\Delta}^{\text{f}}_1+ \boldsymbol{\Delta}^{\text{f}}_2 - 2 \mathbb{I}_{3} \Big) \lVert \boldsymbol{v_{\text{b}}} \rVert \boldsymbol{v_{\text{b}}}\\
+    \nonumber
+    &+ \frac{1}{4} \rho S \boldsymbol{\Phi}^{\text{(mv)}} \Big(\boldsymbol{\Delta}^{\text{f}}_1 + \boldsymbol{\Delta}^{\text{f}}_2 - 2\mathbb{I}_{3}\Big) \boldsymbol{B} \lVert \boldsymbol{v_{\text{b}}} \rVert  \boldsymbol{\omega}_{\text{b}}, 
+\end{align}
+\begin{align} 
+\label{eq:MbColibri}
+\boldsymbol{M}_{\text{W}}(x,u) :&=\boldsymbol{N}_{1} + \boldsymbol{N}_{2} + \boldsymbol{N}_{3} + \boldsymbol{N}_{4} +\skewsym{\smallm{p_x\\ p_{y1}\\ 0}} \boldsymbol{T}_{1} +\skewsym{\smallm{p_x\\ p_{y2}\\ 0}} \boldsymbol{T}_{2} + \skewsym{\smallm{p_x\\ - p_{y3}\\ 0}} \boldsymbol{T}_{3} + \skewsym{\smallm{p_x\\ - p_{y4}\\ 0}} \boldsymbol{T}_{4}\\
+    \nonumber
+  &- \frac{S_{\text{wet}}}{4S_{\text{p}}} \bigg( \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}} (\boldsymbol{\Delta}^{\text{m}}_1- \mathbb{I}_{3} ) + \skewsym{\smallm{0 \\ a_y \\ 0}} \boldsymbol{\Phi}^{\text{(fv)}} (\boldsymbol{\Delta}^{\text{m}}_1 +\mathbb{I}_{3} ) \bigg) (\boldsymbol{T}_{1}+\boldsymbol{T}_{2}) \\
+    \nonumber
+  & - \frac{S_{\text{wet}}}{4S_{\text{p}}} \bigg( \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}} (\boldsymbol{\Delta}^{\text{m}}_2 - \mathbb{I}_{3} ) +  \skewsym{\smallm{0 \\ - a_y \\ 0}} \boldsymbol{\Phi}^{\text{(fv)}} (\boldsymbol{\Delta}^{\text{m}}_2 + \mathbb{I}_{3}) \bigg) (\boldsymbol{T}_{3}+\boldsymbol{T}_{4}) \\
+    \nonumber
+  & + \frac{1}{4} \rho S  \bigg( \Big(\skewsym{\smallm{0 \\ a_y \\ 0}} \!\!\! \boldsymbol{\Phi}^{\text{(fv)}}  + \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}} \Big) \boldsymbol{\Delta}^{\text{m}}_1 \\
+    \nonumber
+  &  + \Big( \skewsym{\smallm{0 \\ - a_y \\ 0}} \!\!\! \boldsymbol{\Phi}^{\text{(fv)}} + \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}}  \Big) \boldsymbol{\Delta}^{\text{m}}_2 - 2 \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}}  \bigg) \lVert \boldsymbol{v_{\text{b}}} \rVert \boldsymbol{v_{\text{b}}} \\
+    \nonumber
+  & +\frac{1}{4} \rho S \bigg(\!\! \Big(\!\! \skewsym{\!\smallm{0 \\ a_y \\ 0}\!}\!\!\! \boldsymbol{\Phi}^{\text{(mv)}} \! + \! \boldsymbol{B} \boldsymbol{\Phi}^{\text{(m$\omega$)}} \Big) \boldsymbol{\Delta}^{\text{m}}_1 \\
+    \nonumber
+  & +  \Big(\!\! \skewsym{\!\smallm{0 \\ - a_y \\ 0}\!} \!\!\! \boldsymbol{\Phi}^{\text{(mv)}} \! + \! \boldsymbol{B} \boldsymbol{\Phi}^{\text{(m$\omega$)}}  \Big) \boldsymbol{\Delta}^{\text{m}}_2 - 2 \boldsymbol{B} \boldsymbol{\Phi}^{\text{(m$\omega$)}}\!  \bigg)\!  \boldsymbol{B}  \lVert \boldsymbol{v_{\text{b}}} \rVert  \boldsymbol{\omega}_{\text{b}} ,
+\end{align}
+où $\boldsymbol{v}_{\text{b}} := \boldsymbol{R}^\top(\boldsymbol{q}) (\boldsymbol{v}-\boldsymbol{w})$ représente la vitesse de l'air vue par le drone et exprimée dans le repère du corps. Dans \cite{lustosaHal-03035938}, la valeur $\lVert \boldsymbol{v_{\text{b}}} \rVert$, apparaissant dans les expressions de  $\boldsymbol{F}_{\text{b}}$ et $\boldsymbol{M}_{\text{b}}$, est remplacée par la valeur $\eta = \sqrt{\lVert \boldsymbol{v_{\text{b}}} \rVert^{2} + \mu c^{2} \lVert \boldsymbol{\omega}_{\text{b}} \rVert^{2}}$, avec $\mu \in \real$ étant un paramètre lié à l'identification du modèle. Toutefois, dans le cas de Colibri, l'identification fournit $\mu = 0$. 
+\todo{identification}
+Dès lors, nous présentons ici une description simplifiée. La matrice des coefficients aérodynamiques constants 
+$\boldsymbol{\Phi}:= \begin{bmatrix} \boldsymbol{\Phi}^{\text{(fv)}} & {\boldsymbol{\Phi}^{\text{(mv)}}}^\top \\ \boldsymbol{\Phi}^{\text{(mv)}} & \boldsymbol{\Phi}^{\text{(m$\omega$)}} \end{bmatrix} \in \real^{6 \times 6}$, est définie dans \cite[eqs. (6)--(9)]{olszaneckibarthHal-02542982} comme $ \boldsymbol{\Phi}^{\text{(fv)}} \!:=\! \diag(C_{\text{d}},C_{y}, C_{\ell})$ et
+\begin{align*}
+&\left[ \begin{array}{c|c}
+    \boldsymbol{\Phi}^{\text{(mv)}}  &  \boldsymbol{\Phi}^{\text{(m$\omega$)}} 
+\end{array}\right] :=\\ 
+&\left[ \begin{array}{ccc|ccc}
+    0 & 0 & 0    &                                          0.1396 & 0 & 0.0573 \\
+    0 & 0 & \!\!\!\!\! -\frac{\Delta_{\text{r}}}{c}C_{\ell} &    0 &  0.6358  & 0 \\
+    0 & 0 & 0 &     0.0405 & 0 & 0.0019 
+\end{array}\right].
+\end{align*}
+
+
+
 
 Enfin, $F_{\text{F}} = F_{m}$ et $M_{\text{F}}$ représentent respectivement l'ensemble des forces et moments non gravitationnels agissant sur le fuselage exprimé dans le repère $O_{\text{W}}$. En particulier, $F_{m} = - k_{f} {u_{\text{tail}}}^{2}$ est la force générée par le moteur situé à l'arrière du fuselage et $u_{\text{tail}}$ est la vitesse de rotation du moteur telle que :
 \begin{align}
@@ -226,7 +290,6 @@ Comme expliqué ci-dessus, nous pouvons mesurer l'angle $\kappa \in \real$ entre
 
 
 Désignons par $\kappa \in \real$ l'angle mesuré, par $\omega_{\kappa} := \dot \kappa  \in \real$ sa dérivée à estimer, et par $\xi = [\kappa,~\omega_{\kappa}]^\top \in \mathbb{R}^2$ leur juxtaposition en un seul vecteur. Notons également $\hat{\xi}$ l'estimation de $\xi$ définie par :
-%\todo{GH: il y a pas un peu de répétitions dans les notations ?}
 %\xi = [\kappa,~\omega_{\kappa}]^\top \in \mathbb{R}^2, \quad 
 \begin{align*}
     \hat{\xi} = [\hat{\kappa},~\hat{\omega}_{\kappa}]^\top \in \mathbb{R}^2.

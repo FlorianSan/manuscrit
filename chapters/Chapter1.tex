@@ -308,16 +308,33 @@ La commande adaptative à référence de modèle (MRAC) utilise un modèle de r�
 \section{Technologies et réalisations}
 \todo{Quelques lignes sur les contributions dans paparazzi et am32}
 Faire un schéma des composants avec nos contributions
+Nos expérimentations sont réalisé grâce au système de drone Paparazzi (voir Annexe \ref{chap:annexe1}) qui est constitué d'une partie matérielle et logicielle. La partie matérielle est principalement composé de l'autopilote (Apogee ou Tawaki) et la partie logicielle comporte l'ensemble des codes, embarqué et au sol, permettant de faire voler un drone. 
 
+La figure \ref{fig:schemaComposent} présente de manière schématique les principaux composant nécessaire à la conduite d'un vol, tous étant relié à l'autopilote. L'autopilote se charge d'exécuter périodiquement les codes associés aux différentes fonctions du drone (estimation d'état, navigation, guidage, contrôle (figure~\ref{fig:schemahiera}), charge utile, etc.).
 \begin{figure}[ht!]
     \centerline{
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\columnwidth]{figures/arch_materiel.png}}
     \caption{Architecture d'un autopilote et son environnement.}
     \label{fig:schemaComposent}
 \end{figure}
-ESC AM32
-Servo STS3032
-Dshot bidirectionnel
+Nos principales contributions dans cet environnement sont le codage des lois de commande proposé dans les chapitres \ref{chap:hybrid}, \ref{chap:6DOF} et d'estimation d'état du chapitre \ref{chap:colibri}. 
+
+Un travail supplémentaire a été réalisé sur les contrôleurs moteurs. Les ESC ont été flashés avec le code open-source AM32 (voir Annexe \ref{sec:AM32}). L'avantage de ce \textit{firmware}, par rapport au code commercial, est qu'il exploite un retour PID \nomenclature[]{\(PID\)}{Proportionnel Intégral Dérivé} de bas niveau de la vitesse de rotation du moteur, qui est calculé à la même vitesse que la commutation de phase du moteur. Nous avons adapté le code de la boucle de vitesse dans le \textit{firmware}, en suivant l'approche de \cite{franchi2017}, avec un algorithme de biais et de gain adaptatif (ABAG) \nomenclature[]{\(ABAG\)}{Biais adaptatif et gain adaptatif \textit{Adaptive Bias and Adaptive Gain}}. Les avantages de la solution ABAG sont une grande réactivité et une grande adaptabilité, puisque les dimensions de l'hélice peuvent être modifiées sans qu'il ne soit nécessaire de modifier les gains d'actionnement.
+Un module a aussi était développé pour pouvoir utiliser des servomoteurs Feetech (le modèle STS3032), qui ont la possibilité d'être chainée et d'être commandé via une liaison série bidirectionnelle. Cela permet notamment d'avoir un retour sur la position du servomoteur.
+
+\begin{figure}[ht!]
+    \centering
+    \resizebox{.9\textwidth}{!}{%
+    \includegraphics[height=3cm]{figures/aikon-ak32-esc.jpg}
+    \quad
+    \includegraphics[height=3cm]{figures/feetech-sts3032.jpg}
+    }
+    \caption{Contrôleur moteur et servomoteur.}
+    \label{fig:ESCServo}
+\end{figure}
+
+
+
 
 \section{Conclusion}
 \todo{Conclusion }
