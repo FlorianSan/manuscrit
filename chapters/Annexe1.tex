@@ -23,12 +23,16 @@ Nous pouvons détailler les capteurs embarqués et le microcontrôleur avec l'en
  \textbf{Le magnétomètre} à trois axes indique la direction du nord magnétique. Il permet de se diriger par rapport à une référence connue. Le principal inconvénient de ce capteur est sa perturbation par les masses magnétiques environnantes, ainsi que par les champs magnétiques parasites induits par la proximité des moteurs électriques par exemple. Il est donc difficile de les utiliser à l'intérieur d'un bâtiment. L'influence magnétique de l'engin porteur et les perturbations dues à d'éventuels moteurs électriques peuvent être éliminées en qualifiant, de manière statique, les erreurs dues aux masses métalliques du véhicule et aux moteurs électriques (en fonction des tensions et courants d'alimentation).
 
  \paragraph*{}
- \textbf{Le baromètre}est un capteur d'altitude basée sur la mesure de la pression atmosphérique.
+ \textbf{Le baromètre} est un capteur d'altitude basée sur la mesure de la pression atmosphérique.
+ \todo{info sur le baro}
 
- Il est courant de retrouver plusieurs capteurs dans un même boitier, que l'on nomme centrale inertielle (Inertial Measurement Units, IMU), \nomenclature[]{\(IMU\)}{Centrales inertielles (\textit{Inertial Measurement Units})}. Ces dernières sont composées au minimum d'un accéléromètre 3-axes et d'un gyroscope 3-axes, mais il est courant de les trouver avec un magnétomètre 3-axes. 
 
  \paragraph*{}
- \textbf{Le GPS}est monté en extérieur de l'autopilote. Ce système de géopositionnement par satellite (\textit{ Global Positioning System}) \nomenclature[]{\(GPS\)}{Géo-positionnement par satellite (\textit{Global Positioning System})} permet d'obtenir un positionnement absolu du drone. 
+ \textbf{Le GPS} est monté en extérieur de l'autopilote. Ce système de géopositionnement par satellite (\textit{ Global Positioning System}) \nomenclature[]{\(GPS\)}{Géo-positionnement par satellite (\textit{Global Positioning System})} permet d'obtenir un positionnement absolu du drone. 
+
+
+ \paragraph*{}
+ Il est courant de retrouver plusieurs capteurs dans un même boitier, que l'on nomme centrale inertielle (Inertial Measurement Units, IMU), \nomenclature[]{\(IMU\)}{Centrales inertielles (\textit{Inertial Measurement Units})}. Ces dernières sont composées au minimum d'un accéléromètre 3-axes et d'un gyroscope 3-axes, mais il est courant de les trouver avec un magnétomètre 3-axes. 
 
  \subsection{Le microcontrôleur d'un autopilote}
  \label{sec:micoctrl}
@@ -37,7 +41,7 @@ Nous pouvons détailler les capteurs embarqués et le microcontrôleur avec l'en
  De plus il possède plusieurs ports de communication pour récupérer les données des capteurs ou envoyer des ordres aux actionneurs.
 
 
- Nous pouvons citer le \textit{Dshot} qui est un protocole de communication défini entre l'autopilote et l'ESC pour envoyer les commandes des moteurs. Les avancées sur ce protocole ont notamment permis la communication bidirectionnelle, permettant d'obtenir la vitesse des moteurs, leur consommation.
+ Nous pouvons citer le \textit{Dshot} qui est un protocole de communication défini entre l'autopilote et l'ESC pour envoyer les commandes des moteurs. Les avancées sur ce protocole ont notamment permis la communication bidirectionnelle, permettant d'obtenir la vitesse des moteurs, leur consommation et d'autres informations.
 
  \todo{Autre protocole can, serial, I2c }
 
