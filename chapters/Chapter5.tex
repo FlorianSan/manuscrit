@@ -296,7 +296,6 @@ Les valeurs singulières de la fonction de sensibilité de la sortie et de l'ent
     \label{fig:SimSytuneStruct_lpv}
 \end{figure}
 
-\todo{ajouter le simulink}
 Avec le réglage indiqué dans \eqref{eq:gain_selection}, tel qu'il est obtenu avec l'Algorithme~\ref{alg:iterativeOptimisation}, nous présentons dans la Figure~\ref{fig:SimSytuneStruct_lpv} des résultats de simulation similaires à ceux déjà présentés dans la Figure.~\ref{fig:SimSytuneStruct_zero} pour la méthode de réglage sans vent discutée dans la Section~\ref{sec:zerowind}. Une fois de plus, nous simulons à la fois le modèle non linéaire \eqref{eq:dyna_orig} (lignes pleines) et le modèle linéarisé \eqref{eq:lpv_linearisation} (ligne en pointillé). 
 
 Par rapport à la Fig.~\ref{fig:SimSytuneStruct_zero}, les simulations de la Figure~\ref{fig:SimSytuneStruct_lpv} montrent que le réglage du contrôleur basé sur les Théorèmes~\ref{thm:eqs} et~\ref{th:lin} résout les problèmes d'instabilité et parvient à stabiliser le vol stationnaire dans tous les scénarios de vent considérés. Nous notons également que la Figure.~\ref{fig:SimSytuneStruct_lpv} montre une action plus agressive. En effet, l'entrée de contrôle $u$ (à la fois la poussée et les déflexions) est plus affectée par le bruit de mesure.
@@ -304,6 +303,9 @@ Par rapport à la Fig.~\ref{fig:SimSytuneStruct_zero}, les simulations de la Fig
 L'efficacité du schéma de contrôle réglé sur la base de l'Algorithme~\ref{alg:iterativeOptimisation} est également confirmée par les résultats expérimentaux présentés dans la section suivante.
 
 \section{Rafale de vent}
+{\color{red}
+Dans le chapitre \ref{sec:perturbation}, nous avons présenté des modèles de perturbation représentant une modélisation d'une rafale de vent. Nous allons les utiliser pour évaluer la réponse du drone face à cette perturbation. 
+}
 \todo{simulation}
 
 

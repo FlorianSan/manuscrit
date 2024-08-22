@@ -157,13 +157,13 @@ Il existe de nombreuses conceptions possibles pour un drone convertible. Bien qu
 Un modèle précis est nécessaire pour les conceptions classiques de contrôle basées sur un modèle et en particulier pour les approches d'inversion dynamique ou de contrôle prédictif de modèle. Cependant, une modélisation précise va nécessiter une campagne d'identification approfondie en soufflerie ou un vol en environnement contraint. Il se peut également que la complexité du modèle ne permette pas une utilisation directe dans le contrôle, à cause d'une limitation matérielle des calculateurs embarqués.
 
 \subsection{Modèle de perturbation}
-
+\label{sec:perturbation}
 Dans notre cas, nous nous sommes intéressés à l'impact du vent sur les architectures mentionnées précédemment. Il est donc nécessaire de modéliser le vent. Dans le cas de vent constant ou de cisaillement de vent, un modèle à échelons semble tout à fait approprié pour représenter le changement brusque de vitesse de vent. 
 Pour les rafales, nous utiliserons plusieurs modèles, tel que le modèle "Chapeau mexicain" ou les "ondelettes de Morlet".
 
 La fonction définissant le chapeau mexicain est :
 \begin{align}
-    \Psi_{mex}(t)= w_{m} - \frac{A_g}{2} \left(1-\cos(2 \pi f_g (t-t_{0,mex}))\right)\sin(3 \pi f_g (t-{0,mex}))
+    \Psi_{mex}(t)= w_{m} - \frac{A_g}{2} \left(1-\cos(2 \pi f_g (t-t_{0,mex}))\right)\sin(3 \pi f_g (t-t_{0,mex}))
 \end{align}
 et la fonction ondelettes de Morlet est définie par :
 \begin{align}
@@ -286,11 +286,26 @@ Enfin, il existe une extension non-linéaire de l'approche $H_{\infty}$ en utili
 Grâce à la nature de la norme $W_{m,p}$, la variable de coût et ses dérivées temporelles sont prises en compte dans la fonction de coût, ce qui permet d'obtenir des contrôleurs offrant de meilleures performances en régime transitoire et en régime permanent.
 
 \subsection*{Contrôleur non linéaire}
-L'approche "inversion dynamique non linéaire incrémentale" (INDI) utilise la connaissance de la dynamique d'un système. Son inversion incrémentale permet d'obtenir les accélérations angulaires cibles. Théoriquement, le bouclage des accélérations angulaires élimine la sensibilité aux imperfections du modèle, ce qui augmente considérablement la robustesse du système par rapport à l'inversion dynamique non linéaire conventionnelle. Cependant, les accélérations angulaires ne sont pas disponibles.
+{ \color{red}
+L'approche "inversion dynamique non linéaire incrémentale" (INDI) utilise la connaissance de la dynamique d'un système. Une inversion incrémentale est réalisé pour d'obtenir les accélérations angulaires cibles. Théoriquement, le bouclage des accélérations angulaires élimine la sensibilité aux imperfections du modèle, ce qui augmente considérablement la robustesse du système par rapport à l'inversion dynamique non linéaire conventionnelle \cite{Sieberling2010, Binz2019}. Ce contrôleur nécessite l'identification des actionneurs afin de régler les paramètres du contrôleur, tels que l'efficacité des actionneurs. Étant donné que l'efficacité des surfaces de contrôle aérodynamique n'est pas constante pendant toute l'enveloppe de vol sur un \textit{tiltwing}, une méthode de programmation des gains a été mise au point \cite{smeurINDI,smeurINDITail}.
+La limitation d'une telle loi de commande est la disponibilité et la qualité  des accélérations angulaires, en effet, les capteurs mesurant la vitesse angulaire sont très bruité et nous sommes obligé de dériver ce signal pour obtenir les accélérations angulaires.
 
-\cite{Sieberling2010, Binz2019, smeurINDI,smeurINDITail}
-\todo{NL}
+}
 
+\subsection*{Contrôleur sans modèle basée capteur}
+{\color{red}
+Contrairement à l'INDI basée sur l'inversion d'un modèle, la loi de commande sans modèle (MFC) \cite{Fliess_2013}  nécessite peu de connaissances préalables du système contrôlé pour concevoir le contrôleur. Cette commande est basée sur un estimateur non-linéaire qui estime la dynamique du système. Soulignons que cet estimateur ne modifie pas les gains de la commande en retour, contrairement aux méthodes de commande adaptative. Le processus adaptatif MFC est réalisé par l'estimateur qui fournir une sortie, laquelle est utilisé pour calculer la commande formant la boucle fermée. Avec cet estimateur, il est possible de mettre en œuvre un contrôleur robuste et adaptatif qui assure la stabilité des systèmes variables dans le temps en estimant en temps réel leur dynamique à partir des mesures périodiques. Nous pouvons citer le travail de \cite{olszaneckibarthHal-02542982} sur un \textit{tailsitter} qui continuer à voler malgré une modification importante de son actionnement et de sa dynamique (voir figure \ref{fig:darko_mfc}).
+
+\begin{figure}[ht!]
+    \centerline{
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\columnwidth]{figures/darko_MFC.png}}
+    \caption{\textit{Tailsitter} DarkO lors de test de robustesse \cite{olszaneckibarthHal-02542982}.}
+    \label{fig:darko_mfc}
+\end{figure}
+
+
+\nomenclature[]{\(MFC\)}{Commande sans modèle (\textit{ Model Free Control})}
+}
 \subsection*{Contrôleur séquencé}
 L'approche "Diviser et Conquérir" permet de passer d'une loi de contrôle à une autre, de manière discrète, de sorte qu'un seul contrôleur ne fonctionne à la fois. Un exemple d'un contrôle séquencé hybride de \textit{tailsitters} est donnée dans \cite{Casau2011}.
 
@@ -301,8 +316,9 @@ Contrairement à "Diviser et Conquérir", la pondération de contrôle fusionne 
 Cet exemple est une transition entre le mode vol stationnaire et le mode croisière. Dans ce cas, $T_{T}$ est le paramètre de durée de la transition et $\Delta t$ est le temps écoulé depuis le début de la manœuvre.
 
 \subsection*{Contrôleur adaptatif}
+{\color{red}
 \nomenclature[]{\(MRAC\)}{Commande adaptative à référence de modèle (\textit{ Model Reference Adaptive Control})}
-La commande adaptative à référence de modèle (MRAC) utilise un modèle de référence avec les performances de suivi souhaitées et adapte le contrôleur en fonction de la différence entre le modèle réel et le modèle de référence.
+La commande adaptative à référence de modèle (MRAC) utilise un modèle de référence avec les performances de suivi souhaitées et adapte les paramètres du contrôleur en fonction de la différence entre le modèle réel $y$ et le modèle de référence $y_{m}$ (voir figure \ref{fig:schemaMRAC}). 
 
 \begin{figure}[ht!]
     \centerline{
@@ -310,10 +326,18 @@ La commande adaptative à référence de modèle (MRAC) utilise un modèle de r�
     \caption{Architecture d'un contrôleur MRAC.}
     \label{fig:schemaMRAC}
 \end{figure}
-\todo{Léger}
 
+
+Le mécanisme d'ajustement peut être développé à partir de la règle de MIT \ref{Jain2013DesignOA}, de la théorie de Lyapunov \ref{GE1999741, CHAKRABARTY2016213} et d'autres approches mathématiques, telles que les fonctions d'ajustement de la covariance, etc. 
+
+La technique de mécanisme d'ajustement proposée par \ref{CHAKRABARTY2016213}, basée sur les fonctions de Lyapunov, vise à suivre la sortie du système et ses états avec le modèle de référence. Pour ce faire, on suppose que tous les états sont disponibles pour la mesure, ce qui n'est pas toujours le cas dans les applications pratiques de contrôle.
+
+Selon la règle du MIT \ref{Shekhar2018}, le mécanisme d'ajustement fonctionne en minimiser l'erreur entre la sortie du système contrôlé $y$ et la sortie du modèle de référence $y_{m}$ via une fonction de coût qui met à jour le gain du contrôleur. Ces paramètres sont modifiés dans le sens négatif du gradient de la fonction de coût. Notons que le modèle de référence joue un rôle important dans les performances du contrôleur car la règle MIT tente de faire correspondre la sortie du système contrôlé avec la sortie du modèle de référence. Si ce modèle est mal modélisé, les performances de contrôle seront donc directement impacté.
+En outre, la règle MIT est très sensible aux changements d'amplitude de l'entrée de référence.
+
+Pour l'estimation des paramètres en temps réel, les méthodes les plus couramment utilisées sont les dérivés de la méthode des moindres carrés moyens, tels que la méthode des moindres carrés moyens normalisés, la méthode des moindres carrés moyens récursifs et le filtre de Kalman étendu. 
+}
 \section{Technologies et réalisations}
-\todo{Quelques lignes sur les contributions dans paparazzi et am32, Faire un schéma des composants avec nos contributions}
 
 Nos expérimentations sont réalisées grâce au système de drone Paparazzi (voir Annexe \ref{chap:annexe1}), lequel est constitué d'une partie matérielle et logicielle. La partie matérielle est principalement composée de l'autopilote (Apogee ou Tawaki) et la partie logicielle comporte l'ensemble des codes, embarqués et au sol, permettant de faire voler un drone. 
 
@@ -321,7 +345,7 @@ La figure \ref{fig:schemaComposent} présente de manière schématique les princ
 
 \begin{figure}[ht!]
     \centerline{
-    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\columnwidth]{figures/arch_materiel.png}}
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.7\columnwidth]{figures/arch_materiel.png}}
     \caption{Architecture d'un autopilote et son environnement.}
     \label{fig:schemaComposent}
 \end{figure}
@@ -346,5 +370,16 @@ Un module a aussi été développé pour pouvoir utiliser des servomoteurs Feete
 
 
 \section{Conclusion}
-\todo{Amélioré la conclusion }
-Le domaine des drones convertibles est vaste et chaque architecture cherche à répondre à une mission. Les diverses complexités engendrées sont autant de challenges pour assurer la stabilité du drone. Nous allons donc nous focaliser sur un drone \textit{tailsitter} et plus précisément sa modélisation dans le but de comprendre les effets des perturbations sur sa dynamique.
+{\color{red}
+Ce chapitre présente un résumé de la littérature relative à la modélisation et au contrôle des \textit{tailsitters}.
+
+Le domaine des drones convertibles est vaste et chaque architecture cherche à répondre à une mission. Les diverses complexités engendrées sont autant de challenges pour assurer la stabilité du drone. Les défis aérodynamiques liés aux différents domaines de vol, tels que les écoulements à faible nombre de Reynolds, l'interaction hélice-ailes et l'identification des coefficients aérodynamiques par des campagnes en soufflerie, ont été résumés. Plusieurs publications expliquent la complexité de développer un modèle dynamique pour les \textit{tailsitters}. Cette difficulté notamment liée à la dynamique instable dans les vols de transition induite par des changements rapides des forces et des moments aérodynamiques, appelle au développement de stratégies de contrôle innovantes et robuste. 
+
+L'analyse de la littérature sur les lois de commande indique que la mise en œuvre d'une loi robuste abordant directement l'impact du vent sur le drone n'a jamais été réalisé.
+
+Nous allons donc nous focaliser sur un drone \textit{tailsitter} et plus précisément sa modélisation dans le but de comprendre les effets des perturbations sur sa dynamique.
+
+
+
+
+}

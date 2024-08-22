@@ -68,9 +68,11 @@ Les deux architectures sur lesquelles se sont concentrées nos recherches sont c
 
 
 \section*{Question de recherche}
+{\color{red}
 Comme expliqué précédemment, lors des phases de décollage et d'atterrissage, le drone est vertical (voir figure~\ref{fig:darko_flight}), ce qui engendre une grande sensibilité aux perturbations. Il semble pertinent de concentrer nos travaux sur l'étude de la robustesse des drones convertibles face au vent.
 Notre travail se focalise sur la recherche d'un contrôleur de vol unifié, pour une architecture de drone fortement non-linéaire et couplée, sur l'intégralité du domaine de vol, en environnement perturbé.
-\todo{Améliorer la question}
+\todo{Améliorer la question ?}
+}
 
 \section*{Plan et contribution}
 Notre exposé commencera par une description générale des architectures de drone convertible (Chapitre~\ref{chap:generalites}), avec une présentation des avantages et des inconvénients ainsi que leur mode de fonctionnement. Une description générale de la modélisation, de l'actionnement et des lois de commande proposée sur les \textit{tailsitters} et les \textit{freewings} introduira nos propos sur ces architectures.
@@ -87,8 +89,13 @@ Le chapitre \ref{chap:colibri} propose une nouvelle architecture de \textit{free
 
 
 \section*{Objectifs fixés pour la thèse}
+{ \color{red}
+Les objectifs fixés sont pluriels : il s'agira d'étudier le comportement d'un drone \textit{tailsitters} en environnement perturbé en présence de saturations des actionneurs pouvant engendrer des cycles limites. Nous utiliserons la linéarisation pour extraire la dynamique du drone autours de l'ensemble des points d'équilibre. Nous étudierons la précision des linéarisations face aux nombreuses non-linéarités du modèle. 
 
-Les objectifs fixés sont pluriels : 
-il s'agira d'étudier le comportement d'un drone \textit{tailsitters} en environnement perturbé, saturations des actionneurs, dynamiques linéarisées, impact des non-linéarités et cycles limites. De proposer des architectures de commande basées modèle pour un drone \textit{tailsitters} permettant d'assurer une robustesse aux perturbations de vent, ouvrant la possibilité de certification de ce type d'architecture. Enfin d'utiliser des capteurs pour mesurer les perturbations en avance de phase pour les rejeter (sonde 5 trous, micro, Pitot, etc.), ce qui implique de développer une nouvelle architecture.
+De nos linéarisations, de notre compréhension du fonctionnement du drone et des limites analysées, il s'agira de proposer des architectures de commande basées modèle pour un drone \textit{tailsitters} permettant d'assurer une robustesse aux perturbations de vent. L'intérêt d'une architecture basée modèle est la possibilité de certification de ce type d'architecture. 
 
-\todo{À reprendre}
+Pour finir, nous souhaitons utiliser des capteurs pour mesurer les perturbations en avance de phase pour les rejeter (sonde 5 trous, micro, Pitot, etc.). La connaissance d'une perturbation en amont de son impact sur le drone peut être un point clé dans la diminution de son impact. La mesure associée à un modèle peut être un moyen d'agir en anticipation plutôt qu'en réaction. Une action en anticipation pourrait se traduire par une modification de l'état du drone avant l'arrivée de la perturbation pour en minimiser son impact. Alors qu'une action en réaction est une gestion de la perturbation suite à une modification de l'équilibre du drone (déplacement ou modification de son orientation) qui intervient après que la perturbation ait impacté le drone.  
+
+Au vu des contraintes \textit{tailsitters}, l'installation de capteur de mesure de vent implique le développement d'une nouvelle architecture permettant l'installation d'un capteur en mesure de capturer les perturbations sur l'intégralité du domaine de vol.
+
+}
