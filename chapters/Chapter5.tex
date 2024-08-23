@@ -303,10 +303,56 @@ Par rapport à la Fig.~\ref{fig:SimSytuneStruct_zero}, les simulations de la Fig
 L'efficacité du schéma de contrôle réglé sur la base de l'Algorithme~\ref{alg:iterativeOptimisation} est également confirmée par les résultats expérimentaux présentés dans la section suivante.
 
 \section{Rafale de vent}
-{\color{red}
+
 Dans le chapitre \ref{sec:perturbation}, nous avons présenté des modèles de perturbation représentant une modélisation d'une rafale de vent. Nous allons les utiliser pour évaluer la réponse du drone face à cette perturbation. 
-}
-\todo{simulation}
+
+
+Nous avons appliqué un vent horizontal $w_x$ avec trois valeurs moyennes $w_{m} \in {0,3,6}\SI{}{\meter\per\second}$ et avec les caractéristiques suivantes pour la fonction "Chapeau mexicain" $A_g=\SI{-5}{\meter\per\second}$, $f_g = \frac{1}{T_g} = \SI{0.2}{\Hz}$ soit une période $T_g$ de 5 secondes. Les résultats sont visibles sur la figure \ref{fig:sim_mex0_2}.
+\begin{figure}[ht!]
+    \centering
+    \resizebox{.99\textwidth}{!}{%
+    \includegraphics[width=0.33\textwidth]{figures/sim_mex_hat5msT5.png}
+    \quad
+    \includegraphics[width=0.33\textwidth]{figures/sim_mex_hat8msT5.png}
+    \quad
+    \includegraphics[width=0.33\textwidth]{figures/sim_mex_hat11msT5.png}
+    }
+    \caption{Simulation du modèle non linéaire \eqref{eq:dyna_orig} face à une perturbation "Chapeau mexicain" \eqref{eq:mex} avec $f_g = \SI{0.2}{\Hz}$.}
+    \label{fig:sim_mex0_2}
+\end{figure}
+
+
+Nous avons aussi réalisé une simulation similaire à la précédente avec une fréquence égale à $f_g = \SI{1.2}{\Hz}$ soit une période $T_g$ de 0.83 seconde. Cette valeur est utilisée dans \cite{Gillebaart2014} pour représenter une rafale. Les résultats sont visibles sur la figure \ref{fig:sim_mex1_2}.
+\begin{figure}[h]
+    \centering
+    \resizebox{.99\textwidth}{!}{%
+    \includegraphics[width=0.33\textwidth]{figures/sim_mex_hat5msF1.2.png}
+    \quad
+    \includegraphics[width=0.33\textwidth]{figures/sim_mex_hat8msF1.2.png}
+    \quad
+    \includegraphics[width=0.33\textwidth]{figures/sim_mex_hat11msF1.2.png}
+    }
+    \caption{Simulation du modèle non linéaire \eqref{eq:dyna_orig} face à une perturbation "Chapeau mexicain" \eqref{eq:mex} avec $f_g = \SI{1.2}{\Hz}$.}
+    \label{fig:sim_mex1_2}
+\end{figure}
+
+
+Enfin nous avons réalisé une simulation avec un vent horizontal $w_x$ avec trois valeurs moyennes $w_{m} \in {0,3,6}\SI{}{\meter\per\second}$ et avec la caractéristique suivante pour la fonction "ondelettes de Morlet" $A_g=\SI{-5}{\meter\per\second}$. Les résultats sont visibles sur la figure \ref{fig:sim_morlet}.
+
+\begin{figure}[h]
+    \centering
+    \resizebox{.99\textwidth}{!}{%
+    \includegraphics[width=0.33\textwidth]{figures/sim_mor5ms.png}
+    \quad
+    \includegraphics[width=0.33\textwidth]{figures/sim_mor8ms.png}
+    \quad
+    \includegraphics[width=0.33\textwidth]{figures/sim_mor11ms.png}
+    }
+    \caption{Simulation du modèle non linéaire \eqref{eq:dyna_orig} face à une perturbation "ondelettes de Morlet" \eqref{eq:morlet}.}
+    \label{fig:sim_morlet}
+\end{figure}
+Nous observons que le drone et son contrôleur sont en mesure de rejeter les différentes perturbations.
+Nous observons sur l'ensemble des simulations que le drone lutte contre le vent incident en modifiant son incidence, il s'aligne dans le flux du vent, ce qui à pour impact majeur de faire prendre de l'altitude au drone.
 
 
 \section{Vol expérimental en soufflerie ouverte} 

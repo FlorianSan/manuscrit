@@ -14,7 +14,7 @@ De plus, le fuselage permettra l'emport d'une charge utile fragile (car elle pou
 \section{Design et modélisation d'un drone : Colibri}
 \label{sec:model_colibri}
 
-Le drone Colibri est dérivé d'un drone \textit{tailsitter} qui génère de la portance pendant le vol d'avancement. Cette aile possède plusieurs actionneurs : quatre moteurs $u_{i}, ~i = 1,2,3,4$ et deux élevons $\delta_{\text{l}}$ et $\delta_{\text{r}}$. Nous pouvons définir le vecteur de contrôle $u_{\text{W}}$ de l'aile d'après la Figure~\ref{fig:world_body} comme $u_{\text{W}} = [u_{1}~u_{2}~u_{3}~u_{4}~\delta_{\text{l}}~\delta_{\text{r}}]^\top$. Un fuselage relié par un pivot est fixé au centre aérodynamique de l'aile. Ce fuselage supporte l'autopilote, la batterie, un moteur et un empennage pour le maintenir horizontal.
+Le drone Colibri est dérivé d'un drone \textit{tailsitter} qui génère de la portance pendant le vol d'avancement. Cette aile possède plusieurs actionneurs : quatre moteurs $u_{i}, ~i = 1,2,3,4$ et deux élevons $\delta_{\text{l}}$ et $\delta_{\text{r}}$. Nous pouvons définir le vecteur de contrôle $u_{\text{W}}$ de l'aile d'après la Figure~\ref{fig:world_body} comme $\boldsymbol{u}_{\text{W}} = [u_{1}~u_{2}~u_{3}~u_{4}~\delta_{\text{l}}~\delta_{\text{r}}]^\top$. Un fuselage relié par un pivot est fixé au centre aérodynamique de l'aile. Ce fuselage supporte l'autopilote, la batterie, un moteur et un empennage pour le maintenir horizontal.
 
 Dans la Figure~\ref{fig:world_body}, toutes les surfaces de contrôle aérodynamiques sont représentées en rose et les hélices en vert. Trois repères sont attachés au drone tel que : (I) est un repère inertiel NED lié à la surface de la terre, (W) est un repère attaché à l'aile du drone et (F) est un repère attaché au fuselage du drone.
 
@@ -49,15 +49,15 @@ Certaines des dimensions caractéristiques sont indiquées dans la Table~\ref{ta
     %   \hline
     %   $S_{\text{p}}$ (propeller area) & 0.0182 & \SI{}{\square\meter}\\
     %   \hline
-      $J_{\text{W}}=diag(J_{x}^{\text{W}}, J_{y}^{\text{W}}, J_{z}^{\text{W}})$ & \!\! $\diag(0.1677,0.0052,0.1634)$\!\! & \SI{}{\kilogram\square\meter}\\
+      $\boldsymbol{J}_{\text{W}}=diag(J_{x}^{\text{W}}, J_{y}^{\text{W}}, J_{z}^{\text{W}})$ & \!\! $\diag(0.1677,0.0052,0.1634)$\!\! & \SI{}{\kilogram\square\meter}\\
       \hline
-      $J_{\text{F}}=diag(J_{x}^{\text{F}}, J_{y}^{\text{F}}, J_{z}^{\text{F}})$ & \!\! $\diag(0.0191,0.0161,0.0343)$\!\! & \SI{}{\kilogram\square\meter}\\
+      $\boldsymbol{J}_{\text{F}}=diag(J_{x}^{\text{F}}, J_{y}^{\text{F}}, J_{z}^{\text{F}})$ & \!\! $\diag(0.0191,0.0161,0.0343)$\!\! & \SI{}{\kilogram\square\meter}\\
       \hline
       $k_{\text{f}}$ (coefficient de poussée de l'hélice) & 1.7800e-8 & \SI{}{\kilogram\meter}\\
       \hline
-       $d_{\text{M}O_{\text{W}}}$  & $[0.383,0,-0.167]^\top$ & \SI{}{\meter}\\
+       $\boldsymbol{d}_{\text{M}O_{\text{W}}}$  & $[0.383,0,-0.167]^\top$ & \SI{}{\meter}\\
       \hline
-       $d_{\text{G}O_{\text{W}}}$  & $[0.052,0,-0.171]^\top$ & \SI{}{\meter}\\
+       $\boldsymbol{d}_{\text{G}O_{\text{W}}}$  & $[0.052,0,-0.171]^\top$ & \SI{}{\meter}\\
       \hline
     \end{tabular}
     \caption{Paramètres numériques du modèle Colibri.}
@@ -65,12 +65,12 @@ Certaines des dimensions caractéristiques sont indiquées dans la Table~\ref{ta
 \end{table}
 
 \todo{Doit-on expliquer l'origine de cette équation}
-La modélisation est basée sur les résultats de \cite[Section 2.15]{udwadia-phohomsiri}. L'algorithme de calcul des matrices $M$, $A$, $Q$ et $B$ se trouve dans \cite{udwadia-schutte}, qui nous fournit les équations de mouvement d'un système multicorps contraint : 
+La modélisation est basée sur les résultats de \cite[Section 2.15]{udwadia-phohomsiri}. L'algorithme de calcul des matrices $\boldsymbol{M}$, $\boldsymbol{A}$, $\boldsymbol{Q}$ et $\boldsymbol{B}$ se trouve dans \cite{udwadia-schutte}, qui nous fournit les équations de mouvement d'un système multicorps contraint : 
 \begin{align}
 \label{eq:udwadia}
-    \ddot{x} = \hat{M}^{\dag} \begin{bmatrix} Q \\ B \end{bmatrix}  = \begin{bmatrix} (I - A^{\dag}A)M \\ A \end{bmatrix}^{\dag} \begin{bmatrix} Q \\ B \end{bmatrix}
+    \ddot{\boldsymbol{x}} = \hat{\boldsymbol{M}}^{\dag} \begin{bmatrix} \boldsymbol{Q} \\ \boldsymbol{B} \end{bmatrix}  = \begin{bmatrix} (\mathbb{I} - \boldsymbol{A}^{\dag}\boldsymbol{A})\boldsymbol{M} \\ \boldsymbol{A} \end{bmatrix}^{\dag} \begin{bmatrix} \boldsymbol{Q} \\ \boldsymbol{B} \end{bmatrix}
 \end{align}
-dont l'expression est valide tant que $\hat{M}$ a un rang complet et où $A$, $M$, $Q$ et $B$ sont décrits par la suite.
+dont l'expression est valide tant que $\hat{\boldsymbol{M}}$ a un rang complet et où $\boldsymbol{A}$, $\boldsymbol{M}$, $\boldsymbol{Q}$ et $\boldsymbol{B}$ sont décrits par la suite.
 
 \begin{figure}[ht!]
     \centering
@@ -78,9 +78,9 @@ dont l'expression est valide tant que $\hat{M}$ a un rang complet et où $A$, $M
     \caption{Repère inertiel (I), du fuselage (F) et de l'aile (W) et forces agissant sur le drone Colibri.}
     \label{fig:colibri_frame_side}
 \end{figure}
-Nous utiliserons les quaternions $q = \left[ \eta ~ \epsilon^\top \right]^\top  \in {\mathbb S}^3:=\{ q\in \real^4: |q| = 1\}$ pour représenter les orientations des deux corps. La matrice de rotation qui en résulte $R(q) \in SO(3): = \{R\in \real^{3\times 3}: R^\top R = I,~\det(R)=1\}$ est définie de manière unique comme $R(q) := I +2\eta \skewsym{\epsilon} + 2\skewsym{\epsilon}^{2} = [R_{1}~R_{2}~R_{3}]$.
+Nous utiliserons les quaternions $\boldsymbol{q} = \left[ \eta ~ \boldsymbol{\epsilon}^\top \right]^\top  \in {\mathbb S}^3:=\{ \boldsymbol{q}\in \real^4: |\boldsymbol{q}| = 1\}$ pour représenter les orientations des deux corps. La matrice de rotation qui en résulte $\boldsymbol{R}(\boldsymbol{q}) \in SO(3): = \{\boldsymbol{R}\in \real^{3\times 3}: \boldsymbol{R}^\top \boldsymbol{R} = \mathbb{I}_{3} \text{ et}~\det(\boldsymbol{R})=1\}$ est définie de manière unique comme $\boldsymbol{R}(\boldsymbol{q}) := \mathbb{I}_{3} +2\eta \skewsym{\boldsymbol{\epsilon}} + 2\skewsym{\boldsymbol{\epsilon}}^{2} = [\boldsymbol{R}_{1}~\boldsymbol{R}_{2}~\boldsymbol{R}_{3}]$.
 
-D'après les Figures~\ref{fig:world_body} et \ref{fig:colibri_frame_side}, nous définissons les vecteurs $p_{\text{F}} = \overrightarrow{O_{\text{I}} O_{\text{F}}} $, $p_{\text{W}} = \overrightarrow{O_{\text{I}} O_{\text{W}}} $, $d_{\text{FW}} = \overrightarrow{O_{\text{F}} O_{\text{W}}} $ satisfaisant $d_{\text{FW}} = p_{\text{W}} - p_{\text{F}}$ and $d_{\text{M}O_{\text{W}}} = \overrightarrow{\text{M} O_{\text{W}} }$, $d_{\text{G}O_{\text{W}}} = \overrightarrow{\text{G} O_{\text{W}} }$.
+D'après les Figures~\ref{fig:world_body} et \ref{fig:colibri_frame_side}, nous définissons les vecteurs $\boldsymbol{p}_{\text{F}} = \overrightarrow{\boldsymbol{O}_{\text{I}} \boldsymbol{O}_{\text{F}}} $, $\boldsymbol{p}_{\text{W}} = \overrightarrow{\boldsymbol{O}_{\text{I}} \boldsymbol{O}_{\text{W}}} $, $\boldsymbol{d}_{\text{FW}} = \overrightarrow{\boldsymbol{O}_{\text{F}} \boldsymbol{O}_{\text{W}}} $ satisfaisant $\boldsymbol{d}_{\text{FW}} = \boldsymbol{p}_{\text{W}} - \boldsymbol{p}_{\text{F}}$ and $\boldsymbol{d}_{\text{\textbf{M}}O_{\text{W}}} = \overrightarrow{\text{M} \boldsymbol{O}_{\text{W}} }$, $\boldsymbol{d}_{\text{\textbf{G}}\boldsymbol{O}_{\text{W}}} = \overrightarrow{\text{\textbf{G}} \boldsymbol{O}_{\text{W}} }$.
 
 D'après \cite{Tangirala2015}, nous avons une définition d'une réalisation minimale : 
 \begin{definition}[Réalisation minimale]
@@ -89,20 +89,20 @@ D'après \cite{Tangirala2015}, nous avons une définition d'une réalisation min
 \end{definition}
 
 
-Le vecteur d'état global est $(x,v) \in \real^{28}$ avec $x=(p_{\text{W}},~q_{\text{W}},~p_{\text{F}},~q_{\text{F}}) \in \real^{14}$ et $v=(v_{\text{W}},~\dot{q}_{\text{W}},~v_{\text{F}},~\dot{q}_{\text{F}}) = (\dot{p}_{\text{W}},~\dot{q}_{\text{W}},~\dot{p}_{\text{F}},~\dot{q}_{\text{F}})=\dot{x} \in \real^{14}$. Nous avons $v_{\text{W}} = \dot{p}_{\text{W}} \in \real^{3}$ qui représente la vitesse linéaire de l'aile dans le repère inertiel ; $\dot{q}_{\text{W}} \in \real^{4}$  est la dérivée du quaternion. $q_{\text{W}} \in \real^{4}$ représentant l'orientation de l'aile ; $v_{\text{F}} =p_{\text{F}} \in \real^{3}$  est la vitesse linéaire du fuselage dans le repère inertiel et $\dot{q}_{\text{F}} \in \real^{4}$  est la dérivée du quaternion. $q_{\text{F}} \in \real^{4}$ représentant l'orientation du fuselage. Nous observons que le vecteur d'état n'est pas minimal d'après la définition \ref{def:reaMini}. Effectivement, le système possède sept degrés de liberté (six degrés pour l'aile et un degré pour le fuselage) et nous le représentons avec un vecteur d'état de dimension quatorze.
+Le vecteur d'état global est $(\boldsymbol{x},\boldsymbol{v}) \in \real^{28}$ avec $\boldsymbol{x}=(\boldsymbol{p}_{\text{W}},~\boldsymbol{q}_{\text{W}},~\boldsymbol{p}_{\text{F}},~\boldsymbol{q}_{\text{F}}) \in \real^{14}$ et $\boldsymbol{v}=(\boldsymbol{v}_{\text{W}},~\dot{\boldsymbol{q}}_{\text{W}},~\boldsymbol{v}_{\text{F}},~\dot{\boldsymbol{q}}_{\text{F}}) = (\dot{\boldsymbol{p}}_{\text{W}},~\dot{\boldsymbol{q}}_{\text{W}},~\dot{\boldsymbol{p}}_{\text{F}},~\dot{\boldsymbol{q}}_{\text{F}})=\dot{\boldsymbol{x}} \in \real^{14}$. Nous avons $\boldsymbol{v}_{\text{W}} = \dot{\boldsymbol{p}}_{\text{W}} \in \real^{3}$ qui représente la vitesse linéaire de l'aile dans le repère inertiel ; $\dot{\boldsymbol{q}}_{\text{W}} \in \real^{4}$  est la dérivée du quaternion. $\boldsymbol{q}_{\text{W}} \in \real^{4}$ représentant l'orientation de l'aile ; $\boldsymbol{v}_{\text{F}} =\boldsymbol{p}_{\text{F}} \in \real^{3}$  est la vitesse linéaire du fuselage dans le repère inertiel et $\dot{\boldsymbol{q}}_{\text{F}} \in \real^{4}$  est la dérivée du quaternion. $\boldsymbol{q}_{\text{F}} \in \real^{4}$ représentant l'orientation du fuselage. Nous observons que le vecteur d'état n'est pas minimal d'après la définition \ref{def:reaMini}. Effectivement, le système possède sept degrés de liberté (six degrés pour l'aile et un degré pour le fuselage) et nous le représentons avec un vecteur d'état de dimension quatorze.
 
-Nous devons aussi définir le vecteur de commande de dimension huit $u = (u_{1},u_{2},u_{3},u_{4},\delta_{\text{l}},\delta_{\text{r}},u_{\text{tail}},\delta_{\text{tail}})$, où les actionneurs sont repérés en vert et rose sur la figure \ref{fig:world_body}. Les actionneurs verts sont des groupes moteurs-hélices et les actionneurs roses sont des surfaces aérodynamiques. 
+Nous devons aussi définir le vecteur de commande de dimension huit $\boldsymbol{u} = (u_{1},u_{2},u_{3},u_{4},\delta_{\text{l}},\delta_{\text{r}},u_{\text{tail}},\delta_{\text{tail}})$, où les actionneurs sont repérés en vert et rose sur la figure \ref{fig:world_body}. Les actionneurs verts sont des groupes moteurs-hélices et les actionneurs roses sont des surfaces aérodynamiques. 
 
-Il convient de noter que la vitesse angulaire $\omega \in \real^{3}$ peut être obtenue à partir de la dérivée du quaternion $\dot{q}$ en utilisant l'équation \cite[équation (2.7)]{udwadia-schutte} rappelée ici : 
+Il convient de noter que la vitesse angulaire $\boldsymbol{\omega} \in \real^{3}$ peut être obtenue à partir de la dérivée du quaternion $\dot{\boldsymbol{q}}$ en utilisant l'équation \cite[équation (2.7)]{udwadia-schutte} rappelée ici : 
 \begin{align*}
-    \omega = H(q) \dot{q} 
+    \boldsymbol{\omega} = \boldsymbol{H}(\boldsymbol{q}) \dot{\boldsymbol{q}} 
 \end{align*}
-où $H(q) \in \real^{3\times4}$ est une matrice définie par $H(q) = 2\begin{bmatrix}-\epsilon & \eta I_{3} - \skewsym{\epsilon}\end{bmatrix}$.
-Pour dériver les équations du mouvement, rappelons que  $R_{i}(q) \in \real^{3}, i = 1,2,3$ sont les trois colonnes d'une matrice de rotation associée au quaternion $q$, lequelles définissent les matrices $L_{\text{i}}^{\text{W}} \left( q_{\text{W}} \right) = \frac{\partial R_{i}}{\partial q}(q_{\text{W}}) \in \real^{3\times4}$, 
-$L_{\text{i}}^{\text{F}} \left( q_{\text{F}} \right) = \frac{\partial R_{i}}{\partial q}(q_{\text{F}}) \in \real^{3\times4}$ et
-$L_{O_{\text{F}}^{\text{W}}} = \sum_{i=1}^{3} d_{\text{FW}}(i) L_{\text{i}}^{\text{F}} (q_{\text{F}})$, $i \in {1,2,3}$, où $d_{\text{FW}}(i)$ désigne la i-ème composante du vecteur $d_{\text{FW}} = p_{\text{W}} - p_{\text{F}}$. Comme le point $O_{\text{W}}$ est situé au centre de rotation de l'aile, la distance $d_{\text{FW}}$ est une constante, puisque $O_{\text{W}}$ et $O_{\text{F}}$ appartiennent au même solide (le fuselage).
+où $\boldsymbol{H}(\boldsymbol{q}) \in \real^{3\times4}$ est une matrice définie par $\boldsymbol{H}(\boldsymbol{q}) = 2\begin{bmatrix}-\boldsymbol{\epsilon} & \eta \mathbb{I}_{3} - \skewsym{\boldsymbol{\epsilon}}\end{bmatrix}$.
+Pour dériver les équations du mouvement, rappelons que  $\boldsymbol{R}_{i}(\boldsymbol{q}) \in \real^{3}, i = 1,2,3$ sont les trois colonnes d'une matrice de rotation associée au quaternion $q$, lesquelles définissent les matrices $\boldsymbol{L}_{\text{i}}^{\text{W}} \left( \boldsymbol{q}_{\text{W}} \right) = \frac{\partial \boldsymbol{R}_{i}}{\partial \boldsymbol{q}}(\boldsymbol{q}_{\text{W}}) \in \real^{3\times4}$, 
+$\boldsymbol{L}_{\text{i}}^{\text{F}} \left( \boldsymbol{q}_{\text{F}} \right) = \frac{\partial \boldsymbol{R}_{i}}{\partial \boldsymbol{q}}(\boldsymbol{q}_{\text{F}}) \in \real^{3\times4}$ et
+$\boldsymbol{L}_{\boldsymbol{O}_{\text{F}}^{\text{W}}} = \sum_{i=1}^{3} \boldsymbol{d}_{\text{FW}}(i) \boldsymbol{L}_{\text{i}}^{\text{F}} (\boldsymbol{q}_{\text{F}})$, $i \in {1,2,3}$, où $\boldsymbol{d}_{\text{FW}}(i)$ désigne la i-ème composante du vecteur $\boldsymbol{d}_{\text{FW}} = \boldsymbol{p}_{\text{W}} - \boldsymbol{p}_{\text{F}}$. Comme le point $\boldsymbol{O}_{\text{W}}$ est situé au centre de rotation de l'aile, la distance $\boldsymbol{d}_{\text{FW}}$ est une constante, puisque $\boldsymbol{O}_{\text{W}}$ et $\boldsymbol{O}_{\text{F}}$ appartiennent au même solide (le fuselage).
 
-On en déduit, avec homogénéité, $\dot{L}_{O_{\text{F}}^{\text{W}}} = \sum_{i=1}^{3} d_{\text{FW}}(i) L_{\text{i}}^{\text{F}} (\dot{q}_{\text{F}})$. Avec ces définitions, les matrices de \eqref{eq:udwadia} sont :
+On en déduit, avec l'homogénéité, $\dot{\boldsymbol{L}}_{\boldsymbol{O}_{\text{F}}^{\text{W}}} = \sum_{i=1}^{3} \boldsymbol{d}_{\text{FW}}(i) \boldsymbol{L}_{\text{i}}^{\text{F}} (\dot{\boldsymbol{q}}_{\text{F}})$. Avec ces définitions, les matrices de \eqref{eq:udwadia} sont :
 
 % \todo{There is no derived process or explanation provided for
 % the M matrix, A, Q matrix, etc. In Equation 1, both Q and B
@@ -110,25 +110,25 @@ On en déduit, avec homogénéité, $\dot{L}_{O_{\text{F}}^{\text{W}}} = \sum_{i
 % the state variables located?}
 
 \begin{align}
-    M = \begin{bmatrix}
-        m_{\text{W}} I_{3} & \mathbb{0}_{3 \times 4} & \mathbb{0}_{3} & \mathbb{0}_{3 \times 4}\\
-        \mathbb{0}_{4 \times 3} & H_{\text{W}}^\top J_{\text{W}} H_{\text{W}} & \mathbb{0}_{4 \times 3} & \mathbb{0}_{4}\\
-        \mathbb{0}_{3} & \mathbb{0}_{3 \times 4} & m_{\text{F}} I_{3} & \mathbb{0}_{3 \times 4} \\
-        \mathbb{0}_{4 \times 3} & \mathbb{0}_{4 } & \mathbb{0}_{4 \times 3} & H_{\text{F}}^\top J_{\text{F}} H_{\text{F}}    \end{bmatrix}\in \real^{14\times14},
+    \boldsymbol{M} = \begin{bmatrix}
+        m_{\text{W}} \mathbb{I}_{3} & \mathbb{0}_{3 \times 4} & \mathbb{0}_{3} & \mathbb{0}_{3 \times 4}\\
+        \mathbb{0}_{4 \times 3} & \boldsymbol{H}_{\text{W}}^\top \boldsymbol{J}_{\text{W}} \boldsymbol{H}_{\text{W}} & \mathbb{0}_{4 \times 3} & \mathbb{0}_{4}\\
+        \mathbb{0}_{3} & \mathbb{0}_{3 \times 4} & m_{\text{F}} \mathbb{I}_{3} & \mathbb{0}_{3 \times 4} \\
+        \mathbb{0}_{4 \times 3} & \mathbb{0}_{4 } & \mathbb{0}_{4 \times 3} & \boldsymbol{H}_{\text{F}}^\top \boldsymbol{J}_{\text{F}} \boldsymbol{H}_{\text{F}}    \end{bmatrix}\in \real^{14\times14},
 \end{align}
-où nous avons noté $H_{\text{W}} = H(q_{\text{W}})$, $H_{\text{F}} = H(q_{\text{F}})$, et
+où nous avons noté $\boldsymbol{H}_{\text{W}} = \boldsymbol{H}(\boldsymbol{q}_{\text{W}})$, $\boldsymbol{H}_{\text{F}} = \boldsymbol{H}(\boldsymbol{q}_{\text{F}})$, et
 \begin{align}
     \label{eq:Q}
-    Q = \begin{bmatrix}
-            m_{\text{W}} g e_3 + R(q_{\text{W}}) F_{\text{W}}(x, u)\\
-            -2\dot{H}_{\text{W}}^\top J_{\text{W}} \dot{H}_{\text{W}} \dot{q}_{\text{W}} + H_{\text{W}}^\top M_{\text{W}}(x, u)\\
-            m_{\text{F}} g e_3 + R(q_{\text{F}}) F_{\text{F}}(u)\\
-            -2\dot{H}_{\text{F}}^\top J_{\text{F}} \dot{H}_{\text{F}} \dot{q}_{\text{F}} + H_{\text{F}}^\top M_{\text{F}}(u)\\
+    \boldsymbol{Q} = \begin{bmatrix}
+            m_{\text{W}} g \boldsymbol{e}_3 + \boldsymbol{R}(\boldsymbol{q}_{\text{W}}) \boldsymbol{F}_{\text{W}}(\boldsymbol{x}, \boldsymbol{u})\\
+            -2\dot{\boldsymbol{H}}_{\text{W}}^\top \boldsymbol{J}_{\text{W}} \dot{\boldsymbol{H}}_{\text{W}} \dot{\boldsymbol{q}}_{\text{W}} + \boldsymbol{H}_{\text{W}}^\top \boldsymbol{M}_{\text{W}}(\boldsymbol{x}, \boldsymbol{u})\\
+            m_{\text{F}} g \boldsymbol{e}_3 + \boldsymbol{R}(\boldsymbol{q}_{\text{F}}) \boldsymbol{F}_{\text{F}}(\boldsymbol{u})\\
+            -2\dot{\boldsymbol{H}}_{\text{F}}^\top \boldsymbol{J}_{\text{F}} \dot{\boldsymbol{H}}_{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} + \boldsymbol{H}_{\text{F}}^\top \boldsymbol{M}_{\text{F}}(\boldsymbol{u})\\
         \end{bmatrix} \in \real^{14},
 \end{align}
 
 
-où $\dot{H}_{\text{W}}$ désigne $H(\dot{q}_{\text{W}})$, coïncidant avec la dérivée temporelle de $H(q_{\text{W}})$ et $\dot{H}_{\text{F}}$ désigne $H(\dot{q}_{\text{F}})$, coïncidant avec la dérivée temporelle de $H(q_{\text{F}})$. De plus, $F_{\text{W}}(x)$ et $M_{\text{b}}(x)$ représentent respectivement toutes les forces et tous les moments agissant sur l'aile. Leur expression est tirée de \cite[équations (45) et (57)]{lustosaHal-03035938} où est développée la $\phi$-théorie, paramétrage qui permet de soustraire les angles classiques d'incidence et de dérapage et d'éviter la singularité du vol stationnaire. De manière similaire aux équations \eqref{eq:Fbdarko} et \eqref{eq:Mbdarko} exprimant les forces et les moments agissant sur DarkO, nous pouvons exprimer $F_{\text{W}}(x)$ et $M_{\text{b}}(x)$ relatif à l'aile de Colibri.
+où $\dot{\boldsymbol{H}}_{\text{W}}$ désigne $\boldsymbol{H}(\dot{\boldsymbol{q}}_{\text{W}})$, coïncidant avec la dérivée temporelle de $\boldsymbol{H}(\boldsymbol{q}_{\text{W}})$ et $\dot{\boldsymbol{H}}_{\text{F}}$ désigne $\boldsymbol{H}(\dot{\boldsymbol{q}}_{\text{F}})$, coïncidant avec la dérivée temporelle de $\boldsymbol{H}(\boldsymbol{q}_{\text{F}})$. De plus, $\boldsymbol{F}_{\text{W}}(x)$ et $\boldsymbol{M}_{\text{b}}(x)$ représentent respectivement toutes les forces et tous les moments agissant sur l'aile. Leur expression est tirée de \cite[équations (45) et (57)]{lustosaHal-03035938} où est développée la $\phi$-théorie, paramétrage qui permet de soustraire les angles classiques d'incidence et de dérapage et d'éviter la singularité du vol stationnaire. De manière similaire aux équations \eqref{eq:Fbdarko} et \eqref{eq:Mbdarko} exprimant les forces et les moments agissant sur DarkO, nous pouvons exprimer $\boldsymbol{F}_{\text{W}}(x)$ et $\boldsymbol{M}_{\text{b}}(x)$ relatif à l'aile de Colibri.
 
 Chaque hélice génère une poussée $\boldsymbol{T}_i$ orientée dans la direction $-z{\text{W}}$ du repère de l'aile et un moment $\boldsymbol{N}_i$ selon le même axe :
 \begin{align}

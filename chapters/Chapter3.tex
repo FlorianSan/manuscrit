@@ -160,14 +160,12 @@ le bruit des capteurs. La robustesse intrinsèque de la rétroaction hybride, é
 
 \section{Conclusion du Chapitre \ref{chap:hybrid}}
 
-{\color{red}
 L'objectif principal de ce chapitre est de proposer un mécanisme hybride capable d'utiliser deux modes de contrôle d'un drone convertible, pour naviguer entre deux points. 
 
-À partir du modèle simplifier proposé dans le chapitre \ref{chap:model}, nous avons proposé deux lois de contrôle, basées sur une linéarisation du modèle et sur un contrôle non linéaire.
+À partir du modèle simplifié décrit dans le chapitre \ref{chap:model}, nous avons proposé deux lois de contrôle, basées sur une linéarisation du modèle et sur un contrôle non linéaire.
 Pour le vol stationnaire, nous avons utilisé une linéarisation autour d'un point d'équilibre sans vent, afin d'obtenir une loi de commande linéaire par retour d'état. L'avantage de cette dernière réside dans sa capacité à optimiser le retour d'état et donc à ajuster sa vitesse de convergence et à rejeter des perturbations.  Cependant, son domaine de stabilité est réduit, car il s'agit d'une loi de commande locale, valable dans le voisinage du point d'équilibre. Au contraire, la seconde loi proposée, non linéaire, est globale. Celle-ci, stable sur l'ensemble du domaine de vol, ne permet cependant pas d'optimiser la vitesse de convergence, compte tenu de sa complexité.
 
 Compte tenu des avantages et des inconvénients observés dans les lois de commande, il a semblé approprié d'envisager une transition hybride sur la base de la stabilité de la boucle. En d'autres termes, le contrôleur non linéaire est utilisé là où le contrôleur linéaire est instable, afin de faire converger le drone vers la cible. Dès que le drone entre dans le domaine de stabilité du contrôleur linéaire, le mécanisme hybride prend en charge le changement de loi, en utilisant la vitesse de convergence maximale autorisée par l'optimisation linéaire. L'avantage de ce mécanisme est qu'il fournit un contrôleur ayant autorité sur l'ensemble du domaine de vol, assurant la convergence, tout en optimisant les capacités du drone. Bien que les premiers résultats ne soient obtenus que par simulation, ils semblent prometteurs pour une intégration sur l'architecture réelle.
 
-Toutefois, ce travail ne prend pas en compte l'impact des turbulences ou du vent sur l'architecture \textit{tailsitter}. Il est donc intéressant de se focalisé sur des mécanismes de stabilisation d'un drone face à des conditions de vol plus réaliste.
+Toutefois, ce travail ne prend pas en compte l'impact des turbulences ou du vent sur l'architecture \textit{tailsitter}. Il est donc intéressant de se focaliser sur des mécanismes de stabilisation d'un drone face à des conditions de vol plus réalistes.
 
-}

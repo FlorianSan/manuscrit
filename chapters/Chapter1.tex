@@ -88,7 +88,7 @@
 
     
         \subsubsection*{\textit{Tiltwing}} 
-        La particularité des \textit{tiltwings} réside dans le fait que les rotors sont inclinés en même temps que les ailes (voir figure \ref{fig:tiltwing}). Un actionneur supplémentaire et puissant est donc nécessaire pour surmonter le couple de l'aile, afin de la positionner dans l'orientation souhaitée \cite{holsten2011design, rohr2019attitude, ccetinsoy2012design}. La commande de cet actionneur doit être prise en compte lors de la conception des lois de commande {\color{red} car il permet de fixer l'orientation de l'aile et par conséquent l'incidence vis-à-vis du flux d'air incident. Toutefois, la dynamique de cet actionneur et l'inertie de l'aile limite les déplacements rapide lesquels permettrait de rejeter des turbulences.} Pendant le décollage, l'atterrissage et les vols stationnaires, les ailes doivent être positionnées vers le haut afin de produire une force de poussée opposée au vecteur gravité. Dans ces phases de vol, lorsque les ailes sont orientées vers le haut, l'aéronef est plus vulnérable au vent et les lois de commande doivent rejeter ces perturbations. Dans la littérature, il existe plusieurs configurations d'ailes basculantes et différentes approches de contrôle conçues pour stabiliser leur dynamique de vol.
+        La particularité des \textit{tiltwings} réside dans le fait que les rotors sont inclinés en même temps que les ailes (voir figure \ref{fig:tiltwing}). Un actionneur supplémentaire et puissant est donc nécessaire pour surmonter le couple de l'aile, afin de la positionner dans l'orientation souhaitée \cite{holsten2011design, rohr2019attitude, ccetinsoy2012design}. La commande de cet actionneur doit être prise en compte lors de la conception des lois de commande car ce servomoteur permet de fixer l'orientation de l'aile et par conséquent l'incidence vis-à-vis du flux d'air incident. Toutefois, la dynamique de cet actionneur et l'inertie de l'aile limitent les déplacements rapides, lesquels permettraient de rejeter des turbulences. Pendant le décollage, l'atterrissage et les vols stationnaires, les ailes doivent être positionnées vers le haut afin de produire une force de poussée opposée au vecteur gravité. Dans ces phases de vol, lorsque les ailes sont orientées vers le haut, l'aéronef est plus vulnérable au vent et les lois de commande doivent rejeter ces perturbations. Dans la littérature, il existe plusieurs configurations d'ailes basculantes et différentes approches de contrôle conçues pour stabiliser leur dynamique de vol.
         \begin{figure}[ht!]
             \centering
             \resizebox{.9\textwidth}{!}{%
@@ -163,10 +163,12 @@ Pour les rafales, nous utiliserons plusieurs modèles, tel que le modèle "Chape
 
 La fonction définissant le chapeau mexicain est :
 \begin{align}
+    \label{eq:mex}
     \Psi_{mex}(t)= w_{m} - \frac{A_g}{2} \left(1-\cos(2 \pi f_g (t-t_{0,mex}))\right)\sin(3 \pi f_g (t-t_{0,mex}))
 \end{align}
 et la fonction ondelettes de Morlet est définie par :
 \begin{align}
+    \label{eq:morlet}
     \Psi_{mor}(t)=  w_{m} + A_g \exp(-(t+t_{0,mor})) \cos(5*(t-t_{0,mor}))
 \end{align}
 où $w_{m}$ est le vent moyen sans perturbation, $t_{0,mex}$ représente l'instant de début de perturbation et $t_{0,mor}$ l'instant où la perturbation est maximale, $A_g$ est l'intensité maximale de la perturbation et  $f_g$ est la fréquence de la perturbation. Les tracés de la figure \ref{fig:mexhat} montrent la représentation temporelle des deux fonctions pour les valeurs $w_{m} = \SI{1}{\meter\per\second}$, $t_{0,mex} = \SI{2}{\second}$,  $t_{0,mor} = \SI{5}{\second}$, $A_g = \SI{1}{\meter\per\second}$ et $f_g = \SI{0.8}{\radian\per\second}$.
@@ -243,7 +245,7 @@ La forme générale d'un contrôleur PID est la suivante :
 \begin{align}
     u_{PID}(t) = K_{p} e(t) + K_{i} \int_{0}^{t} e(\tau) \,d\tau + K_{d} \frac{d e(t)}{dt}
 \end{align}
-{\color{red} où le vecteur d'erreur est $e(t) = x_{ref} (t) - x(t)$ et où les gains $K_{p}$, $K_{i}$ et $K_{d}$ sont respectivement le gain proportionnel, intégral et dérivatif. Ils peuvent être réglés individuellement pour obtenir le comportement souhaité du système en boucle fermée.}
+où le vecteur d'erreur est $e(t) = x_{ref} (t) - x(t)$ et où les gains $K_{p}$, $K_{i}$ et $K_{d}$ sont respectivement le gain proportionnel, intégral et dérivatif. Ils peuvent être réglés individuellement pour obtenir le comportement souhaité du système en boucle fermée.
 
 \subsection*{Contrôleur LQR}
 Les contrôleurs LQR sont un type de contrôle linéaire basé sur les systèmes linéarisés de la forme $\dot{x} = Ax+Bu$. La commande $u$ est
@@ -286,15 +288,15 @@ Enfin, il existe une extension non-linéaire de l'approche $H_{\infty}$ en utili
 Grâce à la nature de la norme $W_{m,p}$, la variable de coût et ses dérivées temporelles sont prises en compte dans la fonction de coût, ce qui permet d'obtenir des contrôleurs offrant de meilleures performances en régime transitoire et en régime permanent.
 
 \subsection*{Contrôleur non linéaire}
-{ \color{red}
-L'approche "inversion dynamique non linéaire incrémentale" (INDI) utilise la connaissance de la dynamique d'un système. Une inversion incrémentale est réalisé pour d'obtenir les accélérations angulaires cibles. Théoriquement, le bouclage des accélérations angulaires élimine la sensibilité aux imperfections du modèle, ce qui augmente considérablement la robustesse du système par rapport à l'inversion dynamique non linéaire conventionnelle \cite{Sieberling2010, Binz2019}. Ce contrôleur nécessite l'identification des actionneurs afin de régler les paramètres du contrôleur, tels que l'efficacité des actionneurs. Étant donné que l'efficacité des surfaces de contrôle aérodynamique n'est pas constante pendant toute l'enveloppe de vol sur un \textit{tiltwing}, une méthode de programmation des gains a été mise au point \cite{smeurINDI,smeurINDITail}.
-La limitation d'une telle loi de commande est la disponibilité et la qualité  des accélérations angulaires, en effet, les capteurs mesurant la vitesse angulaire sont très bruité et nous sommes obligé de dériver ce signal pour obtenir les accélérations angulaires.
 
-}
+L'approche "inversion dynamique non linéaire incrémentale" (INDI) utilise la connaissance de la dynamique d'un système. Une inversion incrémentale est réalisée pour d'obtenir les accélérations angulaires cibles. Théoriquement, le bouclage des accélérations angulaires élimine la sensibilité aux imperfections du modèle, ce qui augmente considérablement la robustesse du système par rapport à l'inversion dynamique non linéaire conventionnelle \cite{Sieberling2010, Binz2019}. Ce contrôleur nécessite l'identification des actionneurs afin de régler les paramètres du contrôleur, telle que l'efficacité des actionneurs. Étant donné que l'efficacité des surfaces de contrôle aérodynamiques n'est pas constante pendant toute l'enveloppe de vol sur un \textit{tiltwing}, une méthode de programmation des gains a été mise au point \cite{smeurINDI,smeurINDITail}.
+La limitation d'une telle loi de commande est la disponibilité et la qualité  des accélérations angulaires. En effet, les capteurs mesurant la vitesse angulaire sont très bruités et nous sommes contraints de dériver ce signal pour obtenir les accélérations angulaires.
+
+
 
 \subsection*{Contrôleur sans modèle basée capteur}
-{\color{red}
-Contrairement à l'INDI basée sur l'inversion d'un modèle, la loi de commande sans modèle (MFC) \cite{Fliess_2013}  nécessite peu de connaissances préalables du système contrôlé pour concevoir le contrôleur. Cette commande est basée sur un estimateur non-linéaire qui estime la dynamique du système. Soulignons que cet estimateur ne modifie pas les gains de la commande en retour, contrairement aux méthodes de commande adaptative. Le processus adaptatif MFC est réalisé par l'estimateur qui fournir une sortie, laquelle est utilisé pour calculer la commande formant la boucle fermée. Avec cet estimateur, il est possible de mettre en œuvre un contrôleur robuste et adaptatif qui assure la stabilité des systèmes variables dans le temps en estimant en temps réel leur dynamique à partir des mesures périodiques. Nous pouvons citer le travail de \cite{olszaneckibarthHal-02542982} sur un \textit{tailsitter} qui continuer à voler malgré une modification importante de son actionnement et de sa dynamique (voir figure \ref{fig:darko_mfc}).
+
+Contrairement à l'INDI basée sur l'inversion d'un modèle, la loi de commande sans modèle (MFC) \cite{Fliess_2013}  nécessite peu de connaissances préalables du système contrôlé pour concevoir le contrôleur. Cette commande est basée sur un estimateur non-linéaire qui estime la dynamique du système. Soulignons que cet estimateur ne modifie pas les gains de la commande en retour, contrairement aux méthodes de commande adaptative. Le processus adaptatif MFC est réalisé par l'estimateur qui fournir une sortie, laquelle est utilisée pour calculer la commande formant la boucle fermée. Avec cet estimateur, il est possible de mettre en œuvre un contrôleur robuste et adaptatif qui assure la stabilité des systèmes variables dans le temps, en estimant en temps réel leur dynamique à partir des mesures périodiques. Nous pouvons citer le travail de \cite{olszaneckibarthHal-02542982} sur un \textit{tailsitter}, lequel continue de voler malgré une modification importante de son actionnement et de sa dynamique (voir figure \ref{fig:darko_mfc}).
 
 \begin{figure}[ht!]
     \centerline{
@@ -305,7 +307,7 @@ Contrairement à l'INDI basée sur l'inversion d'un modèle, la loi de commande 
 
 
 \nomenclature[]{\(MFC\)}{Commande sans modèle (\textit{ Model Free Control})}
-}
+
 \subsection*{Contrôleur séquencé}
 L'approche "Diviser et Conquérir" permet de passer d'une loi de contrôle à une autre, de manière discrète, de sorte qu'un seul contrôleur ne fonctionne à la fois. Un exemple d'un contrôle séquencé hybride de \textit{tailsitters} est donnée dans \cite{Casau2011}.
 
@@ -316,7 +318,7 @@ Contrairement à "Diviser et Conquérir", la pondération de contrôle fusionne 
 Cet exemple est une transition entre le mode vol stationnaire et le mode croisière. Dans ce cas, $T_{T}$ est le paramètre de durée de la transition et $\Delta t$ est le temps écoulé depuis le début de la manœuvre.
 
 \subsection*{Contrôleur adaptatif}
-{\color{red}
+
 \nomenclature[]{\(MRAC\)}{Commande adaptative à référence de modèle (\textit{ Model Reference Adaptive Control})}
 La commande adaptative à référence de modèle (MRAC) utilise un modèle de référence avec les performances de suivi souhaitées et adapte les paramètres du contrôleur en fonction de la différence entre le modèle réel $y$ et le modèle de référence $y_{m}$ (voir figure \ref{fig:schemaMRAC}). 
 
@@ -328,15 +330,15 @@ La commande adaptative à référence de modèle (MRAC) utilise un modèle de r�
 \end{figure}
 
 
-Le mécanisme d'ajustement peut être développé à partir de la règle de MIT \ref{Jain2013DesignOA}, de la théorie de Lyapunov \ref{GE1999741, CHAKRABARTY2016213} et d'autres approches mathématiques, telles que les fonctions d'ajustement de la covariance, etc. 
+Le mécanisme d'ajustement peut être développé à partir de la règle de MIT \cite{Jain2013DesignOA}, de la théorie de Lyapunov \cite{GE1999741, CHAKRABARTY2016213} et d'autres approches mathématiques, telles que les fonctions d'ajustement de la covariance, etc. 
 
-La technique de mécanisme d'ajustement proposée par \ref{CHAKRABARTY2016213}, basée sur les fonctions de Lyapunov, vise à suivre la sortie du système et ses états avec le modèle de référence. Pour ce faire, on suppose que tous les états sont disponibles pour la mesure, ce qui n'est pas toujours le cas dans les applications pratiques de contrôle.
+La technique de mécanisme d'ajustement proposée par \cite{CHAKRABARTY2016213}, basée sur les fonctions de Lyapunov, vise à suivre la sortie du système et ses états avec le modèle de référence. Pour ce faire, on suppose que tous les états sont disponibles pour la mesure, ce qui n'est pas toujours le cas dans les applications pratiques de contrôle.
 
-Selon la règle du MIT \ref{Shekhar2018}, le mécanisme d'ajustement fonctionne en minimiser l'erreur entre la sortie du système contrôlé $y$ et la sortie du modèle de référence $y_{m}$ via une fonction de coût qui met à jour le gain du contrôleur. Ces paramètres sont modifiés dans le sens négatif du gradient de la fonction de coût. Notons que le modèle de référence joue un rôle important dans les performances du contrôleur car la règle MIT tente de faire correspondre la sortie du système contrôlé avec la sortie du modèle de référence. Si ce modèle est mal modélisé, les performances de contrôle seront donc directement impacté.
+Selon la règle du MIT \cite{Shekhar2018}, le mécanisme d'ajustement fonctionne en minimisant l'erreur entre la sortie du système contrôlé $y$ et la sortie du modèle de référence $y_{m}$ via une fonction de coût qui met à jour le gain du contrôleur. Ces paramètres sont modifiés dans le sens négatif du gradient de la fonction de coût. Notons que le modèle de référence joue un rôle important dans les performances du contrôleur car la règle MIT tente de faire correspondre la sortie du système contrôlé avec la sortie du modèle de référence. Si ce modèle est mal modélisé, les performances de contrôle seront donc directement impactées.
 En outre, la règle MIT est très sensible aux changements d'amplitude de l'entrée de référence.
 
-Pour l'estimation des paramètres en temps réel, les méthodes les plus couramment utilisées sont les dérivés de la méthode des moindres carrés moyens, tels que la méthode des moindres carrés moyens normalisés, la méthode des moindres carrés moyens récursifs et le filtre de Kalman étendu. 
-}
+Pour l'estimation des paramètres en temps réel, les méthodes les plus couramment utilisées sont les dérivés de la méthode des moindres carrés moyens, telles que la méthode des moindres carrés moyens normalisés, la méthode des moindres carrés moyens récursifs et le filtre de Kalman étendu. 
+
 \section{Technologies et réalisations}
 
 Nos expérimentations sont réalisées grâce au système de drone Paparazzi (voir Annexe \ref{chap:annexe1}), lequel est constitué d'une partie matérielle et logicielle. La partie matérielle est principalement composée de l'autopilote (Apogee ou Tawaki) et la partie logicielle comporte l'ensemble des codes, embarqués et au sol, permettant de faire voler un drone. 
@@ -370,16 +372,11 @@ Un module a aussi été développé pour pouvoir utiliser des servomoteurs Feete
 
 
 \section{Conclusion}
-{\color{red}
+
 Ce chapitre présente un résumé de la littérature relative à la modélisation et au contrôle des \textit{tailsitters}.
 
 Le domaine des drones convertibles est vaste et chaque architecture cherche à répondre à une mission. Les diverses complexités engendrées sont autant de challenges pour assurer la stabilité du drone. Les défis aérodynamiques liés aux différents domaines de vol, tels que les écoulements à faible nombre de Reynolds, l'interaction hélice-ailes et l'identification des coefficients aérodynamiques par des campagnes en soufflerie, ont été résumés. Plusieurs publications expliquent la complexité de développer un modèle dynamique pour les \textit{tailsitters}. Cette difficulté notamment liée à la dynamique instable dans les vols de transition induite par des changements rapides des forces et des moments aérodynamiques, appelle au développement de stratégies de contrôle innovantes et robuste. 
 
-L'analyse de la littérature sur les lois de commande indique que la mise en œuvre d'une loi robuste abordant directement l'impact du vent sur le drone n'a jamais été réalisé.
+L'analyse de la littérature sur les lois de commande indique que la mise en œuvre d'une loi robuste abordant directement l'impact du vent sur le drone n'a jamais été réalisée.
 
 Nous allons donc nous focaliser sur un drone \textit{tailsitter} et plus précisément sa modélisation dans le but de comprendre les effets des perturbations sur sa dynamique.
-
-
-
-
-}
