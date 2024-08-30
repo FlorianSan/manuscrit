@@ -1,367 +1,401 @@
-% LTeX: language=fr enabled=true
-
-\chapter{Modélisation et commande d'un drone à aile libre rotation libre}
+\chapter{Commande proportionnelle intégrale de DarkO}
 \minitoc
-\label{chap:colibri}
+\label{chap:6DOF}
 
 \section{Motivation}
-\label{sec:motivationcolibri}
-\todo{Explication sur l'intérêt d'avoir un fuselage, capteur, charge utile}
-
-\section{Design et modélisation d'un drone : Colibri}
-\label{sec:model_colibri}
-
-Le drone Colibri est dérivé d'un drone \textit{tailsitter} qui génère de la portance pendant le vol d'avancement. Cette aile possède plusieurs actionneurs : quatre moteurs $u_{i}, ~i = 1,2,3,4$ et deux élevons $\delta_{\text{l}}$ et $\delta_{\text{r}}$. Nous pouvons définir le vecteur de contrôle $u_{\text{W}}$ de l'aile d'après la Figure~\ref{fig:world_body} comme $u_{\text{W}} = [u_{1}~u_{2}~u_{3}~u_{4}~\delta_{\text{l}}~\delta_{\text{r}}]^\top$. Un fuselage relié par un pivot est fixé au centre aérodynamique de l'aile. Ce fuselage supporte l'autopilote, la batterie, un moteur et un empennage pour le maintenir horizontal. Dans la Figure~\ref{fig:world_body}, toutes les surfaces de contrôle aérodynamiques sont représentées en rose et les hélices en vert.
-Trois repère sont attachés au drone. (I) est un repère inertiel NED lié à la surface de la terre, (W) est un repère attaché à l'aile du drone et (F) est un repère attaché au fuselage du drone.
+\label{sec:motivation6DOF}
+Nous avons observé expérimentalement dans le chapitre \ref{chap:3DOF} qu'un drone \textit{tailsitter} pouvait se stabiliser en stationnaire face à du vent, vers les points d'équilibre décrits dans la section \ref{sec:eq_vent}, grâce à une architecture de commande linaire. Cette dernière est basée sur un retour de sortie, proportionnel intégral, libérant deux degrés de liberté sur l'orientation du drone.
 
 
+\section{Commande linéaire proportionnelle intégrale}
+\label{sec:6dofcmd}
+\subsection{Description du schéma de contrôle}
+\label{sec:ctl_sche}
 
-\begin{figure}[ht!]
-\centering
-    \includegraphics[width=0.6\columnwidth,angle=0,trim={0 0 0 0.5cm},clip]{figures/wold_body.png}
-    \caption{Les repères, inertiel (I) et aile (W), attaché à l'architecture de Colibri.}
-    \label{fig:world_body}
+Une inspection minutieuse des matrices de commande et d'entrée des perturbations $\boldsymbol{G}_{w}$ et $\boldsymbol{E}_{w}$ du modèle \eqref{eq:lpv_linearisation} (voir la sortie de l'Algorithme~\ref{alg:linea}) suggère une architecture de contrôle efficace pour rejeter une perturbation de vent constante $\boldsymbol{w}$. En effet, les ailerons et les hélices peuvent être utilisés symétriquement pour générer respectivement un moment autour de l'axe $y_{[\text{b}]}$, vérifiant l'équation \eqref{eq:momenty}, et une force le long de l'axe $x_{[\text{b}]}$, vérifiant l'équation \eqref{eq:forcex}, compensant ainsi l'effet de la perturbation. Néanmoins, il reste une force le long de l'axe $z_{[\text{b}]}$ à compenser en vérifiant l'équation \eqref{eq:forcez}. Une action intégrale peut converger asymptotiquement vers la force désirée, même avec une perturbation du vent non mesurée ($\boldsymbol{w}$). Nous pouvons donc stabiliser le drone à l'équilibre en vol stationnaire tel que caractérisé dans le Théorème~\ref{thm:eqs}. Comme nous ne mesurons pas le vent $\boldsymbol{w}$, les valeurs de $\psi$ et $\theta$ dans l'Algorithme~\ref{alg:eq} sont inconnues. Le contrôleur proposé, illustré à la Fig.~\ref{fig:commande_int6DOF}, utilise l'action intégrale pour faire converger ces angles vers leur valeur d'équilibre. Le bouclage utilise les variables d'erreur suivantes : 
+\begin{align}
+    \boldsymbol{e}_{p}= \boldsymbol{r}_{p} - \boldsymbol{p}, \; \boldsymbol{e}_{v \epsilon \omega} = -  
+       \left[ \begin{smallmatrix} \mathbb{I}_{3}  & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 2} & \mathbb{0}_{3}\\
+       \mathbb{0}_{1\times 3}  & 1 & \mathbb{0}_{1\times 2} & \mathbb{0}_{1 \times 3} \\
+           \mathbb{0}_{3}  & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 2} &   \mathbb{I}_{3}
+           \end{smallmatrix} \right]
+    \smallmat{
+           \tilde{\boldsymbol{v}} \\
+           \tilde{\boldsymbol{\epsilon}} \\
+           \tilde{\boldsymbol{\omega}}_{\text{b}} 
+    }.
+  \label{eq:error_var}
+\end{align} 
+
+Ces variables d'erreur doivent converger vers zéro dans le cas d'un vol stationnaire et pour n'importe quelle position de référence constante $\boldsymbol{r}_{p} \in \mathbb{R}^{3}$. Notons que $\boldsymbol{r}_{p}$ est l'entrée de référence du schéma de contrôle.
+
+Les variables d'erreur dans \eqref{eq:error_var} peuvent être représentées comme dans le schéma  de la Fig.~\ref{fig:commande_int6DOF}, c'est-à-dire, en définissant la sortie $\boldsymbol{y}\in \real^{10}$ de la dynamique du système linéarisé \eqref{eq:lpv_linearisation}, ayant le vecteur d'état incrémental $\boldsymbol{\tilde{x}} \in \real^{10 \times 1}$ défini ci-dessous : 
+\begin{align}
+    \label{eq:output_lin}
+    \boldsymbol{y} = \boldsymbol{C} \boldsymbol{\tilde{x}} + \smallmat{\boldsymbol{p}_{\mathrm{eq}} \\ \mathbb{0}_{7 \times 1}}, \quad
+ \boldsymbol{C} := \smallmat{\mathbb{I}_{6} & \mathbb{0}_{6\times 1} & \mathbb{0}_{6\times 2} &\mathbb{0}_{6\times 3}\\
+    \mathbb{0}_{1\times 6} & 1 & \mathbb{0}_{1\times 2} &\mathbb{0}_{1\times 3}\\
+    \mathbb{0}_{3\times 6} & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 2} &  \mathbb{I}_{3}
+},
+\end{align}
+où la matrice de sortie $\boldsymbol{C} \in \real^{10\times12}$ enlève la composante $\tilde{\epsilon}_{2}$ et $\tilde{\epsilon}_{3}$ du vecteur d'état $\tilde{\boldsymbol{x}}$. 
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{figures/commande_integrale.png}
+    \caption{Schéma de commande intégrale avec la perturbation de vent $\boldsymbol{w}$, la perturbation du système à l'entrée $\boldsymbol{d}$ et à la sortie $\nu$.}
+    \label{fig:commande_int6DOF}
 \end{figure}
 
-Certaines des dimensions caractéristiques sont indiquées dans la Table~\ref{tab:pars_colibri}. Notons que les moteurs sont positionnés symétriquement sur l'aile, ce qui signifie que la position peut être décrite en se concentrant sur un seul côté. 
+Comme le montre la Figure~\ref{fig:commande_int6DOF}, les équations de la dynamique du contrôleur sont basées sur l'erreur $\boldsymbol{e}$ suivante :
 
-\begin{table}[ht]
-  \centering
-    \begin{tabular}{|l|c|c|}
-      \hline
-      \multicolumn{1}{|c|}{Paramètres} & Valeur & Unités  \\
-      \hline
-      $m_{\text{W}}$ (masse de l'aile)  & 0.53& \SI{}{\kilogram} \\
-      \hline
-      $m_{\text{F}}$ (masse du fuselage)  & 1.17& \SI{}{\kilogram} \\
-      \hline
-    %   $b$ (wingspan)  & 1.17 & \SI{}{\meter} \\
-    %   \hline
-    %   $c$ (aerodynamic cord)  & 0.150 & \SI{}{\meter} \\
-    %   \hline
-    %   $S$ (wing area) & 0.1537 & \SI{}{\square\meter}\\
-    %   \hline
-    %   $S_{\text{wet}}$ (wet area) & 0.0813 & \SI{}{\square\meter}\\
-    %   \hline
-    %   $S_{\text{p}}$ (propeller area) & 0.0182 & \SI{}{\square\meter}\\
-    %   \hline
-      $J_{\text{W}}=diag(J_{x}^{\text{W}}, J_{y}^{\text{W}}, J_{z}^{\text{W}})$ & \!\! $\diag(0.1677,0.0052,0.1634)$\!\! & \SI{}{\kilogram\square\meter}\\
-      \hline
-      $J_{\text{F}}=diag(J_{x}^{\text{F}}, J_{y}^{\text{F}}, J_{z}^{\text{F}})$ & \!\! $\diag(0.0191,0.0161,0.0343)$\!\! & \SI{}{\kilogram\square\meter}\\
-      \hline
-      $k_{\text{f}}$ (coefficient de poussée de l'hélice) & 1.7800e-8 & \SI{}{\kilogram\meter}\\
-      \hline
-       $d_{\text{M}O_{\text{W}}}$  & $[0.383,0,-0.167]^\top$ & \SI{}{\meter}\\
-      \hline
-       $d_{\text{G}O_{\text{W}}}$  & $[0.052,0,-0.171]^\top$ & \SI{}{\meter}\\
-      \hline
+\begin{subequations}
+    \label{eq:contoller}
+    \begin{align}
+        \boldsymbol{e} = \smallmat{
+        \boldsymbol{e}_{p}^\top & \boldsymbol{e}_{v\epsilon\omega}^\top}^\top, \quad \dot{\boldsymbol{x}}_{c} = \boldsymbol{H} \boldsymbol{e}, \quad    \boldsymbol{u} = \boldsymbol{\Sigma} \boldsymbol{x}_{c} + \boldsymbol{u}_{K},
+        \\
+        \boldsymbol{\Sigma} := \begin{bmatrix} \! 1 \!&\! 1\! & \!0\! &\! 0\!\\ \!0\! & \!0\! & \!1 \!& \!1\!\end{bmatrix}^\top, \quad
+        \boldsymbol{u}_{K} = \frac{n_1 s+n_0}{d_2 s^{2}+d_1 s + d_0}\boldsymbol{K} \boldsymbol{e} ,
+    \end{align}
+\end{subequations}
+où $\boldsymbol{x}_{c} \in \mathbb{R}^{2}$ est l'état intégral, $\boldsymbol{\Sigma}$ est une matrice d'allocation des entrées qui permet d'affecter la première composante de l'état de l'intégrateur à l'action des hélices et la deuxième composante à l'action des élevons. Les scalaires $n_1$, $n_0$,  $d_2$,  $d_1$,  $d_0$ sont respectivement les coefficients du numérateur et du dénominateur d'un filtre utilisé pour éviter une transmission directe entrée-sortie qui amplifierait le bruit de mesure à haute fréquence. Ce filtre induit un contrôleur strictement propre, pour une robustesse accrue aux incertitudes additives. 
+
+Nous définissons le contrôleur $\boldsymbol{F}$ ayant pour dimensions 4\texttimes10 avec la matrice de transfert $\boldsymbol{F}(s) = T_{\boldsymbol{e} \rightarrow \boldsymbol{u}}(s)$ telle que décrite dans \eqref{eq:contoller} et l'interconnexion détaillée dans la Figure~\ref{fig:commande_int6DOF}. Le système $\boldsymbol{P}$ de dimensions 10\texttimes4 représente la dynamique linéarisée de DarkO. La sortie du système $\boldsymbol{y} \in \real^{10\times1}$ est utilisée comme entrée du contrôleur $\boldsymbol{F}$.
+
+Compte tenu des symétries des actionneurs du drone, nous avons contraint la structure de la matrice $\boldsymbol{K}$ dans \eqref{eq:contoller}, associée à l'action proportionnelle du contrôleur, afin d'utiliser les actionneurs selon leur action physique. Ainsi, $\boldsymbol{K}$ prend la forme : 
+\begin{align}
+\label{eq:k_struct}
+    \!\!\!\boldsymbol{K}_{\text{struct}} \!=\!  \smallmat{
+             k_{1}& \shortminus k_{2}& k_{3}&  k_{4}& \shortminus k_{5}&  k_{6}& \shortminus k_{7}&  k_{8}&  k_{9}& \shortminus k_{10}\\
+             k_{1}&  k_{2}& k_{3}&  k_{4}&  k_{5}&  k_{6}&   k_{7}& \shortminus k_{8}& \shortminus k_{9}&  k_{10}\\
+            \shortminus k_{11}& \shortminus k_{12}& k_{13}& \shortminus k_{14}& \shortminus k_{15}& \shortminus k_{16}&   k_{17}& \shortminus k_{18}&  k_{19}& \shortminus k_{20}\\
+            \shortminus k_{11}&  k_{12}& k_{13}& \shortminus k_{14}&  k_{15}&  k_{16}&   \shortminus k_{17}&  k_{18}&  k_{19}&  k_{20} 
+         }.
+\end{align}
+
+La structure précédente s'explique par le comportement physique du drone. Une erreur de position sur l'axe $z_{[\text{i}]}$ du repère inertiel NED (voir Fig.~\ref{fig:darko2}) entraîne une utilisation symétrique des deux hélices, ce qui génère une force le long de l'axe $x_{[\text{b}]}$ du drone. L'utilisation symétrique des deux moteurs se traduit par le même signe dans les coefficients $k_{3}$ et $k_{6}$ des colonnes 3 et 6 de $\boldsymbol{K}$, qui correspondent respectivement aux erreurs de position et de vitesse sur l'axe $z_{[\text{i}]}$. De même, une erreur de position ou de vitesse le long de l'axe latéral du drone $y_{[\text{b}]}$ sera compensée par une utilisation antisymétrique des moteurs, comme le montrent les coefficients $k_{2}$ et $k_{5}$ et leur signe opposé dans les colonnes 2 et 5 de $\boldsymbol{K}$. Une erreur de vitesse angulaire autour de l'axe $x_{[\text{b}]}$ doit être compensée par une utilisation antisymétrique des élevons, comme le montre le coefficient $k_{18}$ de signe opposé dans la colonne 8 de $\boldsymbol{K}$. Des arguments parallèles expliquent les coefficients restants de la matrice $\boldsymbol{K}$ dans \eqref{eq:k_struct}. Toutes ces explications ne sont valables que dans un voisinage de l'équilibre, où le drone se trouve être à la verticale. On comprend aisément que dans d'autres configurations, ces contraintes d'actionnement ne sont plus valides. Un avantage de la structure de \eqref{eq:k_struct} est la réduction du nombre de variables à optimiser, de 40 à 20 gains scalaires, cela se traduisant par une diminution du temps nécessaire à l'optimisation.
+
+La boucle fermée illustrée à la Figure~\ref{fig:commande_int6DOF} est un retour de sortie à dix éléments, comprenant les trois positions, les trois vitesses linéaires, l'un des trois angles d'attitude ($\epsilon_{1}$) et les trois vitesses angulaires. Cette structure peut être considérée comme un bouclage proportionnel-intégral MIMO. Les paramètres à régler dans le contrôleur $\boldsymbol{F}$ \eqref{eq:contoller} sont le gain proportionnel $\boldsymbol{K} \in \real^{4\times10}$ dans \eqref{eq:k_struct}, le gain intégral $\boldsymbol{H} \in \real^{2\times10}$ et les paramètres du filtre $n_1$, $n_0$, $d_2$, $d_1$, $d_0$, comme repérés en jaune sur la Fig.~\ref{fig:commande_int6DOF}. Une méthode de réglage appropriée doit garantir une réjection adéquate des perturbations et une robustesse satisfaisante aux dynamiques non modélisées. Ces deux objectifs conduisent à un compromis car le rejet des perturbations nécessite un réglage agressif tandis que les propriétés de robustesse sont assurées par une stratégie d'atténuation des hautes fréquences.
+
+Nous examinons ensuite deux méthodes de réglage basées sur l'optimisation. La première est issue des idées proposées dans \ref{sec:3dofcmd}, méthode qui ne nécessitait pas la dynamique linéarisée des Théorèmes~\ref{thm:eqs} et~\ref{th:lin}, et est résumée dans la section~\ref{sec:zerowind}. Il s'agit d'une synthèse multiobjectif avec des contraintes $H_{\infty}$, basée sur le modèle de vent nul, discutée dans la section~\ref{sec:eq_nowind} et~\ref{sec:nowind_lin} et détaillée dans \ref{sec:3dofcmd}. Nous montrerons que cette première méthode ne permet pas de stabiliser le drone dans certaines plages de vent, en raison de la méconnaissance de la dynamique caractérisée par les Théorèmes~\ref{thm:eqs} et~\ref{th:lin}. La deuxième méthode de réglage, présentée à la section \ref{sec:h_inf6DOF_multi}, est une synthèse itérative multiobjectif avec des contraintes $H_{\infty}$, basée sur un ensemble de modèles associés à différentes conditions de vent, lesquels sont obtenus des Théorèmes~\ref{thm:eqs} et~\ref{th:lin}, par le biais des Algorithmes~\ref{alg:eq} et~\ref{alg:linea}.
+
+
+Dans notre validation numérique, présentée dans les sections~\ref{sec:zerowind} et~\ref{sec:h_inf6DOF_multi} (voir en particulier les Fig.~\ref{fig:SimSytuneStruct_zero} et Fig.~\ref{fig:SimSytuneStruct_lpv}), un bruit de mesure est ajouté à la sortie pour produire des résultats numériques semblables aux expérimentaux. Les écarts types des niveaux de bruit adoptés sont indiqués dans la Table~\ref{tab:noise}.
+\begin{table}[ht!]
+    \centering
+    \begin{tabular}{|c|c|c|} 
+        \hline
+        Grandeurs & Valeurs & Unités\\
+        \hline
+        $\boldsymbol{p}$ & \SI{2.5e-4}{} & \SI{}{\meter}  \\ 
+        \hline
+        $\tilde{\boldsymbol{v}}$  & \SI{1.2e-3}{} &  \SI{}{\meter\per\second}  \\ 
+        \hline
+        $\tilde{\boldsymbol{\epsilon}}$ & \SI{4.7e-4}{} &  \\
+        \hline
+        $\tilde{\boldsymbol{\omega}}_{\text{b}}$ & \SI{2.7e-3}{} &\SI{}{\radian\per\second}\\
+        \hline
     \end{tabular}
-    \caption{Paramètres numériques du modèle Colibri.}
-    \label{tab:pars_colibri}
+    \caption{ Écart-type du bruit pour la modélisation des capteurs en simulation.}
+    \label{tab:noise}
 \end{table}
 
-% \todo{There is no derived process or explanation provided for
-% the M matrix, A, Q matrix, etc. In Equation 1, both Q and B
-% are matrices and do not include the location x. Where are
-% the state variables located?}
-La modélisation est basée sur les résultats de \cite[Section 2.15]{udwadia-phohomsiri}. L'algorithme de calcul des matrices $M$, $A$, $Q$ et $B$ se trouve dans \cite{udwadia-schutte}, qui nous fournit les équations de mouvement d'un système multicorps contraint : 
+En plus de présenter les résultats de la simulation du bouclage linéaire de la Fig. ~\ref{fig:commande_int6DOF} avec le modèle linéarisé \eqref{eq:lpv_linearisation}, dans les sections~\ref{sec:zerowind} et~\ref{sec:h_inf6DOF_multi}, nous simulons également la boucle fermée en remplaçant le modèle linéarisé $\boldsymbol{P}$ par le modèle non linéaire \eqref{eq:dyna_orig}, comprenant la dynamique réelle du drone.
+
+Lorsque l'on remplace le modèle linéarisé par la dynamique non linéaire \eqref{eq:dyna_orig}, dont l'état est $\boldsymbol{x} = (\boldsymbol{p}, \boldsymbol{v}, \boldsymbol{q},\boldsymbol{\omega}_{\text{b}}) \in \real^{13} $, nous remplaçons la sortie linéaire $\boldsymbol{y}$ avec la version non linéaire suivante :
 \begin{align}
-\label{eq:udwadia}
-    \ddot{x} = \hat{M}^{\dag} \begin{bmatrix} Q \\ B \end{bmatrix}  = \begin{bmatrix} (I - A^{\dag}A)M \\ A \end{bmatrix}^{\dag} \begin{bmatrix} Q \\ B \end{bmatrix}
+\label{eq:output}
+    \boldsymbol{y}_{\text{NL}} \!=\! \smallmat{\boldsymbol{p}\\
+     \boldsymbol{v}\\
+     \epsilon_{1}\\
+     \boldsymbol{\omega}_{\text{b}}} \!=\! \left[ \begin{smallmatrix} \mathbb{I}_{6} & \mathbb{0}_{6\times 1} & \mathbb{0}_{6\times 1} & \mathbb{0}_{6\times 2} & \mathbb{0}_{3}\\
+     \mathbb{0}_{1\times 3} & 0 & 1 & \mathbb{0}_{1\times 2} & \mathbb{0}_{1 \times 3} \\
+         \mathbb{0}_{3} & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 1} & \mathbb{0}_{3\times 2} &   \mathbb{I}_{3}
+         \end{smallmatrix} \right]
+         \smallmat{\boldsymbol{R}^\top_{\psi}\boldsymbol{p} \\ \boldsymbol{R}^\top_{\psi}\boldsymbol{v} \\
+\boldsymbol{q}_{\mathrm{eq}\psi}^{-1} \otimes \boldsymbol{q} \\
+         \boldsymbol{\omega}_{\text{b}}  }.
 \end{align}
-dont l'expression est valide tant que $\hat{M}$ a un rang complet et où $A$, $M$, $Q$ et $B$ sont décrits par la suite.
+
+
+Dans les sections suivantes, nous notons la marge de module d'une matrice de transfert $s \mapsto T_{v \rightarrow z}$ as $\Delta_m(T_{v \rightarrow z}) = \min\limits_{\omega\in R} \sigma_{\min}(T_{v \rightarrow z}(j\omega))$.
+
+
+
+\subsection{Contrôleur optimisé sous contraintes $H_{\infty}$, cas sans vent}
+\label{sec:zerowind}
+
+Pour régler le contrôleur dans le cas sans vent, nous utilisons le modèle linéaire du système décrit dans la section~\ref{sec:nowind_lin}, $\boldsymbol{P}(s) = T_{\boldsymbol{u} \rightarrow \boldsymbol{y}}(s)$, obtenu à partir des équations \eqref{eq:linearized} et \eqref{eq:output_lin} tel que :
+
+\begin{align*}
+    \boldsymbol{P}(s) = \boldsymbol{C} (s \mathbb{I}_{12} - \boldsymbol{A}_{0})^{-1} \boldsymbol{G}_{0}.
+\end{align*} 
+
+En lien avec la Figure~\ref{fig:commande_int6DOF}, nous introduisons des matrices de transfert qui correspondent aux objectifs de robustesse : la fonction de sensibilité en sortie définie par $T_{\nu \rightarrow e}=(\mathbb{I}_{10}+\boldsymbol{P}\boldsymbol{F})^{-1}$ de dimensions 10\texttimes10, telle que $\lVert T_{\nu \rightarrow e} \rVert _{\infty}=\Delta_m(T_{\nu \rightarrow e})^{-1} $ et la fonction de sensibilité en entrée $T_{d \rightarrow u}=(\mathbb{I}_{4}+\boldsymbol{F}\boldsymbol{P})^{-1}$ de dimensions 4\texttimes4, définie par $\lVert T_{d \rightarrow u} \rVert _{\infty}=\Delta_m(T_{d \rightarrow u})^{-1}$.
+Par conséquent, la minimisation de la norme $H_{\infty}$ de $T_{\nu \rightarrow e}$ ou de $T_{d \rightarrow u}$ correspond à l'augmentation des marges de module en entrée et en sortie. Étant donné que le système $\boldsymbol{P}$ est MIMO, nous accordons de l'importance aux fonctions de sensibilité en entrée et en sortie qui ne coïncident pas, car $\boldsymbol{P}$ et $\boldsymbol{F}$ ne commutent pas.
+
+Nous définissons aussi la matrice de transfert $T_{\nu \rightarrow u}$ de dimensions 4\texttimes10 liée à l'impact du bruit de mesure $\nu$ sur la commande $\boldsymbol{u}$, e $T_{d \rightarrow y}$ de dimensions 10\texttimes4 représentant l'impact de la perturbation en entrée $\boldsymbol{d}$ sur la sortie du système $\boldsymbol{y}$. 
+
+Nous résolvons le même problème que dans notre travail précédent \ref{eq:pb_optim} en utilisant le logiciel {\tt Systune} \cite{1576856}, mais nous utilisons le diagramme de contrôle présenté dans la section~\ref{sec:ctl_sche} qui comprend un filtre sur l'action proportionnelle et un nombre différent de sorties. Nous incluons également dans le système $\boldsymbol{P}$ la dynamique des actionneurs linéaires discutée dans la section~\ref{sec:saturation}.
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.6\columnwidth]{figures/sim_systune_zero_wind.png}
+    \caption{Simulation du modèle non linéaire \eqref{eq:dyna_orig} (ligne continue) et du modèle linéarisé \eqref{eq:lpv_linearisation} (ligne en pointillé) avec des incréments de vent constants croissants et le contrôleur basé sur l'optimisation sans vent de la section~\ref{sec:zerowind}.}
+    \label{fig:SimSytuneStruct_zero}
+\end{figure}
+
+Une augmentation successive de l'intensité horizontale et verticale du vent (allant de 0 à \SI{-6}{\meter\per\second}) est appliquée, comme le montre le tracé inférieur de la Fig.~\ref{fig:SimSytuneStruct_zero}. Les couples de vent sélectionnés $(w_{x}, w_{z})$ sont représentés par des points rouges sur les surfaces de la figure~\ref{fig:saturation}, où l'on peut voir que l'équilibre $(\boldsymbol{u}_{\text{eq}}, \boldsymbol{x}_{\text{eq}})$ est atteint sans que les actionneurs ne soient saturés. Nous ne nous intéressons qu'à la partie négative de la vitesse verticale du vent car elle est la plus limitante. En effet, le drone est soulevé par le vent vertical ascendant (dont le signe est négatif dans le cadre de la NED), nécessitant ainsi moins de traction sur les hélices pour compenser la gravité. Les moteurs génèrent moins de flux d'air sur les élevons, ce qui réduit leur efficacité, conduit à la saturation et déstabilise le drone.
+L'objectif du système de contrôle est de maintenir le drone en position de vol stationnaire (définie comme $\boldsymbol{r}_{p} = [0,0,0]^\top$), malgré l'augmentation du vent horizontal et vertical $w_{x}$ et $w_{z}$. 
+
+
+La Figure~\ref{fig:SimSytuneStruct_zero} présente à la fois des simulations linéaires avec la dynamique linéarisée \eqref{eq:lpv_linearisation} (en pointillé) et des simulations non linéaires avec le modèle non-linéaire \eqref{eq:dyna_orig} (en traits pleins). Les simulations linéaires et non linéaires montrent systématiquement que le contrôleur fonctionne bien à faible vitesse de vent (effectivement, le réglage est effectué sur la base du modèle de vent nul). Cependant, lorsque la vitesse du vent $w_{x}$ et $w_{z}$ dépasse \SI{-5}{\meter\per\second}, la position de vol stationnaire devient instable et le drone oscille et diverge. Les angles d'inclinaison $\theta$ sont utilisés pour représenter l'attitude afin de donner un meilleur aperçu du comportement du véhicule, mais la simulation de la dynamique non linéaire \eqref{eq:dyna_orig} est effectuée avec un quaternion unitaire. L'instabilité observée dans les résultats de la simulation de la figure~\ref{fig:SimSytuneStruct_zero} confirme les instabilités expérimentales rapportées dans la section \ref{sec:exp3DOF}, où nous avons utilisé cette même méthode de réglage. Est également confirmée l'importance des Théorèmes~\ref{thm:eqs} et~\ref{th:lin} dans la Section~\ref{sec:model}, pour un réglage approprié des gains du contrôleur, comme cela est effectué dans la section suivante.
+
+
+\subsection{Contrôleur optimisé sous contrainte $H_{\infty}$, cas multimodèle}
+\label{sec:h_inf6DOF_multi}
+
+Les résultats de simulation obtenus avec la méthode de réglage sans vent (voir la Figure~\ref{fig:SimSytuneStruct_zero}), ainsi que les instabilités expérimentales observées dans la section \ref{sec:exp3DOF} confirment la nécessité d'une procédure de réglage du gain du contrôleur exploitant les linéarisations paramétrées en fonction du vent des Théorèmes~\ref{thm:eqs} et~\ref{th:lin}. En nous concentrant à nouveau sur le schéma de contrôle de la Figure~\ref{fig:commande_int6DOF}, nous considérons maintenant explicitement l'effet du vent (linéarisé) sur le système \eqref{eq:lpv_linearisation} avec la sortie \eqref{eq:output_lin} et avec les sélections de l'algorithme~\ref{alg:linea} comme définies ci-dessous :
+\begin{align*}
+\label{eq:Pw_synthesis}
+\numberthis
+    \boldsymbol{P}_w(s) &= \begin{bmatrix}
+        \boldsymbol{P}_{u}(s;w) &  \boldsymbol{P}_{w}(s;w)
+    \end{bmatrix}\\&:= \boldsymbol{C} (s \mathbb{I}_{12} - \boldsymbol{A}_{w})^{-1} \begin{bmatrix}\boldsymbol{G}_{w} &   \boldsymbol{E}_{w}\end{bmatrix},
+\end{align*}
+
+où l'entrée est la concaténation de l'entrée de commande $\boldsymbol{u}$ et de l'entrée de perturbation de vent $\boldsymbol{w}$. Comme le modèle dépend de la vitesse du vent $\boldsymbol{w}$, nous introduisons une nouvelle matrice de transfert $T_{w \rightarrow y}$ ayant des dimensions de 10\texttimes3, laquelle correspond à la matrice de transfert entre l'entrée du vent $\boldsymbol{w}$ et la sortie du système $\boldsymbol{y}$, quantifiant l'effet de la perturbation du vent sur la boucle de commande du drone. 
+
+Avec l'ensemble des matrices de transfert définies dans la section~\ref{sec:zerowind} et la nouvelle matrice de transfert $T_{w \rightarrow y}$, nous utilisons l'approche proposée dans \cite{1576856,ApkarianMulti} qui utilise des techniques d'optimisation non lisses pour traiter les problèmes de bouclage non convexes, appelée ''{\tt Systune}''. Ainsi nous pouvons régler notre architecture de contrôle structurée, pour laquelle nous optimisons les matrices de gain $\boldsymbol{K}$, $\boldsymbol{H}$ et les paramètres de filtrage $n_1$, $n_0$,  $d_2$,  $d_1$,  $d_0$  (en jaune sur la Figure~\ref{fig:commande_int6DOF}). Comme indiqué dans \cite[eq. (2)]{ApkarianMulti}, nous résolvons le problème d'optimisation multiobjectifs, en exploitant l'implémentation Matlab bien expliquée dans \cite[\S 3]{ApkarianMulti}.
+
+En particulier, sur la base d'un ensemble ${\mathcal W}$ comprenant une collection finie de couples $(w_x, w_z)$, avec $w_{x} \in [0,~8]~\SI{}{\meter\per\second}$ et $ w_{z} \in [\shortminus 4,~4]~\SI{}{\meter\per\second}$, nous considérons l'ensemble des systèmes linéarisés qui résulte de \eqref{eq:Pw_synthesis} et nous résolvons l'optimisation convexe suivante, où les scalaires $W_{1}$, $W_{2}$, $W_{3}$, $W_{4}$ et $W_{5}$ sont des facteurs de pondération à ajuster pour obtenir un compromis satisfaisant entre la robustesse (associée à $W_2$, $W_3$ et $W_4$) et la performance (associée à $W_1$ et $W_5$) :
+
+\begin{align*} \label{eq:pb_optim_lpv}
+\numberthis
+\gamma^\star &= \min_{\boldsymbol{F}} \max_{w \in {\mathcal W}} 
+\begin{vmatrix}
+    \| W_{1} T_{\nu \rightarrow e}(\boldsymbol{P}_w,\boldsymbol{F})\|_{\infty} \\
+    \|W_{2} T_{d \rightarrow u}(\boldsymbol{P}_w,\boldsymbol{F})\|_{\infty}\\
+    \|W_{3} T_{\nu \rightarrow u}(\boldsymbol{P}_w,\boldsymbol{F})\|_{\infty}\\
+    \|W_{4} T_{d \rightarrow y}(\boldsymbol{P}_w,\boldsymbol{F})\|_{\infty}\\
+    \|W_{5} T_{w \rightarrow y}(\boldsymbol{P}_w,\boldsymbol{F})\|_{\infty}
+    \end{vmatrix}_{\infty}, \text{ sous condition que } \\ 
+    &\qquad \boldsymbol{F}
+    \text{ stabilise en interne } {\mathcal F}_\ell (\boldsymbol{P}_w,\boldsymbol{F}), \forall w \in {\mathcal W},
+\end{align*}
+où ${\mathcal F}_\ell(\boldsymbol{P}_w,\boldsymbol{F})$ désigne l'interconnexion de bouclage linéaire de la Figure~\ref{fig:commande_int6DOF} pour une valeur spécifique de $w$ (ceci est cohérent avec la notation classique de contrôle robuste \cite{1576856,ApkarianMulti}). Nous notons que, par rapport à \cite[eq. (2)]{ApkarianMulti}, nous ne spécifions que des contraintes \textit{soft} et non des contraintes \textit{hard}.
+
+
+\begin{algorithm}
+  \caption{Réglage itératif et multimodèle des gains du contrôleur.}
+  \label{alg:iterativeOptimisation}
+  \hspace*{.1cm} \textbf{Entrées} : $\boldsymbol{A}_{w}$, $\boldsymbol{G}_{w}$, $\boldsymbol{E}_{w}$  les matrices de sortie de l'algorithme~\ref{alg:linea} et les scalaires de pondération positifs $W_1$--$W_5$\\
+  \hspace*{.1cm} \textbf{Sorties} : $\boldsymbol{K}$, $\boldsymbol{H}$ et les gains du filtre
+  \begin{algorithmic}[1]
+   
+    \State (Initialisation) Initialiser ${\mathcal W}$ comme un maillage comprenant toutes les paires $ w_{x} \in \{0,~-4,~-8\}$ et $ w_{z} \in \{\shortminus 4,~0,~4\}$
+    \State \label{step:synthesis} (Synthèse) Résoudre l'optimisation \eqref{eq:pb_optim_lpv} avec le logiciel {\tt Systune}
+
+    \State \label{step:analysis} (Analyse) Définir un maillage de validation ${\mathcal W}_{\text{v}}$ en discrétisant l'intervalle $(w_x,w_y) \in [0,8]\times[-4,4]$ avec un pas de discrétisation de $1$. En utilisant le contrôleur $\boldsymbol{F}$ obtenu à l'étape précédente et pour chaque $w_{\text{v}}\in {\mathcal W}_{\text{v}}$, nous calculons :
+    \begin{align}
+    \label{eq:validation_step}
+    \gamma_{\text{v}} = \begin{vmatrix}
+    \| W_{1} T_{\nu \rightarrow e}(\boldsymbol{P}_{w_{\text{v}}},\boldsymbol{F})\|_{\infty} \\
+    \|W_{2} T_{d \rightarrow u}(\boldsymbol{P}_{w_{\text{v}}},\boldsymbol{F})\|_{\infty}\\
+    \|W_{3} T_{\nu \rightarrow u}(\boldsymbol{P}_{w_{\text{v}}},\boldsymbol{F})\|_{\infty}\\
+    \|W_{4} T_{d \rightarrow y}(\boldsymbol{P}_{w_{\text{v}}},\boldsymbol{F})\|_{\infty}\\
+    \|W_{5} T_{w \rightarrow y}(\boldsymbol{P}_{w_{\text{v}}},\boldsymbol{F})\|_{\infty}
+    \end{vmatrix}_{\infty}.
+    \end{align}
+    Augmenter  ${\mathcal W}$ avec le point correspondant si $\gamma_{\text{v}} > 1$ ou si $\gamma_{\text{v}}$ est indéfini (à savoir si $\boldsymbol{F}$ n'est pas stabilisant).
+
+
+    \State (Conclusion) Si ${\mathcal W}$ n'a pas été augmenté à l'étape précédente, passer à l'étape~\ref{step:final}, sinon passer à l'étape~\ref{step:synthesis}.
+    
+    \State \label{step:final} 
+    \textbf{Retourne} : $\boldsymbol{K}$, $\boldsymbol{H}$ et les paramètres du filtre $n_1$, $n_0$,  $d_2$,  $d_1$,  $d_0$
+
+  \end{algorithmic}
+\end{algorithm}
+
+Le problème d'optimisation \eqref{eq:pb_optim_lpv} devient de plus en plus lourd d'un point de vue informatique, à mesure que nous augmentons la cardinalité de l'ensemble des conditions de vent considérées dans ${\mathcal W}$. En fait, une approche de force brute incluant un maillage fin de points dans ${\mathcal W}$ conduit à une optimisation difficile à calculer. Au lieu de cela, nous suivons ici la procédure itérative décrite dans l'algorithme~\ref{alg:iterativeOptimisation}, où ${\mathcal W}$ est initialement sélectionné comme un maillage grossier comprenant $3 \times 3 = 9$ points (étape 1) ; une étape de synthèse (étape 2) est ensuite suivie de manière répétée par une étape d'analyse (simple du point de vue du calcul) (étape 3) où le contrôleur $\boldsymbol{F}$ est fixé.
+L'étape 3 identifie les points de violation en utilisant un maillage de validation plus fin ${\mathcal W}_{\text{v}}$ et les ajoute à l'ensemble d'optimisation ${\mathcal W}_{\text{v}}$. L'algorithme se termine après quelques itérations, lorsque aucun point du maillage de validation ne viole les contraintes.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|l|c|c|c|c|c|} 
+    \hline
+    Pondération & $W_1$ & $W_2$ & $W_3$ & $W_4$ & $W_5$ \\ \hline
+    Values &18 & 16 & 11 & 26 & 5 \\ \hline
+    \end{tabular}
+    \caption{\label{tab:W1W5} Valeurs des scalaires de pondération positifs $W_1$--$W_5$ utilisés dans l'exécution de l'Algorithme~\ref{alg:iterativeOptimisation}.}
+\end{table}
+L'exécution de l'algorithme~\ref{alg:iterativeOptimisation}, pour les modèles de DarkO issus des théorèmes~\ref{thm:eqs} et~\ref{th:lin} avec la sélection des scalaires de pondération positifs $W_1$--$W_5$ indiqués dans la Table \ref{tab:W1W5}, a donné la sélection suivante après 2 itérations :
+\begin{align*}
+ \left[\!\! \begin{array}{c|c} 
+ \boldsymbol{K}^\top \!\!&  \boldsymbol{H}^\top \!\!
+       \end{array} \right] \!&=\!
+\left[\!\! \begin{array}{c|c} 
+\begin{smallmatrix}
+    -3.86&-3.86&0.79&0.79\\ 
+1.43&-1.43&1.71&-1.71\\ 
+4.06&4.06&-2.07&-2.07\\ 
+-6.86&-6.86&-11.60&-11.60\\ 
+-10.75&10.75&-1.89&1.89\\ 
+27.20&27.20&-4.29&4.29\\ 
+-12.32&12.32&-3.46&3.46\\  
+-5.84&5.84&-2.29&2.29\\ 
+-5.19&5.19&5.79&5.79\\ 
+-6.52&6.52&0.08&-0.08\\ 
+\end{smallmatrix}&
+\begin{smallmatrix}
+    0.02&0.48\\ 
+    -0.47&-1.63\\ 
+    -0.45&0.52\\ 
+    -0.14&1.40\\ 
+    3.35&5.69\\ 
+    -1.84&3.79\\ 
+    3.72&6.81\\ 
+    1.58&3.13\\ 
+    2.86&-1.54\\ 
+    0.08&2.82\\ 
+\end{smallmatrix}
+\end{array} \right],\\
+\left[\!\! \begin{array}{c|c} 
+        n_1 &  n_0\\ \hline
+        d_2 &  d_1\\\hline
+        d_0 &  
+       \end{array} \right] \!&=\!
+       \left[\begin{array}{c|c} 
+        \smallm{-429} & \smallm{-389}\\ \hline
+        \smallm{1} &  \smallm{6475}\\ \hline
+        \smallm{4905} &  
+       \end{array}\right].
+       \numberthis
+       \label{eq:gain_selection}
+\end{align*}
+
+Après la première itération de l'algorithme~\ref{alg:iterativeOptimisation} et qu'un contrôleur candidat $\boldsymbol{F}$ ait été évalué à l'étape~\ref{step:synthesis}, nous pouvons tracer la Figure~\ref{fig:transferts_tcst}. Elle montre en bleu les diagrammes de bode des valeurs singulières maximales des matrices de transferts $T_{\nu \rightarrow e}$, $T_{d \rightarrow u}$, $T_{\nu \rightarrow u}$, $T_{d \rightarrow y}$, et $T_{w \rightarrow y}$ (associées à la valeur de $\gamma_{\text{v}}$) reportées dans \eqref{eq:validation_step} à l'étape d'analyse~\ref{step:analysis}, à comparer à l'inverse des cinq poids $W_1$--$W_5$, représenté par les lignes horizontales vertes. 
+Les diagrammes en rouge correspondent aux points qui violent les contraintes et qui sont ajoutés à l'ensemble ${\mathcal W}$ pour l'itération suivante. Les quelques diagrammes en magenta, en revanche, correspondent aux 9 points considérés dans ${\mathcal W}$ pour la première itération de l'étape de synthèse~\ref{step:synthesis}.
+Les diagrammes rouges de la Fig.~\ref{fig:transferts_tcst} illustrent clairement que l'algorithme itératif parvient à détecter les valeurs critiques de la vitesse du vent $(w_x,w_z)$ que nous ajoutons à l'ensemble d'optimisation ${\mathcal W}$.
+
+Les valeurs singulières de la fonction de sensibilité de la sortie et de l'entrée (respectivement $T_{r \rightarrow e}$ et $T_{d \rightarrow u}$) sont représentées sur la Fig.~\ref{fig:transferts_tcst} ligne supérieure. Le graphique de la troisième ligne représente la valeur singulière du transfert entre la perturbation du vent $\boldsymbol{w}$ et la sortie du drone $\boldsymbol{y}$. La valeur singulière qui tangente la contrainte est celle de la condition de vent la plus élevée du modèle de synthèse, $(w_x, w_z) = (-8,-4)~\SI{}{\meter\per\second}$.
 
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=0.6\columnwidth,angle=0,trim={0 0 0 0.5cm},clip]{figures/fram_side_colibri.png}
-    \caption{Repère inertiel (I), du fuselage (F) et de l'aile (W) et forces agissant sur le drone Colibri.}
-    \label{fig:colibri_frame_side}
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.6\columnwidth]{figures/transferts_tcst.png}
+    \caption{Diagrammes des valeurs singulières des fonctions de transfert dans \eqref{eq:validation_step}, à la première itération de l'algorithme~\ref{alg:iterativeOptimisation}.}
+    \label{fig:transferts_tcst}
 \end{figure}
-Nous utiliserons les quaternions $q = \left[ \eta ~ \epsilon^\top \right]^\top  \in {\mathbb S}^3:=\{ q\in \real^4: |q| = 1\}$ pour représenter les orientations des deux corps. La matrice de rotation qui en résulte $R(q) \in SO(3): = \{R\in \real^{3\times 3}: R^\top R = I,~\det(R)=1\}$ est définie de manière unique comme $R(q) := I +2\eta \skewsym{\epsilon} + 2\skewsym{\epsilon}^{2} = [R_{1}~R_{2}~R_{3}]$.
-
-D'après les Figures~\ref{fig:world_body} et \ref{fig:colibri_frame_side}, nous définissons les vecteurs $p_{\text{F}} = \overrightarrow{O_{\text{I}} O_{\text{F}}} $, $p_{\text{W}} = \overrightarrow{O_{\text{I}} O_{\text{W}}} $, $d_{\text{FW}} = \overrightarrow{O_{\text{F}} O_{\text{W}}} $ satisfaisant $d_{\text{FW}} = p_{\text{W}} - p_{\text{F}}$ and $d_{\text{M}O_{\text{W}}} = \overrightarrow{\text{M} O_{\text{W}} }$, $d_{\text{G}O_{\text{W}}} = \overrightarrow{\text{G} O_{\text{W}} }$.
-
-Le vecteur d'état global est $(x,v) \in \real^{28}$ avec $x=(p_{\text{W}},~q_{\text{W}},~p_{\text{F}},~q_{\text{F}}) \in \real^{14}$ et $v=(v_{\text{W}},~\dot{q}_{\text{W}},~v_{\text{F}},~\dot{q}_{\text{F}}) = (\dot{p}_{\text{W}},~\dot{q}_{\text{W}},~\dot{p}_{\text{F}},~\dot{q}_{\text{F}})=\dot{x} \in \real^{14}$, où $v_{\text{W}} = \dot{p}_{\text{W}} \in \real^{3}$ représente la vitesse linéaire de l'aile dans le repère inertiel, $\dot{q}_{\text{W}} \in \real^{4}$  est la dérivée du quaternion, $q_{\text{W}} \in \real^{4}$ représentant l'orientation de l'aile, $v_{\text{F}} =p_{\text{F}} \in \real^{3}$  est la vitesse linéaire du fuselage dans le repère inertiel et $\dot{q}_{\text{F}} \in \real^{4}$  est la dérivée du quaternion, $q_{\text{F}} \in \real^{4}$ représentant l'orientation du fuselage. Nous observons que le vecteur d'état n'est pas minimal.
-\todo{Minimalité du vecteur}
-Il convient de noter que la vitesse angulaire $\omega \in \real^{3}$ peut être obtenue à partir de la dérivée du quaternion $\dot{q}$ en utilisant l'équation \cite[équation (2.7)]{udwadia-schutte} rappelée ici : 
-\begin{align*}
-    \omega = H(q) \dot{q} 
-\end{align*}
-où $H(q) \in \real^{3\times4}$ est une matrice définie par $H(q) = 2\begin{bmatrix}-\epsilon & \eta I_{3} - \skewsym{\epsilon}\end{bmatrix}$.
-Pour dériver les équations du mouvement, rappelons que  $R_{i}(q) \in \real^{3}, i = 1,2,3$ sont les trois colonnes d'une matrice de rotation associée au quaternion $q$, définissent les matrices $L_{\text{i}}^{\text{W}} \left( q_{\text{W}} \right) = \frac{\partial R_{i}}{\partial q}(q_{\text{W}}) \in \real^{3\times4}$, 
-$L_{\text{i}}^{\text{F}} \left( q_{\text{F}} \right) = \frac{\partial R_{i}}{\partial q}(q_{\text{F}}) \in \real^{3\times4}$ et
-$L_{O_{\text{F}}^{\text{W}}} = \sum_{i=1}^{3} d_{\text{FW}}(i) L_{\text{i}}^{\text{F}} (q_{\text{F}})$, $i \in {1,2,3}$, où $d_{\text{FW}}(i)$ désigne la i-ème composante du vecteur $d_{\text{FW}} = p_{\text{W}} - p_{\text{F}}$. Comme $O_{\text{W}}$ est situé au centre de rotation de l'aile, la distance $d_{\text{FW}}$ est une constante, puisque $O_{\text{W}}$ et $O_{\text{F}}$ appartiennent au même solide (le fuselage).
-
-On en déduit, avec homogénéité, $\dot{L}_{O_{\text{F}}^{\text{W}}} = \sum_{i=1}^{3} d_{\text{FW}}(i) L_{\text{i}}^{\text{F}} (\dot{q}_{\text{F}})$. Avec ces définitions, les matrices de \eqref{eq:udwadia} sont
-
-\begin{align}
-    M = \begin{bmatrix}
-        m_{\text{W}} I_{3} & \mathbb{0}_{3 \times 4} & \mathbb{0}_{3} & \mathbb{0}_{3 \times 4}\\
-        \mathbb{0}_{4 \times 3} & H_{\text{W}}^\top J_{\text{W}} H_{\text{W}} & \mathbb{0}_{4 \times 3} & \mathbb{0}_{4}\\
-        \mathbb{0}_{3} & \mathbb{0}_{3 \times 4} & m_{\text{F}} I_{3} & \mathbb{0}_{3 \times 4} \\
-        \mathbb{0}_{4 \times 3} & \mathbb{0}_{4 } & \mathbb{0}_{4 \times 3} & H_{\text{F}}^\top J_{\text{F}} H_{\text{F}}    \end{bmatrix}\in \real^{14\times14},
-\end{align}
-où nous avons noté $H_{\text{W}} = H(q_{\text{W}})$, $H_{\text{F}} = H(q_{\text{F}})$, et
-\begin{align}
-    Q = \begin{bmatrix}
-            m_{\text{W}} g e_3 + R(q_{\text{W}}) F_{\text{b}}\\
-            -2\dot{H}_{\text{W}}^\top J_{\text{W}} \dot{H}_{\text{W}} \dot{q}_{\text{W}} + H_{\text{W}}^\top M_{\text{W}}\\
-            m_{\text{F}} g e_3 + R(q_{\text{F}}) F_{\text{F}}\\
-            -2\dot{H}_{\text{F}}^\top J_{\text{F}} \dot{H}_{\text{F}} \dot{q}_{\text{F}} + H_{\text{F}}^\top M_{\text{F}}\\
-        \end{bmatrix} \in \real^{14},
-\end{align}
-% \todo{Details of forces and moments generated while the wing
-% transits its position should be given in detail as this is
-% the key distinct feature of this aircraft.}
-
-où $\dot{H}_{\text{W}}$ désigne $H(\dot{q}_{\text{W}})$, coïncidant avec la dérivée temporelle de $H(q_{\text{W}})$ et $\dot{H}_{\text{F}}$ désigne $H(\dot{q}_{\text{F}})$, coïncidant avec la dérivée temporelle de $H(q_{\text{F}})$. De plus, $F_{\text{b}}$ et $M_{\text{b}}$ représentent respectivement toutes les forces et tous les moments agissant sur l'aile. Les expressions de $M$ et $Q$ sont tirées de \cite[équations (45) et (57)]{lustosaHal-03035938} où est développée la $\phi$-théorie, paramétrage qui permet de soustraire les angles classiques d'incidence et de dérapage et d'éviter la singularité du vol stationnaire. 
-
-Enfin, $F_{\text{F}} = F_{m}$ et $M_{\text{F}}$ représentent respectivement l'ensemble des forces et moments non gravitationnels agissant sur le fuselage exprimé dans le repère $O_{\text{W}}$. En particulier, $F_{m} = - k_{f} {u_{\text{tail}}}^{2}$ est la force générée par le moteur situé à l'arrière du fuselage et $u_{\text{tail}}$ est la vitesse de rotation du moteur telle que :
-\begin{align}
-    M_{\text{F}} =  m_{\text{F}} g e_3 \times d_{\text{G}O_{\text{W}}} + F_{m} \times d_{\text{M}O_{\text{W}}},
-\end{align}
-où $d_{\text{M}O_{\text{W}}}$ est la distance entre l'emplacement du moteur et le centre de rotation et $d_{\text{G}O_{\text{W}}}$ est la distance entre l'emplacement du centre de gravité du fuselage et le centre de rotation.
-
-
-L'ensemble des contraintes, associées à la non-minimalité de l'état $(x,v)$ et à la liaison pivot entre les deux corps, est donné par :
-\begin{align}
-    \label{eq:contraintes}
-    \left\{
-    \begin{aligned}
-    &\varphi_{1} \coloneqq q_{\text{W}}^\top q_{\text{W}} - 1 = 0\\
-    &\varphi_{2} \coloneqq q_{\text{F}}^\top q_{\text{F}} - 1 = 0\\
-    &\varphi_{3} \coloneqq R_{2}(q_{\text{W}})^\top R_{3}(q_{\text{F}}) = 0\\
-    &\varphi_{4} \coloneqq R_{2}(q_{\text{W}})^\top R_{1}(q_{\text{F}}) = 0\\
-    &\varphi_{5} \coloneqq p_{\text{F}} + d_{\text{FA}} + p_{\text{W}} = 0
-    \end{aligned}
-    \right.
-\end{align}
-
-Les deux premières contraintes imposent la norme unitaire des quaternions $q_{\text{F}}$ et $q_{\text{W}}$.
-Les troisième et quatrième contraintes sont liées à une contrainte pivot, c'est-à-dire que l'orthogonalité de deux vecteurs est imposée. La dernière est une contrainte de position, de sorte que le point du centre de rotation de l'aile coïncide avec le point défini dans le fuselage. Cette contrainte est basée sur une fermeture géométrique tridimensionnelle.
-Il est plus commode d'exprimer l'ensemble des contraintes sous la forme d'un système dynamique stable convergeant vers zéro, et nous convertissons donc chacune des contraintes sous la forme suivante :
-\begin{align}
-    \ddot{\varphi_{i}} + \delta_{1} \dot{\varphi_{i}}  + \delta_{2} \varphi_{i} = 0, i \in {1,2,3,4,5},
-\end{align}
-
-avec les sélections $(\delta_{1}, \delta_{2}) = (0.5,~8)$ étant les coefficients d'un polynôme stable, de sorte que, quelle que soit la sélection $\varphi_{i}(0) = 0$, nous avons $\lim\limits_{t \to \infty} \varphi_{i}(t) = 0$. En différenciant deux fois les contraintes \eqref{eq:contraintes} et en les factorisant sous la forme $ A(x,\dot{x}) \ddot{x} = B(x,\dot{x})$, nous obtenons l'expression de $A(x,\dot{x})$ reportée dans l'équation \eqref{eq : A_contraint} et de $B(x,\dot{x})$ reportée dans l'équation \eqref{eq:b_contraint}.
-
-\begin{align}
-\label{eq:A_contraint}
-    A = \begin{bmatrix}
-            \mathbb{0}_{1 \times 3} & q_{\text{W}}^\top & \mathbb{0}_{1 \times 3} & \mathbb{0}_{1 \times 4}\\
-            \mathbb{0}_{1 \times 3} & \mathbb{0}_{1 \times 4} & \mathbb{0}_{1 \times 3} & q_{\text{F}}^\top\\
-            \mathbb{0}_{1 \times 3} & R_{3}(q_{\text{F}})^\top L_{2}^{\text{W}}( q_{\text{W}} ) & \mathbb{0}_{1 \times 3} & R_{2}(q_{\text{W}})^\top L_{3}^{\text{F}}( q_{\text{F}} ) \\
-            \mathbb{0}_{1 \times 3} & R_{1}(q_{\text{F}})^\top L_{2}^{\text{W}}( q_{\text{W}} ) & \mathbb{0}_{1 \times 3} & R_{2}(q_{\text{W}})^\top L_{3}^{\text{F}}( q_{\text{F}} ) \\
-            \mathbb{I}_{3} & L_{O_{\text{F}}^{\text{W}}} & -\mathbb{I}_{3} & \mathbb{0}_{3 \times 4}
-        \end{bmatrix}
-\end{align}
-
-\begin{align}
-    \label{eq:b_contraint}
-    B = \begin{bmatrix}
-            -\delta_{1} q_{\text{W}}^\top \dot{q}_{\text{W}} - \frac{\delta_{2}}{2} (q_{\text{W}}^\top q_{\text{W}} -1) - \dot{q}_{\text{W}}^\top \dot{q}_{\text{W}} \\
-            -\delta_{1} q_{\text{F}}^\top \dot{q}_{\text{F}} - \frac{\delta_{2}}{2} (q_{\text{F}}^\top q_{\text{F}} -1) - \dot{q}_{\text{F}}^\top \dot{q}_{\text{F}} \\
-            -R_{3}(q_{\text{F}})^\top \dot{L}_{2}^{\text{W}}\dot{q}_{\text{W}} - R_{2}(q_{\text{W}})^\top \dot{L}_{3}^{\text{F}} \dot{q}_{\text{F}} - 2\dot{q}_{\text{W}}^\top {L_{2}^{\text{W}}}^\top L_{3}^{\text{F}} \dot{q}_{\text{F}} - \delta_{1}(R_{3}(q_{\text{F}})^\top L_{2}^{\text{W}}\dot{q}_{\text{W}} +  R_{2}(q_{\text{W}})^\top L_{3}^{\text{F}} \dot{q}_{\text{F}} ) - \delta_{2}\varphi_{3}\\
-            -R_{1}(q_{\text{F}})^\top \dot{L}_{2}^{\text{W}}\dot{q}_{\text{W}} - R_{2}(q_{\text{W}})^\top \dot{L}_{1}^{\text{F}} \dot{q}_{\text{F}} - 2\dot{q}_{\text{W}}^\top {L_{2}^{\text{W}}}^\top L_{1}^{\text{F}} \dot{q}_{\text{F}} - \delta_{1}(R_{1}(q_{\text{F}})^\top L_{2}^{\text{W}}\dot{q}_{\text{W}} +  R_{2}(q_{\text{W}})^\top L_{1}^{\text{F}} \dot{q}_{\text{F}} ) - \delta_{2} \varphi_{4}\\
-            \dot{L}_{O_{\text{F}}^{\text{W}}} \dot{q}_{\text{F}}  - \delta_{1}( v_{\text{W}} + \dot{L}_{O_{\text{F}}^{\text{W}}} \dot{q}_{\text{W}} - v_{\text{F}}) - \delta_{1}\varphi_{5}
-        \end{bmatrix}
-\end{align}
-
-La simulation d'un drone reste complexe, car il est naturellement instable. Nous avons choisi d'utiliser la loi de contrôle proposée dans \ref{sec:h_inf6DOF_multi} pour stabiliser le système. Ce contrôle stabilise l'aile. Une autre loi de contrôle basée sur une rétroaction proportionnelle-dérivée stabilise le fuselage pour le maintenir horizontal. Les résultats de la simulation en boucle fermée sont présentés à la Figure~\ref{fig:sim_colibri}.
-
-\begin{figure}[ht!]
-\centering
-    \includegraphics[width=0.6\columnwidth,angle=0]{figures/colibri_sim.png}
-    \caption{Simulation de la position et de l'orientation du drone multicorps Colibri en boucle fermée avec un contrôleur à double boucle. }
-    \label{fig:sim_colibri}
-\end{figure}
-
-En considérant les degrés de liberté de la liaison pivot, le couplage entre les deux corps est clairement visible sur les trois graphiques du bas. En effet, les angles de roulis et de lacet $(\phi_{\text{F}}, \psi_{\text{F}})$ et $(\phi_{\text{W}}, \psi_{\text{W}})$ du fuselage et de l'aile coïncident parfaitement, alors que les angles de tangage $(\theta{\text{F}}, \theta{\text{F}})$ sont différents.
-
-
-
-
-
-
-
-
-\section{State estimation}\label{sec:stateEst}
-% \todo{Link to the modeling:  What is the connection between angular velocity
-% estimation and the multibody dynamics derived in the paper?
-% What are the advantages of the angular velocity estimator
-% compared to existing technologies? It is difficult to
-% discern the theoretical contribution to the angular
-% velocity estimation part.}
-
-
-Pour stabiliser ce système de drone à deux corps, il est nécessaire de connaître la position et l'orientation des deux corps. Grâce à la liaison pivot entre l'aile et le fuselage, la différence entre l'orientation de l'aile et l'orientation du fuselage est simplement une rotation autour de l'axe de tangage de l'aile. Les deux autres orientations (roulis et lacet) coïncident. La position du centre de gravité du fuselage peut être déduite de la position du centre de gravité de l'aile et de l'angle entre le fuselage et l'aile. Cet angle est mesuré par un codeur rotatif en quadrature (CUI Devices AMT22, codeurs absolus, 12 bits, SPI), qui renvoie une mesure angulaire quantifiée avec un pas de \SI{0,09}{\degree}. Compte tenu de cette mesure angulaire, nous examinons ci-dessous l'estimation des informations relatives à la vitesse, afin de reconstruire l'état du drone.
-
-\subsection{Placement des capteurs}
-\label{subsec:sens_pos}
-Une première question concerne l'emplacement des capteurs : l'IMU (accéléromètre, gyroscope et magnétomètre) peut être installé sur le fuselage ou sur l'aile. 
-L'installation de l'IMU sur l'aile permet d'effectuer les mesures directement dans le référentiel souhaité, mais les mesures sont plus bruitées car l'IMU est attaché à la structure supportant les moteurs. Compte tenu de la taille des ailes, leur flexibilité peut générer des résonances et perturber les mesures. 
-
-L'installation de l'IMU sur le fuselage réduit les vibrations, mais implique que les mesures soient transformées dans le référentiel de l'aile. La transformation correspondante peut être calculée à partir de la mesure de l'encodeur rotatif, qui fournit l'angle entre l'aile et le fuselage, ainsi qu'à partir des mesures prises avec le logiciel de CAO, qui fournissent des informations précises sur les distances entre les référentiels de l'aile et du fuselage. Notre choix final est de fixer l'IMU au fuselage. Une autre considération est que la carte de pilotage automatique, qui a déjà une IMU intégrée, est également supposée être connectée à la charge utile et à d'autres capteurs fixés sur fuselage. Il s'agit donc de limiter le nombre de câbles au point de pivot pour les commandes des actionneurs et l'alimentation électrique.
-
-
-\subsection{Estimation de la vitesse angulaire}
-
-Comme expliqué ci-dessus, nous pouvons mesurer l'angle $\kappa \in \real$ entre l'aile et le fuselage à l'aide de l'encodeur rotatif. Ensuite, pour estimer la vitesse angulaire, nous utilisons un observateur grand gain proposé dans \cite{203613} (voir également \cite{1032320} pour l'utilisation d'observateurs grand gain pour estimer les dérivées temporelles). Cette méthode est préférable à une dérivée par différence finie, car les informations quantifiées générées par l'encodeur rotatif peuvent donner lieu à du bruit numérique dans les valeurs estimées de vitesse angulaire.
-
-
-Désignons par $\kappa \in \real$ l'angle mesuré, par $\omega_{\kappa} := \dot \kappa  \in \real$ sa dérivée, à estimer, et par $\xi = [\kappa,~\omega_{\kappa}]^\top \in \mathbb{R}^2$ leur juxtaposition en un seul vecteur. Notons également $\hat{\xi}$ l'estimation de $\xi$ définie par :
-%\todo{GH: il y a pas un peu de répétitions dans les notations ?}
-%\xi = [\kappa,~\omega_{\kappa}]^\top \in \mathbb{R}^2, \quad 
-\begin{align*}
-    \hat{\xi} = [\hat{\kappa},~\hat{\omega}_{\kappa}]^\top \in \mathbb{R}^2.
-\end{align*}
-Suivant \cite{203613}, la dynamique de l'estimateur est donnée par :
-\begin{align}
-\label{eq:high_dyn}
-    \dot{\hat{\xi}} =  \begin{bmatrix}0 & 1 \\ 0 & 0 \end{bmatrix} \hat{\xi}+ \begin{bmatrix}\frac{k_{p}}{\epsilon_{\kappa}}  \\ \frac{k_{v}}{\epsilon_{\kappa}^{2}}  \end{bmatrix} (\kappa - \hat{\kappa}),
-\end{align}
-où $\kappa$ est la mesure angulaire récupérée du capteur, $k_{p}$ et $k_{v}$ sont deux gains scalaires positifs tels que l'équation caractéristique $s^{2} + k_{v} s + k_{p} = 0$ ait des racines à partie réelle négative. Pour notre estimateur, nous avons choisi $k_{p} = 1$ et $k_{v} = 1,3$ de manière à obtenir un facteur d'amortissement $\zeta = 0,65$ conduisant à une réponse légèrement sous-amortie comme compromis approprié entre un temps de montée rapide et une réponse légèrement oscillatoire. Le gain $\epsilon_{\kappa}$ peut être ajusté de manière pratique afin d'obtenir un compromis entre l'action de lissage (obtenue en augmentant $\epsilon_{\kappa}$) et la réduction du retard temporel
-de l'estimateur (obtenue en réduisant $\epsilon_{\kappa}$). En outre, l'action de lissage de l'approche proposée atténue l'effet de la quantification de la mesure angulaire. Nous avons choisi $\epsilon_{\kappa} = 0,05$ pour nos expériences. La Figure~\ref{fig:high_gain} montre les résultats expérimentaux obtenus après la mise en œuvre du filtre grand gain \eqref{eq:high_dyn} dans le cas d'un vol générant des oscillations angulaires de grande amplitude.
-
-Nous avons effectué une dérivation par différence finie (en vert) en post-traitement pour comparer les résultats. En raison de la nature quantifiée de l'encodeur rotatif, nous observons que la vitesse angulaire obtenue par différence finie est très bruitée. On constate que le filtre grand gain permet d'estimer la vitesse angulaire avec plus de précision (en rouge), bien qu'avec un léger retard. Grâce à l'ajout d'une IMU supplémentaire sur l'aile lors d'un essai en vol, il est possible de comparer l'estimation de la vitesse avec les mesures du gyroscope de l'aile (MPU9250), visibles sur le graphique du bas de la Figure~\ref{fig:high_gain} (trace bleue). On constate que les mesures du gyroscope sont quelque peu bruitées, notamment en raison des vibrations générées par les moteurs. 
-
-\begin{figure}[ht!]
-\centering
-    \includegraphics[width=0.6\columnwidth,angle=0]{figures/highGainFilter.png}
-    \caption{Mesure de l'angle (noir, graphique du haut), mesure de la vitesse angulaire avec le gyroscope de l'aile (bleu, graphique du bas), estimation de la vitesse angulaire par différence finie (vert, graphique du bas) et estimation avec le filtre grand gain (courbes rouges).}
-    \label{fig:high_gain}
-\end{figure}
-\todo{Ce n'est pas très lisible comme figure}
-
-Afin d'effectuer la transformation nécessaire entre les repères, nous définissons le quaternion $q_{\hat{\kappa}} \in {\mathbb S}^3$ suivant :
-\begin{align}
-\label{eq:rot_quat}
-    q_{\hat{\kappa}} =  \left[\cos\left(\frac{\hat{\kappa}}{2}\right) ~ 0 ~ \sin\left(\frac{\hat{\kappa}}{2}\right) ~ 0 \right]^\top
-\end{align}
-
-
-\subsection{Estimation de l'état de l'aile}
-
-Sur la base de l'angle estimé $\hat{\kappa}$ et de la vitesse angulaire estimée $\hat{\omega}_{\kappa}$, il est possible de transformer les mesures réalisées dans le repère du fuselage vers le repère de l'aile. Tous les capteurs sont installés sur la carte de l'autopilote, qui est elle-même fixée au fuselage. Cependant, nous voulons utiliser INDI pour stabiliser l'aile. Cette loi de contrôle nécessite donc des informations sur l'état du drone dans repère de l'aile, où toutes les forces sont appliquées (aérodynamiques et de traction).
-Deux solutions viables sont alors possibles : effectuer l'estimation d'état dans le repère du fuselage et faire pivoter l'estimation, en utilisant l'estimation de l'angle $\hat{\kappa}$, ou faire pivoter les mesures brutes à l'avance pour les exprimer dans le repère l'aile, et ensuite effectuer l'estimation d'état dans ce dernier. 
-Compte tenu de l'architecture actuelle du logiciel du système Paparazzi (voir Annexe \ref{sec:logiciel}), il est impossible d'avoir deux structures conjointes d'estimation de l'état, et il est donc complexe de mettre en œuvre la première solution, dans laquelle le contrôleur récupère directement l'estimation de l'état actuel. C'est pourquoi nous avons choisi d'estimer l'état de l'aile à partir des données mesurées sur le fuselage. À cette fin, nous détaillons ci-dessous les transformations pour les trois capteurs : gyroscope, accéléromètre et magnétomètre. 
-
-Pour les mesures de la vitesse angulaire basées sur le gyroscope, nous pouvons calculer la vitesse angulaire de l'aile exprimée dans le repère de l'aile :
-\begin{align}
-    \label{eq:gyro_deplacement}
-    \omega_{\text{W}} = R(q_{\hat{\kappa}}) \left( \omega_{gyro}^{\text{F}} + \begin{bmatrix}
-    0\\ \omega_{\kappa} \\ 0
-    \end{bmatrix}  \right) 
-\end{align}
-où $\omega_{gyro}^{\text{F}}$ est la vitesse angulaire mesurée par le gyroscope sur le fuselage, exprimée dans le repère du fuselage, $\hat{\omega}_{\kappa}$ est la vitesse angulaire estimée de l'aile par rapport au fuselage, conformément à \eqref{eq:high_dyn}, et $q_{\hat{\kappa}}$ est le quaternion défini dans \eqref{eq:rot_quat}.
-L'expression \eqref{eq:gyro_deplacement} est similaire à une composition de vitesses angulaires et à un changement du repère.
-
-Pour la mesure de l'accélération avec l'accéléromètre, nous pouvons utiliser la relation de l'équation \eqref{eq:accel_deplacement}, qui est obtenue à partir du théorème de transport du taux de variation \cite{brizard2004motion}, où nous trouvons le terme d'accélération d'Euler $\dot{\omega_{\text{F}}} \times d_{AF}$  et le terme d'accélération centripète $\omega_{\text{F}} \times ( \omega_{\text{F}} \times  d_{AF})$. L'accélération de Coriolis $2\omega_{\text{F}} \times \frac{d (d_{\text{FW}})}{d t}\Bigr|_{O_{\text{F}}}$ et le taux d'accélération $\frac{d^{2} (d_{\text{FW}})}{d^{2} t}\Bigr|_{O_{\text{F}}}$ sont nuls car $d_{\text{FW}}$ est constant.
-
-\begin{align}
-    \label{eq:accel_deplacement}
-    a_{\text{W}} = R(q_{\hat{\kappa}}) \left( a_{acc}^{F} + \dot{\omega}_{gyro}^{F} \times d_{\text{FW}} + \omega_{gyro}^{F} \times ( \omega_{gyro}^{F} \times  d_{\text{FW}}) \right) 
-\end{align}
-où $a_{acc}^{F} \in \real^{3}$ est l'accélération mesurée par l'accéléromètre sur le fuselage, exprimée dans le repère du fuselage et $\omega_{gyro}^{F}$ est la vitesse angulaire du fuselage, identique à l'équation \eqref{eq:gyro_deplacement}. L'accélération angulaire $\dot{\omega}_{gyro}^{F}$ dans \eqref{eq:accel_deplacement} est calculée par différence finie.
-
-
-Pour les mesures du magnétomètre, nous avons
-\begin{align}
-    \label{eq:mag_deplacement}
-    E_{\text{W}} = R(q_{\hat{\kappa}}) E_{mag}
-\end{align}
-où $E_{mag} \in \real^{3}$ est la sortie du magnétomètre, exprimée dans le repère du fuselage et $ E_{\text{W}} \in \real^{3}$ est la mesure exprimée dans le repère de l'aile.
-
-Pour obtenir une estimation de l'état de l'aile, nous utilisons un algorithme de fusion des mesures des capteurs : le filtre de Kalman étendu (EKF)  \nomenclature[]{\(EKF\)}{Filtre de Kalman étendu (\textit{Extended Kalman Filter})} qui fournit une estimation des états suivants : $p_{\text{W}}$, $v_{\text{W}}$, $q_{\text{W}}$ à partir de mesures transformées dans le repère de l'aile $\omega_{\text{W}}$ (équation \eqref{eq:gyro_deplacement}), $a_{\text{W}}$ (équation \eqref{eq:accel_deplacement}), $E_{\text{W}}$ (équation \eqref{eq:mag_deplacement}) et les données du système de vision externe, qui fournissent une mesure précise de la position $p_{text{W}}$ et de la vitesse $v_{text{W}}$ du drone dans le repère inertiel (I).
-
-
-\subsection{Estimation de l'orientation du fuselage}
-Pour déterminer l'orientation du fuselage, nous pouvons effectuer une composition entre le quaternion représentant l'orientation de l'aile $q_{text{W}}$ résultat de l'EKF et le quaternion construit à partir de la mesure filtrée de l'encodeur rotatif $q_{\hat{\kappa}}$ dans \eqref{eq:rot_quat},
-\begin{align}
-\label{eq:quat_fuselage}
-    q_{\text{F}} = q_{\text{W}} \otimes q_{\hat{\kappa}}
-\end{align}
-où l'opérateur $\otimes$ désigne le produit hamiltonien. La connaissance de $q_{\text{F}}$ est nécessaire pour maintenir le fuselage parfaitement horizontal. 
-
-\section{Inversion non linéaire incrémentale de la dynamique du drone}
-
-\todo{Détails}
-La théorie de l'inversion dynamique non linéaire incrémentale (INDI) utilisée dans le contexte des micro drones est présentée dans \cite{smeurINDI}. Nous utilisons la notation proposée dans \cite{smeurINDITail}. L'hypothèse centrale sous-jacente est que le principe de séparation des échelles de temps s'applique à la dynamique de l'actionneur et à la dynamique des forces et des moments aérodynamiques. Le signal de commande peut alors être calculé de manière incrémentale en utilisant la matrice d'efficacité de l'actionneur $G$.
-
-\begin{align}
-    u_{\text{W}} = u_{\text{W}} + G^{\dag} (\nu - \begin{bmatrix}
-    \dot{\omega}_{\text{W}} \\
-    T_{\text{W}}
-    \end{bmatrix})
-\end{align}
-où  $ \dot{\omega}_{\text{W}} \in \real^{3}$ est l'accélération angulaire obtenue par différence finie à partir de l'équation \eqref{eq:gyro_deplacement},  $T_{\text{W}} \in \real$ est la poussée actuelle, $\nu$ est défini dans \cite[équation (4)]{smeurINDITail} et $G$ est la matrice d'efficacité du contrôle, défini par :
-\begin{align*}
-    \begin{bmatrix}
-    \partial \phi \\
-    \partial \theta \\
-    \partial \psi \\
-    \partial T
-    \end{bmatrix}\! =\! G u_{f} \!=\!
-    \begin{bmatrix}
-    -7.5 & -15 & 7.5 & 15 & 0 & 0\\
-    0 & 0 & 0 & 0 & 15 & 15 \\
-    0 & 0 & 0 & 0 & 4 & -4 \\
-    -0.6 & -0.6 & -0.6 & -0.6 & 0 & 0\\
-    \end{bmatrix}
-    u_{f}
-\end{align*}
-Cette sélection de la matrice d'efficacité a été déterminée pour les vols stationnaires, mais il est nécessaire d'effectuer une étude différente pour le vol vers l'avant.
-
-Pour stabiliser le fuselage, nous utilisons un bouclage proportionnel-dérivé de l'angle $\theta_{\text{F}}$ formé entre le fuselage et l'horizontale, que nous voulons maintenir à zéro. Cet angle est obtenu en convertissant le quaternion $q_{\text{F}}$ de l'équation \eqref{eq:quat_fuselage} en un angle d'Euler en suivant la convention d'Euler 'ZYX'. Le bouclage fournit la commande $u_{text{tail}}$ pour la vitesse angulaire du moteur générant la force $F_{m}$ (voir Figure~\ref{fig:colibri_frame_side}), suivant l'expression :
-\begin{align*}
-    u_{\text{tail}} = u_{eq} + k_{p} \theta_{\text{F}} + k_{d} \dot{\theta_{\text{F}}},
-\end{align*}
-où $u_{eq}$ est la commande, à l'équilibre, du moteur pour maintenir le fuselage horizontal en l'absence de perturbation et $k_{p}$, $k_{d}$ sont des gains scalaires ajustables. La valeur $u_{eq}$ a été obtenue en appliquant le théorème des moments au fuselage au point $O_{\text{W}}$. En effet, les deux moments qui agissent sur le fuselage sont le couple dû à la force de poussée du moteur et le couple dû à la position du centre de gravité du fuselage.
-\todo{Expliquer les moments}
-
-Les gains $k_{p}$ et $k_{d}$ ont été ajustés en vol pour assurer un comportement satisfaisant. On obtient $\dot{\theta_{\text{F}}}$ à partir de $\omega_{gyro}^{F} = [\dot{\phi_{\text{F}}}~\dot{\theta_{\text{F}}}~\dot{\psi_{\text{F}}}]^\top$.
-
-\section{Expérimentations}
-\label{sec:exp}
-% \todo{Photo de la volière: It is difficult to understand the experimental results
-% due to the absence of snapshots, detailed explanations, or
-% pictures of the experimental environment. Illustrations and
-% explanations of the experimental structure, actual flight
-% photos, and the design structure of the entire flight
-% system must be added.}
-Un prototype a été mis au point, comme le montre la Figure~\ref{fig:colibri_real}. La Figure~\ref{fig:colibri_flight} présente une sélection des résultats expérimentaux en environnement contrôlé.
 
 
 \begin{figure}[ht!]
     \centering
-    \includegraphics[trim={0 15cm 0 25cm},clip, width=0.6\columnwidth]{figures/colibri_real.jpg}
-    \caption{Prototype : Colibri.}
-    \label{fig:colibri_real}
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.6\columnwidth]{figures/sim_systune_lpv_noise.png}
+    \caption{Simulation du modèle non linéaire \eqref{eq:dyna_orig} (ligne continue) et du modèle linéarisé \eqref{eq:lpv_linearisation} (ligne en pointillé) avec des incréments de vent constants croissants, le contrôleur étant réglé à l'aide de l'optimisation multimodèle de l'algorithme~\ref{alg:iterativeOptimisation} dans la section~\ref{sec:h_inf6DOF_multi}.}
+    \label{fig:SimSytuneStruct_lpv}
 \end{figure}
 
-Sur la Figure~\ref{fig:colibri_flight}, de \SI{0}{\second} à \SI{8}{\second}, le drone est au sol. De \SI{8}{\second} à \SI{16}{\second}, le drone décolle pour atteindre une hauteur de 2 mètres visible sur le troisième graphique. Cette hauteur est atteinte après un dépassement de 10 \%. Le drone est maintenu dans cette position pendant \SI{54}{\second}. Des oscillations d'incidence sont observées dans le cinquième et le dernier graphique, générant des oscillations dans la position horizontale du drone. Ce phénomène est dû au couplage entre les deux corps, qui n'est pas correctement stabilisé. À partir de \SI{70}{\second}, le drone commence à se diriger vers le point $p_{c} = \begin{bmatrix} 3 & 0.9 & -1.5 \end{bmatrix}^\top$ et $\psi_{c}=\SI{90}{\degree}$.
+Avec le réglage indiqué dans \eqref{eq:gain_selection}, tel qu'il est obtenu avec l'Algorithme~\ref{alg:iterativeOptimisation}, nous présentons dans la Figure~\ref{fig:SimSytuneStruct_lpv} des résultats de simulation similaires à ceux déjà présentés dans la Figure.~\ref{fig:SimSytuneStruct_zero} pour la méthode de réglage sans vent discutée dans la Section~\ref{sec:zerowind}. Une fois de plus, nous simulons à la fois le modèle non linéaire \eqref{eq:dyna_orig} (lignes pleines) et le modèle linéarisé \eqref{eq:lpv_linearisation} (ligne en pointillé). 
 
-%This brings the drone in front of the WindShape open wind tunnel. The wind generator is switched on at \SI{95}{\second} at a speed of \SI{1}{\per\second}. This disturbance destabilises the drone, which is not shown here. \todo{GH: ça fait beaucoup d'info qui ne seront pas détaillés, est-ce qu'il faut tout garder ?}
+Par rapport à la Fig.~\ref{fig:SimSytuneStruct_zero}, les simulations de la Figure~\ref{fig:SimSytuneStruct_lpv} montrent que le réglage du contrôleur basé sur les Théorèmes~\ref{thm:eqs} et~\ref{th:lin} résout les problèmes d'instabilité et parvient à stabiliser le vol stationnaire dans tous les scénarios de vent considérés. Nous notons également que la Figure.~\ref{fig:SimSytuneStruct_lpv} montre une action plus agressive. En effet, l'entrée de contrôle $u$ (à la fois la poussée et les déflexions) est plus affectée par le bruit de mesure.
+
+L'efficacité du schéma de contrôle réglé sur la base de l'Algorithme~\ref{alg:iterativeOptimisation} est également confirmée par les résultats expérimentaux présentés dans la section suivante.
+
+\section{Rafale de vent}
+
+Dans le chapitre \ref{sec:perturbation}, nous avons présenté des modèles de perturbation représentant une modélisation d'une rafale de vent. Nous allons les utiliser pour évaluer la réponse du drone face à cette perturbation. 
+
+
+Nous avons appliqué un vent horizontal $w_x$ avec trois valeurs moyennes $w_{m} \in {0,3,6}\SI{}{\meter\per\second}$ et avec les caractéristiques suivantes pour la fonction "Chapeau mexicain" $A_g=\SI{-5}{\meter\per\second}$, $f_g = \frac{1}{T_g} = \SI{0.2}{\Hz}$ soit une période $T_g$ de 5 secondes. Les résultats sont visibles sur la figure \ref{fig:sim_mex0_2}.
 \begin{figure}[ht!]
-\centering
-    \includegraphics[width=0.6\columnwidth,angle=0]{figures/colibri_flight.png}
-    \caption{Position et orientation de l'aile dans les six premiers graphiques et mesure de l'angle entre l'aile et le fuselage sur le dernier graphique lors d'un vol réel. }
-    \label{fig:colibri_flight}
+    \centering
+    \resizebox{.99\textwidth}{!}{%
+    \includegraphics[width=0.33\textwidth]{figures/sim_mex_hat5msT5.png}
+    \quad
+    \includegraphics[width=0.33\textwidth]{figures/sim_mex_hat8msT5.png}
+    \quad
+    \includegraphics[width=0.33\textwidth]{figures/sim_mex_hat11msT5.png}
+    }
+    \caption{Simulation du modèle non linéaire \eqref{eq:dyna_orig} face à une perturbation "Chapeau mexicain" \eqref{eq:mex} avec $f_g = \SI{0.2}{\Hz}$.}
+    \label{fig:sim_mex0_2}
 \end{figure}
 
-\section{Vol avec un contrôleur unifié}
 
-\section{Commande Udwadia-Kalaba}
+Nous avons aussi réalisé une simulation similaire à la précédente avec une fréquence égale à $f_g = \SI{1.2}{\Hz}$ soit une période $T_g$ de 0.83 seconde. Cette valeur est utilisée dans \cite{Gillebaart2014} pour représenter une rafale. Les résultats sont visibles sur la figure \ref{fig:sim_mex1_2}.
+\begin{figure}[h]
+    \centering
+    \resizebox{.99\textwidth}{!}{%
+    \includegraphics[width=0.33\textwidth]{figures/sim_mex_hat5msF1.2.png}
+    \quad
+    \includegraphics[width=0.33\textwidth]{figures/sim_mex_hat8msF1.2.png}
+    \quad
+    \includegraphics[width=0.33\textwidth]{figures/sim_mex_hat11msF1.2.png}
+    }
+    \caption{Simulation du modèle non linéaire \eqref{eq:dyna_orig} face à une perturbation "Chapeau mexicain" \eqref{eq:mex} avec $f_g = \SI{1.2}{\Hz}$.}
+    \label{fig:sim_mex1_2}
+\end{figure}
 
-Mesure du vent, sonde 5 trous
 
-\section{Vols expérimentaux}
+Enfin nous avons réalisé une simulation avec un vent horizontal $w_x$ avec trois valeurs moyennes $w_{m} \in {0,3,6}\SI{}{\meter\per\second}$ et avec la caractéristique suivante pour la fonction "ondelettes de Morlet" $A_g=\SI{-5}{\meter\per\second}$. Les résultats sont visibles sur la figure \ref{fig:sim_morlet}.
 
-\section{Conclusion du Chapitre \ref{chap:colibri}}
+\begin{figure}[h]
+    \centering
+    \resizebox{.99\textwidth}{!}{%
+    \includegraphics[width=0.33\textwidth]{figures/sim_mor5ms.png}
+    \quad
+    \includegraphics[width=0.33\textwidth]{figures/sim_mor8ms.png}
+    \quad
+    \includegraphics[width=0.33\textwidth]{figures/sim_mor11ms.png}
+    }
+    \caption{Simulation du modèle non linéaire \eqref{eq:dyna_orig} face à une perturbation "ondelettes de Morlet" \eqref{eq:morlet}.}
+    \label{fig:sim_morlet}
+\end{figure}
+Nous observons que le drone et son contrôleur sont en mesure de rejeter les différentes perturbations.
+Nous observons sur l'ensemble des simulations que le drone lutte contre le vent incident en modifiant son incidence, il s'aligne dans le flux du vent, ce qui à pour impact majeur de faire prendre de l'altitude au drone.
 
 
+\section{Vol expérimental en soufflerie ouverte} 
+\label{sec:exp6DOF}
+
+Les vols expérimentaux de DarkO se sont déroulés dans un espace dédié (voir Fig.~\ref{fig:flight_windshape}) avec un système de localisation Optitrack basé sur une convention NED selon la Figure~\ref{fig:darko2}. Nous avons utilisé un générateur de vent à veine ouverte pour obtenir des incréments de vent que nous avons mesurés à l'aide d'une sonde à fil chaud (la barre verticale dans la Fig.~\ref{fig:flight_windshape}). 
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.6\columnwidth]{figures/img_flight_darko.png}
+    \caption{Vol expérimental de DarkO devant la soufflerie ouverte.}
+    \label{fig:flight_windshape}
+\end{figure}
+Bien que cette information sur le vent soit enregistrée à bord du drone pour synchroniser les données, nous n'utilisons pas cette mesure dans la loi de commande. La fréquence de mesure de cette sonde de vent n'est que de 0,5 Hz, de sorte que nous n'avons qu'une mesure toutes les deux secondes. 
+L'estimation de l'état est effectuée à l'aide d'un système de navigation inertielle pour fusionner les données de l'unité de mesure inertielle (IMU) et du système de localisation Optitrack afin d'obtenir une estimation précise de la sortie $\boldsymbol{y}$ dans la Fig.~\ref{fig:commande_int6DOF}. Cependant, la vitesse angulaire du drone $\boldsymbol{\omega}_{text{b}}$ est mesurée sur la base du gyromètre de l'IMU, qui fournit des mesures bruitées. Nous avons donc ajouté un filtre passe-bas \textit{Butterworth} de second ordre avec une fréquence de coupure de 20 Hz pour lisser la sortie $\boldsymbol{\omega}_{text{b}}$. Le filtre de \textit{Butterworth} est pris en compte dans la dynamique linéarisée lors de l'optimisation des gains du contrôleur en suivant l'Algorithme~\ref{alg:iterativeOptimisation}. 
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.6\columnwidth]{figures/exp_systune_struct.png}
+    %'/home/florian/Log/DarkoLog/09_11_23/23_11_05__06_40_06_SD.data'
+    \caption{Expérience du drone DarkO devant la soufflerie avec des incréments de vent constants croissants (graphique du bas).}
+    \label{fig:ExpSytuneStruct}
+\end{figure}
+
+Nous avons également utilisé les ESC similaires à ceux utilisés lors de l'identification montrée dans la Figure~\ref{fig:IOmot} pour l'actionnement des hélices. Les deux ESC ont été flashés avec le code open-source AM32 (voir Annexe \ref{sec:AM32}). De cette manière, nous compensons les effets de décharge de la batterie et obtenons un suivi précis de la vitesse commandée. Avant cette modification, l'action intégrale de la rétroaction stabilisatrice de la Fig.~\ref{fig:commande_int6DOF} compensait la perte de vitesse du moteur causée par la réduction de la tension de la batterie pendant le vol. Cette compensation intégrale a été indirectement générée par la perte d'altitude du drone causée par la réduction de la traction. 
+
+Nous avons réalisé une expérience de vol au cours de laquelle DarkO a été mis manuellement en mode de vol stationnaire stabilisé devant la soufflerie, puis nous avons activé la loi de contrôle de l'Algorithme~\ref{alg:iterativeOptimisation}. Comme le drone devait être stabilisé à au moins \SI{30}{\centi\meter} de la soufflerie, un pilotage manuel a été réalisé pour éviter tout dépassement qui pourrait endommager la soufflerie. Une fois que DarkO était suffisamment proche du point de consigne $\boldsymbol{r}_{p}$ de la Fig.~\ref{fig:commande_int6DOF}, nous avons activé le contrôleur proposé, obtenant les résultats de la Fig.~\ref{fig:ExpSytuneStruct}. Au cours de la phase d'expérimentation, comme le montre le graphique inférieur de la Fig.~\ref{fig:ExpSytuneStruct}, nous avons augmenté progressivement la vitesse du vent, en attendant 20 secondes entre chaque évolution de vent jusqu'à une vitesse finale de \SI{7}{\meter\per\second}.
 
 
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.6\columnwidth]{figures/boxplot.png}
+    \caption{Visualisation statistique des performances de vol stationnaire.}
+    \label{fig:statpos}
+\end{figure}
+
+Les figures~\ref{fig:ExpSytuneStruct} et~\ref{fig:statpos} montrent que le drone maintient sa position malgré l'augmentation de la vitesse du vent. Nous pouvons noter quelques points importants, en accord avec les simulations : la traction du moteur diminue lorsque la vitesse du vent augmente. Le schéma de contrôle profite de la portance générée par le vent pour soutenir le drone, de sorte que moins d'énergie soit nécessaire pour stabiliser la position en vol stationnaire. Le drone maintient son angle d'inclinaison à une valeur inconnue, a priori, pour la loi de commande et qui découle naturellement de l'action intégrale. Cette valeur est atteinte asymptotiquement et converge vers la valeur requise de $\theta$. Pour stabiliser la position, le drone utilise les élevons pour annuler le moment de tangage généré par la forme de l'aile, soumise à un vent horizontal, sans atteindre les limites de saturation.
+On note également une légère asymétrie de l'efficacité des actionneurs, qui est efficacement compensée par l'action proportionnelle du schéma de contrôle.
+
+
+\section{Conclusion du Chapitre \ref{chap:6DOF}}
+Nous avons proposé un schéma de contrôle pour la stabilisation d'un \textit{tailsitter} lors d'un vol stationnaire en présence d'un vent constant inconnu. Notre bouclage contient une action intégrale et ne nécessite pas la mesure de la vitesse du vent. Les modèles paramétriques linéarisés se sont avérés être un instrument clé pour effectuer le réglage des paramètres du contrôleur.
+Après avoir étudié les résultats de la simulation, nous avons mené une campagne de vols expérimentaux dans un environnement contrôlé pour valider notre solution de contrôle. 
+
+La principale limitation de cette architecture réside dans l'impossibilité de mesurer le vent dans les phases de vol stationnaire ou de vitesse faible. Pour tenter de résoudre ce problème, nous avons proposé une nouvelle architecture.
 
 

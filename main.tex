@@ -36,6 +36,7 @@
 \usepackage{amsthm}
 \usepackage{etoolbox}
 \usepackage{subcaption}
+\usepackage{pdfpages}
 
 
 
@@ -127,7 +128,8 @@
 \makeatother
 
 % \makeflyleaf
-% \includepdf[pages=-]{chapters/couverture_these.pdf} % if you want to use generated pdf cover (e.g. ADUM), use this instead of \makeflyleaf. You'll also need \usepackage{pdfpages}
+\includepdf[pages=-]{chapters/couverture_these.pdf} % if you want to use generated pdf cover (e.g. ADUM), use this instead of \makeflyleaf. You'll also need
+
 \cleardoublepage
 \onehalfspacing
 \dominitoc
@@ -183,7 +185,7 @@
 \include{chapters/Chapter4}
 \include{chapters/Chapter5}
 \include{chapters/Chapter6}
-% \include{chapters/Chapter7}
+\include{chapters/Chapter7}
 % \include{chapters/Chapter8}
 \include{chapters/Conclusion}
 

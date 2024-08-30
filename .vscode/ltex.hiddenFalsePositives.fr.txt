@@ -1,0 +1,1 @@
+{"rule":"PASSER_UNE_LOI","sentence":"^\\QL'approche \"Diviser et Conquérir\" permet de passer d'une loi de contrôle à une autre, de manière discrète, de sorte qu'un seul contrôleur fonctionne à la fois.\\E$"}
