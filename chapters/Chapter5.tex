@@ -5,11 +5,11 @@
 \section{Motivation}
 \label{sec:motivationLMI}
 
-\todo{motivation}
+Dans le chapitre précédemment, nous avons exploré la possibilité de stabiliser la dynamique longitudinale du drone à l'aide d'un contrôleur par retour de sortie. Les gains du contrôleur sont obtenus par une optimisation non-lisse basée sur des critères $H_{\infty}$. Nous proposons à présent d'étudier une manière différente de régler les gains du contrôleur, basée sur les inégalités linéaires matricielles.
 
-Ce chapitre va permetre la mise en œuvre d'une formulation mathématique pour la synthèse de contrôleur basée sur un modèle dans un cas pratique. Jusqu'à présent, cette approche a été testée et évaluée uniquement sur des cas théoriques \cite{Arzelier2018} avec des modèles dynamiques qui ne reflétaient pas les systèmes du monde réel. 
+Ce chapitre va permettre la mise en œuvre d'une formulation mathématique pour la synthèse du contrôleur basé modèle dans un cas pratique. Jusqu'à présent, cette approche a été testée et évaluée uniquement sur des cas théoriques \cite{Arzelier2018} avec des modèles dynamiques qui ne reflétaient pas les systèmes du monde réel. 
 
-La méthode proposée pour contrôler le modèle de drone convertible étudié est basée sur la synthèse d'un contrôleur statique de sortie, qui est obtenu en convertissant algorithmiquement le problème d'inégalités matricielles bilinéaires (BMI) non convexe en 3 problèmes convexes auxiliaires :
+La méthode proposée pour contrôler le modèle de drone convertible étudié est basée sur la synthèse d'un contrôleur statique de sortie. Le contrôleur est obtenu en convertissant algorithmiquement le problème d'inégalités matricielles bilinéaires (BMI) non convexe en trois problèmes convexes auxiliaires :
 \begin{itemize}
     \item un problème de retour d'état (SF),
     \item un problème d'injection de sortie (OI),
@@ -22,11 +22,11 @@ La méthode proposée pour contrôler le modèle de drone convertible étudié e
 \nomenclature[]{\(SI\)}{Injection d'état (\textit{State injection})}
 
 
-La résolution des problèmes (SF), (OI) et (SI) est une condition nécessaire à l'existence d'une solution pour le problème de retour statique de sortie. Par conséquent, la résolution de chacun des problèmes ci-dessus est abordée au moyen d'un algorithme en trois phases présenté à la section \ref{SOF Controller Synthesis}. Cet algorithme est mis en œuvre sur la dynamique augmentée de DarkO qui est incorporée dans la boucle ouverte pour imposer une forme souhaitée, semblable aux principes de la méthode de mise en forme de la boucle \cite{McFarlane1992}. Cela conduit à des garanties multiples, notamment en termes de performance, avec un gain élevé en boucle ouverte à basse fréquence, et en termes de robustesse, avec une stratégie de gain faible en boucle ouverte à haute fréquence, tout en satisfaisant à l'exigence de suivi de la référence. 
+La résolution des problèmes (SF), (OI) et (SI) est une condition nécessaire à l'existence d'une solution pour le problème de retour statique de sortie. Par conséquent, la résolution de chacun des problèmes ci-dessus est abordée au moyen d'un algorithme en trois phases présenté à la section \ref{SOF Controller Synthesis}. Cet algorithme est mis en œuvre sur la dynamique augmentée de DarkO, laquelle est incorporée dans la boucle ouverte pour imposer une forme souhaitée semblable aux principes de la méthode de mise en forme de la boucle \cite{McFarlane1992}. Cela conduit à des garanties multiples, notamment en termes de performance (avec un gain élevé en boucle ouverte à basse fréquence) et en termes de robustesse (avec une stratégie de gain faible en boucle ouverte à haute fréquence), tout en satisfaisant à l'exigence de suivi de la référence. 
 
-Les contrôleurs par retour statique de sortie résultants pour la dynamique augmentée seront validés par des simulations dans le domaine temporel. De plus, une validation sera également effectuée de manière expérimentale par le biais d'essais en vol réels avec un modèle expérimental du drone DarkO. 
+Les contrôleurs par retour statique de sortie résultant pour la dynamique augmentée seront validés par des simulations dans le domaine temporel. De plus, une validation sera également effectuée de manière expérimentale par le biais d'essais en vol réels, avec un modèle expérimental du drone DarkO. 
 
-Le chapitre est organisé comme suit. La section \ref{SOF Controller Synthesis} détaille l'algorithme itératif déterministe pour la conception des contrôleurs par retour statique de sortie qui sera mis en œuvre, ainsi que le processus d'augmentation du systeme. Dans la section \ref{resultLMI}, les résultats de la synthèse du contrôleur sont analysés au moyen de simulations dans le domaine temporel et d'expérimentations, en mettant en œuvre les lois de contrôle conçues directement sur le système réel. 
+Le chapitre est organisé comme suit. La section \ref{SOF Controller Synthesis} détaille l'algorithme itératif déterministe pour la conception des contrôleurs par retour statique de sortie, ainsi que le processus d'augmentation du système. Dans la section \ref{resultLMI}, les résultats de la synthèse du contrôleur sont analysés au moyen de simulations dans le domaine temporel et d'expérimentations, en mettant en œuvre les lois de contrôle conçues directement sur le système réel. 
 
 
 
@@ -34,7 +34,7 @@ Le chapitre est organisé comme suit. La section \ref{SOF Controller Synthesis} 
 \label{SOF Controller Synthesis}
 
 La synthèse d'un contrôleur statique de sortie pose un problème non convexe en raison des multiplications entre les variables de décision, ce qui entraîne des inégalités matricielles bilinéaires (BMI). Cette complexité rend le problème d'optimisation NP-difficile. 
-En se référant à la formulation des BMI dans \cite{ebihara2015}, plusieurs reformulations équivalentes sont proposées dans \cite{Arzelier2018}, ce qui conduit à l'inégalité matricielle présentée dans \eqref{MainMatrixIneq}. La méthode proposée ici est extraite de \cite{ebihara2015}, s'appyaunt nottament sur l'approche S-variable et les calculs duaux.
+En se référant à la formulation des BMI dans \cite{ebihara2015}, plusieurs reformulations équivalentes sont proposées dans \cite{Arzelier2018}, ce qui conduit à l'inégalité matricielle présentée dans \eqref{MainMatrixIneq}. La méthode proposée ici est extraite de \cite{ebihara2015}, s'appuyant notamment sur l'approche S-variable et les calculs duaux.
 
 
 
@@ -73,7 +73,7 @@ En se référant à la formulation des BMI dans \cite{ebihara2015}, plusieurs re
     \label{GetF}
 \end{equation}
 
-Même si cette nouvelle reformulation est toujours non-convexe, elle permet d'obtenir un résultat. Si une solution est trouvée pour le système dans \eqref{MainMatrixIneq} avec $\textcolor{blue}{\lambda} = 1$, $\textcolor{blue}{M} = 0$ et $\textcolor{blue}{S_2}$ non singulière alors nous pouvons calculer une matrice de gain $\boldsymbol{F}$ qui garantit la stabilité en boucle fermée (la preuve est disponible dans \cite{Arzelier2018}). Cette matrice de gain, qui n'est pas directement optimisée dans la synthèse convexe, est obtenue à l'aide de \eqref{GetF}. 
+Même si cette nouvelle reformulation est toujours non-convexe, elle permet d'obtenir un résultat. Si une solution est trouvée pour le système dans \eqref{MainMatrixIneq} avec $\textcolor{blue}{\lambda} = 1$, $\textcolor{blue}{M} = 0$ et $\textcolor{blue}{S_2}$ non singulière, alors nous pouvons calculer une matrice de gain $\boldsymbol{F}$ qui garantit la stabilité en boucle fermée (la preuve est disponible dans \cite{Arzelier2018}). Cette matrice de gain, qui n'est pas directement optimisée dans la synthèse convexe, est obtenue à l'aide de \eqref{GetF}. 
 
 Cette preuve constitue l'objectif principal du processus d'optimisation. Relever les défis découlant de la nature non convexe du problème \ref{MainMatrixIneq} nécessite des avancées mathématiques et techniques spécifiques. La formulation mathématique introduite dans la littérature a donné des résultats théoriques initiaux prometteurs. L'algorithme, qui sera détaillé dans la sous-section suivante, sera appliqué à la dynamique du drone DarkO. L'analyse qui en résultera permettra de tirer des conclusions quant à l'efficacité de l'algorithme dans des scénarios d'essai pratiques.
 
@@ -81,26 +81,25 @@ Cette preuve constitue l'objectif principal du processus d'optimisation. Relever
 \subsection{Algorithme déterministe itératif pour la conception de retour statique de sortie}
 \label{3a}
 
-Le problème de la synthèse de gain d'un retour statique de sortie se caractérise par sa nature intrinsèquement non convexe qui s'accompagne de difficultés de calcul liées aux problèmes NP-difficile. Ceci, associé à une complexité inhérente qui provient de l'impossibilité d'optimiser toutes les variables de décision simultanément, rend le processus de division du problème non-convexe en de multiples sous-problèmes convexes auxiliaires extrêmement attrayant. L'inégalité matricielle bilinéaire \eqref{MainMatrixIneq} sera utilisée pour traduire ces objectifs dans un cadre d'optimisation. Chaque objectif particulier est atteint en fixant de manière optimale une partie des variables de décision, tout en affinant le reste par un processus itératif. Pour concevoir le contrôleur, un algorithme en trois phases introduit dans \cite{Arzelier2018} sera mis en œuvre Fig. \ref{AlgoPhases} qui prend en entrée les matrices $\boldsymbol{A}$, $\boldsymbol{B}$, $\boldsymbol{C}$ de la dynamique linéarisée du système.
+Le problème de la synthèse de gain d'un retour statique de sortie se caractérise par sa nature intrinsèquement non convexe qui s'accompagne de difficultés de calcul liées aux problèmes NP-difficile. Ceci, associé à une complexité inhérente qui provient de l'impossibilité d'optimiser toutes les variables de décision simultanément, rend le processus de division du problème non-convexe en de multiples sous-problèmes convexes auxiliaires extrêmement attrayant. L'inégalité matricielle bilinéaire \eqref{MainMatrixIneq} sera utilisée pour traduire ces objectifs dans un cadre d'optimisation. Chaque objectif particulier est atteint en fixant de manière optimale une partie des variables de décision, tout en affinant le reste par un processus itératif. Pour concevoir le contrôleur, un algorithme en trois phases introduit dans \cite{Arzelier2018} sera mis en œuvre Fig. \ref{AlgoPhases}, lequel prend en entrée les matrices $\boldsymbol{A}$, $\boldsymbol{B}$, $\boldsymbol{C}$ de la dynamique linéarisée du système.
 
 \begin{figure}[hbt]
     \centering
-      \includegraphics[width=0.6\columnwidth]{figures/AlgorithmPhases.png}
+      \includegraphics[width=0.6\columnwidth]{figures/LMIAlgo.png}
       \vspace{-0.2cm}\caption{Structure de l'algorithme d'optimisation.}
       \label{AlgoPhases}
 \end{figure} 
-\todo{Traduire}
 
 \subsubsection{Phase d'initialisation} 
-L'objectif de la première phase est essentiellement de fournir une estimation initiale pour un contrôleur matriciel de gain à retour d'état $\boldsymbol{K}$ qui stabilise la boucle fermée $\dot{\boldsymbol{x}}=(\boldsymbol{A}+\boldsymbol{B}\boldsymbol{K})\boldsymbol{x}$. Pour ce faire, la stratégie adoptée consiste à fixer les variables de décision \textcolor{blue}{$\lambda$, M, H} présentes dans \eqref{MainMatrixIneq} de la manière suivante :
+L'objectif de la première phase est essentiellement de fournir une estimation initiale pour un contrôleur matriciel de gain à retour d'état $\boldsymbol{K}$ qui stabilise la boucle fermée $\dot{\boldsymbol{x}}=(\boldsymbol{A}+\boldsymbol{B}\boldsymbol{K})\boldsymbol{x}$. Pour ce faire, la stratégie adoptée consiste à fixer les variables de décision \textcolor{blue}{$\lambda$, M, H} de \eqref{MainMatrixIneq} de la manière suivante :
 \begin{equation}
     \begin{gathered}
-        \textcolor{blue}{\lambda} = \lambda = 0 \quad
+        \textcolor{blue}{\lambda} = \lambda = 0, \quad
         \textcolor{blue}{M} = M_0 = \begin{pmatrix}
             C^{\circ}C\\
             {C^{\perp}}^T
-        \end{pmatrix}\\
-        \textcolor{blue}{H} = H_0 = J M_0^{-1} \quad
+        \end{pmatrix},\\
+        \textcolor{blue}{H} = H_0 = J M_0^{-1}, \quad
         J = (-\mu-h)\mathbb{I},
     \end{gathered}
     \label{InitVariableFixing}
@@ -134,12 +133,12 @@ où $h$ est un scalaire positif et $-\mu$ est la partie réelle maximale des val
     \label{InitMatrixIneq} 
 \end{equation} 
 
-Si \eqref{InitMatrixIneq} est réalisable pour une combinaison des variables de décision \textcolor{blue}{$S_1$, $S_2$, Z} et pour le certificat de Lyapunov \textcolor{blue}{P}, alors une première estimation d'un gain de retour d'état stabilisant $\boldsymbol{K}$ est trouvée, et nous pouvons passer à la phase d'itération. En revanche, si aucune solution n'est trouvée, le paramètre $h$ est incrémenté de 1 et la phase d'initialisation est exécutée à nouveau. Cette phase résout les problèmes (SI) et (SF). Les résultats de cette phase sont les suivants
+Si \eqref{InitMatrixIneq} est réalisable pour une combinaison de variables de décision \textcolor{blue}{$S_1$, $S_2$, Z} et pour le certificat de Lyapunov \textcolor{blue}{P}, alors une première estimation d'un gain de retour d'état stabilisant $\boldsymbol{K}$ est trouvée, et nous pouvons passer à la phase d'itération. En revanche, si aucune solution n'est trouvée, le paramètre $h$ est incrémenté de 1 et la phase d'initialisation est exécutée à nouveau. Cette phase résout les problèmes (SI) et (SF). Les résultats de cette phase sont les suivants :
 
 \begin{equation}
     \begin{gathered}
-        S_{1.0}=\textcolor{blue}{S_1}  \\
-        \hat{K}_0 = -\textcolor{blue}{Z} \textcolor{blue}{S_2}^{-1} \\
+        S_{1.0}=\textcolor{blue}{S_1},  \quad
+        \hat{K}_0 = -\textcolor{blue}{Z} \textcolor{blue}{S_2}^{-1}, \quad
         K = -\textcolor{blue}{Z} \textcolor{blue}{S_2}^{-1} M_0
     \end{gathered}
     \label{OutputsInit}
@@ -147,7 +146,7 @@ Si \eqref{InitMatrixIneq} est réalisable pour une combinaison des variables de 
 
 \subsubsection{Phase d'itération - Étape k,1}
 
-Cette phase comprend deux étapes itératives. Dans la première étape, les variables d'optimisation $\lambda$ et $\boldsymbol{M}$ dans \ref{MainMatrixIneq} précédemment fixées lors de l'initialisation, sont maintenant traitées comme des variables de décision. Pour maintenir la convexité, la variable de marge \textcolor{blue}{$S_1$} est fixée à la valeur $S_{1,0}$ déterminée lors de la phase d'initialisation. Le système \eqref{Iter1MatrixIneq} est ensuite résolu.
+Cette phase comprend deux étapes itératives. Dans la première étape, les variables d'optimisation $\lambda$ et $\boldsymbol{M}$ dans \ref{MainMatrixIneq} précédemment fixées lors de l'initialisation, sont maintenant traitées comme des variables de décision. Pour maintenir la convexité; la variable de marge \textcolor{blue}{$S_1$} est fixée à la valeur $S_{1,0}$ déterminée lors de la phase d'initialisation. Le système \eqref{Iter1MatrixIneq} est ensuite résolu.
 
 \begin{equation}
 \centering
@@ -186,15 +185,15 @@ Cette phase comprend deux étapes itératives. Dans la première étape, les var
     \label{Iter1MatrixIneq}
 \end{equation}
 
-Dans \eqref{Iter1MatrixIneq}, deux inégalités matricielles apparaissent en plus de l'inégalité du certificat de Lyapunov et de l'inégalité \eqref{MainMatrixIneq}. Ces contraintes supplémentaires contribuent à la réalisation de l'objectif de la phase d'itération, qui consiste à trouver une solution pour \eqref{MainMatrixIneq} dans laquelle les variables $\lambda$ et $\boldsymbol{M}$ convergent respectivement vers 1 et 0, ce qui est une condition obligatoire pour atteindre l'objectif d'optimisation principal. Pour ce faire, la maximisation de $\lambda$ est définie comme un objectif dans le solveur d'optimisation. Une inégalité matricielle contraint la norme de $\boldsymbol{M}$ et la réduit à 0, à mesure que $\lambda$ augmente jusqu'à 1. La seconde inégalité est simplement une contrainte sur $\lambda$ qui doit être positif.
+Dans \eqref{Iter1MatrixIneq}, deux inégalités matricielles apparaissent en plus de l'inégalité du certificat de Lyapunov et de l'inégalité \eqref{MainMatrixIneq}. Ces contraintes supplémentaires contribuent à la réalisation de l'objectif de la phase d'itération, qui consiste à trouver une solution pour \eqref{MainMatrixIneq} dans laquelle les variables $\lambda$ et $\boldsymbol{M}$ convergent respectivement vers 1 et 0, ce qui est une condition obligatoire pour atteindre l'objectif d'optimisation principal. Pour ce faire, la maximisation de $\lambda$ est définie comme un objectif dans le solveur d'optimisation. Une inégalité matricielle contraint la norme de $\boldsymbol{M}$ et la réduit à 0, à mesure que $\lambda$ augmente jusqu'à 1. La seconde inégalité est simplement une contrainte sur $\lambda$, ce dernier devant être positif.
 
 
-Si une solution est trouvée pour \eqref{Iter1MatrixIneq} et si, pour cette solution, $1-\lambda$ est inférieur à une tolérance définit, cela signifie que l'on peut passer à la troisième et dernière phase, à savoir la validation. Les résultats de cette phase sont les suivants :
+Si une solution est trouvée pour \eqref{Iter1MatrixIneq} et si, pour cette solution, $1-\lambda$ est inférieur à une tolérance définie, cela signifie que l'on peut passer à la troisième et dernière phase, à savoir la validation. Les résultats de cette phase sont les suivants :
 
 \begin{equation}
     \begin{gathered}
-        \lambda_k=\textcolor{blue}{\lambda}  \quad
-        M_k = \textcolor{blue}{M} \quad
+        \lambda_k=\textcolor{blue}{\lambda},  \quad
+        M_k = \textcolor{blue}{M}, \quad
         H_k^T = \textcolor{blue}{S_2}^{-1} \textcolor{blue}{Y}^T
     \end{gathered}
     \label{OutputsIterStap2}
@@ -250,7 +249,7 @@ Le problème d'optimisation à résoudre dans cette phase est le suivant :
     \label{Artificiu2}
 \end{equation}
 
-Lors de cette étape, un nouveau terme, hat{M}($\textcolor{blue}{\alpha}$) apparaît, dépendant d'une nouvelle variable de décision $\textcolor{blue}{\alpha}$. L'objectif est de minimiser \textcolor{blue}{$\alpha$} à l'aide de la méthode de bissection, en convertissant le problème non convexe en un problème convexe. Idéalement, \textcolor{blue}{$\alpha$} converge vers 0, signalant la fin de cette phase d'itération et la progression vers la phase de validation finale. Si $\alpha \approx 0$ selon une certaine tolérance, \eqref{Artificiu2} se simplifie en \eqref{Artificiu3}. Par conséquent, les valeurs des variables de décision pour la solution de \eqref{Iter2MatrixIneq} lors l'étape k,2 sont identiques aux solutions de \eqref{MainMatrixIneq}, laquelle est résolu pour $\lambda = 1$ et $\boldsymbol{M} =0$. Cette solution permet le calcul d'un contrôleur par retour de sortie statique stabilisant.
+Lors de cette étape, un nouveau terme, $\hat{M}(\textcolor{blue}{\alpha})$ apparaît, dépendant d'une nouvelle variable de décision $\textcolor{blue}{\alpha}$. L'objectif est de minimiser \textcolor{blue}{$\alpha$} à l'aide de la méthode de bissection, en convertissant le problème non convexe en un problème convexe. Idéalement, \textcolor{blue}{$\alpha$} converge vers 0, signalant la fin de cette phase d'itération et la progression vers la phase de validation finale. Si $\alpha \approx 0$ selon une certaine tolérance, \eqref{Artificiu2} se simplifie en \eqref{Artificiu3}. Par conséquent, les valeurs des variables de décision pour la solution de \eqref{Iter2MatrixIneq} lors l'étape k,2 sont identiques à la solution de \eqref{MainMatrixIneq}, laquelle est résolue pour $\lambda = 1$ et $\boldsymbol{M} =0$. Cette solution permet le calcul d'un contrôleur par retour de sortie statique stabilisant.
 
 \begin{equation}
     \begin{gathered}
@@ -270,12 +269,12 @@ Lors de cette étape, un nouveau terme, hat{M}($\textcolor{blue}{\alpha}$) appar
     \label{Artificiu3}
 \end{equation}
 
-Si, à l'étape k,2, $\alpha$ n'est pas inférieur à la tolérance fixée, l'algorithme commence une nouvelle étape d'itération à k,1. Les résultats de la phase actuelle sont les suivants :
+Si, à l'étape k,2, $\alpha$ n'est pas inférieure à la tolérance fixée, l'algorithme commence une nouvelle étape d'itération à k,1. Les résultats de la phase actuelle sont les suivants :
 
 \begin{equation}
     \begin{gathered}
-\alpha_k=\textcolor{blue}{\alpha}  \\
-        \hat{K}_{k-1} = -\textcolor{blue}{Z} \textcolor{blue}{S_2}^{-1} \\
+\alpha_k=\textcolor{blue}{\alpha}  \quad
+        \hat{K}_{k-1} = -\textcolor{blue}{Z} \textcolor{blue}{S_2}^{-1} \quad
         S_{1,k} = \textcolor{blue}{S_1}
     \end{gathered}
     \label{OutputsIterStap1}
@@ -284,7 +283,7 @@ Si, à l'étape k,2, $\alpha$ n'est pas inférieur à la tolérance fixée, l'al
 \subsubsection{Phase de validation}
 Dans les cas où l'étape d'itération fournit des solutions pour lesquelles $\boldsymbol{\lambda} = 1 $ et $\boldsymbol{M} = 0$, une phase de validation n'est pas nécessaire car le contrôleur peut être calculé directement. 
 
-En pratique, l'algorithme quitte la phase d'itération avec des solutions $\boldsymbol{\lambda} \approx 1$ et $\boldsymbol{M} \approx 0$, en raison des limites des solveurs d'optimisation et des précisions numériques. Dans ces cas, les conditions pour atteindre l'objectif d'optimisation principal ne sont pas exactement remplies. Par conséquent, une phase de validation est nécessaire, où le problème à résoudre est défini par \eqref{ValidMatrixIneq} où les variables sont fixées $\boldsymbol{\lambda} = 1$ et $\boldsymbol{M} = 0$ et $\boldsymbol{H}$ est fixé à $\boldsymbol{H_k}$ (obtenu au cours de la phase d'itération). Si une solution est trouvée, la matrice de gain $\boldsymbol{F}$ peut être construite avec \eqref{GetF} cela garantie la stabilité la boucle fermée $(\boldsymbol{A}+\boldsymbol{B}\boldsymbol{F}\boldsymbol{C})$. Cette dernière phase fournit la solution aux objectifs (OI) et (OF). 
+En pratique, l'algorithme quitte la phase d'itération avec des solutions $\boldsymbol{\lambda} \approx 1$ et $\boldsymbol{M} \approx 0$, en raison des limites des solveurs d'optimisation et des précisions numériques. Dans ces cas, les conditions pour atteindre l'objectif d'optimisation principal ne sont pas exactement remplies. Par conséquent, une phase de validation est nécessaire. Le problème à résoudre est défini par \eqref{ValidMatrixIneq}, où les variables sont fixées $\boldsymbol{\lambda} = 1$ et $\boldsymbol{M} = 0$ et $\boldsymbol{H}$ est fixé à $\boldsymbol{H_k}$ (obtenu au cours de la phase d'itération). Si une solution est trouvée, la matrice de gain $\boldsymbol{F}$ peut être construite avec \eqref{GetF}, ce qui garanti la stabilité la boucle fermée $(\boldsymbol{A}+\boldsymbol{B}\boldsymbol{F}\boldsymbol{C})$. Cette dernière phase fournit la solution aux objectifs (OI) et (OF). 
 
 \begin{equation}
 \centering
@@ -322,10 +321,10 @@ En pratique, l'algorithme quitte la phase d'itération avec des solutions $\bold
 \label{3b}
 
 
-L'architecture de contrôle du drone DarkO est conçue pour le stabiliser en vol stationnaire, avec et sans perturbations externes. Par exemple, pour contrer un vent de face affectant la vitesse linéaire le long des axes $x_{[b]}$ et $z_{[b]}$ et générant un moment autour de l'axe $y_{[b]}$, le schéma de commande utilise les ailerons et les hélices de manière symétrique pour générer un moment et une force compensatoires. Une action intégrale est employée pour contrebalancer la force le long de l'axe $z_{[b]}$, assurant une convergence asymptotique vers la force désirée en utilisant deux intégrateurs, un pour les moteurs et un pour les élevons.
+L'architecture de contrôle du drone DarkO est conçue pour le stabiliser en vol stationnaire, avec et sans perturbations externes. Par exemple, pour contrer un vent de face affectant la vitesse linéaire le long des axes $x_{[b]}$ et $z_{[b]}$ et générant un moment autour de l'axe $y_{[b]}$, le schéma de commande utilise les ailerons et les hélices de manière symétrique pour générer un moment et une force compensatoires. Une action intégrale est employée pour contre-balancer la force le long de l'axe $z_{[b]}$, assurant une convergence asymptotique vers la force désirée en utilisant deux intégrateurs, un pour les moteurs et un pour les élevons.
 
 
-La synthèse d'un contrôleur par retour de sortie statique pour la dynamique de DarkO augmentée s'inspire de \cite{SYRMOS1997125} où il est montré qu'un retour de sortie dynamique d'ordre $q \leq n$ (système d'ordre $n$), peut être converti en un retour de sortie statique à travers l'augmentation de l'espace d'état. Dans notre cas, des termes dynamiques tels que des intégrateurs et des filtres sont ajoutés à la dynamique du système, ce qui donne un espace d'état augmenté pour lequel une loi de bouclage statique composée d'une matrice de gain statique sera synthétisée. L'architecture mise en œuvre, présentée à la figure \ref{Plant Augmentation}, est une reformulation de la loi de contrôle présentée dans le chapitre \ref{chap:3DOF}. Elle se compose du bloc dynamique linéarisé du drone DarkO \eqref{eq:linearized} avec les matrices $\boldsymbol{A}_{0}$ \eqref{matrice_A} et $\boldsymbol{G}_{0}$ \eqref{matriceG0}, du bloc de saturation pour les deux hélices et les deux élevons comme présenté dans la section \ref{sec:saturation}. La matrice de sélection des sorties élimine la mesure de l'état de l'angle de tangage, $\theta$.
+La synthèse d'un contrôleur par retour de sortie statique pour la dynamique de DarkO augmentée s'inspire de \cite{SYRMOS1997125} où il est montré qu'un retour de sortie dynamique d'ordre $q \leq n$ (système d'ordre $n$), peut être converti en un retour de sortie statique à travers l'augmentation de l'espace d'état. Dans notre cas, des termes dynamiques tels que des intégrateurs et des filtres sont ajoutés à la dynamique du système, ce qui donne un espace d'état augmenté pour lequel une loi de bouclage statique composée d'une matrice de gain statique sera synthétisée. L'architecture mise en œuvre, présentée à la figure \ref{Plant Augmentation}, est une reformulation de la loi de contrôle présentée dans le chapitre \ref{chap:3DOF}. Elle se compose du bloc dynamique linéarisé du drone DarkO \eqref{eq:linearized} avec les matrices $\boldsymbol{A}_{0}$ \eqref{matrice_A} et $\boldsymbol{G}_{0}$ \eqref{matriceG0}, du bloc de saturation pour les deux hélices et les deux élevons, comme présenté dans la section \ref{sec:saturation}. La matrice de sélection des sorties élimine la mesure de l'état de l'angle de tangage, $\theta$.
 
 \begin{figure}[hbt]
     \centering
@@ -335,7 +334,7 @@ La synthèse d'un contrôleur par retour de sortie statique pour la dynamique de
 \end{figure}
 
 
-Pour la conception du contrôle, une structure de contrôleur de type PI est employée pour minimiser l'erreur statique et améliorer le rejet des perturbations externes. Pour ce faire, on ajoute des filtres pré-compensateurs à l'entrée du système, sur la base de la méthodologie de mise en forme en boucle ouverte \cite{McFarlane1992} où un intégrateur est ajouté pour assurer la performance (gain élevé) à basse fréquence, ce qui correspond à la spécification de suivi, et un filtre de deuxième ordre est ajouté pour assurer que le contrôleur est strictement propre et pour être robuste en ce qui concerne les dynamiques négligées grâce à un comportement d'atténuation. La fréquence de coupure du filtre est fixée à environ 5 Hz pour s'aligner sur la dynamique de la boucle fermée et rejeter le bruit dans les signaux mesurés. Pour limiter le nombre d'intégrateurs à 2 (un qui génère la commande d'intégration pour les deux hélices et l'autre pour les deux élevons), les sorties du bloc intégrateur sont doublées par une matrice d'allocation $\Sigma$. L'implémentation d'un filtre de second ordre présente l'avantage supplémentaire d'éviter un terme de transimission directe, qui peut amplifier les bruits indésirables des capteurs. La matrice de gain $\boldsymbol{F}$ comprend les matrices de gain $\boldsymbol{H}$ et $\boldsymbol{K}$ respectivement pour l'action intégrale et proportionnelle. Les équations et la représentation de l'espace d'état du système augmentée se trouvent dans \eqref{AugEq1}.
+Pour la conception du contrôle, une structure de contrôleur de type PI est employée pour minimiser l'erreur statique et améliorer le rejet des perturbations externes. Pour ce faire, nous ajoutons des filtres pré-compensateurs à l'entrée du système, sur la base de la méthodologie de mise en forme en boucle ouverte \cite{McFarlane1992}. Un intégrateur est ajouté pour assurer la performance (gain élevé) à basse fréquence, ce qui correspond à la spécification de suivi. De même, un filtre de deuxième ordre est ajouté pour assurer que le contrôleur soit strictement propre et robuste en ce qui concerne les dynamiques négligées grâce à un comportement d'atténuation. La fréquence de coupure du filtre est fixée à environ \SI{5}{\hertz} pour s'aligner sur la dynamique de la boucle fermée et rejeter le bruit dans les signaux mesurés. Pour limiter le nombre d'intégrateurs à 2 (un qui génère la commande d'intégration pour les deux hélices et l'autre pour les deux élevons), les sorties du bloc intégrateur sont doublées par une matrice d'allocation $\Sigma$. L'implémentation d'un filtre de second ordre présente l'avantage supplémentaire d'éviter un terme de transmission directe, qui peut amplifier les bruits indésirables des capteurs. La matrice de gain $\boldsymbol{F}$ comprend les matrices de gain $\boldsymbol{H}$ et $\boldsymbol{K}$ respectivement pour l'action intégrale et proportionnelle. Les équations et la représentation de l'espace d'état du système augmentée se trouvent dans \eqref{AugEq1}.
 
 \begin{equation}
 \centering
@@ -378,7 +377,7 @@ Pour la conception du contrôle, une structure de contrôleur de type PI est emp
     \end{gathered}
     \label{AugEq1}
 \end{equation}
-où $\boldsymbol{x_i} \in \mathbb{R}^{2}$ sont les états des intégrateurs,  $\boldsymbol{x_f} \in \mathbb{R}^{4}$ sont les états des filtres, $\boldsymbol{r} \in \mathbb{R}^{3}$ est le signal de référence,$\boldsymbol{y} \in \mathbb{R}^{11}$ est la sortie mesurée et $\boldsymbol{u}\in \mathbb{R}^{4}$ est l'entrée du système.
+où $\boldsymbol{x_i} \in \mathbb{R}^{2}$ sont les états des intégrateurs,  $\boldsymbol{x_f} \in \mathbb{R}^{4}$ sont les états des filtres, $\boldsymbol{r} \in \mathbb{R}^{3}$ est le signal de référence, $\boldsymbol{y} \in \mathbb{R}^{11}$ est la sortie mesurée et $\boldsymbol{u}\in \mathbb{R}^{4}$ est l'entrée du système.
 
 \section{Résultats}
 \label{resultLMI}
@@ -386,7 +385,7 @@ où $\boldsymbol{x_i} \in \mathbb{R}^{2}$ sont les états des intégrateurs,  $\
 
 L'approche de la section \ref{3a} a été appliquée au système augmenté de la section \ref{3b}, en se concentrant sur la dynamique linéarisée pour une vitesse de vent nulle (scénario de vol stationnaire). On a ainsi obtenu quatre contrôleurs stabilisateurs pour $h=12, 13, 14 \text{ et } 15$, $h$ variant entre 1 et 40. Plusieurs itérations avec différentes valeurs de $h$, servant de points d'initialisation pour l'algorithme d'optimisation, sont nécessaires pour améliorer la probabilité de convergence.
 
-La figure \ref{HKStepRes_a} montre la réponse temporelle en boucle fermée des quatre contrôleurs, avec des variations de consignes sur l'axe $x$ à 5 s, l'axe $y$ à 90 s et l'axe $z$ à 40 s. Tous les contrôleurs stabilisent efficacement la dynamique en boucle fermée et suivent les références de position selon les trois axes. La réponse est lente sur les axes X et Z et rapide sur l'axe Y, cela est dû à la capacité d'actionnement et l'utilisation différentielle des moteurs. De plus, une variation de consigne sur un axe n'entraîne pas de changement significatif sur les deux autres axes, ce qui indique un fort découplage entre les états de position. En outre, les actionneurs n'ont jamais été saturés.
+La figure \ref{HKStepRes_a} montre la réponse temporelle en boucle fermée des quatre contrôleurs, avec des variations de consigne sur l'axe $x$ à 5 s, l'axe $y$ à 90 s et l'axe $z$ à 40 s. Tous les contrôleurs stabilisent efficacement la dynamique en boucle fermée et suivent les références de position selon les trois axes. La réponse est lente sur les axes $x$ et $z$ et rapide sur l'axe $y$. Cela est dû à la capacité d'actionnement et l'utilisation différentielle des moteurs. De plus, une variation de consigne sur un axe n'entraîne pas de changement significatif sur les deux autres axes, ce qui indique un fort découplage entre les états de position. En outre, les actionneurs n'ont jamais été saturés.
 
 
 \begin{figure}[hbt]
@@ -405,7 +404,7 @@ Le premier graphique de la figure \ref{thetanowind} montre que l'angle d'inciden
     \label{thetanowind}
 \end{figure}
 
-Les équations \eqref{Kstructure1} et \eqref{Kstructure2} présentent les gains du contrôleur synthétisé $\boldsymbol{F}$ (bloc illustré dans \ref{Plant Augmentation}) comprenant les gains matriciels $\boldsymbol{H}$ et $\boldsymbol{K}$ pour h=12 et une dynamique linéarisée à une vitesse de vent nulle. En examinant plus attentivement la matrice de gain $\boldsymbol{K}$ qui produit quatre signaux de commande utilisés pour la commande asymétrique ou symétrique des actionneurs du drone, on peut observer que les lignes 1 et 2 (qui génèrent une commande de poussée sur les deux hélices) ainsi que les lignes 3 et 4 (qui génèrent une commande d'angle de déflexion pour les deux élevons) sont soit presque égales, soit opposées, à quelques exceptions près. Ce modèle a émergé naturellement du processus d'optimisation sans aucune contrainte, reflétant un alignement intuitif et cohérent avec la dynamique du drone.
+Les équations \eqref{Kstructure1} et \eqref{Kstructure2} présentent les gains du contrôleur synthétisés $\boldsymbol{F}$ (bloc illustré dans \ref{Plant Augmentation}) comprenant les gains matriciels $\boldsymbol{H}$ et $\boldsymbol{K}$ pour h=12 et une dynamique linéarisée à une vitesse de vent nulle. En examinant plus attentivement la matrice de gain $\boldsymbol{K}$ qui produit quatre signaux de commande utilisés pour la commande asymétrique ou symétrique des actionneurs du drone, on peut observer que les lignes 1 et 2 (qui génèrent une commande de poussée sur les deux hélices) ainsi que les lignes 3 et 4 (qui génèrent une commande d'angle de déflexion pour les deux élevons) sont soit presque égales, soit opposées, à quelques exceptions près. Ce modèle a émergé naturellement du processus d'optimisation sans aucune contrainte, reflétant un alignement intuitif et cohérent avec la dynamique du drone.
 
 \begin{equation}\label{Kstructure1}
 \boldsymbol{H}=
@@ -426,9 +425,9 @@ Les équations \eqref{Kstructure1} et \eqref{Kstructure2} présentent les gains 
 
 \subsection{Résultats expérimentaux}
 
-Pour la validation expérimentale, les contrôleurs ont été testés sur le modèle réel de drone DarkO construit à l'ENAC Fig. \ref{DarkO1}. Les essais en vol ont eu lieu dans la volière de l'ENAC, équipée d'un système de capture de mouvement Optitrack fournissant des données de position et d'attitude à \SI{40}{\hertz}, éliminant ainsi le besoin d'un capteur GPS. La vitesse est obtenue par une différence finie entre la position et l'attitude. Des algorithmes de fusion de données, y compris des filtres invariants, ont combiné les données d'Optitrack (position, vitesse et attitude) et de l'unité IMU du drone DarkO pour améliorer l'estimation de l'état. Cette estimation est utilisée pour créer le vecteur de sortie $\boldsymbol{y}$ utilisé par la loi de contrôle \eqref{AugEq1}. Compte tenu de l'architecture de la boucle de contrôle, l'estimation doit être de très bonne qualité avec le délai le plus court possible.
+Pour la validation expérimentale, les contrôleurs ont été testés sur le modèle réel de drone DarkO construit à l'ENAC Fig. \ref{DarkO1}. Les essais en vol ont eu lieu dans la volière de l'ENAC, équipée d'un système de capture de mouvement Optitrack fournissant des données de position et d'attitude à \SI{40}{\hertz}, éliminant ainsi le besoin d'un capteur GPS. La vitesse est obtenue par une différence finie. Des algorithmes de fusion de données, y compris des filtres invariants, ont combiné les données d'Optitrack (position, vitesse et attitude) et de l'unité IMU du drone DarkO pour améliorer l'estimation de l'état. Cette estimation est utilisée pour créer le vecteur de sortie $\boldsymbol{y}$, entrée de la loi de contrôle \eqref{AugEq1}. Compte tenu de l'architecture de la boucle de contrôle, l'estimation doit être de très bonne qualité avec le délai le plus court possible.
 
-La nature modulaire de Paparazi permet d'utiliser l'implémentation existante du filtre invariant pour estimer le vecteur d'état de DarkO et d'ajouter un module de stabilisation basé sur la loi de contrôle décrite ci-dessus (voir \ref{3b}). L'autopilote échantillonne les lois de commande et de contrôle à \SI{500}{\hertz}, générant des commandes de contrôle appropriées pour réaliser les manœuvres de vol souhaitées et stocker toutes les données en vue d'une analyse a posteriori.
+La nature modulaire de Paparazzi permet d'utiliser l'implémentation existante du filtre invariant pour estimer le vecteur d'état de DarkO et d'ajouter un module de stabilisation basé sur la loi de contrôle décrite ci-dessus (voir \ref{3b}). L'autopilote échantillonne les lois de commande et de contrôle à \SI{500}{\hertz}, générant des commandes de contrôle appropriées pour réaliser les manœuvres de vol souhaitées et stocker toutes les données en vue d'une analyse a posteriori.
 
 \begin{figure}[ht]
     \centering
@@ -453,11 +452,11 @@ Les essais expérimentaux suivants constituent les expérimentations réalisées
     \label{Dabbene_Flight_Test }
 \end{figure}
 
-Comme cela a également été observé dans les simulations, sur les axes $x$ et $z$, la réponse temporelle est relativement élevée alors que sur l'axe $y$, la réponse temporelle est considérablement plus rapide, en raison de l'actionnement différentiel important sur cet axe soutenu par la dynamique rapide de l'actionneur. Sur l'axe $z$, le passage du contrôleur INDI au contrôleur synthétisé entraîne une descente verticale relativement importante du drone. Par conséquent, un réglage et une modélisation supplémentaires doivent être effectués afin de corriger les valeurs d'initialisation de l'état et de l'entrée de commande correspondant au point d'équilibre \eqref{eq:equilibria}. La dynamique du drone sur l'axe $z$ est caractérisée par de petites oscillations autour de la position de référence, qui peuvent également être observées dans le signal de commande des vitesses angulaires des hélices, illustré à la figure \ref{Dabbene_Flight_Test}. Ces oscillations réduites sont dues au fait que la dynamique de l'actionneur n'est pas prise en compte dans la loi de commande. Il convient de noter que l'objectif premier de l'algorithme d'optimisation est de parvenir à une stabilisation en boucle fermée, sans tenir compte des critères de performance ou de robustesse. Au cours des vols expérimentaux, le contrôleur n'a pas saturé les actionneurs (voir la figure \ref{Dabbene_Flight_Test}).
+Comme cela a également été observé dans les simulations, sur les axes $x$ et $z$, la réponse temporelle est relativement élevée alors que sur l'axe $y$, la réponse temporelle est considérablement plus rapide, en raison de l'actionnement différentiel important sur cet axe soutenu par la dynamique rapide de l'actionneur. Sur l'axe $z$, le passage du contrôleur INDI au contrôleur synthétisé entraîne une descente verticale relativement importante du drone. Par conséquent, un réglage et une modélisation supplémentaire doivent être effectués afin de corriger les valeurs d'initialisation de l'état et de l'entrée de commande correspondant au point d'équilibre \eqref{eq:equilibria}. La dynamique du drone sur l'axe $z$ est caractérisée par de petites oscillations autour de la position de référence, qui peuvent également être observées dans le signal de commande des vitesses angulaires des hélices, illustré à la figure \ref{Dabbene_Flight_Test}. Ces oscillations réduites sont dues au fait que la dynamique de l'actionneur n'est pas prise en compte dans la loi de commande. Il convient de noter que l'objectif premier de l'algorithme d'optimisation est de parvenir à une stabilisation en boucle fermée, sans tenir compte des critères de performance ou de robustesse. Au cours des vols expérimentaux, le contrôleur n'a pas saturé les actionneurs (voir la figure \ref{Dabbene_Flight_Test}).
 
 
 
 \section{Conclusion du Chapitre \ref{chap:LMI}}
 
 Un algorithme d'optimisation convexe, utilisant le cadre LMI et la théorie de la stabilité de Lyapunov, a été employé pour synthétiser des contrôleurs à retour de sortie statique pour le modèle de drone convertible DarkO. Cette technique de synthèse basée sur le modèle a permis de stabiliser efficacement la dynamique en boucle fermée du système, assurant une réponse temporelle satisfaisante et un suivi de la référence sans saturation des actionneurs. Malgré une modélisation incomplète des phénomènes non linéaires, les contrôleurs ont démontré leur robustesse lors des premières démonstrations expérimentales sur le modèle de drone DarkO. Avec les matrices de gain du contrôleur conçues et la structure de la loi de commande, des vols expérimentaux ont été menés avec succès pour le vol stationnaire et le suivi de la trajectoire. Ce résultat constitue une solide preuve de concept pour la loi de commande développée en termes de performance et de robustesse.
-Il est maintenant nécessaire de s'intéressé à l'impact du vent sur l'architecture du drone et des impacts sur l'obtention des gains du contrôleur.
+Il est maintenant nécessaire de s'intéresser à l'impact du vent sur l'architecture du drone et aux impacts sur l'obtention des gains du contrôleur.

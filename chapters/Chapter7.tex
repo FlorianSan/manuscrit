@@ -3,7 +3,6 @@
 \chapter{Modélisation et commande d'un \textit{freewing}}
 \minitoc
 \label{chap:colibri}
-\todo{bold}
 
 \section{Motivation}
 \label{sec:motivationcolibri}
@@ -11,14 +10,26 @@ Les nombreux avantages d'une architecture \textit{tailsitter} nous ont poussé �
 
 De plus, le fuselage permettra l'emport d'une charge utile fragile (car elle pourra être maintenue horizontale en toutes circonstances), mais aussi de capteurs et de la batterie. L'ensemble de la masse du drone sera concentré sur le fuselage de manière à minimiser l'inertie de l'aile et faciliter sa rotation face à des turbulences faibles.
 
+\section{Réflexion autours de diverses architectures}
+La maquette utilisée dans le chapitre \ref{chap:3DOF} nous a permis d'expérimenter le comportement de l'aile en fonction de la position du centre de rotation.
+
+Plusieurs réflexions ont eu lieu pour conserver cette architecture, d'autres propositions ont été évalués, comme celle de faire un drone avec deux ailes en rotation libre (aile droite et gauche indépendante) problème d'estimation deux capteurs.
+Une autre possibilité étant de monter les moteurs sur des nacelles pour supprimer les élevons et généré de la pousser vectorielle (inertie hélice, mécanisme)
+\todo{autre idée}
+
 \section{Design et modélisation d'un drone : Colibri}
 \label{sec:model_colibri}
 
-Le drone Colibri est dérivé d'un drone \textit{tailsitter} qui génère de la portance pendant le vol d'avancement. Cette aile possède plusieurs actionneurs : quatre moteurs $u_{i}, ~i = 1,2,3,4$ et deux élevons $\delta_{\text{l}}$ et $\delta_{\text{r}}$. Nous pouvons définir le vecteur de contrôle $u_{\text{W}}$ de l'aile d'après la Figure~\ref{fig:world_body} comme $\boldsymbol{u}_{\text{W}} = [u_{1}~u_{2}~u_{3}~u_{4}~\delta_{\text{l}}~\delta_{\text{r}}]^\top$. Un fuselage relié par un pivot est fixé au centre aérodynamique de l'aile. Ce fuselage supporte l'autopilote, la batterie, un moteur et un empennage pour le maintenir horizontal.
+\subsection{Description de l'architecture}
+Le drone Colibri est dérivé d'un drone \textit{tailsitter} qui génère de la portance pendant le vol d'avancement. Cette aile possède plusieurs actionneurs : quatre moteurs $u_{i}, ~i = 1,2,3,4$ et deux élevons $\delta_{\text{l}}$ et $\delta_{\text{r}}$. Nous pouvons définir le vecteur de contrôle $\boldsymbol{u}_{\text{W}}$ de l'aile d'après la Figure~\ref{fig:world_body} comme :
+\begin{align}
+    \label{eq:uw}
+    \boldsymbol{u}_{\text{W}} = [u_{1}~u_{2}~u_{3}~u_{4}~\delta_{\text{l}}~\delta_{\text{r}}]^\top
+\end{align}. Un fuselage relié par un pivot est fixé au centre aérodynamique de l'aile. Ce fuselage supporte l'autopilote, la batterie, un moteur et un empennage pour le maintenir horizontal.
 
 Dans la Figure~\ref{fig:world_body}, toutes les surfaces de contrôle aérodynamiques sont représentées en rose et les hélices en vert. Trois repères sont attachés au drone tel que : (I) est un repère inertiel NED lié à la surface de la terre, (W) est un repère attaché à l'aile du drone et (F) est un repère attaché au fuselage du drone.
 
-\todo{autre idée}
+
 
 \begin{figure}[ht!]
 \centering
@@ -72,14 +83,35 @@ Certaines des dimensions caractéristiques sont indiquées dans la Table~\ref{ta
     \label{tab:pars_colibri}
 \end{table}
 
-
-\todo{Doit-on expliquer l'origine de cette équation}
-La modélisation est basée sur les résultats de \cite[Section 2.15]{udwadia-phohomsiri}. L'algorithme de calcul des matrices $\boldsymbol{M}$, $\boldsymbol{A}$, $\boldsymbol{Q}$ et $\boldsymbol{B}$ se trouve dans \cite{udwadia-schutte}, qui nous fournit les équations de mouvement d'un système multicorps contraint : 
+\todo{Description de la fixation du capteur, de la réalisation du joint tournant }
+\subsection{Modélisation}
+La modélisation est basée sur les résultats de \cite[Équation (2.15)]{udwadia-phohomsiri}. 
+Elle est obtenue à partir de l'équation de Lagrange décrivant le mouvement d'un système à chaque instant $t$ :
+\begin{align}
+    \label{eq:unconstraintDyn}
+    \boldsymbol{M}(\boldsymbol{x},t) \ddot{\boldsymbol{x}} = Q(\boldsymbol{x}, \dot{\boldsymbol{x}}, t)
+\end{align}
+Cette équation correspond au système non contraint, cela correspond au fait que les $n$ coordonnée de $\boldsymbol{x}$ sont indépendantes les unes vis-à-vis des autres ou du moins traité comme tel. Nous allons adjoindre à ce système non contraint $m$ contrainte :
+\begin{align}
+    \label{eq:contraintes_phi}
+    \varphi_{i}(\boldsymbol{x},\dot{\boldsymbol{x}},t) = 0, \quad i=1,2,...,m.
+\end{align}
+En supposant que ces contraintes soient assez lisses, nous pouvons différentier \eqref{eq:contraintes_phi} par rapport au temps pour obtenir : 
+\begin{align}
+    \label{eq:contrainteAB}
+    \boldsymbol{A}(\boldsymbol{x},\dot{\boldsymbol{x}}, t) \ddot{\boldsymbol{x}} = \boldsymbol{B}(\boldsymbol{x},\dot{\boldsymbol{x}},t).
+\end{align}
+En utilisant \eqref{eq:unconstraintDyn} et \eqref{eq:contrainteAB}, nous pouvons obtenir :
+\begin{align}
+    \label{eq:Mx=Q}
+    \begin{bmatrix} (\mathbb{I} - \boldsymbol{A}^{\dag}\boldsymbol{A})\boldsymbol{M} \\ \boldsymbol{A} \end{bmatrix}  \ddot{\boldsymbol{x}}  =  \begin{bmatrix} (\mathbb{I} - \boldsymbol{A}^{\dag}\boldsymbol{A}) \boldsymbol{Q} \\ \boldsymbol{B} \end{bmatrix}.
+\end{align}
+ L'équation \eqref{eq:Mx=Q} nous fournit l'équation de mouvement d'un système multicorps contraint : 
 \begin{align}
 \label{eq:udwadia}
-    \ddot{\boldsymbol{x}} = \hat{\boldsymbol{M}}^{\dag} \begin{bmatrix} \boldsymbol{Q} \\ \boldsymbol{B} \end{bmatrix}  = \begin{bmatrix} (\mathbb{I} - \boldsymbol{A}^{\dag}\boldsymbol{A})\boldsymbol{M} \\ \boldsymbol{A} \end{bmatrix}^{\dag} \begin{bmatrix} \boldsymbol{Q} \\ \boldsymbol{B} \end{bmatrix}
+    \ddot{\boldsymbol{x}} := \hat{\boldsymbol{M}}^{\dag} \begin{bmatrix} \boldsymbol{Q} \\ \boldsymbol{B} \end{bmatrix}  = \begin{bmatrix} (\mathbb{I} - \boldsymbol{A}^{\dag}\boldsymbol{A})\boldsymbol{M} \\ \boldsymbol{A} \end{bmatrix}^{\dag} \begin{bmatrix} \boldsymbol{Q} \\ \boldsymbol{B} \end{bmatrix}
 \end{align}
-dont l'expression est valide tant que $\hat{\boldsymbol{M}}$ a un rang complet et où $\boldsymbol{A}$, $\boldsymbol{M}$, $\boldsymbol{Q}$ et $\boldsymbol{B}$ sont décrits par la suite.
+dont l'expression est valide tant que $\hat{\boldsymbol{M}}$ a un rang complet et où $\boldsymbol{A}$, $\boldsymbol{M}$, $\boldsymbol{Q}$ et $\boldsymbol{B}$ sont décrits par la suite. L'algorithme de calcul de ces matrices se trouve dans \cite{udwadia-schutte}.
 
 \begin{figure}[ht!]
     \centering
@@ -150,7 +182,6 @@ La position de chaque élevon $\delta_i \in \real$ est assignée par un servomot
 \end{align}
  Les paramètres constants $k_{\text{f}}$, $k_{\text{m}}$, $\xi_{\text{f}}$, $\xi_{\text{m}}$ apparaissant dans \eqref{eq:thrust} et \eqref{eq:elevons_efficiency} sont listés dans la Table~\ref{tab:pars_colibri}.
 
- \todo{ajouter les parametres}
 
 Avec les quantités ci-dessus, nous pouvons nous inspirer de la dynamique donnée dans  \cite[eqns (97),~(98)]{lustosaHal-03035938} et exprimer $\boldsymbol{F}_{\text{W}}(x,u)$ et $\boldsymbol{M}_{\text{W}}(x,u)$ dans \eqref{eq:Q} comme :
 
@@ -179,7 +210,7 @@ Avec les quantités ci-dessus, nous pouvons nous inspirer de la dynamique donné
   & +  \Big(\!\! \skewsym{\!\smallm{0 \\ - a_y \\ 0}\!} \!\!\! \boldsymbol{\Phi}^{\text{(mv)}} \! + \! \boldsymbol{B} \boldsymbol{\Phi}^{\text{(m$\omega$)}}  \Big) \boldsymbol{\Delta}^{\text{m}}_2 - 2 \boldsymbol{B} \boldsymbol{\Phi}^{\text{(m$\omega$)}}\!  \bigg)\!  \boldsymbol{B}  \lVert \boldsymbol{v_{\text{b}}} \rVert  \boldsymbol{\omega}_{\text{b}} ,
 \end{align}
 où $\boldsymbol{v}_{\text{b}} := \boldsymbol{R}^\top(\boldsymbol{q}) (\boldsymbol{v}-\boldsymbol{w})$ représente la vitesse de l'air vue par le drone et exprimée dans le repère du corps. Dans \cite{lustosaHal-03035938}, la valeur $\lVert \boldsymbol{v_{\text{b}}} \rVert$, apparaissant dans les expressions de  $\boldsymbol{F}_{\text{b}}$ et $\boldsymbol{M}_{\text{b}}$, est remplacée par la valeur $\eta = \sqrt{\lVert \boldsymbol{v_{\text{b}}} \rVert^{2} + \mu c^{2} \lVert \boldsymbol{\omega}_{\text{b}} \rVert^{2}}$, avec $\mu \in \real$ étant un paramètre lié à l'identification du modèle. Toutefois, dans le cas de Colibri, l'identification fournit $\mu = 0$. 
-\todo{identification}
+
 Dès lors, nous présentons ici une description simplifiée. La matrice des coefficients aérodynamiques constants 
 $\boldsymbol{\Phi}:= \begin{bmatrix} \boldsymbol{\Phi}^{\text{(fv)}} & {\boldsymbol{\Phi}^{\text{(mv)}}}^\top \\ \boldsymbol{\Phi}^{\text{(mv)}} & \boldsymbol{\Phi}^{\text{(m$\omega$)}} \end{bmatrix} \in \real^{6 \times 6}$, est définie dans \cite[eqs. (6)--(9)]{olszaneckibarthHal-02542982} comme $ \boldsymbol{\Phi}^{\text{(fv)}} \!:=\! \diag(C_{\text{d}},C_{y}, C_{\ell})$ et
 \begin{align*}
@@ -224,7 +255,7 @@ Il est plus commode d'exprimer l'ensemble des contraintes sous la forme d'un sys
     \ddot{\varphi_{i}} + \delta_{1} \dot{\varphi_{i}}  + \delta_{2} \varphi_{i} = 0, i \in {1,2,3,4,5},
 \end{align}
 
-avec les sélections $(\delta_{1}, \delta_{2}) = (0.5,~8)$ étant les coefficients d'un polynôme stable, de sorte que, quelle que soit la sélection $\varphi_{i}(0) = 0$, nous ayons $\lim\limits_{t \to \infty} \varphi_{i}(t) = 0$. En différenciant deux fois les contraintes \eqref{eq:contraintes} et en les factorisant sous la forme $ \boldsymbol{A}(\boldsymbol{x},\dot{\boldsymbol{x}}) \ddot{\boldsymbol{x}} = \boldsymbol{B}(\boldsymbol{x},\dot{\boldsymbol{x}})$, nous obtenons l'expression de $\boldsymbol{A}(\boldsymbol{x},\dot{\boldsymbol{x}})$ reportée dans l'équation \eqref{eq:A_contraint} et de $\boldsymbol{B}(\boldsymbol{x},\dot{\boldsymbol{x}})$ reportée dans l'équation \eqref{eq:b_contraint}.
+avec les sélections $(\delta_{1}, \delta_{2}) = (0.5,~8)$ étant les coefficients d'un polynôme stable, de sorte que, quelle que soit la sélection $\varphi_{i}(0) = 0$, nous ayons $\lim\limits_{t \to \infty} \varphi_{i}(t) = 0$. En différenciant deux fois les contraintes \eqref{eq:contraintes} et en les factorisant sous la forme de l'équation \eqref{eq:contrainteAB}, nous obtenons l'expression de $\boldsymbol{A}(\boldsymbol{x},\dot{\boldsymbol{x}})$ reportée dans l'équation \eqref{eq:A_contraint} et de $\boldsymbol{B}(\boldsymbol{x},\dot{\boldsymbol{x}})$ reportée dans l'équation \eqref{eq:b_contraint}.
 
 \begin{align}
 \label{eq:A_contraint}
@@ -237,17 +268,24 @@ avec les sélections $(\delta_{1}, \delta_{2}) = (0.5,~8)$ étant les coefficien
         \end{bmatrix}
 \end{align}
 
-\todo{Expression de A et B}
 \begin{align}
     \label{eq:b_contraint}
-    B = \begin{bmatrix}
+    \boldsymbol{B} = \begin{bmatrix}
             -\delta_{1} \boldsymbol{q}_{\text{W}}^\top \dot{\boldsymbol{q}}_{\text{W}} - \frac{\delta_{2}}{2} (\boldsymbol{q}_{\text{W}}^\top \boldsymbol{q}_{\text{W}} -1) - \dot{\boldsymbol{q}}_{\text{W}}^\top \dot{\boldsymbol{q}}_{\text{W}} \\
             -\delta_{1} \boldsymbol{q}_{\text{F}}^\top \dot{\boldsymbol{q}}_{\text{F}} - \frac{\delta_{2}}{2} (\boldsymbol{q}_{\text{F}}^\top \boldsymbol{q}_{\text{F}} -1) - \dot{\boldsymbol{q}}_{\text{F}}^\top \dot{\boldsymbol{q}}_{\text{F}} \\
-            -\boldsymbol{R}_{3}(\boldsymbol{q}_{\text{F}})^\top \dot{\boldsymbol{L}}_{2}^{\text{W}}\dot{\boldsymbol{q}}_{\text{W}} - \boldsymbol{R}_{2}(\boldsymbol{q}_{\text{W}})^\top \dot{\boldsymbol{L}}_{3}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} - 2\dot{\boldsymbol{q}}_{\text{W}}^\top {\boldsymbol{L}_{2}^{\text{W}}}^\top \boldsymbol{L}_{3}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} - \delta_{1}(\boldsymbol{R}_{3}(\boldsymbol{q}_{\text{F}})^\top \boldsymbol{L}_{2}^{\text{W}}\dot{\boldsymbol{q}}_{\text{W}} +  \boldsymbol{R}_{2}(\boldsymbol{q}_{\text{W}})^\top \boldsymbol{L}_{3}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} ) - \delta_{2}\varphi_{3}\\
-            -\boldsymbol{R}_{1}(\boldsymbol{q}_{\text{F}})^\top \dot{\boldsymbol{L}}_{2}^{\text{W}}\dot{\boldsymbol{q}}_{\text{W}} - \boldsymbol{R}_{2}(\boldsymbol{q}_{\text{W}})^\top \dot{\boldsymbol{L}}_{1}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} - 2\dot{\boldsymbol{q}}_{\text{W}}^\top {\boldsymbol{L}_{2}^{\text{W}}}^\top \boldsymbol{L}_{1}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} - \delta_{1}(\boldsymbol{R}_{1}(\boldsymbol{q}_{\text{F}})^\top \boldsymbol{L}_{2}^{\text{W}}\dot{\boldsymbol{q}}_{\text{W}} +  \boldsymbol{R}_{2}(\boldsymbol{q}_{\text{W}})^\top \boldsymbol{L}_{1}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} ) - \delta_{2} \varphi_{4}\\
+            B_{3}\\
+            B_{4}\\
             \dot{\boldsymbol{L}}_{O_{\text{F}}^{\text{W}}} \dot{\boldsymbol{q}}_{\text{F}}  - \delta_{1}( \boldsymbol{v}_{\text{W}} + \dot{\boldsymbol{L}}_{O_{\text{F}}^{\text{W}}} \dot{\boldsymbol{q}}_{\text{W}} - \boldsymbol{v}_{\text{F}}) - \delta_{1}\boldsymbol{\varphi}_{5}
         \end{bmatrix}.
 \end{align}
+avec 
+\begin{multline*}
+    B_{3} = -\boldsymbol{R}_{3}(\boldsymbol{q}_{\text{F}})^\top \dot{\boldsymbol{L}}_{2}^{\text{W}}\dot{\boldsymbol{q}}_{\text{W}} - \boldsymbol{R}_{2}(\boldsymbol{q}_{\text{W}})^\top \dot{\boldsymbol{L}}_{3}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} - 2\dot{\boldsymbol{q}}_{\text{W}}^\top {\boldsymbol{L}_{2}^{\text{W}}}^\top \boldsymbol{L}_{3}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}}\\ - \delta_{1}(\boldsymbol{R}_{3}(\boldsymbol{q}_{\text{F}})^\top \boldsymbol{L}_{2}^{\text{W}}\dot{\boldsymbol{q}}_{\text{W}} +  \boldsymbol{R}_{2}(\boldsymbol{q}_{\text{W}})^\top \boldsymbol{L}_{3}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} ) - \delta_{2}\varphi_{3}
+\end{multline*}
+et 
+\begin{multline*}
+    B_{4} = -\boldsymbol{R}_{1}(\boldsymbol{q}_{\text{F}})^\top \dot{\boldsymbol{L}}_{2}^{\text{W}}\dot{\boldsymbol{q}}_{\text{W}} - \boldsymbol{R}_{2}(\boldsymbol{q}_{\text{W}})^\top \dot{\boldsymbol{L}}_{1}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} - 2\dot{\boldsymbol{q}}_{\text{W}}^\top {\boldsymbol{L}_{2}^{\text{W}}}^\top \boldsymbol{L}_{1}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} \\- \delta_{1}(\boldsymbol{R}_{1}(\boldsymbol{q}_{\text{F}})^\top \boldsymbol{L}_{2}^{\text{W}}\dot{\boldsymbol{q}}_{\text{W}} +  \boldsymbol{R}_{2}(\boldsymbol{q}_{\text{W}})^\top \boldsymbol{L}_{1}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} ) - \delta_{2} \varphi_{4}
+\end{multline*}
 
 La simulation d'un drone reste complexe, car il est naturellement instable. Nous avons choisi d'utiliser la loi de contrôle proposée dans \ref{sec:h_inf6DOF_multi} pour stabiliser le système. Ce contrôle stabilise l'aile. Une autre loi de contrôle basée sur une rétroaction proportionnelle-dérivée stabilise le fuselage pour le maintenir horizontal. Les résultats de la simulation en boucle fermée sont présentés à la Figure~\ref{fig:sim_colibri}.
 
@@ -293,15 +331,15 @@ L'installation de l'IMU sur le fuselage réduit les vibrations, mais implique qu
 Comme expliqué ci-dessus, nous pouvons mesurer l'angle $\kappa \in \real$ entre l'aile et le fuselage à l'aide de l'encodeur rotatif. Ensuite, pour estimer la vitesse angulaire, nous utilisons un observateur grand gain proposé dans \cite{203613} (voir également \cite{1032320} pour l'utilisation d'observateurs grand gain pour estimer les dérivées temporelles). Cette méthode est préférable à une dérivée par différence finie, car les informations quantifiées générées par l'encodeur rotatif peuvent donner lieu à du bruit numérique dans les valeurs estimées de vitesse angulaire.
 
 
-Désignons par $\kappa \in \real$ l'angle mesuré, par $\omega_{\kappa} := \dot \kappa  \in \real$ sa dérivée à estimer, et par $\xi = [\kappa,~\omega_{\kappa}]^\top \in \mathbb{R}^2$ leur juxtaposition en un seul vecteur. Notons également $\hat{\xi}$ l'estimation de $\xi$ définie par :
+Désignons par $\kappa \in \real$ l'angle mesuré, par $\omega_{\kappa} := \dot \kappa  \in \real$ sa dérivée à estimer, et par $\boldsymbol{\xi} = [\kappa,~\omega_{\kappa}]^\top \in \mathbb{R}^2$ leur juxtaposition en un seul vecteur. Notons également $\hat{\boldsymbol{\xi}}$ l'estimation de $\boldsymbol{\xi}$ définie par :
 %\xi = [\kappa,~\omega_{\kappa}]^\top \in \mathbb{R}^2, \quad 
 \begin{align*}
-    \hat{\xi} = [\hat{\kappa},~\hat{\omega}_{\kappa}]^\top \in \mathbb{R}^2.
+    \hat{\boldsymbol{\xi}} = [\hat{\kappa},~\hat{\omega}_{\kappa}]^\top \in \mathbb{R}^2.
 \end{align*}
 Suivant \cite{203613}, la dynamique de l'estimateur est donnée par :
 \begin{align}
 \label{eq:high_dyn}
-    \dot{\hat{\xi}} =  \begin{bmatrix}0 & 1 \\ 0 & 0 \end{bmatrix} \hat{\xi}+ \begin{bmatrix}\frac{k_{p}}{\epsilon_{\kappa}}  \\ \frac{k_{v}}{\epsilon_{\kappa}^{2}}  \end{bmatrix} (\kappa - \hat{\kappa}),
+    \dot{\hat{\boldsymbol{\xi}}} =  \begin{bmatrix}0 & 1 \\ 0 & 0 \end{bmatrix} \hat{\boldsymbol{\xi}}+ \begin{bmatrix}\frac{k_{p}}{\epsilon_{\kappa}}  \\ \frac{k_{v}}{\epsilon_{\kappa}^{2}}  \end{bmatrix} (\kappa - \hat{\kappa}),
 \end{align}
 où $\kappa$ est la mesure angulaire récupérée du capteur, $k_{p}$ et $k_{v}$ sont deux gains scalaires positifs tels que l'équation caractéristique $s^{2} + k_{v} s + k_{p} = 0$ ait des racines à partie réelle négative. Pour notre estimateur, nous avons choisi $k_{p} = 1$ et $k_{v} = 1,3$ de manière à obtenir un facteur d'amortissement $\zeta = 0,65$ conduisant à une réponse légèrement sous-amortie comme compromis approprié entre un temps de montée rapide et une réponse légèrement oscillatoire. Le gain $\epsilon_{\kappa}$ peut être ajusté de manière pratique afin d'obtenir un compromis entre l'action de lissage (obtenue en augmentant $\epsilon_{\kappa}$) et la réduction du retard temporel
 de l'estimateur (obtenue en réduisant $\epsilon_{\kappa}$). En outre, l'action de lissage de l'approche proposée atténue l'effet de la quantification de la mesure angulaire. Nous avons choisi $\epsilon_{\kappa} = 0,05$ pour nos expériences. La Figure~\ref{fig:high_gain} montre les résultats expérimentaux obtenus après la mise en œuvre du filtre grand gain \eqref{eq:high_dyn} dans le cas d'un vol générant des oscillations angulaires de grande amplitude.
@@ -316,10 +354,10 @@ Nous avons effectué une dérivation par différence finie (en vert) en post-tra
 \end{figure}
 \todo{Ce n'est pas très lisible comme figure}
 
-Afin d'effectuer la transformation nécessaire entre les repères, nous définissons le quaternion $q_{\hat{\kappa}} \in {\mathbb S}^3$ suivant :
+Afin d'effectuer la transformation nécessaire entre les repères, nous définissons le quaternion $\boldsymbol{q}_{\hat{\kappa}} \in {\mathbb S}^3$ suivant :
 \begin{align}
 \label{eq:rot_quat}
-    q_{\hat{\kappa}} =  \left[\cos\left(\frac{\hat{\kappa}}{2}\right) ~ 0 ~ \sin\left(\frac{\hat{\kappa}}{2}\right) ~ 0 \right]^\top
+\boldsymbol{q}_{\hat{\kappa}} =  \left[\cos\left(\frac{\hat{\kappa}}{2}\right) ~ 0 ~ \sin\left(\frac{\hat{\kappa}}{2}\right) ~ 0 \right]^\top
 \end{align}
 
 
@@ -333,78 +371,86 @@ Compte tenu de l'architecture actuelle du logiciel du système Paparazzi (voir A
 Pour les mesures de la vitesse angulaire basées sur le gyroscope, nous pouvons calculer la vitesse angulaire de l'aile exprimée dans le repère de l'aile :
 \begin{align}
     \label{eq:gyro_deplacement}
-    \omega_{\text{W}} = R(q_{\hat{\kappa}}) \left( \omega_{gyro}^{\text{F}} + \begin{bmatrix}
+    \boldsymbol{\omega}_{\text{W}} = \boldsymbol{R}(\boldsymbol{q}_{\hat{\kappa}}) \left( \boldsymbol{\omega}_{gyro}^{\text{F}} + \begin{bmatrix}
     0\\ \omega_{\kappa} \\ 0
     \end{bmatrix}  \right) 
 \end{align}
-où $\omega_{gyro}^{\text{F}}$ est la vitesse angulaire mesurée par le gyroscope sur le fuselage, exprimée dans le repère du fuselage, $\hat{\omega}_{\kappa}$ est la vitesse angulaire estimée de l'aile par rapport au fuselage, conformément à \eqref{eq:high_dyn}, et $q_{\hat{\kappa}}$ est le quaternion défini dans \eqref{eq:rot_quat}.
+où $\boldsymbol{\omega}_{gyro}^{\text{F}}$ est la vitesse angulaire mesurée par le gyroscope sur le fuselage, exprimée dans le repère du fuselage, $\hat{\omega}_{\kappa}$ est la vitesse angulaire estimée de l'aile par rapport au fuselage, conformément à \eqref{eq:high_dyn}, et $\boldsymbol{q}_{\hat{\kappa}}$ est le quaternion défini dans \eqref{eq:rot_quat}.
 L'expression \eqref{eq:gyro_deplacement} est similaire à une composition de vitesse angulaire et à un changement du repère.
 
-Pour la mesure de l'accélération avec l'accéléromètre, nous pouvons utiliser la relation de l'équation \eqref{eq:accel_deplacement}, qui est obtenue à partir du théorème de transport du taux de variation \cite{brizard2004motion}, où nous trouvons le terme d'accélération d'Euler $\dot{\omega_{\text{F}}} \times d_{AF}$  et le terme d'accélération centripète $\omega_{\text{F}} \times ( \omega_{\text{F}} \times  d_{AF})$. L'accélération de Coriolis $2\omega_{\text{F}} \times \frac{d (d_{\text{FW}})}{d t}\Bigr|_{O_{\text{F}}}$ et le taux d'accélération $\frac{d^{2} (d_{\text{FW}})}{d^{2} t}\Bigr|_{O_{\text{F}}}$ sont nuls car $d_{\text{FW}}$ est constant.
+Pour la mesure de l'accélération avec l'accéléromètre, nous pouvons utiliser la relation de l'équation \eqref{eq:accel_deplacement}, qui est obtenue à partir du théorème de transport du taux de variation \cite{brizard2004motion}, où nous trouvons le terme d'accélération d'Euler $\dot{\boldsymbol{\omega}_{\text{F}}} \times \boldsymbol{d}_{AF}$  et le terme d'accélération centripète $\boldsymbol{\omega}_{\text{F}} \times ( \boldsymbol{\omega}_{\text{F}} \times  \boldsymbol{d}_{AF})$. L'accélération de Coriolis $2\boldsymbol{\omega}_{\text{F}} \times \frac{d (\boldsymbol{d}_{\text{FW}})}{d t}\Bigr|_{O_{\text{F}}}$ et le taux d'accélération $\frac{d^{2} (\boldsymbol{d}_{\text{FW}})}{d^{2} t}\Bigr|_{O_{\text{F}}}$ sont nuls car $\boldsymbol{d}_{\text{FW}}$ est constant.
 
 \begin{align}
     \label{eq:accel_deplacement}
-    a_{\text{W}} = R(q_{\hat{\kappa}}) \left( a_{acc}^{F} + \dot{\omega}_{gyro}^{F} \times d_{\text{FW}} + \omega_{gyro}^{F} \times ( \omega_{gyro}^{F} \times  d_{\text{FW}}) \right) 
+    \boldsymbol{a}_{\text{W}} = \boldsymbol{R}(\boldsymbol{q}_{\hat{\kappa}}) \left( \boldsymbol{a}_{acc}^{F} + \dot{\boldsymbol{\omega}}_{gyro}^{F} \times \boldsymbol{d}_{\text{FW}} + \boldsymbol{\omega}_{gyro}^{F} \times ( \boldsymbol{\omega}_{gyro}^{F} \times  \boldsymbol{d}_{\text{FW}}) \right) 
 \end{align}
-où $a_{acc}^{F} \in \real^{3}$ est l'accélération mesurée par l'accéléromètre sur le fuselage, exprimée dans le repère du fuselage et $\omega_{gyro}^{F}$ est la vitesse angulaire du fuselage, identique à l'équation \eqref{eq:gyro_deplacement}. L'accélération angulaire $\dot{\omega}_{gyro}^{F}$ dans \eqref{eq:accel_deplacement} est calculée par différence finie.
+où $\boldsymbol{a}_{acc}^{F} \in \real^{3}$ est l'accélération mesurée par l'accéléromètre sur le fuselage, exprimée dans le repère du fuselage et $\boldsymbol{\omega}_{gyro}^{F} \in \real^{3}$ est la vitesse angulaire du fuselage, identique à l'équation \eqref{eq:gyro_deplacement}. L'accélération angulaire $\dot{\boldsymbol{\omega}}_{gyro}^{F} \in \real^{3}$ dans \eqref{eq:accel_deplacement} est calculée par différence finie.
 
 
 Pour les mesures du magnétomètre, nous avons :
 \begin{align}
     \label{eq:mag_deplacement}
-    E_{\text{W}} = R(q_{\hat{\kappa}}) E_{mag}
+    \boldsymbol{E}_{\text{W}} = \boldsymbol{R}(\boldsymbol{q}_{\hat{\kappa}}) \boldsymbol{E}_{mag}
 \end{align}
-où $E_{mag} \in \real^{3}$ est la sortie du magnétomètre, exprimée dans le repère du fuselage et $ E_{\text{W}} \in \real^{3}$ est la mesure exprimée dans le repère de l'aile.
+où $\boldsymbol{E}_{mag} \in \real^{3}$ est la sortie du magnétomètre, exprimée dans le repère du fuselage et $ \boldsymbol{E}_{\text{W}} \in \real^{3}$ est la mesure exprimée dans le repère de l'aile.
 
-Pour obtenir une estimation de l'état de l'aile, nous utilisons un algorithme de fusion des mesures des capteurs : le filtre de Kalman étendu (EKF)  \nomenclature[]{\(EKF\)}{Filtre de Kalman étendu (\textit{Extended Kalman Filter})} qui fournit une estimation des états suivants : $p_{\text{W}}$, $v_{\text{W}}$, $q_{\text{W}}$ à partir de mesures transformées dans le repère de l'aile $\omega_{\text{W}}$ (équation \eqref{eq:gyro_deplacement}), $a_{\text{W}}$ (équation \eqref{eq:accel_deplacement}), $E_{\text{W}}$ (équation \eqref{eq:mag_deplacement}) et les données du système de vision externe, qui fournissent une mesure précise de la position $p_{text{W}}$ et de la vitesse $v_{text{W}}$ du drone dans le repère inertiel (I).
+Pour obtenir une estimation de l'état de l'aile, nous utilisons un algorithme de fusion des mesures des capteurs : le filtre de Kalman étendu (EKF)  \nomenclature[]{\(EKF\)}{Filtre de Kalman étendu (\textit{Extended Kalman Filter})} qui fournit une estimation des états suivants : $\boldsymbol{p}_{\text{W}}$, $\boldsymbol{v}_{\text{W}}$, $\boldsymbol{q}_{\text{W}}$ à partir de mesures transformées dans le repère de l'aile $\boldsymbol{\omega}_{\text{W}}$ (équation \eqref{eq:gyro_deplacement}), $\boldsymbol{a}_{\text{W}}$ (équation \eqref{eq:accel_deplacement}), $\boldsymbol{E}_{\text{W}}$ (équation \eqref{eq:mag_deplacement}) et les données du système de vision externe, qui fournissent une mesure précise de la position $\boldsymbol{p}_{\text{W}}$ et de la vitesse $\boldsymbol{v}_{\text{W}}$ du drone dans le repère inertiel (I).
 
 
 \subsection{Estimation de l'orientation du fuselage}
-Pour déterminer l'orientation du fuselage, nous pouvons effectuer une composition entre le quaternion représentant l'orientation de l'aile $q_{text{W}}$ résultat de l'EKF et le quaternion construit à partir de la mesure filtrée de l'encodeur rotatif $q_{\hat{\kappa}}$ dans \eqref{eq:rot_quat},
+Pour déterminer l'orientation du fuselage, nous pouvons effectuer une composition entre le quaternion représentant l'orientation de l'aile $\boldsymbol{q}_{\text{W}}$ résultat de l'EKF et le quaternion construit à partir de la mesure filtrée de l'encodeur rotatif $\boldsymbol{q}_{\hat{\kappa}}$ dans \eqref{eq:rot_quat},
 \begin{align}
 \label{eq:quat_fuselage}
-    q_{\text{F}} = q_{\text{W}} \otimes q_{\hat{\kappa}}
+\boldsymbol{q}_{\text{F}} = \boldsymbol{q}_{\text{W}} \otimes \boldsymbol{q}_{\hat{\kappa}}
 \end{align}
-où l'opérateur $\otimes$ désigne le produit hamiltonien. La connaissance de $q_{\text{F}}$ est nécessaire pour maintenir le fuselage parfaitement horizontal. 
+où l'opérateur $\otimes$ désigne le produit hamiltonien. La connaissance de $\boldsymbol{q}_{\text{F}}$ est nécessaire pour maintenir le fuselage parfaitement horizontal. 
 
 \section{Inversion non linéaire incrémentale de la dynamique du drone}
 
-\todo{Détails}
-La théorie de l'inversion dynamique non linéaire incrémentale (INDI) utilisée dans le contexte des micro-drones est présentée dans \cite{smeurINDI}. Nous utilisons la notation proposée dans \cite{smeurINDITail}. L'hypothèse centrale sous-jacente est que le principe de séparation des échelles de temps s'applique à la dynamique de l'actionneur et à la dynamique des forces et des moments aérodynamiques. Le signal de commande peut alors être calculé de manière incrémentale en utilisant la matrice d'efficacité de l'actionneur $G$.
+La théorie de l'inversion dynamique non linéaire incrémentale (INDI) utilisée dans le contexte des micro-drones est présentée dans \cite{smeurINDI}. Nous utilisons la notation proposée dans \cite{smeurINDITail}. L'hypothèse centrale sous-jacente est que le principe de séparation des échelles de temps s'applique à la dynamique de l'actionneur et à la dynamique des forces et des moments aérodynamiques. Le signal de commande $\boldsymbol{u}_{\text{W}}$ définit dans \eqref{eq:uw} peut alors être calculé de manière incrémentale en utilisant la matrice d'efficacité de l'actionneur $G$.
 
 \begin{align}
-    u_{\text{W}} = u_{\text{W}} + G^{\dag} (\nu - \begin{bmatrix}
-    \dot{\omega}_{\text{W}} \\
+    \boldsymbol{u}_{\text{W}} = \boldsymbol{u}_{\text{W}} + \boldsymbol{G}^{\dag} (\boldsymbol{\nu} - \begin{bmatrix}
+    \dot{\boldsymbol{\omega}}_{\text{W}} \\
     T_{\text{W}}
     \end{bmatrix})
 \end{align}
 \todo{$\nu$ explication}
-où  $ \dot{\omega}_{\text{W}} \in \real^{3}$ est l'accélération angulaire obtenue par différence finie à partir de l'équation \eqref{eq:gyro_deplacement},  $T_{\text{W}} \in \real$ est la poussée actuelle, $\nu$ est défini dans \cite[équation (4)]{smeurINDITail} et $G$ est la matrice d'efficacité du contrôle, définie par :
+où  $ \dot{\boldsymbol{\omega}}_{\text{W}} \in \real^{3}$ est l'accélération angulaire obtenue par différence finie à partir de l'équation \eqref{eq:gyro_deplacement},  $T_{\text{W}} \in \real$ est la poussée actuelle.
+\begin{align}
+    \boldsymbol{\nu} = \begin{bmatrix}
+        K_{\Omega} (\Omega_{ref}-\boldsymbol{\omega}_{\text{W}})\\
+        T_{d}
+    \end{bmatrix}
+\end{align}
+
+
+La matrice d'efficacité du contrôle $\boldsymbol{G}$ est définie par :
 \begin{align*}
     \begin{bmatrix}
     \partial \phi \\
     \partial \theta \\
     \partial \psi \\
     \partial T
-    \end{bmatrix}\! =\! G u_{f} \!=\!
+    \end{bmatrix}\! =\! \boldsymbol{G} \boldsymbol{u}_{\text{W}} \!=\!
     \begin{bmatrix}
     -7.5 & -15 & 7.5 & 15 & 0 & 0\\
     0 & 0 & 0 & 0 & 15 & 15 \\
     0 & 0 & 0 & 0 & 4 & -4 \\
     -0.6 & -0.6 & -0.6 & -0.6 & 0 & 0\\
     \end{bmatrix}
-    u_{f}
+    \boldsymbol{u}_{\text{W}}
 \end{align*}
 Cette sélection de la matrice d'efficacité a été déterminée pour les vols stationnaires, mais il est nécessaire d'effectuer une étude différente pour le vol vers l'avant.
 
-Pour stabiliser le fuselage, nous utilisons un bouclage proportionnel-dérivé de l'angle $\theta_{\text{F}}$ formé entre le fuselage et l'horizontale, que nous voulons maintenir à zéro. Cet angle est obtenu en convertissant le quaternion $q_{\text{F}}$ de l'équation \eqref{eq:quat_fuselage} en un angle d'Euler en suivant la convention d'Euler 'ZYX'. Le bouclage fournit la commande $u_{text{tail}}$ pour la vitesse angulaire du moteur générant la force $F_{m}$ (voir Figure~\ref{fig:colibri_frame_side}), suivant l'expression :
+Pour stabiliser le fuselage, nous utilisons un bouclage proportionnel-dérivé de l'angle $\theta_{\text{F}}$ formé entre le fuselage et l'horizontale, que nous voulons maintenir à zéro. Cet angle est obtenu en convertissant le quaternion $q_{\text{F}}$ de l'équation \eqref{eq:quat_fuselage} en un angle d'Euler en suivant la convention d'Euler 'ZYX'. Le bouclage fournit la commande $u_{\text{tail}}$ pour la vitesse angulaire du moteur générant la force $F_{m}$ (voir Figure~\ref{fig:colibri_frame_side}), suivant l'expression :
 \begin{align*}
     u_{\text{tail}} = u_{eq} + k_{p} \theta_{\text{F}} + k_{d} \dot{\theta_{\text{F}}},
 \end{align*}
 où $u_{eq}$ est la commande, à l'équilibre, du moteur pour maintenir le fuselage horizontal en l'absence de perturbation et $k_{p}$, $k_{d}$ sont des gains scalaires ajustables. La valeur $u_{eq}$ a été obtenue en appliquant le théorème des moments au fuselage au point $O_{\text{W}}$. En effet, les deux moments qui agissent sur le fuselage sont le couple dû à la force de poussée du moteur et le couple dû à la position du centre de gravité du fuselage.
 \todo{Expliquer les moments}
 
-Les gains $k_{p}$ et $k_{d}$ ont été ajustés en vol pour assurer un comportement satisfaisant. On obtient $\dot{\theta_{\text{F}}}$ à partir de $\omega_{gyro}^{F} = [\dot{\phi_{\text{F}}}~\dot{\theta_{\text{F}}}~\dot{\psi_{\text{F}}}]^\top$.
+Les gains $k_{p}$ et $k_{d}$ ont été ajustés en vol pour assurer un comportement satisfaisant. On obtient $\dot{\theta}_{\text{F}}$ à partir de $\boldsymbol{\omega}_{gyro}^{F} = [\dot{\phi}_{\text{F}}~\dot{\theta}_{\text{F}}~\dot{\psi}_{\text{F}}]^\top$.
 
 
 
@@ -426,7 +472,7 @@ Un prototype a été mis au point, comme le montre la Figure~\ref{fig:colibri_re
     \label{fig:colibri_real}
 \end{figure}
 
-Sur la Figure~\ref{fig:colibri_flight}, de \SI{0}{\second} à \SI{8}{\second}, le drone est au sol. De \SI{8}{\second} à \SI{16}{\second}, le drone décolle pour atteindre une hauteur de 2 mètres, visible sur le troisième graphique. Cette hauteur est atteinte après un dépassement de 10 \%. Le drone est maintenu dans cette position pendant \SI{54}{\second}. Des oscillations d'incidence sont observées dans le cinquième et le dernier graphique, générant des oscillations dans la position horizontale du drone. Ce phénomène est dû au couplage entre les deux corps, qui n'est pas correctement stabilisé. À partir de \SI{70}{\second}, le drone commence à se diriger vers le point $p_{c} = \begin{bmatrix} 3 & 0.9 & -1.5 \end{bmatrix}^\top$ et $\psi_{c}=\SI{90}{\degree}$.
+Sur la Figure~\ref{fig:colibri_flight}, de \SI{0}{\second} à \SI{8}{\second}, le drone est au sol. De \SI{8}{\second} à \SI{16}{\second}, le drone décolle pour atteindre une hauteur de 2 mètres, visible sur le troisième graphique. Cette hauteur est atteinte après un dépassement de 10 \%. Le drone est maintenu dans cette position pendant \SI{54}{\second}. Des oscillations d'incidence sont observées dans le cinquième et le dernier graphique, générant des oscillations dans la position horizontale du drone. Ce phénomène est dû au couplage entre les deux corps, qui n'est pas correctement stabilisé. À partir de \SI{70}{\second}, le drone commence à se diriger vers le point $\boldsymbol{p}_{c} = \begin{bmatrix} 3 & 0.9 & -1.5 \end{bmatrix}^\top$ et $\psi_{c}=\SI{90}{\degree}$.
 \begin{figure}[ht!]
 \centering
     \includegraphics[width=0.6\columnwidth,angle=0]{figures/colibri_flight.png}
