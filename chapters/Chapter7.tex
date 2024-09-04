@@ -12,9 +12,34 @@ De plus, le fuselage permettra l'emport d'une charge utile fragile (car elle pou
 
 \section{Réflexion autours de diverses architectures}
 La maquette utilisée dans le chapitre \ref{chap:3DOF} nous a permis d'expérimenter le comportement de l'aile en fonction de la position du centre de rotation.
+{\color{blue}
+Nous avons réalisé un montage permettant de modifier la position du centre de rotation par rapport au centre de gravité. Cela impacte la stabilité de l'aile, mais aussi son comportement face au vent. 
 
-Plusieurs réflexions ont eu lieu pour conserver cette architecture, d'autres propositions ont été évalués, comme celle de faire un drone avec deux ailes en rotation libre (aile droite et gauche indépendante) problème d'estimation deux capteurs.
-Une autre possibilité étant de monter les moteurs sur des nacelles pour supprimer les élevons et généré de la pousser vectorielle (inertie hélice, mécanisme)
+\begin{figure}[ht!]
+    \centering
+   \includegraphics[width=0.8\columnwidth]{figures/vueMaquetteDarkoReglage.png}
+    \caption{Montage de la maquette du chapitre \ref{chap:3DOF} avec un réglage de la position du centre de rotation (pièce jeune).}
+    \label{fig:MontageDarkoReglable}
+\end{figure}
+
+Le centre de gravité doit se trouver en arrière du centre de rotation pour assurer que l'aile soit verticale naturellement.
+\begin{figure}[ht!]
+    \centering
+    \resizebox{.7\textwidth}{!}{%
+    \includegraphics[height=3cm]{figures/CentreRotationAv.png}
+    \quad
+    \includegraphics[height=3cm]{figures/CentreRotationArr.png}
+    }
+    \caption{Positionnement avant et arrière du centre de rotation par rapport au centre de gravité.}
+    \label{fig:MontageDarkoReglableAvArr}
+\end{figure}
+
+} 
+
+ Une autre possibilité étant de monter les moteurs sur des nacelles pour supprimer les élevons et généré de la pousser vectorielle (inertie hélice, mécanisme).
+
+ Nous avons aussi évalué la possibilité de rendre les deux ailes droite et gauche indépendante 
+ problème avec la multiplication des capteurs.
 \todo{autre idée}
 
 \section{Design et modélisation d'un drone : Colibri}
@@ -298,7 +323,9 @@ La simulation d'un drone reste complexe, car il est naturellement instable. Nous
 
 En considérant les degrés de liberté de la liaison pivot, le couplage entre les deux corps est clairement visible sur les trois graphiques du bas. En effet, les angles de roulis et de lacet $(\phi_{\text{F}}, \psi_{\text{F}})$ et $(\phi_{\text{W}}, \psi_{\text{W}})$ du fuselage et de l'aile coïncident parfaitement, alors que les angles de tangage $(\theta_{\text{F}}, \theta_{\text{F}})$ sont différents.
 
-
+{\color{blue}
+    Par la suite, nous souhaitons réaliser des expérimentations avec un système réel, nous devons donc étudier la possibilité d'obtention de l'estimation des corps pour stabiliser le drone.
+}
 
 
 
@@ -306,12 +333,10 @@ En considérant les degrés de liberté de la liaison pivot, le couplage entre l
 
 
 \section{Estimation d'état}\label{sec:stateEst}
-% \todo{Link to the modeling:  What is the connection between angular velocity
-% estimation and the multibody dynamics derived in the paper?
-% What are the advantages of the angular velocity estimator
-% compared to existing technologies? It is difficult to
-% discern the theoretical contribution to the angular
-% velocity estimation part.}
+
+{\color{blue}
+    Un des problèmes engendré par cette architecture multicorps est l'estimation de l'état de chacun des composants.
+}
 
 
 Pour stabiliser ce système de drone à deux corps, il est nécessaire de connaître la position et l'orientation des deux corps. Grâce à la liaison pivot entre l'aile et le fuselage, la différence entre l'orientation de l'aile et l'orientation du fuselage est simplement une rotation autour de l'axe de tangage de l'aile. Les deux autres orientations (roulis et lacet) coïncident. La position du centre de gravité du fuselage peut être déduite de la position du centre de gravité de l'aile et de l'angle entre le fuselage et l'aile. Cet angle est mesuré par un codeur rotatif en quadrature (CUI Devices AMT22, codeurs absolus, 12 bits, SPI), qui renvoie une mesure angulaire quantifiée avec un pas de \SI{0,09}{\degree}. Compte tenu de cette mesure angulaire, nous examinons ci-dessous l'estimation des informations relatives à la vitesse, afin de reconstruire l'état du drone.
@@ -352,7 +377,6 @@ Nous avons effectué une dérivation par différence finie (en vert) en post-tra
     \caption{Mesure de l'angle (noir, graphique du haut), mesure de la vitesse angulaire avec le gyroscope de l'aile (bleu, graphique du bas), estimation de la vitesse angulaire par différence finie (vert, graphique du bas) et estimation avec le filtre grand gain (courbes rouges).}
     \label{fig:high_gain}
 \end{figure}
-\todo{Ce n'est pas très lisible comme figure}
 
 Afin d'effectuer la transformation nécessaire entre les repères, nous définissons le quaternion $\boldsymbol{q}_{\hat{\kappa}} \in {\mathbb S}^3$ suivant :
 \begin{align}
@@ -453,6 +477,15 @@ où $u_{eq}$ est la commande, à l'équilibre, du moteur pour maintenir le fusel
 Les gains $k_{p}$ et $k_{d}$ ont été ajustés en vol pour assurer un comportement satisfaisant. On obtient $\dot{\theta}_{\text{F}}$ à partir de $\boldsymbol{\omega}_{gyro}^{F} = [\dot{\phi}_{\text{F}}~\dot{\theta}_{\text{F}}~\dot{\psi}_{\text{F}}]^\top$.
 
 
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[trim={0 15cm 0 25cm},clip, width=0.6\columnwidth]{figures/IMG_20230120_141852.jpg}
+    \caption{Fuselage de Colibri.}
+    \label{fig:colibri_fus}
+\end{figure}
+
+
+
 
 \section{Expérimentations}
 \label{sec:exp}
@@ -483,6 +516,9 @@ Sur la Figure~\ref{fig:colibri_flight}, de \SI{0}{\second} à \SI{8}{\second}, l
 \section{Vol avec un contrôleur unifié}
 
 \todo{feedforward accélération}
+{\color{blue}
+
+}
 
 \section{Commande Udwadia-Kalaba}
 
