@@ -11,18 +11,21 @@ Les nombreux avantages d'une architecture \textit{tailsitter} nous ont poussé �
 De plus, le fuselage permettra l'emport d'une charge utile fragile (car elle pourra être maintenue horizontale en toutes circonstances), mais aussi de capteurs et de la batterie. L'ensemble de la masse du drone sera concentré sur le fuselage de manière à minimiser l'inertie de l'aile et faciliter sa rotation face à des turbulences faibles.
 
 \section{Réflexion autours de diverses architectures}
-La maquette utilisée dans le chapitre \ref{chap:3DOF} nous a permis d'expérimenter le comportement de l'aile en fonction de la position du centre de rotation.
 {\color{blue}
-Nous avons réalisé un montage permettant de modifier la position du centre de rotation par rapport au centre de gravité. Cela impacte la stabilité de l'aile, mais aussi son comportement face au vent. 
+La maquette utilisée dans le chapitre \ref{chap:3DOF} nous a permis d'expérimenter le comportement de l'aile en fonction de la position du centre de rotation.
+
+Nous avons réalisé un montage permettant de modifier la position du centre de rotation par rapport au centre de gravité (figure \ref{fig:MontageDarkoReglable}). Cela impacte la stabilité de l'aile, mais aussi son comportement face au vent. 
+
 
 \begin{figure}[ht!]
     \centering
    \includegraphics[width=0.8\columnwidth]{figures/vueMaquetteDarkoReglage.png}
-    \caption{Montage de la maquette du chapitre \ref{chap:3DOF} avec un réglage de la position du centre de rotation (pièce jeune).}
+    \caption{Montage de la maquette du chapitre \ref{chap:3DOF} avec un réglage de la position du centre de rotation (pièce jaune).}
     \label{fig:MontageDarkoReglable}
 \end{figure}
+La pièce jaune de la figure \ref{fig:MontageDarkoReglable} assure la liaison entre les demi ailes (droite et gauche) et le système de rotation central. De plus, la pièce est conçue pour permettre un glissement dans le plan des ailes, ce qui à pour conséquence de déplacer le centre de gravité de l'ensemble par rapport au centre de rotation, ce dernier étant bloqué. Nous observons sur la figure \ref{fig:MontageDarkoReglableAvArr} que le réglage permet un débattement d'environ \SI{30}{\milli\meter}. Le montage est verrouillé par deux vis par aile, assurant la rigidité.
 
-Le centre de gravité doit se trouver en arrière du centre de rotation pour assurer que l'aile soit verticale naturellement.
+Le centre de gravité doit se trouver en arrière du centre de rotation pour assurer que l'aile soit verticale sans commande.
 \begin{figure}[ht!]
     \centering
     \resizebox{.7\textwidth}{!}{%
@@ -34,13 +37,16 @@ Le centre de gravité doit se trouver en arrière du centre de rotation pour ass
     \label{fig:MontageDarkoReglableAvArr}
 \end{figure}
 
-} 
+De ce montage et en utilisant la loi de stabilisation de la figure \ref{fig:commande_int3DOF}, nous avons observé l'intérêt de positionné un fuselage pendulaire fixé en rotation libre. Ainsi l'aile se trouve libre de tourner autours de l'axe de liaison pour obtenir l'incidence nécessaire à la stabilisation du drone dans la phase de vol considéré. Nous avons choisi d'expérimenté le cas ou la charge utile ainsi que la batterie se situe sur le fuselage de manière à diminuer l'inertie de l'aile, cela permet d'augmenter sa réactivité. Ainsi la maquette de la figure \ref{fig:MontageDarkoReglable} était alimenté par une batterie au plomb installé au sol avec des câbles alimentant le système installé au niveau de la fixation. Ces câbles génèrent de moment résistant, permettant d'approcher au mieux le système réel.
 
- Une autre possibilité étant de monter les moteurs sur des nacelles pour supprimer les élevons et généré de la pousser vectorielle (inertie hélice, mécanisme).
+Au niveau de l'actionnement, le parti prit a été d'utiliser un mécanisme similaire à celui de DarkO étant donné les études préliminaires réalisées sur la modélisation, l'étude des couplages, des saturations. Toutefois, il existait d'autres possibilités.
+Nous pouvions monter les moteurs sur des nacelles pour supprimer les élevons et généré de la pousser vectorielle. Ce mécanisme ne supprime pas d'actionneur car le servomoteur présent sur l'élevons se retrouve à actionner la nacelle. Ce servomoteur doit être dimensionné pour vaincre les affects gyroscopiques de l'hélice, ce qui peut diminuer la réactivité de l'actionnement. De plus, le mécanisme de nacelle augmente ne nombre de pièces en mouvement, ce qui pose des problèmes de fiabilité. L'absence de commande aérodynamique ne permet pas de vol plané, en cas de panne moteur, le contrôle du drone ne peut pas être assuré.
+Une autre possibilité était d'actionné non pas l'élevon, mais de motorisé l'intégralité d'une demi aile, ce qui permet de modifier la direction de poussé de moteur, mais aussi de modifier l'incidence de l'aile. Toutefois, vus les dimensions de l'aile, les servomoteurs doivent être dimensionnés au vu des effets gyroscopiques des hélices couplé à l'inertie de la demi aile. Cela va engendrer des servomoteurs puissants qui vont alourdir la structure.
 
- Nous avons aussi évalué la possibilité de rendre les deux ailes droite et gauche indépendante 
- problème avec la multiplication des capteurs.
-\todo{autre idée}
+ Nous avons aussi évalué la possibilité de rendre les deux ailes droite et gauche indépendante. Ce qui ajoute un degré de liberté dans la dynamique du drone. Ce fonctionnement permet de se soustraire de l'impact d'une différence de vitesse air sur chacune des demi ailes. Toutefois, il est nécessaire de mesurer l'orientation de chacune des demi ailes, ce qui nécessite un capteur en plus dans un espace assez contraint.
+
+}
+
 
 \section{Design et modélisation d'un drone : Colibri}
 \label{sec:model_colibri}
@@ -108,6 +114,9 @@ Certaines des dimensions caractéristiques sont indiquées dans la Table~\ref{ta
     \label{tab:pars_colibri}
 \end{table}
 
+{\color{blue}
+    Nous avons déjà conçu un système de rotation libre dans le chapitre \ref{sec:motivation3DOF}, toutefois il était fixé à un banc de test. Pour Colibri, il est nécessaire de concevoir une liaison robuste, mais légère pour être embarqué sur le drone. 
+}
 \todo{Description de la fixation du capteur, de la réalisation du joint tournant }
 \subsection{Modélisation}
 La modélisation est basée sur les résultats de \cite[Équation (2.15)]{udwadia-phohomsiri}. 
