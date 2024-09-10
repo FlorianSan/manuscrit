@@ -116,8 +116,43 @@ Certaines des dimensions caractéristiques sont indiquées dans la Table~\ref{ta
 
 {\color{blue}
     Nous avons déjà conçu un système de rotation libre dans le chapitre \ref{sec:motivation3DOF}, toutefois il était fixé à un banc de test. Pour Colibri, il est nécessaire de concevoir une liaison robuste, mais légère pour être embarqué sur le drone. 
+
+    Nous avons donc conçu un système de rotation basée sur deux roulements à aiguille (en violet sur l'image \ref{fig:ColibriRot}) et deux butées à bille F6-12M pour minimiser le couple résistant (en jaune sur l'image \ref{fig:ColibriRot}). Les butées à  bille sont bloqué par des pièces de verrouillage (en bleu sur l'image \ref{fig:ColibriRot}) obtenues par impression 3D stéréolithographique (SLA). Ces verrouilleurs pincent le tube en carbone pour éviter qu'il coulisse de droite à gauche. 
+
+    L'impression 3D SLA est un procédé de photopolymérisation qui utilise un laser UV pour polymériser une résine liquide en plastique durci. Cette technologie permet d'obtenir des pièces d'une grande précision et plus résistante que l'impression 3D à dépôt de fil fondu (FDM).
+
+    
+
+    \nomenclature[]{\(SLA\)}{Impression 3D stéréolithographique (\textit{StereoLithography Apparatus})} 
+
+    \nomenclature[]{\(FDM\)}{Impression 3D dépôt de fil fondu (\textit{Fused deposition modeling})} 
+
+    \begin{figure}[ht!]
+        \centering
+        \resizebox{.9\textwidth}{!}{%
+        \includegraphics[height=3cm]{figures/ColibriRotPlein.png}
+        \quad
+        \includegraphics[height=3cm]{figures/ColibriRotTransparent.png}
+        }
+        \caption{Modèle 3D de la liaison.}
+        \label{fig:ColibriRot}
+    \end{figure}
+
+    L'encodeur rotatif, CUI Devices AMT22, est fixée au bâti qui maintient les roulements (figure \ref{fig:ColibriRotReel} gauche), un système de pince est installé sur le tube en carbone et permet au capteur de mesurer l'angle de rotation de l'ensemble aile par rapport au fuselage.
+
+    \begin{figure}[ht!]
+        \centering
+        \resizebox{.9\textwidth}{!}{%
+        \includegraphics[height=3cm]{figures/ColibriRotVueCote.png}
+        \quad
+        \includegraphics[height=3cm]{figures/ColibriRotReel.jpg}
+        }
+        \caption{Visualisation de l'encodeur rotatif sur le modèle 3D (gauche) et modèle réel (droite).}
+        \label{fig:ColibriRotReel}
+    \end{figure}
+    Le montage réel est proposé sur la figure \ref{fig:ColibriRotReel} de droite. On observe le montage du contrôleur moteur avec les fils qui vont jusqu'au moteur (3 par moteur soit un total de 12 fils) et le câbles de commande de l'ESC, les câbles de l'encodeur rotatif et les câbles de commandes des servomoteurs (3 fils, car les servomoteurs sont chainés) et enfin les câbles de l'IMU installé sur l'aile.
 }
-\todo{Description de la fixation du capteur, de la réalisation du joint tournant }
+
 \subsection{Modélisation}
 La modélisation est basée sur les résultats de \cite[Équation (2.15)]{udwadia-phohomsiri}. 
 Elle est obtenue à partir de l'équation de Lagrange décrivant le mouvement d'un système à chaque instant $t$ :
