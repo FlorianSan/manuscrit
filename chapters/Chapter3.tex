@@ -17,8 +17,15 @@ Dans cette partie, nous allons nous concentrer sur la stabilisation stationnaire
 
 
 \section{Contrôleur par retour d'état non-linéaire}
-Nous illustrons dans cette section une loi de contrôle dynamique non linéaire inspirée du résultat de \cite{2020e-MicCenZacFra}. Pour que cette loi de contrôle non linéaire soit applicable, les matrices $\boldsymbol{F}$ et $\boldsymbol{M}$ mentionnées dans \eqref{eq:withouwind} doivent permettre de définir une direction dite de zéro moment $\boldsymbol{\bar u} \in \real^4$ garantissant
+Nous illustrons dans cette section une loi de contrôle dynamique non linéaire inspirée du résultat de \cite{2020e-MicCenZacFra} et présenté en Figure \ref{fig:NLZeroMoment}. Pour que cette loi de contrôle non linéaire soit applicable, les matrices $\boldsymbol{F}$ et $\boldsymbol{M}$ mentionnées dans \eqref{eq:withouwind} doivent permettre de définir une direction dite de zéro moment $\boldsymbol{\bar u} \in \real^4$ garantissant
 $|\boldsymbol{F}\boldsymbol{\bar u}| = 1$ et $\boldsymbol{M} \boldsymbol{\bar u}=0$, et la matrice inverse à droite $\boldsymbol{M}^r$ de $\boldsymbol{M}$ doit satisfaire $\boldsymbol{M} \boldsymbol{M}^r = \mathbb{I}_3$ et $\boldsymbol{F}\boldsymbol{M}^r=0$. 
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[trim=0cm 0.6cm 0cm 0.6cm,clip,width=0.9\columnwidth]{figures/NLZeroMoment.png}
+  \caption{Schéma de commande non linéaire basée sur une direction de zéro moment \cite{2020e-MicCenZacFra}.}
+  \label{fig:NLZeroMoment}
+\end{figure}
 
 Dans notre cas, nous constatons que la direction du moment zéro $\boldsymbol{\bar u} = \frac{\sqrt{2}}{2a_{\text{f}}}\smallmat{1&1&0&0}^\top$ satisfait les conditions, alors que le fait que $\rank(\boldsymbol{F}) = 2$ (donc que le noyau de $\boldsymbol{F}$ ($\ker \boldsymbol{F}$) soit de dimension 2) rend impossible l'obtention de la matrice inverse à droite $\boldsymbol{M}^r$ de $\boldsymbol{M}$, laquelle est entièrement contenue dans $\ker \boldsymbol{F}$.
 
@@ -50,14 +57,13 @@ Sur la base du choix de $\boldsymbol{M}^r$ et de $\boldsymbol{\bar u}$ décrit c
 \label{eq:u_nonlin}
     \boldsymbol{u} = \boldsymbol{u_{\text{nl}}} := \boldsymbol{M}^r \boldsymbol{\tau_{r}} + \boldsymbol{\bar u} \boldsymbol{f},
 \end{align}
-où $\boldsymbol{\tau_{r}}$ et $\boldsymbol{f}$ sont fournis par le contrôleur proposé dans \cite{2020e-MicCenZacFra}.
-
+où $\boldsymbol{\tau_{r}} = -k_{ap} \boldsymbol{\epsilon}_{\Delta} - k_{ad} \boldsymbol{\omega}_{\Delta} + \boldsymbol{\omega} \times J \boldsymbol{\omega} + J \boldsymbol{\omega}_{dd}$ est le moment de référence et $\boldsymbol{f}$ est la force dans la direction de zéro moment. 
 
 La sélection de $\boldsymbol{M}^r$ basée sur l'optimalité peut être interprétée de manière intéressante lorsqu'on observe le produit $\boldsymbol{M}^r \boldsymbol{\tau_{r}} = \boldsymbol{M}^r \smallmat{\tau_{r,x} & \tau_{r,y} & \tau_{r,z}}^top$. 
 
 Premièrement, pour obtenir un moment $\tau_{r,z}$ autour de l'axe $z_{\text{b}}$, nous utilisons principalement l'action différentielle de la poussée ; deuxièmement, un moment $\tau_{r,y}$ autour de l'axe $y_{\text{b}}$ est généré par une utilisation symétrique des deux volets, avec une grande efficacité ; enfin, un moment $\tau_{r,x}$ autour de l'axe $x_{\text{b}}$ provient d'une utilisation différentielle des volets. 
 
-Enfin, par rapport à la solution proposée dans \cite{2020e-MicCenZacFra}, pour prendre partiellement en compte les effets de saturation énoncés dans la section~\ref{sec:saturation}, le bouclage décrit dans \cite{2020e-MicCenZacFra} a été augmenté d'une stratégie de saturation d'erreur ne permettant jamais à l'erreur de position $\boldsymbol{\rm e}_p$ utilisée dans \cite[eqn. (22)]{2020e-MicCenZacFra} de dépasser la valeur maximale de 3 mètres. Les autres gains de réglage nécessaires à la solution de \cite{2020e-MicCenZacFra} ont été sélectionnés en suivant une procédure de réglage des gains proportionnels et dérivés, cela conduit à $k_{pp} = 0.5$, $k_{pd} = 1.2$, $k_{ap} = 0.08$, $k_{ad} = 0.1$ et $k_{\Delta} = 1$.
+Enfin, par rapport à la solution proposée dans \cite{2020e-MicCenZacFra}, pour prendre partiellement en compte les effets de saturation énoncés dans la section~\ref{sec:saturation}, le bouclage décrit dans \cite{2020e-MicCenZacFra} a été augmenté d'une stratégie de saturation d'erreur ne permettant jamais à l'erreur de position $\boldsymbol{\rm e}_p$ utilisée dans \cite[eqn. (22)]{2020e-MicCenZacFra} de dépasser la valeur maximale de 3 mètres. Les autres gains de réglage nécessaires à la solution de \cite{2020e-MicCenZacFra} ont été sélectionnés comme $k_{pp} = 0.5$, $k_{pd} = 1.2$, $k_{ap} = 0.08$, $k_{ad} = 0.1$ et $k_{\Delta} = 1$.
  
 La figure~\ref{fig_global_contol} montre la réponse du système en termes de positions, d'orientations (deux lignes du haut) et d'efforts des actionneurs (deux lignes du bas) lorsque le système part de la condition initiale $\boldsymbol{x(0)} = [\boldsymbol{p(0)}~ \boldsymbol{v(0)}~ \boldsymbol{q(0)}~ \boldsymbol{\omega_b(0)}]^\top = [0~0~0 ~ 0~0~0 ~0. 9140 ~0.1134~ -0.3728~ 0. 1134~ 0~ 0~ 0]^\top $ avec une position d'équilibre cible de $\boldsymbol{p_{\text{eq}}} = [4~5~6]^\top$ et $\boldsymbol{q_{\text{eq}}} = [\frac{\sqrt{2}}{2}~0~-\frac{\sqrt{2}}{2}~0]^\top$. 
 Une réponse adéquate peut être observée, laquelle reste assez éloignée des saturations des actionneurs (voir section~\ref{sec:saturation}). L'augmentation des gains peut accélérer la réponse, mais produit toutefois des oscillations d'attitude indésirables. Il est donc intéressant de combiner ce contrôleur non linéaire (qui fournit une grande région d'attraction) avec un contrôleur plus agressif, conçu sur la base de la dynamique linéarisée sans vent \eqref{eq:linearized}.
@@ -79,7 +85,7 @@ Sur la base des observations de la section précédente et étant donné une pos
 \end{align}
 où $\boldsymbol{\tilde x}$ a été introduit dans \eqref{eq:linearized} et $\boldsymbol{K} \in \real^{4 \times 12}$ est un gain de retour d'état qui peut être sélectionné, sur la base des matrices $\boldsymbol{A}_{0}$ et $\boldsymbol{G}_{0}$ apparaissant dans \eqref{eq:linearized}, de telle sorte que la boucle fermée du retour d'état $A_{\text{cl}}:=\boldsymbol{A}_{0}-\boldsymbol{G}_{0}\boldsymbol{K}$ soit exponentiellement stable. 
 
-Dans notre cas, nous avons utilisé une sélection basée sur la commande linéaire quadratique, LQR \nomenclature[]{\(LQR\)}{Commande linéaire quadratique (\textit{Linear Quadratic Regulators})}, associée aux matrices de pondération $\boldsymbol{Q} = I_{12}$ et $\boldsymbol{R} = I_{4}$, qui donne une réponse en boucle fermée désirable. La conception LQR fournit également une matrice définie positive  $\boldsymbol{S} \in \real^{12 \times 12}$ (solution de l'équation algébrique de Riccati) garantissant que $\boldsymbol{A}_{\text{cl}}^\top \boldsymbol{S} + \boldsymbol{S} A_{text{cl}} <0$. Il est donc possible d'utiliser $\boldsymbol{S}$ pour former une fonction de Lyapunov.  En particulier, il est bien connu, d'après le théorème d'approximation linéaire, que la fonction $V(\boldsymbol{\tilde x}) = \boldsymbol{\tilde x}^\top S \boldsymbol{\tilde x}$ est également une fonction de Lyapunov certifiant la stabilité exponentielle locale de $\boldsymbol{x_{\text{eq}}}$ pour la dynamique non-linéaire. Plus précisément, il existe un scalaire positif $\bar v \in \real$ tel que, le long de la dynamique \eqref{eq:dyna_orig}, nous avons :
+Dans notre cas, nous avons utilisé une sélection basée sur la commande linéaire quadratique, LQR \nomenclature[]{\(LQR\)}{Commande linéaire quadratique (\textit{Linear Quadratic Regulators})}, associée aux matrices de pondération $\boldsymbol{Q} = I_{12}$ et $\boldsymbol{R} = I_{4}$, qui donne une réponse en boucle fermée désirable. La conception LQR fournit également une matrice définie positive  $\boldsymbol{S} \in \real^{12 \times 12}$ (solution de l'équation algébrique de Riccati) garantissant que $\boldsymbol{A}_{\text{cl}}^\top \boldsymbol{S} + \boldsymbol{S} A_{\text{cl}} <0$. Il est donc possible d'utiliser $\boldsymbol{S}$ pour former une fonction de Lyapunov.  En particulier, il est bien connu que la fonction $V(\boldsymbol{\tilde x}) = \boldsymbol{\tilde x}^\top S \boldsymbol{\tilde x}$ est également une fonction de Lyapunov certifiant la stabilité exponentielle locale de $\boldsymbol{x_{\text{eq}}}$ pour la dynamique non-linéaire. Plus précisément, il existe un scalaire positif $\bar v \in \real$ tel que, le long de la dynamique \eqref{eq:dyna_orig}, nous avons :
 \begin{align}
 \label{eq:Vdecrease}
   V(\boldsymbol{\tilde x}) \leq \bar v \quad \Rightarrow \quad \dot V(\boldsymbol{\tilde x}) := \langle 
@@ -120,24 +126,45 @@ Considérant les stratégies locales-globales présentées dans \cite[Ex. 1. 7]{
 \label{eq:u_hybrid}
   \boldsymbol{u}=\boldsymbol{u}_{\text{hyb}} := \ell \boldsymbol{u}_{\text{nl}} + (1-\ell) \boldsymbol{u}_{\text{lin}}.
 \end{align}
-Nous nous assurons, grâce à la dynamique hybride, que $\ell$ ne puisse prendre que des valeurs dans $\{0,1\}$. Sa dynamique est définie par : 
-\begin{align*}
+Nous nous assurons, grâce à la dynamique hybride, que $\ell$ ne puisse prendre que des valeurs dans $\{0,1\}$. Sa dynamique est définie par une évolution continue notée $\dot \ell$ dans $\mathcal{C}$ et une évolution discrète notée $\ell^{+}$ dans $\mathcal{D}$ telle que : 
+\begin{align}
     \left\{
         \begin{array}{ll}
             \dot \ell = 0,& \chi \in \mathcal{C}\\
             \ell^{+} = 1-\ell,& \chi \in \mathcal{D}
-        \end{array}
+        \end{array}.
     \right.
-\end{align*}
-où $\chi = \left[\boldsymbol{p},~ \boldsymbol{v},~ \boldsymbol{q},~  \boldsymbol{\omega},~ l\right]$ est l'état complet de la boucle fermée et $\mathcal{C}$ et $\mathcal{D}$ sont, respectivement, les ensembles continus et discrets, définis par :
+\end{align}
+Ce formalise mathématique représente un fonctionnement simple qui correspond à un maintien de la valeur de $\ell$ lors de l'évolution continue $\mathcal{C}$ et à un changement de la valeur de $\ell$ de 1 vers 0 ou inversement lors des évolutions discrètes $\mathcal{D}$ représenté par les croix rouge sur la figure \ref{fig:ensembletrnaistion}
+
+
+Nous avons l'état complet de la boucle fermée $\chi = \left[\boldsymbol{p},~ \boldsymbol{v},~ \boldsymbol{q},~  \boldsymbol{\omega},~ l\right]$ et les ensembles continus et discrets sont, respectivement, $\mathcal{C}$ et $\mathcal{D}$ définis par :
 \begin{align*}
-    & \mathcal{C} := \mathcal{C}_{0} \cup \mathcal{C}_{1}, ~ \mathcal{D} := \mathcal{D}_{0} \cup \mathcal{D}_{1},\\
+    & \mathcal{C} := \mathcal{C}_{0} \cup \mathcal{C}_{1}, \quad \mathcal{D} := \mathcal{D}_{0} \cup \mathcal{D}_{1},\\
    & \mathcal{C}_{0} :=\{\boldsymbol{\chi} \in \mathbb{R}^{14}:~ V(\boldsymbol{\tilde x}) \le \overline{v} \mbox{ and } \ell=0\}\\
    & \mathcal{C}_{1} :=\left\{\boldsymbol{\chi} \in \mathbb{R}^{14}:~ V(\boldsymbol{\tilde x}) \ge \underline{v} \mbox{ and } \ell=1 \right\}\\
    & \mathcal{D}_{0} :=\left\{\boldsymbol{\chi} \in \mathbb{R}^{14}:~ V(\boldsymbol{\tilde x}) \geq \overline{v}\mbox{ and } \ell=0 \right\}\\
    & \mathcal{D}_{1} :=\left\{\boldsymbol{\chi} \in \mathbb{R}^{14}:~ V(\boldsymbol{\tilde x}) \leq \underline{v}\mbox{ and } \ell=1 \right\}
 \end{align*}
-où $V(\boldsymbol{\tilde x}) := \boldsymbol{\tilde x}^\top S \boldsymbol{\tilde x}$  a été défini dans la section précédente, $\overline{v}=400$ a été déterminée pour satisfaire \eqref{eq:Vdecrease} et $\underline{v}$ est toute constante positive satisfaisant $\underline{v}<\overline{v}$ (un choix plus grand de $\underline{v}$ augmente la marge d'hystérésis, mais retarde le changement de loi de commande). Dans notre cas, nous choisissons $\underline{v}= 350$.
+où $V(\boldsymbol{\tilde x}) := \boldsymbol{\tilde x}^\top S \boldsymbol{\tilde x}$  a été défini dans la section précédente, $\overline{v}=400$ a été déterminée pour satisfaire \eqref{eq:Vdecrease} et $\underline{v}$ est toute constante positive satisfaisant $\underline{v}<\overline{v}$.
+
+L'intérêt de $\underline{v}$ et de $\overline{v}$ est de permettre une hystérésis sur le changement local/global de loi de commande de manière à éviter les oscillations entre les deux lois à proximité de la transition. Ce fonctionnement est représenté sur la figure \ref{fig:hysteresis}. Il retarde toutefois le changement de loi de commande.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.8\columnwidth]{figures/hysteresis.png}
+  \caption{Mécanisme d'hystérésis sur le changement local/global de loi de commande.}
+  \label{fig:hysteresis}
+\end{figure}
+
+Dans notre cas, nous choisissons $\underline{v}= 350$. La figure \ref*{fig:ensembletrnaistion} présente un exemple du fonctionnement du mécanisme hybride en fonction de l'évolution de $V(\boldsymbol{\tilde x})$
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.8\columnwidth]{figures/transition.png}
+  \caption{Exemple de l'évolution de $V(\boldsymbol{\tilde x})$, de la variable discrète $\ell$ et des ensembles continu $\mathcal{C}_{0}$ et $ \mathcal{C}_{1}$ et discret $\mathcal{D}_{0}$ et $\mathcal{D}_{1}$.}
+  \label{fig:ensembletrnaistion}
+\end{figure}
 
 Le résultat suivant est une conséquence immédiate des résultats de \cite[Ex. 1.7]{65} et des propriétés de nos modèles linéaires et non linéaires.
 
@@ -145,9 +172,9 @@ Le résultat suivant est une conséquence immédiate des résultats de \cite[Ex.
     Avec l'action du bouclage hybride \eqref{eq:u_hybrid}, la boucle fermée présente, quand elle utilise le contrôleur linéaire \eqref{eq:u_lin}, le même bassin d'attraction que celui associé au contrôleur non linéaire \eqref{eq:u_nonlin}.
 \end{proposition}
 
-Nous avons réalisé plusieurs simulations de la boucle fermée à l'aide de la \textit{toolbox} Matlab \cite{sanfelice_2017}. Les simulations sont effectuées avec le modèle complet du drone \eqref{eq:dyna_orig}, comprenant tous les effets aérodynamiques non linéaires. Un exemple de simulation est présenté dans la Figure~\ref{fig_sim}, où nous initialisons le drone à l'origine avec une orientation nulle, sauf pour l'angle de tangage fixé à 45 degrés. L'orientation de la cible est en configuration de vol stationnaire vertical et la position de la cible est assignée à $\boldsymbol{p_{\text{eq}}} = [50,~25,~12.5]$.
+Nous avons réalisé plusieurs simulations de la boucle fermée à l'aide de la \textit{Hybrid Equations Toolbox} (HyEQ) de Matlab \cite{sanfelice_2017}. Les simulations sont effectuées avec le modèle complet du drone \eqref{eq:dyna_orig}, comprenant tous les effets aérodynamiques non linéaires. Un exemple de simulation est présenté dans la Figure~\ref{fig_sim}, où nous initialisons le drone à l'origine avec une orientation nulle, sauf pour l'angle de tangage fixé à 45 degrés. L'orientation de la cible est en configuration de vol stationnaire vertical et la position de la cible est assignée à $\boldsymbol{p_{\text{eq}}} = [50,~25,~12.5]$.
 
-\begin{figure}[!ht]
+\begin{figure}[ht! ]
     \centering
     \includegraphics[trim=0cm 0cm 0cm 1.1cm,clip,width=0.8\columnwidth]{figures/switch_paper2.eps}
     \caption{Simulation en boucle fermée avec le contrôleur hybride \eqref{eq:u_hybrid}.}
@@ -169,5 +196,5 @@ Pour le vol stationnaire, nous avons utilisé une linéarisation autour d'un poi
 
 Compte tenu des avantages et des inconvénients observés dans les lois de commande, il a semblé approprié d'envisager une transition hybride sur la base de la stabilité de la boucle. En d'autres termes, le contrôleur non linéaire est utilisé là où le contrôleur linéaire est instable, afin de faire converger le drone vers la cible. Dès que le drone entre dans le domaine de stabilité du contrôleur linéaire, le mécanisme hybride prend en charge le changement de loi, en utilisant la vitesse de convergence maximale autorisée par l'optimisation linéaire. L'avantage de ce mécanisme est qu'il fournit un contrôleur ayant autorité sur l'ensemble du domaine de vol, assurant la convergence, tout en optimisant les capacités du drone. Bien que les premiers résultats ne soient obtenus que par simulation, ils semblent prometteurs pour une intégration sur l'architecture réelle.
 
-Toutefois, ce travail ne prend pas en compte l'impact des turbulences ou du vent sur l'architecture \textit{tailsitter}. Il est donc intéressant de se focaliser sur des mécanismes de stabilisation d'un drone face à des conditions de vol plus réalistes.
+Toutefois, ce travail ne prend pas en compte l'impact des turbulences ou du vent sur l'architecture \textit{tailsitter}. Il est donc intéressant de se focaliser sur des mécanismes de stabilisation d'un drone face à des conditions de vol plus réalistes. L'ensemble de ces études sera mené dans le contexte d'un contrôleur local.
 

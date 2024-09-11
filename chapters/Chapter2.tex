@@ -4,8 +4,10 @@
 
 \section{Modèle du drone DarkO}
 \label{sec:model}
-DarkO, drone conçu et développé à l'École Nationale de l'Aviation Civile (ENAC) \nomenclature[]{\(ENAC\)}{École Nationale de l'Aviation Civile} de Toulouse (France), est un exemple clair de drone convertible avec une architecture dite \textit{tailsitter}.
+DarkO, drone conçu et développé à l'École Nationale de l'Aviation Civile (ENAC) de Toulouse (France), est un exemple de drone convertible avec une architecture dite \textit{tailsitter}.
 DarkO est assemblé à partir de plusieurs pièces d'Onyx imprimées en 3D (un matériau très robuste composé de fibres de carbone omnidirectionnelles). Toutes les pièces sont emboîtées sur un seul axe, de sorte que le drone puisse facilement être démonté pour remplacer des pièces ou accéder à l'électronique embarquée. 
+
+\nomenclature[]{\(ENAC\)}{École Nationale de l'Aviation Civile}
 
 L'autopilote embarqué est une carte Apogee~\footnote{\url{https://wiki.paparazziuav.org/wiki/Apogee/v1.00}} fabriquée à l'ENAC (voir Fig. \ref{fig:apogee}). 
 
@@ -21,18 +23,15 @@ L'autopilote offre la possibilité d'enregistrer les données de bord sur une ca
 
 \nomenclature[]{\(ESC\)}{Contrôleurs électroniques de vitesse (\textit{Electronic Speed Controller})}
 
-
-
-Les actionneurs de DarkO peuvent être décomposés en deux catégories. La première est constituée de deux hélices (T-Motor T5147) placées symétriquement à l'avant de l'aile (illustrées en \textbf{noir} dans la Fig. \ref{fig:darko2}) et alimentées par deux moteurs électriques (T-Motor F30 2300kv) générant une traction selon l'axe $x_{b}$. La seconde catégorie est relative aux actionneurs aérodynamiques. Ainsi, le drone possède deux élevons, placés à l'arrière de l'aile (illustrés en \textcolor{cyan}{bleu} dans la Fig. \ref{fig:darko2}), agissant en tant que surface de contrôle. Les élevons génèrent des forces et des moments en modifiant leur incidence relativement au flux d'air dans lequel ils sont placés. Ce flux d'air peut être généré par le vent relatif (lié à la vitesse du drone), le vent extérieur, mais aussi par le souffle des hélices. Les élevons sont commandés par deux servomoteurs MKS DS65K.
-
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=0.8\columnwidth]{figures/darko.png}
     \caption{Repère de référence de DarkO avec une représentation schématique des actionneurs.}
     \label{fig:darko2}
 \end{figure}
+Les actionneurs de DarkO sont deux catégories. La première est liée à la propulsion et est constituée de deux hélices (T-Motor T5147) placées symétriquement à l'avant de l'aile (illustrées en \textbf{noir} dans la Fig. \ref{fig:darko2}) et alimentées par deux moteurs électriques (T-Motor F30 2300kv) générant une traction selon l'axe $x_{b}$. La seconde catégorie est relative aux actionneurs aérodynamiques. Ainsi, le drone possède deux élevons, placés à l'arrière de l'aile (illustrés en \textcolor{cyan}{bleu} dans la Fig. \ref{fig:darko2}), agissant en tant que surface de contrôle. Les élevons génèrent des forces et des moments en modifiant leur incidence relativement au flux d'air dans lequel ils sont placés.  Ce flux d'air peut être dû au vent relatif (lié à la vitesse du drone), au vent extérieur, mais aussi au souffle des hélices. Les élevons sont commandés par deux servomoteurs MKS DS65K qui apporte une grande rapidité lors des déplacements avec une grande robustesse et une faible masse.
 
-La figure \ref{fig:darko2} montre le modèle de DarkO, ainsi qu'un repère de référence inertiel \textit{North, east, down} (NED) \nomenclature[]{\(NED\)}{Nord Est Bas (\textit{North, East, Down})} (ou repère terrestre) ``$\text{i}$'' lié à la surface de la Terre, et un repère corps `$\text{b}$'' attaché au drone, avec $x_{\text{b}}$ correspondant à l'axe de roulis (l'axe des hélices dans le plan $z_{ \text{b} } = 0$), $y_{\text{b}}$ l'axe de tangage (la direction des ailes), $z_{\text{b}}$ l'axe de lacet. En utilisant la même notation que dans \cite{lustosaHal-03035938}, le couple hélice/élevon gauche et droit est désigné par les indices $i=1$ (gauche) et $i=2$ (droite). La convention de signe sera définie comme positive pour les positions des élevons $\delta_{1}$, $\delta_{2}$ lorsqu'ils créent un moment à cabrer avec les hélices tournant dans des directions opposées avec des vitesses angulaires $\omega_{1} > 0$ et $\omega_{2} < 0$, respectivement.
+La figure \ref{fig:darko2} montre le modèle de DarkO, ainsi qu'un repère de référence inertiel \textit{North, east, down} (NED) \nomenclature[]{\(NED\)}{Nord Est Bas (\textit{North, East, Down})} (ou repère terrestre) ``$\text{i}$'' lié à la surface de la Terre, et un repère corps `$\text{b}$'' attaché au drone, avec $x_{\text{b}}$ correspondant à l'axe de roulis (l'axe des hélices dans le plan $z_{\text{b}} = 0$), $y_{\text{b}}$ l'axe de tangage (la direction des ailes), $z_{\text{b}}$ l'axe de lacet. En utilisant la même notation que dans \cite{lustosaHal-03035938}, le couple hélice/élevon gauche et droit est désigné par les indices $i=1$ (gauche) et $i=2$ (droite). La convention de signe sera définie comme positive pour les positions des élevons $\delta_{1}$, $\delta_{2}$ lorsqu'ils créent un moment à cabrer avec les hélices tournant dans des directions opposées avec des vitesses angulaires $\omega_{1} > 0$ et $\omega_{2} < 0$, respectivement.
 
 \begin{table}[h]
     \centering
@@ -87,17 +86,23 @@ La figure \ref{fig:darko2} montre le modèle de DarkO, ainsi qu'un repère de r�
 
 \subsection{Modèle non-linéaire complet}
 
-En exploitant la modélisation présentée dans \cite{lustosaHal-03035938, olszaneckibarthHal-02542982} et récemment validée par \cite{MuraliMorenoLustosa2024}, un modèle précis de la dynamique de DarkO décrit la position $\boldsymbol{p} \in \real^3$ du centre de gravité et sa vitesse $\boldsymbol{v} = \dot{\boldsymbol{p}} \in \real^3$, son orientation est représentée par un quaternion $\boldsymbol{q} \in {\mathbb S}^3:=\{ \boldsymbol{q} \in \real^4 : |\boldsymbol{q}| = 1\}$ et $\boldsymbol{q} := \left[ \eta ~ \boldsymbol{\epsilon}^\top \right]^\top$, et sa vitesse angulaire $\boldsymbol{\omega}_{\text{b}}$, représentée dans le repère du corps, satisfait $\boldsymbol{\dot q} = \frac{1}{2}\boldsymbol{q} \otimes \smallmat{0 \\ \boldsymbol{\omega}_{{\text{b}}}}$, où $\otimes$ représente le produit hamiltonien (voir équation \eqref{eq:produitquat}).
+En exploitant la modélisation présentée dans \cite{lustosaHal-03035938, olszaneckibarthHal-02542982} et récemment validée par \cite{MuraliMorenoLustosa2024}, un modèle précis de la dynamique de DarkO permet de relier la position  du centre de gravité $\boldsymbol{p} \in \real^3$, sa vitesse $\boldsymbol{v} = \dot{\boldsymbol{p}} \in \real^3$.
 
+Son orientation est représentée par un quaternion unitaire $\boldsymbol{q} \in {\mathbb S}^3:=\{ \boldsymbol{q} \in \real^4 : |\boldsymbol{q}| = 1\}$ et $\boldsymbol{q} := \left[ \eta ~ \boldsymbol{\epsilon}^\top \right]^\top$. Nous avons donc $\eta$ qui représente la partie scalaire du quaternion et $\boldsymbol{\epsilon}$ qui représente la partie vectorielle du quaternion.
+
+La vitesse angulaire $\boldsymbol{\omega}_{\text{b}}$, représentée dans le repère du corps telle que $\boldsymbol{\dot q} = \frac{1}{2}\boldsymbol{q} \otimes \smallmat{0 \\ \boldsymbol{\omega}_{{\text{b}}}}$, où $\otimes$ représente le produit hamiltonien (c'est à-dire le produit de quaternions) couramment utilisé dans le contexte des quaternions. 
+Le produit hamiltonien est défini par :
 \begin{align}
     \label{eq:produitquat}
     p \otimes q = \begin{bmatrix}
         \eta_{p} \eta_{q}- \boldsymbol{\epsilon}_{p} \cdot \boldsymbol{\epsilon}_{q}\\
         \eta_{p}\boldsymbol{\epsilon}_{q}+ \eta_{q}\boldsymbol{\epsilon}_{p} + \boldsymbol{\epsilon}_{p} \times \boldsymbol{\epsilon}_{q}
-    \end{bmatrix}
+    \end{bmatrix}.
 \end{align}
 
-En choisissant l'état global comme $\boldsymbol{x}:=(\boldsymbol{p},~ \boldsymbol{v},~ \boldsymbol{q},~ \boldsymbol{\omega}_{\text{b}})$, le modèle mathématique, dérivé dans \cite{lustosaHal-03035938}, dépend d'un ensemble de paramètres énumérés dans la Table~\ref{tab:pars}, où nous indiquons également la valeur obtenue à partir d'une identification du système \cite{sansouStage}. Le modèle dynamique peut être écrit comme ci-dessous :
+En choisissant l'état global comme $\boldsymbol{x}:=(\boldsymbol{p},~ \boldsymbol{v},~ \boldsymbol{q},~ \boldsymbol{\omega}_{\text{b}})$, le modèle mathématique, dérivé dans \cite{lustosaHal-03035938}, dépend d'un ensemble de paramètres énumérés dans la Table~\ref{tab:pars}. Les valeurs numériques sont obtenues à partir d'une identification du système \cite{sansouStage}, la démarche est expliquée section \ref{sec:identification}.
+
+Le modèle dynamique peut être écrit comme ci-dessous :
 
 \begin{subequations}\label{eq:dyna_orig}
     \begin{empheq}[left=\empheqlbrace]{alignat=2}
@@ -138,28 +143,37 @@ Avec les quantités ci-dessus, nous pouvons réarranger la dynamique donnée dan
 \begin{align}
 \nonumber
     \boldsymbol{F}_{\text{b}} :={}&  \boldsymbol{T}_{1} + \boldsymbol{T}_{2} + \frac{S_{\text{wet}}}{4S_{\text{p}}} \boldsymbol{\Phi}^{\text{(fv)}} \Big( (\boldsymbol{\Delta}^{\text{f}}_1 - \mathbb{I}_{3} ) \boldsymbol{T}_{1} + ( \boldsymbol{\Delta}^{\text{f}}_2 - \mathbb{I}_{3}) \boldsymbol{T}_{2}\Big) \\ 
-     \label{eq:Fbdarko}
-    &+ \frac{1}{4} \rho S  \boldsymbol{\Phi}^{\text{(fv)}} \Big(\boldsymbol{\Delta}^{\text{f}}_1+ \boldsymbol{\Delta}^{\text{f}}_2 - 2 \mathbb{I}_{3} \Big) \lVert \boldsymbol{v_{\text{b}}} \rVert \boldsymbol{v_{\text{b}}}\\
     \nonumber
+    &+ \frac{1}{4} \rho S  \boldsymbol{\Phi}^{\text{(fv)}} \Big(\boldsymbol{\Delta}^{\text{f}}_1+ \boldsymbol{\Delta}^{\text{f}}_2 - 2 \mathbb{I}_{3} \Big) \lVert \boldsymbol{v_{\text{b}}} \rVert \boldsymbol{v_{\text{b}}}\\
+     \label{eq:Fbdarko}
     &+ \frac{1}{4} \rho S \boldsymbol{\Phi}^{\text{(mv)}} \Big(\boldsymbol{\Delta}^{\text{f}}_1 + \boldsymbol{\Delta}^{\text{f}}_2 - 2\mathbb{I}_{3}\Big) \boldsymbol{B} \lVert \boldsymbol{v_{\text{b}}} \rVert  \boldsymbol{\omega}_{\text{b}}, 
 \end{align}
-\begin{align} 
-\label{eq:Mbdarko}
- \boldsymbol{M}_{\text{b}} :&=\boldsymbol{N}_{1} + \boldsymbol{N}_{2} + \skewsym{\smallm{p_x\\ p_y\\ 0}} \boldsymbol{T}_{1} + \skewsym{\smallm{p_x\\ - p_y\\ 0}} \boldsymbol{T}_{2}\\
-    \nonumber
-  &- \frac{S_{\text{wet}}}{4S_{\text{p}}} \bigg( \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}} (\boldsymbol{\Delta}^{\text{m}}_1- \mathbb{I}_{3} ) + \skewsym{\smallm{0 \\ a_y \\ 0}} \boldsymbol{\Phi}^{\text{(fv)}} (\boldsymbol{\Delta}^{\text{m}}_1 +\mathbb{I}_{3} ) \bigg) \boldsymbol{T}_{1} \\
-    \nonumber
-  & - \frac{S_{\text{wet}}}{4S_{\text{p}}} \bigg( \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}} (\boldsymbol{\Delta}^{\text{m}}_2 - \mathbb{I}_{3} ) +  \skewsym{\smallm{0 \\ - a_y \\ 0}} \boldsymbol{\Phi}^{\text{(fv)}} (\boldsymbol{\Delta}^{\text{m}}_2 + \mathbb{I}_{3}) \bigg) \boldsymbol{T}_{2} \\
-    \nonumber
-  & + \frac{1}{4} \rho S  \bigg( \Big(\skewsym{\smallm{0 \\ a_y \\ 0}} \!\!\! \boldsymbol{\Phi}^{\text{(fv)}}  + \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}} \Big) \boldsymbol{\Delta}^{\text{m}}_1 \\
-    \nonumber
-  &  + \Big( \skewsym{\smallm{0 \\ - a_y \\ 0}} \!\!\! \boldsymbol{\Phi}^{\text{(fv)}} + \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}}  \Big) \boldsymbol{\Delta}^{\text{m}}_2 - 2 \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}}  \bigg) \lVert \boldsymbol{v_{\text{b}}} \rVert \boldsymbol{v_{\text{b}}} \\
-    \nonumber
-  & +\frac{1}{4} \rho S \bigg(\!\! \Big(\!\! \skewsym{\!\smallm{0 \\ a_y \\ 0}\!}\!\!\! \boldsymbol{\Phi}^{\text{(mv)}} \! + \! \boldsymbol{B} \boldsymbol{\Phi}^{\text{(m$\omega$)}} \Big) \boldsymbol{\Delta}^{\text{m}}_1 \\
-    \nonumber
-  & +  \Big(\!\! \skewsym{\!\smallm{0 \\ - a_y \\ 0}\!} \!\!\! \boldsymbol{\Phi}^{\text{(mv)}} \! + \! \boldsymbol{B} \boldsymbol{\Phi}^{\text{(m$\omega$)}}  \Big) \boldsymbol{\Delta}^{\text{m}}_2 - 2 \boldsymbol{B} \boldsymbol{\Phi}^{\text{(m$\omega$)}}\!  \bigg)\!  \boldsymbol{B}  \lVert \boldsymbol{v_{\text{b}}} \rVert  \boldsymbol{\omega}_{\text{b}} ,
-\end{align}
-où $\boldsymbol{v}_{\text{b}} := \boldsymbol{R}^\top(\boldsymbol{q}) (\boldsymbol{v}-\boldsymbol{w})$ représente la vitesse de l'air vue par le drone et exprimée dans le repère du corps. Dans \cite{lustosaHal-03035938}, la valeur $\lVert \boldsymbol{v_{\text{b}}} \rVert$, apparaissant dans les expressions de  $\boldsymbol{F}_{\text{b}}$ et $\boldsymbol{M}_{\text{b}}$, est remplacée par la valeur $\eta = \sqrt{\lVert \boldsymbol{v_{\text{b}}} \rVert^{2} + \mu c^{2} \lVert \boldsymbol{\omega}_{\text{b}} \rVert^{2}}$, avec $\mu \in \real$ étant un paramètre lié à l'identification du modèle. Toutefois, dans le cas de DarkO, l'identification fournit $\mu = 0$ \cite{sansouStage}. Dès lors, nous présentons ici une description simplifiée. La matrice des coefficients aérodynamiques constants 
+
+\begingroup
+    \allowdisplaybreaks
+    \begin{align} 
+        \nonumber
+    \boldsymbol{M}_{\text{b}} :&=\boldsymbol{N}_{1} + \boldsymbol{N}_{2} + \skewsym{\smallm{p_x\\ p_y\\ 0}} \boldsymbol{T}_{1} + \skewsym{\smallm{p_x\\ - p_y\\ 0}} \boldsymbol{T}_{2}\\
+        \nonumber
+    &- \frac{S_{\text{wet}}}{4S_{\text{p}}} \bigg( \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}} (\boldsymbol{\Delta}^{\text{m}}_1- \mathbb{I}_{3} ) + \skewsym{\smallm{0 \\ a_y \\ 0}} \boldsymbol{\Phi}^{\text{(fv)}} (\boldsymbol{\Delta}^{\text{m}}_1 +\mathbb{I}_{3} ) \bigg) \boldsymbol{T}_{1} \\
+        \nonumber
+    & - \frac{S_{\text{wet}}}{4S_{\text{p}}} \bigg( \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}} (\boldsymbol{\Delta}^{\text{m}}_2 - \mathbb{I}_{3} ) +  \skewsym{\smallm{0 \\ - a_y \\ 0}} \boldsymbol{\Phi}^{\text{(fv)}} (\boldsymbol{\Delta}^{\text{m}}_2 + \mathbb{I}_{3}) \bigg) \boldsymbol{T}_{2} \\
+        \nonumber
+    & + \frac{1}{4} \rho S  \bigg( \Big(\skewsym{\smallm{0 \\ a_y \\ 0}} \!\!\! \boldsymbol{\Phi}^{\text{(fv)}}  + \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}} \Big) \boldsymbol{\Delta}^{\text{m}}_1 \\
+        \nonumber
+    &  + \Big( \skewsym{\smallm{0 \\ - a_y \\ 0}} \!\!\! \boldsymbol{\Phi}^{\text{(fv)}} + \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}}  \Big) \boldsymbol{\Delta}^{\text{m}}_2 - 2 \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}}  \bigg) \lVert \boldsymbol{v_{\text{b}}} \rVert \boldsymbol{v_{\text{b}}} \\
+        \nonumber
+    & +\frac{1}{4} \rho S \bigg(\!\! \Big(\!\! \skewsym{\!\smallm{0 \\ a_y \\ 0}\!}\!\!\! \boldsymbol{\Phi}^{\text{(mv)}} \! + \! \boldsymbol{B} \boldsymbol{\Phi}^{\text{(m$\omega$)}} \Big) \boldsymbol{\Delta}^{\text{m}}_1 \\
+        \label{eq:Mbdarko}
+    & +  \Big(\!\! \skewsym{\!\smallm{0 \\ - a_y \\ 0}\!} \!\!\! \boldsymbol{\Phi}^{\text{(mv)}} \! + \! \boldsymbol{B} \boldsymbol{\Phi}^{\text{(m$\omega$)}}  \Big) \boldsymbol{\Delta}^{\text{m}}_2 - 2 \boldsymbol{B} \boldsymbol{\Phi}^{\text{(m$\omega$)}}\!  \bigg)\!  \boldsymbol{B}  \lVert \boldsymbol{v_{\text{b}}} \rVert  \boldsymbol{\omega}_{\text{b}} ,
+    \end{align}
+\endgroup
+
+où $\boldsymbol{v}_{\text{b}} := \boldsymbol{R}^\top(\boldsymbol{q}) (\boldsymbol{v}-\boldsymbol{w})$ représente la vitesse de l'air vue par le drone et exprimée dans le repère du corps. 
+
+Dans ce travail, la description de $\boldsymbol{F}_{\text{b}}$ et $\boldsymbol{M}_{\text{b}}$ est simplifiée par rapport à celle proposée dans la $\phi$-théorie \cite{lustosaHal-03035938}. En effet, la valeur de $\phi$ a été identifier nulle ce qui engendre $\eta = \sqrt{\lVert \boldsymbol{v_{\text{b}}} \rVert^{2} + \phi c^{2} \lVert \boldsymbol{\omega}_{\text{b}} \rVert^{2}} = \lVert \boldsymbol{v_{\text{b}}} \rVert$ dans  \cite[équation (17)]{lustosaHal-03035938}.
+
+La matrice des coefficients aérodynamiques constants 
 $\boldsymbol{\Phi}:= \begin{bmatrix} \boldsymbol{\Phi}^{\text{(fv)}} & {\boldsymbol{\Phi}^{\text{(mv)}}}^\top \\ \boldsymbol{\Phi}^{\text{(mv)}} & \boldsymbol{\Phi}^{\text{(m$\omega$)}} \end{bmatrix} \in \real^{6 \times 6}$, est définie dans \cite[eqs. (6)--(9)]{olszaneckibarthHal-02542982} comme $ \boldsymbol{\Phi}^{\text{(fv)}} \!:=\! \diag(C_{\text{d}},C_{y}, C_{\ell})$ et
 \begin{align*}
 &\left[ \begin{array}{c|c}
@@ -183,14 +197,18 @@ Nous définissons le vecteur de commande :
     \boldsymbol{u} := \begin{bmatrix}\tau_{1}  \!&\! \tau_{2}  \!&\! \delta_{1} \!&\! \delta_{2} \end{bmatrix}^\top,
 \end{align}
 lequel permet d'obtenir le modèle basse vitesse comportant les effets majeurs non-linéaires du vent :
-\begin{subequations}\label{eq:dyna_simp}
-    \begin{alignat}{3}
-    &\boldsymbol{\dot p} = \boldsymbol{v}, \label{eq:dyna1}\\
-       & m\boldsymbol{\dot v} =\! \shortminus m\boldsymbol{g} \!+ \! \boldsymbol{R} (\boldsymbol{q}) \!\!\left( \! \boldsymbol{M}_{\text{f}}(\boldsymbol{u}) \! + \! \boldsymbol{D}_{\text{f}}(\boldsymbol{u}) \| \boldsymbol{w} \| \boldsymbol{R}^\top \!(\boldsymbol{q}) (\boldsymbol{v} \! \shortminus \! \boldsymbol{w}) \! \right)\!,\!\! \label{eq:dyna2}\\
-        &\boldsymbol{\dot q} = \frac{1}{2}\boldsymbol{q} \otimes \smallmat{0 \\ \boldsymbol{\omega}_{\text{b}}}, \label{eq:dyna3}\\
-        &\boldsymbol{J} \boldsymbol{\dot \omega}_{\text{b}} = \shortminus \skewsym{\boldsymbol{\omega}_{\text{b}}}\boldsymbol{J}\boldsymbol{\omega}_{\text{b}}\! + \boldsymbol{M}_{\text{m}}(\boldsymbol{u})\! + \boldsymbol{D}_{\text{m}} (\boldsymbol{u}) \lVert \boldsymbol{w} \rVert \boldsymbol{R}^\top(\boldsymbol{q}) (\boldsymbol{v}-\boldsymbol{w}), \label{eq:dyna4}
-    \end{alignat}
-\end{subequations}
+
+\begingroup
+    \allowdisplaybreaks
+    \begin{subequations}\label{eq:dyna_simp}
+        \begin{alignat}{3}
+        &\boldsymbol{\dot p} = \boldsymbol{v}, \label{eq:dyna1}\\
+        & m\boldsymbol{\dot v} =\! \shortminus m\boldsymbol{g} \!+ \! \boldsymbol{R} (\boldsymbol{q}) \!\!\left( \! \boldsymbol{M}_{\text{f}}(\boldsymbol{u}) \! + \! \boldsymbol{D}_{\text{f}}(\boldsymbol{u}) \| \boldsymbol{w} \| \boldsymbol{R}^\top \!(\boldsymbol{q}) (\boldsymbol{v} \! \shortminus \! \boldsymbol{w}) \! \right)\!,\!\! \label{eq:dyna2}\\
+            &\boldsymbol{\dot q} = \frac{1}{2}\boldsymbol{q} \otimes \smallmat{0 \\ \boldsymbol{\omega}_{\text{b}}}, \label{eq:dyna3}\\
+            &\boldsymbol{J} \boldsymbol{\dot \omega}_{\text{b}} = \shortminus \skewsym{\boldsymbol{\omega}_{\text{b}}}\boldsymbol{J}\boldsymbol{\omega}_{\text{b}}\! + \boldsymbol{M}_{\text{m}}(\boldsymbol{u})\! + \boldsymbol{D}_{\text{m}} (\boldsymbol{u}) \lVert \boldsymbol{w} \rVert \boldsymbol{R}^\top(\boldsymbol{q}) (\boldsymbol{v}-\boldsymbol{w}), \label{eq:dyna4}
+        \end{alignat}
+    \end{subequations}
+\endgroup
 où les vecteurs $\boldsymbol{M}_{\text{f}}(\boldsymbol{u})$ et $ \boldsymbol{M}_{\text{m}}(\boldsymbol{u})$, et les matrices $\boldsymbol{D}_{\text{f}}(\boldsymbol{u})$ et $\boldsymbol{D}_{\text{m}} (\boldsymbol{u})$ proviennent de l'annulation des termes dépendant de la vitesse angulaire dans l'équation \eqref{eq:Fbdarko} et \eqref{eq:Mbdarko}. Ils peuvent être développés en : 
 \begin{align}
 \label{eq:Mf}
@@ -231,7 +249,15 @@ où les vecteurs $\boldsymbol{M}_{\text{f}}(\boldsymbol{u})$ et $ \boldsymbol{M}
 où l'on observe l'effet d'un vent non nul, de plus la dynamique est non linéaire vis-à-vis de $\boldsymbol{q}$, $\lVert \boldsymbol{v}_{\text{b}} \rVert$ et $\boldsymbol{w}$. Comme dans \cite[eqn. (10)]{olszaneckibarthHal-02542982} et selon la formule de Diederich, nous obtenons $C_{\ell} = C_{\text{d}} + \frac{\pi AR}{1+\sqrt{1+\left(\frac{AR}{2}\right)^{2}}}$ où $AR = \frac{b^{2}}{S}$ est l'allongement de l'aile.
 Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2}\tau_{2}\right)$  dans les expressions des vecteurs $\boldsymbol{M}_{\text{f}}(\boldsymbol{u})$ et $\boldsymbol{M}_{\text{m}}(\boldsymbol{u})$.
 
-\section{Identification des paramètres du modèle}
+\section{Caractérisation de la maquette}
+\label{sec:identification}
+{\color{blue}
+    L'obtention d'un modèle cohérent avec la réalité est lié à la caractérisation des paramètres constitutive du modèle. Toutefois, lors de modèle complexe avec de forte composante non linéaire, il peut être difficile de caractérisé une valeur. Nous avons donc choisi une méthode itérative basée sur l'identification individuelle de coefficient caractéristique par des méthodes dédiées. Ainsi, nous avons obtenu les constantes des moteurs par une mesure sur un capteur de force et de moment, la matrice d'inertie à l'aide d'un montage de pendule bifilaire et un montage en soufflerie pour mesurer les coefficients aérodynamiques du modèle.
+    }
+
+\subsection{Identification des paramètres du modèle}
+
+
     Les valeurs numériques de la Table~\ref{tab:pars} ont été obtenues par une campagne d'identification du modèle \cite{sansouStage}. En particulier, le coefficient $k_{\text{f}}$ a été identifié à partir de l'équation \eqref{eq:thrust}, qui relie la vitesse de rotation du moteur $\omega_{i}$ à la traction générée, à la vitesse de rotation minimale et maximale et à la constante de temps de la chaîne d'actionnement du moteur.
     \begin{figure}[ht!]
         \centerline{
@@ -275,9 +301,9 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
     où $\theta$ est l'angle mesuré par l'autopilote à l'aide du code d'estimation d'état utilisant le gyroscope, l'accéléromètre et l'Optitrack.
     
 
-    \begin{figure}[ht]
+    \begin{figure}[ht!]
     \centerline{
-    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.6\columnwidth]{figures/ident_inertia.png}}
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\columnwidth]{figures/ident_inertia.png}}
     \caption{Identification de l'inertie ($\boldsymbol{J}$), à partir des mesures issues du pendule bifilaire \ref{fig:BifilarPend}.}
     \label{fig:BifilarPend_meas}
     \end{figure}
@@ -285,12 +311,12 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
 
     
     Les autres coefficients ont été estimés à l'aide d'un montage sur un capteur de forces et moments à 6 degrés de liberté (DOF), observé sur la Figure~\ref{fig:BifilarPend_meas}. \nomenclature[]{\(DOF\)}{Degrés de liberté  (\textit{Degrees of Freedom})}
-    \begin{figure}[ht]
+    \begin{figure}[ht!]
         \centering
         \resizebox{.9\textwidth}{!}{%
-        \includegraphics[height=3cm]{figures/montage_ident_arr.jpg}
+        \includegraphics[height=2.5cm]{figures/montage_ident_arr.jpg}
         \quad
-        \includegraphics[height=3cm]{figures/montage_ident_face.jpg}
+        \includegraphics[height=2.5cm]{figures/montage_ident_face.jpg}
         }
         \caption{Montage de DarkO sur un banc de mesure face à une soufflerie ouverte.}
         \label{fig:montage_ident}
@@ -305,11 +331,14 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
 
     Pour les moteurs électriques générant la traction par les hélices, il existe deux causes de saturation. Une saturation à haute vitesse liée à  la tension maximale du moteur et une saturation basse vitesse liée à la vitesse minimale de commutation de bobine du moteur, pour maintenir la rotation. De plus, ces saturations permettent d'obtenir un modèle réaliste à énergie finie. Elles correspondent à la contrainte suivante : $\omega_i \in [2500,~16000]~rpm = [262,~1675]~\SI{}{\radian\per\second}$, $i=1,2$.
     
-    En termes de dynamique, nous avons représenté la chaîne d'actionnement du moteur (composée de l'ESC, du moteur et de l'hélice) par une fonction de transfert du premier ordre ayant une constante de temps égale à \SI{0,0125}{\second}, ce qui fournit un système d'actionnement assez agressif.
+    En termes de dynamique, nous avons représenté la chaîne d'actionnement du moteur (composée de l'ESC, du moteur et de l'hélice) par une fonction de transfert du premier ordre ayant une constante de temps égale à \SI{0,0125}{\second}, ce qui fournit un système d'actionnement assez agressif. Cette constante de temps a pu être identifié lors du montage présenté sur la figure \ref{fig:montage_ident}, nous avons piloté un démarrage des moteurs et mesurer la génération de force par le capteur.
 
-    Les saturations impactant les élevons proviennent des limites physiques des servomoteurs et du débattement limité par la forme de l'UAV, $\delta_i \in [-30~; 30]\text{\textdegree}$, $i=1,2$. La saturation la plus importante ici est la bande passante de l'actionneur (due à l'actionnement du servomoteur), qui est modélisée par une fonction de transfert du premier ordre avec une constante de temps \SI{0,05}{\second}. 
+    Les saturations impactant les élevons proviennent des limites physiques des servomoteurs et du débattement limité par la forme de l'UAV, $\delta_i \in [-30~; 30]\text{\textdegree}$, $i=1,2$. La contrainte la plus importante, ici, est la bande passante de l'actionneur (due à l'actionnement du servomoteur), qui est modélisée par une fonction de transfert du premier ordre avec une constante de temps \SI{0,05}{\second}. 
 
 \section{Équilibres stationnaires}
+{\color{blue}
+    Notre travail a pour point de départ les travaux réalisé par \cite{ olszaneckibarthHal-02542982, smeurINDITail} qui utilise des lois de commande basée mesure. Ces lois de commande fournissent de très bonne propriété de stabilisation même en présence de perturbation. Toutefois, elles permettent d'atteindre des équilibres qui n'ont jamais été caractérisé. Ce manque engendre une incompréhension des mécanismes en jeu lors de déstabilisation. Effectivement, les expérimentations réalisées avec un bouclage INDI ont montré une oscillation de DarkO pour certaines vitesses de vent horizontal. Ainsi, il se pose la question de savoir si ce comportement est dû à un cycle limite lié à des saturations d'actionneur ou bien à des effets aérodynamiques. Pour répondre à cette question, nous allons étudier l'ensemble des points d'équilibre du drone soumis ou non à du vent.
+}
     \subsection{Équilibre stationnaire sans vent}
         \label{sec:eq_nowind}
 
@@ -503,7 +532,7 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
             \begin{align} \label{eq:theta}
                 \theta &=  -\tan^{-1}\left(\frac{\rho S \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert C_{\ell}  (\xi_{\text{f}} - \xi_{\text{m}})w_{\text{r}z} - 2 \xi_{\text{m}} mg }{\rho S\lVert \boldsymbol{w}_{\mathrm{eq}} \rVert C_{\ell}  (\xi_{\text{f}} - \xi_{\text{m}}) w_{\text{r}x}}\right).
             \end{align}
-        Cette dernière expression coïncide avec la sélection \eqref{eq:theta_alg} dans l'Algorithme~\ref{alg:eq}, après développements.
+        Cette dernière expression coïncide avec la sélection \eqref{eq:theta_alg} dans l'Algorithme~\ref{alg:eq}.
         À partir de \eqref{eq:theta_alg}, nous pouvons calculer les commandes à l'équilibre en substituant \eqref{eq:forcex} dans \eqref{eq:forcez}. Après simplifications, la force nécessaire de traction des hélices  $\tau$ pour maintenir la position d'équilibre correspond à l'expression  \eqref{eq:tau_alg}. Finalement, avec la valeur de $\tau$ dans \eqref{eq:tau_alg}, nous pouvons obtenir la déflexion des élevons nécessaire $\delta$ à partir de l'équation \eqref{eq:forcez}, ce qui nous donne la valeur obtenue dans \eqref{eq:delta_alg}.
     \end{proof}
     Il est intéressant de noter que pour chaque couple de vent($w_{\text{r}z}$, $w_{\text{r}x}$) correspond une orientation d'équilibre \eqref{eq:qeq}, \eqref{eq:theta_alg} étant indépendante de l'entrée $\boldsymbol{u}_{\text{eq}}$. En outre, il convient de souligner que pour toutes les valeurs de vent raisonnables, l'équation \eqref{eq:tau_alg} correspond à la racine positive d'un polynôme du second ordre, l'autre racine étant toujours négative, ce qui conduit à une condition de poussée négative physiquement impossible.
@@ -526,6 +555,7 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
     \end{figure}
 
 \section{Dynamiques linéarisées}
+\todo{intro}
 \subsection{Dynamique linéarisée sans vent}
 \label{sec:nowind_lin}
 Considérons le cas sans vent discuté dans la section \ref{sec:eq_nowind} pour lequel nous utilisons le vecteur de commande $\boldsymbol{u}_{\text{nowind}}$  et le vecteur de commande à l'équilibre $\boldsymbol{u}_{\text{nowind},\text{eq}}$ défini dans l'équation \eqref{eq:bar_u} et rappelons la transformation du vecteur de commande suivante $ \boldsymbol{u}_{\text{nowind}} := \begin{bmatrix}\tau_{1}  \!&\! \tau_{2}  \!&\! \delta_{1}\tau_{1} \!&\! \delta_{2}\tau_{2} \end{bmatrix}^\top$. La dynamique linéarisée dans le cas sans vent est :
