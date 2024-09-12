@@ -10,7 +10,14 @@
 \section{Motivation}
 En prenant en compte les capacités d'un \textit{tailsitter}, il est légitime de se poser la question du mode de vol devant être utilisé pour rejoindre un point. Effectivement, le drone a la possibilité de se déplacer en stationnaire ou bien en vol d'avancement. Lors d'un déplacement en stationnaire, le drone est vertical donc il se retrouve fortement sujet aux perturbations. Il est donc nécessaire d'avoir une grande région d'attraction autour de la position d'équilibre pour assurer un rejet des perturbations et une stabilisation. Lors d'un vol d'avancement, le drone se trouve dans une configuration proche d'une aile volante. Ainsi, il se trouve moins perturbé par les turbulences, dans la mesure où la surface projetée d'aile impactée par le flux d'air est plus faible. Toutefois, le drone doit voler à une vitesse assez importante pour être dans cette configuration donc il ne peut pas maintenir une position, mais seulement effectuer des cercles autour. 
 
-Nous nous concentrons dans ce chapitre uniquement au vol stationnaire. Il s'agit donc de proposer une stratégie de commande pour stabiliser le drone en position stationnaire. Cette stratégie repose sur une dynamique discrète définissant l'usage d'une première loi de commande non-linéaire présentée dans \cite{2020e-MicCenZacFra} et qui fournit une grande région d'attraction et d'une seconde loi basée sur la dynamique linéarisée et fournissant une agressivité supérieure pour réaliser l'approche finale. Les deux contrôleurs sont réunis par un mécanisme hybride qui permet de conserver les performances en régime permanent de la conception linéarisée, avec la grande région d'attraction garantie par la conception non linéaire. Notre solution est testée en simulant le modèle non linéaire complet.
+Nous nous concentrons dans ce chapitre uniquement au vol stationnaire. Il s'agit donc de proposer une stratégie de commande pour stabiliser le drone en position stationnaire. Cette stratégie repose sur une dynamique discrète définissant l'usage d'une première loi de commande non-linéaire présentée dans \cite{2020e-MicCenZacFra} et qui fournit une grande région d'attraction et d'une seconde loi basée sur la dynamique linéarisée et fournissant une agressivité supérieure pour réaliser l'approche finale.
+\todo{agressivité}
+Les deux contrôleurs sont réunis par un mécanisme hybride qui permet de conserver les performances en régime permanent de la conception linéarisée, avec la grande région d'attraction garantie par la conception non linéaire.
+{ \color{blue}
+  
+}
+
+Notre solution est testée en simulant le modèle non linéaire complet.
 
 Dans cette partie, nous allons nous concentrer sur la stabilisation stationnaire du drone. Ainsi nous nous appuyons sur la dynamique simplifiée décrite dans la section \ref{sec:model_NL_simp}, avec la simplification $\boldsymbol{w} = 0$ qui permet d'obtenir la dynamique simplifiée sans vent \eqref{eq:withouwind}. 
 
@@ -78,6 +85,7 @@ Une réponse adéquate peut être observée, laquelle reste assez éloignée des
 
 
 \section{Contrôleur par retour d'état linéaire}
+\label{sec:ctrlLin}
 Sur la base des observations de la section précédente et étant donné une position cible correspondant à un équilibre $\boldsymbol{p_{\text{eq}}}, \boldsymbol{q_{\text{eq}}}$ tel que caractérisé dans l'équation~\ref{eq:equilibria}, nous concevons ici un contrôleur par retour d'état linéaire capable de produire une réponse plus agressive. Pour cela, nous nous concentrons sur la dynamique linéarisée \eqref{eq:linearized} et proposons une loi de commande de la forme :
 \begin{align}
   \boldsymbol{u_{\text{lin}}} := \boldsymbol{u_{\text{eq}}} - \boldsymbol{K} \boldsymbol{\tilde x},

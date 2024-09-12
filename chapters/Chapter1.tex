@@ -244,6 +244,7 @@ Plusieurs méthodes de commande ont été proposées sur les drones convertibles
 
 
 \subsection*{Contrôleur PID}
+\label{sec:PID}
 Le contrôle Proportionnel Intégral Dérivé (PID) (ou P/PD/PI) est couramment utilisé, car son réglage est intuitif et ne nécessite qu'une connaissance limitée du système. Le contrôle PID donne souvent de très bons résultats et constitue un excellent point de départ pour la conception de contrôleurs plus avancés.
 
 La forme générale d'un contrôleur PID est la suivante :
@@ -253,6 +254,7 @@ La forme générale d'un contrôleur PID est la suivante :
 où le vecteur d'erreur est $e(t) = x_{ref} (t) - x(t)$ et où les gains $K_{p}$, $K_{i}$ et $K_{d}$ sont respectivement le gain proportionnel, intégral et dérivatif. Ils peuvent être réglés ou calculés individuellement pour obtenir le comportement souhaité du système en boucle fermée.
 
 \subsection*{Contrôleur LQR}
+\label{sec:LQR}
 Les contrôleurs LQR sont un type de contrôle linéaire basé sur les systèmes linéarisés de la forme $\dot{x} = Ax+Bu$. La commande $u$ est
 choisie comme :
 \begin{align*}
@@ -336,10 +338,50 @@ Pour l'estimation des paramètres en temps réel, les méthodes les plus couramm
 
 \section{Méthode de résolution}
 \label{sec:methodo}
+{\color{blue}
+    Il existe plusieurs méthodes pour obtenir les gains des contrôleurs évoqués précédemment (section \ref{sec:archcmd}). L'ensemble de méthode commence par la plus naïve avec un réglage des gains d'un PID par essais erreur et va jusqu'à des méthodes complexes d'optimisation (optimisation non lisse pour synthèse multiobjectif) en passant par la résolution de l'équation algébrique de Riccati pour obtenir la matrice de gain d'un contrôleur LQR (section \ref{sec:LQR}). Nous nous attarderons ici sur deux méthodes, le réglage des gains d'un PID par une méthode de placement de pole et une synthèse basée sur de critères $H_{\infty}$.
 
-\subsection*{Wang et all }
-\todo{Faire}
 
+\subsection*{Obtention des gains d'un PID par une méthode de placement de pole \cite{WANG2008PID}}
+L'obtention des gains proportionnel, intégral et dérivatif d'un contrôleur PID très largement utilisé dans l'industrie est souvent réalisé à l'aide d'un réglage manuel des valeurs. Toutefois, à l'aide d'un modèle, il est possible d'obtenir les gains qui assurent des critères de performance (rapidité et dépassement). Cette méthode a été proposée par \cite{WANG2008PID}.
+
+Considérons un contrôleur PID de la forme :
+\begin{align}
+    C(s) = K_{p} +  \frac{K_{i}}{s} + K_{d} s
+\end{align}
+utilisé pour contrôler un système $G(s)$ avec un retour unitaire d'équation caractéristique de bouclage 
+\begin{align}
+    \label{eq:bouclePID}
+    1+ C(s)G(s) = 0
+\end{align}.
+
+Nous proposons de convertir les exigences de performance en une paire de pôles conjugués $\rho_{1,2} = -a \pm bj$.
+
+La conception de la commande exige que le rapport entre $a$ et la partie réelle de tous les pôles du système dépasse $r$, qui est généralement supérieur à 3. Cette contrainte impose l'emplacement de tous les autres pôles du système sur le côté gauche de la ligne $s = ra$.
+
+En substituant  $\rho_{1} = -a + bj$ dans \eqref{eq:bouclePID}, nous obtenons
+\begin{align}
+    K_{p} +  \frac{K_{i}}{-a + bj} + K_{d} (-a + bj) = -\frac{1}{G(\rho_{1})}.
+\end{align}
+Cette équation complexe peut être résolu en exprimant $K_{i}$ et $K_{d}$ en fonction de $K_{p}$ :
+
+\begin{align}
+    \label{eq:simplifyPID}
+    \left\{
+        \begin{aligned}
+            K_{i} &= \frac{a^{2} + b^{2}}{2a} K_{p} - (a^{2} + b^{2}) X_{1},\\
+            K_{d} &= \frac{1}{2a} K_{p} + X_{2}
+        \end{aligned}
+      \right.
+  \end{align}
+  avec 
+  \begin{align*}
+    X_{1} = \frac{1}{2b} \operatorname{Im}(\frac{-1}{G(\rho_{1})})+ \frac{1}{2a} \operatorname{Re}(\frac{-1}{G(\rho_{1})}), \quad X_{2} = \frac{1}{2b} \operatorname{Im}(\frac{-1}{G(\rho_{1})})- \frac{1}{2a} \operatorname{Re}(\frac{-1}{G(\rho_{1})}).
+  \end{align*}
+
+  L'équation \eqref{eq:simplifyPID} simplifie la conception du contrôleur PID dépendant d'un paramètre $K_{p}$. Par conséquent, le gain $K_{p}$ peut être déterminé pour ses valeurs positives à partir de la méthode du lieu racine. Selon le tracé des racines de l'équation caractéristique de la boucle fermée, nous sommes en mesure de déterminer la plage de $K_{p}$, de sorte que les racines se trouvent dans la région complexe requise. 
+
+}
 \subsection*{Synthèse $H_{\infty}$}
 La synthèse $H_{\infty}$ est une méthode qui sert à la conception de commandes optimales, en imposant des contraintes sur la norme $H_{\infty}$ d'un système \cite{1576856, ApkarianMulti}. En se basant sur une synthèse $H_{\infty}$, les auteurs de \cite{SunYang2009} ont obtenu la stabilisation longitudinale d'un \textit{tiltrotor}. En combinant une synthèse $H_{\infty}$ à une approche de séquencement des gains, les auteurs de \cite{DickesonMix2005, DickesonCifdaloz2006,DickesonMiles2007} ont proposé la stabilisation d'un \textit{tiltwing} sur l'ensemble de son enveloppe de vol.
 

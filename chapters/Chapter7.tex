@@ -253,31 +253,35 @@ La position de chaque élevon $\delta_i \in \real$ est assignée par un servomot
 
 
 Avec les quantités ci-dessus, nous pouvons nous inspirer de la dynamique donnée dans  \cite[eqns (97),~(98)]{lustosaHal-03035938} et exprimer $\boldsymbol{F}_{\text{W}}(x,u)$ et $\boldsymbol{M}_{\text{W}}(x,u)$ dans \eqref{eq:Q} comme :
-
-\begin{align}
-\nonumber
-\boldsymbol{F}_{\text{W}}(x,u) :={}&  \boldsymbol{T}_{1} + \boldsymbol{T}_{2} + \boldsymbol{T}_{3} + \boldsymbol{T}_{4} + \frac{S_{\text{wet}}}{4S_{\text{p}}} \boldsymbol{\Phi}^{\text{(fv)}} \Big( (\boldsymbol{\Delta}^{\text{f}}_1 - \mathbb{I}_{3} ) (\boldsymbol{T}_{1}+\boldsymbol{T}_{2}) + ( \boldsymbol{\Delta}^{\text{f}}_2 - \mathbb{I}_{3}) (\boldsymbol{T}_{3}+\boldsymbol{T}_{4})\Big) \\ 
-     \label{eq:FbColibri}
-    &+ \frac{1}{4} \rho S  \boldsymbol{\Phi}^{\text{(fv)}} \Big(\boldsymbol{\Delta}^{\text{f}}_1+ \boldsymbol{\Delta}^{\text{f}}_2 - 2 \mathbb{I}_{3} \Big) \lVert \boldsymbol{v_{\text{b}}} \rVert \boldsymbol{v_{\text{b}}}\\
+\begingroup
+    \allowdisplaybreaks
+    \begin{align}
     \nonumber
-    &+ \frac{1}{4} \rho S \boldsymbol{\Phi}^{\text{(mv)}} \Big(\boldsymbol{\Delta}^{\text{f}}_1 + \boldsymbol{\Delta}^{\text{f}}_2 - 2\mathbb{I}_{3}\Big) \boldsymbol{B} \lVert \boldsymbol{v_{\text{b}}} \rVert  \boldsymbol{\omega}_{\text{b}}, 
-\end{align}
-\begin{align} 
-\label{eq:MbColibri}
-\boldsymbol{M}_{\text{W}}(x,u) :&=\boldsymbol{N}_{1} + \boldsymbol{N}_{2} + \boldsymbol{N}_{3} + \boldsymbol{N}_{4} +\skewsym{\smallm{p_x\\ p_{y1}\\ 0}} \boldsymbol{T}_{1} +\skewsym{\smallm{p_x\\ p_{y2}\\ 0}} \boldsymbol{T}_{2} + \skewsym{\smallm{p_x\\ - p_{y3}\\ 0}} \boldsymbol{T}_{3} + \skewsym{\smallm{p_x\\ - p_{y4}\\ 0}} \boldsymbol{T}_{4}\\
+    \boldsymbol{F}_{\text{W}}(x,u) :={}&  \sum_{i=1}^{4} \boldsymbol{T}_{i} + \frac{S_{\text{wet}}}{4S_{\text{p}}} \boldsymbol{\Phi}^{\text{(fv)}} \Big( (\boldsymbol{\Delta}^{\text{f}}_1 - \mathbb{I}_{3} ) (\boldsymbol{T}_{1}+\boldsymbol{T}_{2}) + ( \boldsymbol{\Delta}^{\text{f}}_2 - \mathbb{I}_{3}) (\boldsymbol{T}_{3}+\boldsymbol{T}_{4})\Big) \\ 
     \nonumber
-  &- \frac{S_{\text{wet}}}{4S_{\text{p}}} \bigg( \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}} (\boldsymbol{\Delta}^{\text{m}}_1- \mathbb{I}_{3} ) + \skewsym{\smallm{0 \\ a_y \\ 0}} \boldsymbol{\Phi}^{\text{(fv)}} (\boldsymbol{\Delta}^{\text{m}}_1 +\mathbb{I}_{3} ) \bigg) (\boldsymbol{T}_{1}+\boldsymbol{T}_{2}) \\
+        &+ \frac{1}{4} \rho S  \boldsymbol{\Phi}^{\text{(fv)}} \Big(\boldsymbol{\Delta}^{\text{f}}_1+ \boldsymbol{\Delta}^{\text{f}}_2 - 2 \mathbb{I}_{3} \Big) \lVert \boldsymbol{v_{\text{b}}} \rVert \boldsymbol{v_{\text{b}}}\\
+        &+ \frac{1}{4} \rho S \boldsymbol{\Phi}^{\text{(mv)}} \Big(\boldsymbol{\Delta}^{\text{f}}_1 + \boldsymbol{\Delta}^{\text{f}}_2 - 2\mathbb{I}_{3}\Big) \boldsymbol{B} \lVert \boldsymbol{v_{\text{b}}} \rVert  \boldsymbol{\omega}_{\text{b}}, \label{eq:FbColibri}
+    \end{align}
+\endgroup
+% \boldsymbol{N}_{2} + \boldsymbol{N}_{3} + \boldsymbol{N}_{4}  + \boldsymbol{T}_{2} + \boldsymbol{T}_{3} + \boldsymbol{T}_{4} 
+\begingroup
+    \allowdisplaybreaks
+    \begin{align} 
     \nonumber
-  & - \frac{S_{\text{wet}}}{4S_{\text{p}}} \bigg( \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}} (\boldsymbol{\Delta}^{\text{m}}_2 - \mathbb{I}_{3} ) +  \skewsym{\smallm{0 \\ - a_y \\ 0}} \boldsymbol{\Phi}^{\text{(fv)}} (\boldsymbol{\Delta}^{\text{m}}_2 + \mathbb{I}_{3}) \bigg) (\boldsymbol{T}_{3}+\boldsymbol{T}_{4}) \\
-    \nonumber
-  & + \frac{1}{4} \rho S  \bigg( \Big(\skewsym{\smallm{0 \\ a_y \\ 0}} \!\!\! \boldsymbol{\Phi}^{\text{(fv)}}  + \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}} \Big) \boldsymbol{\Delta}^{\text{m}}_1 \\
-    \nonumber
-  &  + \Big( \skewsym{\smallm{0 \\ - a_y \\ 0}} \!\!\! \boldsymbol{\Phi}^{\text{(fv)}} + \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}}  \Big) \boldsymbol{\Delta}^{\text{m}}_2 - 2 \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}}  \bigg) \lVert \boldsymbol{v_{\text{b}}} \rVert \boldsymbol{v_{\text{b}}} \\
-    \nonumber
-  & +\frac{1}{4} \rho S \bigg(\!\! \Big(\!\! \skewsym{\!\smallm{0 \\ a_y \\ 0}\!}\!\!\! \boldsymbol{\Phi}^{\text{(mv)}} \! + \! \boldsymbol{B} \boldsymbol{\Phi}^{\text{(m$\omega$)}} \Big) \boldsymbol{\Delta}^{\text{m}}_1 \\
-    \nonumber
-  & +  \Big(\!\! \skewsym{\!\smallm{0 \\ - a_y \\ 0}\!} \!\!\! \boldsymbol{\Phi}^{\text{(mv)}} \! + \! \boldsymbol{B} \boldsymbol{\Phi}^{\text{(m$\omega$)}}  \Big) \boldsymbol{\Delta}^{\text{m}}_2 - 2 \boldsymbol{B} \boldsymbol{\Phi}^{\text{(m$\omega$)}}\!  \bigg)\!  \boldsymbol{B}  \lVert \boldsymbol{v_{\text{b}}} \rVert  \boldsymbol{\omega}_{\text{b}} ,
-\end{align}
+    \boldsymbol{M}_{\text{W}}(x,u) :&= \sum_{i=1}^{4} \boldsymbol{N}_{i} ++\skewsym{\smallm{p_x\\ p_{y1}\\ 0}} \boldsymbol{T}_{1} +\skewsym{\smallm{p_x\\ p_{y2}\\ 0}} \boldsymbol{T}_{2} + \skewsym{\smallm{p_x\\ - p_{y3}\\ 0}} \boldsymbol{T}_{3} + \skewsym{\smallm{p_x\\ - p_{y4}\\ 0}} \boldsymbol{T}_{4}\\
+        \nonumber
+    &- \frac{S_{\text{wet}}}{4S_{\text{p}}} \bigg( \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}} (\boldsymbol{\Delta}^{\text{m}}_1- \mathbb{I}_{3} ) + \skewsym{\smallm{0 \\ a_y \\ 0}} \boldsymbol{\Phi}^{\text{(fv)}} (\boldsymbol{\Delta}^{\text{m}}_1 +\mathbb{I}_{3} ) \bigg) (\boldsymbol{T}_{1}+\boldsymbol{T}_{2}) \\
+        \nonumber
+    & - \frac{S_{\text{wet}}}{4S_{\text{p}}} \bigg( \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}} (\boldsymbol{\Delta}^{\text{m}}_2 - \mathbb{I}_{3} ) +  \skewsym{\smallm{0 \\ - a_y \\ 0}} \boldsymbol{\Phi}^{\text{(fv)}} (\boldsymbol{\Delta}^{\text{m}}_2 + \mathbb{I}_{3}) \bigg) (\boldsymbol{T}_{3}+\boldsymbol{T}_{4}) \\
+        \nonumber
+    & + \frac{1}{4} \rho S  \bigg( \Big(\skewsym{\smallm{0 \\ a_y \\ 0}} \!\!\! \boldsymbol{\Phi}^{\text{(fv)}}  + \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}} \Big) \boldsymbol{\Delta}^{\text{m}}_1 \\
+        \nonumber
+    &  + \Big( \skewsym{\smallm{0 \\ - a_y \\ 0}} \!\!\! \boldsymbol{\Phi}^{\text{(fv)}} + \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}}  \Big) \boldsymbol{\Delta}^{\text{m}}_2 - 2 \boldsymbol{B} \boldsymbol{\Phi}^{\text{(mv)}}  \bigg) \lVert \boldsymbol{v_{\text{b}}} \rVert \boldsymbol{v_{\text{b}}} \\
+        \nonumber
+    & +\frac{1}{4} \rho S \bigg(\!\! \Big(\!\! \skewsym{\!\smallm{0 \\ a_y \\ 0}\!}\!\!\! \boldsymbol{\Phi}^{\text{(mv)}} \! + \! \boldsymbol{B} \boldsymbol{\Phi}^{\text{(m$\omega$)}} \Big) \boldsymbol{\Delta}^{\text{m}}_1 \\
+    & +  \Big(\!\! \skewsym{\!\smallm{0 \\ - a_y \\ 0}\!} \!\!\! \boldsymbol{\Phi}^{\text{(mv)}} \! + \! \boldsymbol{B} \boldsymbol{\Phi}^{\text{(m$\omega$)}}  \Big) \boldsymbol{\Delta}^{\text{m}}_2 - 2 \boldsymbol{B} \boldsymbol{\Phi}^{\text{(m$\omega$)}}\!  \bigg)\!  \boldsymbol{B}  \lVert \boldsymbol{v_{\text{b}}} \rVert  \boldsymbol{\omega}_{\text{b}} , \label{eq:MbColibri}
+    \end{align}
+\endgroup
 où $\boldsymbol{v}_{\text{b}} := \boldsymbol{R}^\top(\boldsymbol{q}) (\boldsymbol{v}-\boldsymbol{w})$ représente la vitesse de l'air vue par le drone et exprimée dans le repère du corps. Dans \cite{lustosaHal-03035938}, la valeur $\lVert \boldsymbol{v_{\text{b}}} \rVert$, apparaissant dans les expressions de  $\boldsymbol{F}_{\text{b}}$ et $\boldsymbol{M}_{\text{b}}$, est remplacée par la valeur $\eta = \sqrt{\lVert \boldsymbol{v_{\text{b}}} \rVert^{2} + \mu c^{2} \lVert \boldsymbol{\omega}_{\text{b}} \rVert^{2}}$, avec $\mu \in \real$ étant un paramètre lié à l'identification du modèle. Toutefois, dans le cas de Colibri, l'identification fournit $\mu = 0$. 
 
 Dès lors, nous présentons ici une description simplifiée. La matrice des coefficients aérodynamiques constants 
@@ -483,7 +487,6 @@ La théorie de l'inversion dynamique non linéaire incrémentale (INDI) utilisé
     T_{\text{W}}
     \end{bmatrix})
 \end{align}
-\todo{$\nu$ explication}
 où  $ \dot{\boldsymbol{\omega}}_{\text{W}} \in \real^{3}$ est l'accélération angulaire obtenue par différence finie à partir de l'équation \eqref{eq:gyro_deplacement},  $T_{\text{W}} \in \real$ est la poussée actuelle.
 \begin{align}
     \boldsymbol{\nu} = \begin{bmatrix}
@@ -516,6 +519,12 @@ Pour stabiliser le fuselage, nous utilisons un bouclage proportionnel-dérivé d
     u_{\text{tail}} = u_{eq} + k_{p} \theta_{\text{F}} + k_{d} \dot{\theta_{\text{F}}},
 \end{align*}
 où $u_{eq}$ est la commande, à l'équilibre, du moteur pour maintenir le fuselage horizontal en l'absence de perturbation et $k_{p}$, $k_{d}$ sont des gains scalaires ajustables. La valeur $u_{eq}$ a été obtenue en appliquant le théorème des moments au fuselage au point $O_{\text{W}}$. En effet, les deux moments qui agissent sur le fuselage sont le couple dû à la force de poussée du moteur et le couple dû à la position du centre de gravité du fuselage.
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[trim={0 15cm 0 25cm},clip, width=0.6\columnwidth]{figures/IMG_20230120_141852.jpg}
+    \caption{Fuselage de Colibri.}
+    \label{fig:colibri_fus}
+\end{figure}
 \todo{Expliquer les moments}
 
 Les gains $k_{p}$ et $k_{d}$ ont été ajustés en vol pour assurer un comportement satisfaisant. On obtient $\dot{\theta}_{\text{F}}$ à partir de $\boldsymbol{\omega}_{gyro}^{F} = [\dot{\phi}_{\text{F}}~\dot{\theta}_{\text{F}}~\dot{\psi}_{\text{F}}]^\top$.

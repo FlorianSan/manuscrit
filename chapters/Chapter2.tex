@@ -336,6 +336,7 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
     Les saturations impactant les élevons proviennent des limites physiques des servomoteurs et du débattement limité par la forme de l'UAV, $\delta_i \in [-30~; 30]\text{\textdegree}$, $i=1,2$. La contrainte la plus importante, ici, est la bande passante de l'actionneur (due à l'actionnement du servomoteur), qui est modélisée par une fonction de transfert du premier ordre avec une constante de temps \SI{0,05}{\second}. 
 
 \section{Équilibres stationnaires}
+\label{sec:eqpoint}
 {\color{blue}
     Notre travail a pour point de départ les travaux réalisé par \cite{ olszaneckibarthHal-02542982, smeurINDITail} qui utilise des lois de commande basée mesure. Ces lois de commande fournissent de très bonne propriété de stabilisation même en présence de perturbation. Toutefois, elles permettent d'atteindre des équilibres qui n'ont jamais été caractérisé. Ce manque engendre une incompréhension des mécanismes en jeu lors de déstabilisation. Effectivement, les expérimentations réalisées avec un bouclage INDI ont montré une oscillation de DarkO pour certaines vitesses de vent horizontal. Ainsi, il se pose la question de savoir si ce comportement est dû à un cycle limite lié à des saturations d'actionneur ou bien à des effets aérodynamiques. Pour répondre à cette question, nous allons étudier l'ensemble des points d'équilibre du drone soumis ou non à du vent.
 }
@@ -416,56 +417,56 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
     Les paramètres de l'équilibre sont la rotation horizontale $\psi = \arctan(w_{x}, w_{y})$, l'angle d'inclinaison $\theta$, la poussée des hélices $\tau$, et la déflexion des élevons $\delta$. Ils peuvent être obtenus à partir de l'algorithme~\ref{alg:eq}. 
 
     \begin{algorithm}
-    \caption{Obtention des paramètres d'équilibre en \eqref{eq:equilibrium}.}
-    \label{alg:eq}
-    \hspace*{.1cm} \textbf{Entrée} : Vecteur vent $\boldsymbol{w}_{\text{eq}} =\smallmat{w_x & w_y & w_z}^\top$ \\
-    \hspace*{.1cm} \textbf{Sortie} : Paramètres $\psi$, $\theta$, $\tau$, $\delta$ dans \eqref{eq:equilibrium}
-    \begin{algorithmic}[1]
-        %\Require {\bf Input} values: $\boldsymbol{w} =\smallmat{w_x & w_y & w_z}^\top$ 
-        %\Ensure  $\psi$, $\theta$, $\tau$, $\delta$
-        \State Détermine l'angle $\psi = \text{atan2}(w_x, w_y)$ de manière à obtenir $\boldsymbol{q}_{\mathrm{eq}\psi}$ dans \eqref{eq:qpsi}  
-        \State Détermine la perturbation tournée $\boldsymbol{w}_{\text{r}}$ avec la composante $y$ nulle, en utilisant $\boldsymbol{R}_{\psi}:= \smallmat{ \cos \psi & \sin \psi & 0 \\ -\sin \psi & \cos \psi & 0 \\ 0 & 0 & 1 }$, selon :
-        \begin{align}
-        \label{eq:wh}
-        \boldsymbol{w}_{\mathrm{r,eq}} := \smallmat{w_{\text{r}x} \\ 0 \\w_{\text{r}z}} :=  \boldsymbol{R}^\top(\boldsymbol{q}_{\mathrm{eq}\psi}) \boldsymbol{w}_{\mathrm{eq}} = \boldsymbol{R}^\top_{\psi} \boldsymbol{w}_{\mathrm{eq}}
-        \end{align}
+        \caption{Obtention des paramètres d'équilibre en \eqref{eq:equilibrium}.}
+        \label{alg:eq}
+        \hspace*{.1cm} \textbf{Entrée} : Vecteur vent $\boldsymbol{w}_{\text{eq}} =\smallmat{w_x & w_y & w_z}^\top$ \\
+        \hspace*{.1cm} \textbf{Sortie} : Paramètres $\psi$, $\theta$, $\tau$, $\delta$ dans \eqref{eq:equilibrium}
+        \begin{algorithmic}[1]
+            %\Require {\bf Input} values: $\boldsymbol{w} =\smallmat{w_x & w_y & w_z}^\top$ 
+            %\Ensure  $\psi$, $\theta$, $\tau$, $\delta$
+            \State Détermine l'angle $\psi = \text{atan2}(w_x, w_y)$ de manière à obtenir $\boldsymbol{q}_{\mathrm{eq}\psi}$ dans \eqref{eq:qpsi}  
+            \State Détermine la perturbation tournée $\boldsymbol{w}_{\text{r}}$ avec la composante $y$ nulle, en utilisant $\boldsymbol{R}_{\psi}:= \smallmat{ \cos \psi & \sin \psi & 0 \\ -\sin \psi & \cos \psi & 0 \\ 0 & 0 & 1 }$, selon :
+            \begin{align}
+            \label{eq:wh}
+            \boldsymbol{w}_{\mathrm{r,eq}} := \smallmat{w_{\text{r}x} \\ 0 \\w_{\text{r}z}} :=  \boldsymbol{R}^\top(\boldsymbol{q}_{\mathrm{eq}\psi}) \boldsymbol{w}_{\mathrm{eq}} = \boldsymbol{R}^\top_{\psi} \boldsymbol{w}_{\mathrm{eq}}
+            \end{align}
 
-        \State Détermine l'angle d'inclinaison $\theta$ de manière à obtenir $\boldsymbol{q}_{\text{eq}\theta}$ dans \eqref{eq:qeq}:  
-        \begin{align}
-        \label{eq:theta_alg}
-            \theta = -\tan^{-1}\left(\frac{w_{\text{r}z}}{w_{\text{r}x}} + \frac{2mg}{\rho S \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert C_{\ell}  (1-\frac{\xi_{\text{f}}}{\xi_{\text{m}}}) w_{\text{r}x} } \right)
-        \end{align}
-    \State Pour des raisons de commodité, nous définissons les scalaires :
-        $$ 
-        \left[\begin{array}{c|c} 
-        \!\!a\!\!&\!\!b\!\! \\ \hline \!\!c\!\!&\!\! d\!\!\end{array}  \right] \!:=\! 
-        \left[\begin{array}{c|c}
-        2 S_{\text{wet}} C_{\ell} mg \sin{\theta} \xi_{\text{f}} &
-        \! 2 S_{\text{wet}} C_{\text{d}} C_{\ell} \rho  \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert  w_{x}^{\text{b}}\!\! \\ \hline
-        \!\!-4 S S_{\text{p}} C_{\ell} \rho  \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert  w_{x}^{\text{b}} \xi_{\text{f}}\!\! & \frac{b \xi_{\text{f}}}{2}
-        \end{array}\right]
-        $$ 
-        et grâce à ces scalaires $(a,b,c,d)$, déterminons la traction des hélices $\tau$ dans \eqref{eq:ueq} comme :
-        \begin{align}
-            \nonumber
-            \tau &= \frac{S_{\text{p}}}{2 S_{\text{wet}} C_{\ell} \xi_{\text{f}} (4S_{\text{p}} -  S_{\text{wet}} C_{\text{d}} )} \Bigg( a+b+c+d + \Bigg[ (a+b+c \shortminus d)^2 \shortminus 4 (d^2+ac \shortminus bd)  \\ 
-            & \quad
-            \shortminus \frac{4 {w_{z}^{\text{b}}}^2 d}{ {w_{x}^{\text{b}}}^2 } (d+c) + \frac{4 w_{z}^{\text{b}}ad\cos{\theta}}{w_{x}^{\text{b}} C_{\ell} \sin{\theta} } \left(C_{\text{d}} - \frac{4 S_{\text{p}}}{S_{\text{wet}}}\right) \Bigg] ^{\frac{1}{2}} \Bigg),\label{eq:tau_alg}
-        \end{align}
-        où
-        $$
-        \bigmat{w_{x}^{\text{b}} \\ w_{z}^{\text{b}}} = \bigmat{   w_{\text{r}x} \cos{\theta} - w_{\text{r}z} \sin{\theta}\\
-                    w_{\text{r}x} \sin{\theta} +  w_{\text{r}z} \cos{\theta} }.
-        $$
-        
-        \State Déterminons la déflexion des élevons $\delta$ comme :
-        \begin{align}
-        \label{eq:delta_alg}
-            \delta = \frac{2mg\sin{\theta}}{\rho S \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert C_{\text{d}}\xi_{\text{f}} w_{z}^{\text{b}}} + \frac{w_{x}^{\text{b}}}{\xi_{\text{f}}w_{z}^{\text{b}}} -  \frac{(4-\frac{S_{\text{wet}}}{S_{\text{p}}} C_{\text{d}})}{\rho S \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert C_{\text{d}}\xi_{\text{f}} w_{z}^{\text{b}}} \tau.
-        \end{align}
+            \State Détermine l'angle d'inclinaison $\theta$ de manière à obtenir $\boldsymbol{q}_{\text{eq}\theta}$ dans \eqref{eq:qeq}:  
+            \begin{align}
+            \label{eq:theta_alg}
+                \theta = -\tan^{-1}\left(\frac{w_{\text{r}z}}{w_{\text{r}x}} + \frac{2mg}{\rho S \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert C_{\ell}  (1-\frac{\xi_{\text{f}}}{\xi_{\text{m}}}) w_{\text{r}x} } \right)
+            \end{align}
+        \State Pour des raisons de commodité, nous définissons les scalaires :
+            $$ 
+            \left[\begin{array}{c|c} 
+            \!\!a\!\!&\!\!b\!\! \\ \hline \!\!c\!\!&\!\! d\!\!\end{array}  \right] \!:=\! 
+            \left[\begin{array}{c|c}
+            2 S_{\text{wet}} C_{\ell} mg \sin{\theta} \xi_{\text{f}} &
+            \! 2 S_{\text{wet}} C_{\text{d}} C_{\ell} \rho  \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert  w_{x}^{\text{b}}\!\! \\ \hline
+            \!\!-4 S S_{\text{p}} C_{\ell} \rho  \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert  w_{x}^{\text{b}} \xi_{\text{f}}\!\! & \frac{b \xi_{\text{f}}}{2}
+            \end{array}\right]
+            $$ 
+            et grâce à ces scalaires $(a,b,c,d)$, déterminons la traction des hélices $\tau$ dans \eqref{eq:ueq} comme :
+            \begin{align}
+                \nonumber
+                \tau &= \frac{S_{\text{p}}}{2 S_{\text{wet}} C_{\ell} \xi_{\text{f}} (4S_{\text{p}} -  S_{\text{wet}} C_{\text{d}} )} \Bigg( a+b+c+d + \Bigg[ (a+b+c \shortminus d)^2 \shortminus 4 (d^2+ac \shortminus bd)  \\ 
+                & \quad
+                \shortminus \frac{4 {w_{z}^{\text{b}}}^2 d}{ {w_{x}^{\text{b}}}^2 } (d+c) + \frac{4 w_{z}^{\text{b}}ad\cos{\theta}}{w_{x}^{\text{b}} C_{\ell} \sin{\theta} } \left(C_{\text{d}} - \frac{4 S_{\text{p}}}{S_{\text{wet}}}\right) \Bigg] ^{\frac{1}{2}} \Bigg),\label{eq:tau_alg}
+            \end{align}
+            où
+            $$
+            \bigmat{w_{x}^{\text{b}} \\ w_{z}^{\text{b}}} = \bigmat{   w_{\text{r}x} \cos{\theta} - w_{\text{r}z} \sin{\theta}\\
+                        w_{\text{r}x} \sin{\theta} +  w_{\text{r}z} \cos{\theta} }.
+            $$
+            
+            \State Déterminons la déflexion des élevons $\delta$ comme :
+            \begin{align}
+            \label{eq:delta_alg}
+                \delta = \frac{2mg\sin{\theta}}{\rho S \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert C_{\text{d}}\xi_{\text{f}} w_{z}^{\text{b}}} + \frac{w_{x}^{\text{b}}}{\xi_{\text{f}}w_{z}^{\text{b}}} -  \frac{(4-\frac{S_{\text{wet}}}{S_{\text{p}}} C_{\text{d}})}{\rho S \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert C_{\text{d}}\xi_{\text{f}} w_{z}^{\text{b}}} \tau.
+            \end{align}
 
-    \end{algorithmic}
-    \hspace*{.1cm} \textbf{Retourne}:  $\psi$, $\theta$, $\tau$, $\delta$
+        \end{algorithmic}
+        \hspace*{.1cm} \textbf{Retourne}:  $\psi$, $\theta$, $\tau$, $\delta$
     \end{algorithm}
 
     \noindent\begin{minipage}{\linewidth}
@@ -555,7 +556,9 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
     \end{figure}
 
 \section{Dynamiques linéarisées}
-\todo{intro}
+{\color{blue}
+    Des points équilibres obtenus dans la section \ref{sec:eqpoint} et notamment de l'Algorithme~\ref{alg:eq}, il semble cohérent de poursuivre notre travail en obtenant les dynamiques linéarisés autours des points d'équilibre. Ces résultats permettront, par exemple, de concevoir des lois de commande linéaire basée modèle
+}
 \subsection{Dynamique linéarisée sans vent}
 \label{sec:nowind_lin}
 Considérons le cas sans vent discuté dans la section \ref{sec:eq_nowind} pour lequel nous utilisons le vecteur de commande $\boldsymbol{u}_{\text{nowind}}$  et le vecteur de commande à l'équilibre $\boldsymbol{u}_{\text{nowind},\text{eq}}$ défini dans l'équation \eqref{eq:bar_u} et rappelons la transformation du vecteur de commande suivante $ \boldsymbol{u}_{\text{nowind}} := \begin{bmatrix}\tau_{1}  \!&\! \tau_{2}  \!&\! \delta_{1}\tau_{1} \!&\! \delta_{2}\tau_{2} \end{bmatrix}^\top$. La dynamique linéarisée dans le cas sans vent est :
