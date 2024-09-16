@@ -518,13 +518,14 @@ Pour stabiliser le fuselage, nous utilisons un bouclage proportionnel-dérivé d
 \begin{align*}
     u_{\text{tail}} = u_{eq} + k_{p} \theta_{\text{F}} + k_{d} \dot{\theta_{\text{F}}},
 \end{align*}
-où $u_{eq}$ est la commande, à l'équilibre, du moteur pour maintenir le fuselage horizontal en l'absence de perturbation et $k_{p}$, $k_{d}$ sont des gains scalaires ajustables. La valeur $u_{eq}$ a été obtenue en appliquant le théorème des moments au fuselage au point $O_{\text{W}}$. En effet, les deux moments qui agissent sur le fuselage sont le couple dû à la force de poussée du moteur et le couple dû à la position du centre de gravité du fuselage.
+où $u_{eq}$ est la commande, à l'équilibre, du moteur pour maintenir le fuselage horizontal en l'absence de perturbation et $k_{p}$, $k_{d}$ sont des gains scalaires ajustables. La valeur $u_{eq}$ a été obtenue en appliquant le théorème des moments au fuselage au point $O_{\text{W}}$. En effet, les deux moments qui agissent sur le fuselage sont le couple dû à la force de poussée du moteur et le couple dû à la position du centre de gravité du fuselage. Ces deux forces sont représentées sur la figure \ref{fig:colibri_fus_force}. 
 \begin{figure}[ht!]
     \centering
-    \includegraphics[trim={0 15cm 0 25cm},clip, width=0.6\columnwidth]{figures/IMG_20230120_141852.jpg}
-    \caption{Fuselage de Colibri.}
-    \label{fig:colibri_fus}
+    \includegraphics[trim={0 15cm 0 25cm},clip, width=0.6\columnwidth]{figures/colibriMoment.png}
+    \caption{Force agissant sur le fuselage de Colibri.}
+    \label{fig:colibri_fus_force}
 \end{figure}
+Nous utilisons le théorème des moments $\sum M = 0$ pour obtenir la commande à l'équilibre du moteur $u_{eq}$
 \todo{Expliquer les moments}
 
 Les gains $k_{p}$ et $k_{d}$ ont été ajustés en vol pour assurer un comportement satisfaisant. On obtient $\dot{\theta}_{\text{F}}$ à partir de $\boldsymbol{\omega}_{gyro}^{F} = [\dot{\phi}_{\text{F}}~\dot{\theta}_{\text{F}}~\dot{\psi}_{\text{F}}]^\top$.
@@ -533,7 +534,7 @@ Les gains $k_{p}$ et $k_{d}$ ont été ajustés en vol pour assurer un comportem
 \begin{figure}[ht!]
     \centering
     \includegraphics[trim={0 15cm 0 25cm},clip, width=0.6\columnwidth]{figures/IMG_20230120_141852.jpg}
-    \caption{Fuselage de Colibri.}
+    \caption{Maquette expérimentale du fuselage de Colibri.}
     \label{fig:colibri_fus}
 \end{figure}
 
@@ -566,18 +567,18 @@ Sur la Figure~\ref{fig:colibri_flight}, de \SI{0}{\second} à \SI{8}{\second}, l
     \label{fig:colibri_flight}
 \end{figure}
 
-\section{Vol avec un contrôleur unifié}
+% \section{Vol avec un contrôleur unifié}
 
-\todo{feedforward accélération}
-{\color{blue}
+% \todo{feedforward accélération}
+% {\color{blue}
+    Dans le cas dynamique, le mouvement de l'aile et donc du point d'attache à un impact sur le fuselage. Il est donc nécessaire de réalisé une étude dynamique. Toutefois, en l'absence de vent l'actionneur utilisé poiur stabiliser le fuselage est le moteur qui ne peux generé qu'une force veers le bas. Ainsi, lors d'une accélération positive il ne sera pas possible de contrebalancer l'effet de l'acceleration sur le fuselage avec le moteur. Lors d'une décélération, une augmentation de la 
+% }
 
-}
+% \section{Commande Udwadia-Kalaba}
 
-\section{Commande Udwadia-Kalaba}
+% Mesure du vent, sonde 5 trous
 
-Mesure du vent, sonde 5 trous
-
-\section{Vols expérimentaux}
+% \section{Vols expérimentaux}
 
 \section{Conclusion du Chapitre \ref{chap:colibri}}
 
