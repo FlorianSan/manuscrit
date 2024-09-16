@@ -467,7 +467,7 @@ Au cours des vols expérimentaux, le contrôleur n'a pas saturé les actionneurs
 
 
 
-\section{Conclusion du Chapitre \ref{chap:LMI}}
+\section{Conclusion}
 
 \todo{reprendre}
 Pour traiter de la synthèse d'un retour statique de sortie, nous peupouvons envisager deux approches étant donné le caractère non convexe et - difficile du problème. La première approche consiste à utiliser des outils d'optimisation non convexes pour directement optimiser les variables de décision du contrôleur, à savoir les matrices de gain. C'est ce qui est présenté dans le chapitre \ref{chap:3DOF} et \ref{chap:6DOF} en utilisant l’optimisation  non-lisse et la fonction {\tt Systune} de Matlab. La seconde approche consiste à utiliser des outils d'optimisation non convexe, ici l'outil LMI, pour résoudre un problème qui ne l'est pas puisque BMI. Il s'agit alors de proposer un algorithme, ici itératif, de résolution du problème BMI en une succession de problèmes LMI. C'est donc par exemple l'approche développe dans \cite{Arzelier2018} qui a été implémentée et testée en simulation et expérimentalement sur le drone. 

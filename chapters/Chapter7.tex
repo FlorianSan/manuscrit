@@ -150,7 +150,7 @@ Certaines des dimensions caractéristiques sont indiquées dans la Table~\ref{ta
         \caption{Visualisation de l'encodeur rotatif sur le modèle 3D (gauche) et modèle réel (droite).}
         \label{fig:ColibriRotReel}
     \end{figure}
-    Le montage réel est proposé sur la figure \ref{fig:ColibriRotReel} de droite. On observe le montage du contrôleur moteur avec les fils qui vont jusqu'au moteur (3 par moteur soit un total de 12 fils) et le câbles de commande de l'ESC, les câbles de l'encodeur rotatif et les câbles de commandes des servomoteurs (3 fils, car les servomoteurs sont chainés) et enfin les câbles de l'IMU installé sur l'aile.
+    Le montage réel est proposé sur la figure \ref{fig:ColibriRotReel} de droite. Nous observons le montage du contrôleur moteur avec les fils qui vont jusqu'au moteur (3 par moteur soit un total de 12 fils) et le câbles de commande de l'ESC, les câbles de l'encodeur rotatif et les câbles de commandes des servomoteurs (3 fils, car les servomoteurs sont chainés) et enfin les câbles de l'IMU installé sur l'aile.
 }
 
 \subsection{Modélisation}
@@ -212,7 +212,7 @@ Pour dériver les équations du mouvement, rappelons que  $\boldsymbol{R}_{i}(\b
 $\boldsymbol{L}_{\text{i}}^{\text{F}} \left( \boldsymbol{q}_{\text{F}} \right) = \frac{\partial \boldsymbol{R}_{i}}{\partial \boldsymbol{q}}(\boldsymbol{q}_{\text{F}}) \in \real^{3\times4}$ et
 $\boldsymbol{L}_{\boldsymbol{O}_{\text{F}}^{\text{W}}} = \sum_{i=1}^{3} \boldsymbol{d}_{\text{FW}}(i) \boldsymbol{L}_{\text{i}}^{\text{F}} (\boldsymbol{q}_{\text{F}})$, $i \in {1,2,3}$, où $\boldsymbol{d}_{\text{FW}}(i)$ désigne la i-ème composante du vecteur $\boldsymbol{d}_{\text{FW}} = \boldsymbol{p}_{\text{W}} - \boldsymbol{p}_{\text{F}}$. Comme le point $\boldsymbol{O}_{\text{W}}$ est situé au centre de rotation de l'aile, la distance $\boldsymbol{d}_{\text{FW}}$ est une constante, puisque $\boldsymbol{O}_{\text{W}}$ et $\boldsymbol{O}_{\text{F}}$ appartiennent au même solide (le fuselage).
 
-On en déduit, avec l'homogénéité, $\dot{\boldsymbol{L}}_{\boldsymbol{O}_{\text{F}}^{\text{W}}} = \sum_{i=1}^{3} \boldsymbol{d}_{\text{FW}}(i) \boldsymbol{L}_{\text{i}}^{\text{F}} (\dot{\boldsymbol{q}}_{\text{F}})$. Avec ces définitions, les matrices de \eqref{eq:udwadia} sont :
+Nous en déduisons, avec l'homogénéité, $\dot{\boldsymbol{L}}_{\boldsymbol{O}_{\text{F}}^{\text{W}}} = \sum_{i=1}^{3} \boldsymbol{d}_{\text{FW}}(i) \boldsymbol{L}_{\text{i}}^{\text{F}} (\dot{\boldsymbol{q}}_{\text{F}})$. Avec ces définitions, les matrices de \eqref{eq:udwadia} sont :
 
 \begin{align}
     \boldsymbol{M} = \begin{bmatrix}
@@ -300,8 +300,12 @@ $\boldsymbol{\Phi}:= \begin{bmatrix} \boldsymbol{\Phi}^{\text{(fv)}} & {\boldsym
 
 
 
-Enfin, $\boldsymbol{F}_{\text{F}} = \boldsymbol{F}_{m}$ et $\boldsymbol{M}_{\text{F}}$ représentent respectivement l'ensemble des forces et moments non gravitationnels agissant sur le fuselage exprimés dans le repère $O_{\text{W}}$. En particulier, $\boldsymbol{F}_{m} = - k_{\text{p}} {u_{\text{tail}}}^{2}$ est la force générée par le moteur situé à l'arrière du fuselage et $u_{\text{tail}}$ est la vitesse de rotation du moteur telle que :
+Enfin, $\boldsymbol{F}_{\text{F}} = \boldsymbol{F}_{m}$ et $\boldsymbol{M}_{\text{F}}$ représentent respectivement l'ensemble des forces et moments non gravitationnels agissant sur le fuselage exprimés dans le repère $O_{\text{W}}$. En particulier, $\boldsymbol{F}_{m} = - k_{\text{p}} {u_{\text{tail}}}^{2}$ est la force générée par le moteur situé à l'arrière du fuselage et $u_{\text{tail}}$ est la vitesse de rotation du moteur.
+
+Nous utilisons le théorème fondamental de la statique et nous isolons le fuselage. Les deux moments qui agissent sur le fuselage sont le couple dû à la force de poussée du moteur (en rouge sur la figure \eqref{fig:colibri_frame_side}) et le couple dû à la position du centre de gravité du fuselage (en bleu sur la figure \eqref{fig:colibri_frame_side}). Il en resulte l'équation suivante :
+
 \begin{align}
+    \label{eq:momentfuselage}
     \boldsymbol{M}_{\text{F}} =  m_{\text{F}} g \boldsymbol{e}_3 \times \boldsymbol{d}_{\text{G}O_{\text{W}}} + \boldsymbol{F}_{m} \times \boldsymbol{d}_{\text{M}O_{\text{W}}},
 \end{align}
 où $\boldsymbol{d}_{\text{M}O_{\text{W}}}$ est la distance entre l'emplacement du moteur et le centre de rotation et $\boldsymbol{d}_{\text{G}O_{\text{W}}}$ est la distance entre l'emplacement du centre de gravité du fuselage et le centre de rotation.
@@ -417,7 +421,7 @@ Suivant \cite{203613}, la dynamique de l'estimateur est donnée par :
 où $\kappa$ est la mesure angulaire récupérée du capteur, $k_{p}$ et $k_{v}$ sont deux gains scalaires positifs tels que l'équation caractéristique $s^{2} + k_{v} s + k_{p} = 0$ ait des racines à partie réelle négative. Pour notre estimateur, nous avons choisi $k_{p} = 1$ et $k_{v} = 1,3$ de manière à obtenir un facteur d'amortissement $\zeta = 0,65$ conduisant à une réponse légèrement sous-amortie comme compromis approprié entre un temps de montée rapide et une réponse légèrement oscillatoire. Le gain $\epsilon_{\kappa}$ peut être ajusté de manière pratique afin d'obtenir un compromis entre l'action de lissage (obtenue en augmentant $\epsilon_{\kappa}$) et la réduction du retard temporel
 de l'estimateur (obtenue en réduisant $\epsilon_{\kappa}$). En outre, l'action de lissage de l'approche proposée atténue l'effet de la quantification de la mesure angulaire. Nous avons choisi $\epsilon_{\kappa} = 0,05$ pour nos expériences. La Figure~\ref{fig:high_gain} montre les résultats expérimentaux obtenus après la mise en œuvre du filtre grand gain \eqref{eq:high_dyn} dans le cas d'un vol générant des oscillations angulaires de grande amplitude.
 
-Nous avons effectué une dérivation par différence finie (en vert) en post-traitement pour comparer les résultats. En raison de la nature quantifiée de l'encodeur rotatif, nous observons que la vitesse angulaire obtenue par différence finie est très bruitée. On constate que le filtre grand gain permet d'estimer la vitesse angulaire avec plus de précision (en rouge), bien qu'avec un léger retard. Grâce à l'ajout d'une IMU supplémentaire sur l'aile lors d'un essai en vol, il est possible de comparer l'estimation de la vitesse avec les mesures du gyroscope de l'aile (MPU9250), visibles sur le graphique du bas de la Figure~\ref{fig:high_gain} (trace bleue). On constate que les mesures du gyroscope sont quelque peu bruitées, notamment en raison des vibrations générées par les moteurs. 
+Nous avons effectué une dérivation par différence finie (en vert) en post-traitement pour comparer les résultats. En raison de la nature quantifiée de l'encodeur rotatif, nous observons que la vitesse angulaire obtenue par différence finie est très bruitée. Nous constatons que le filtre grand gain permet d'estimer la vitesse angulaire avec plus de précision (en rouge), bien qu'avec un léger retard. Grâce à l'ajout d'une IMU supplémentaire sur l'aile lors d'un essai en vol, il est possible de comparer l'estimation de la vitesse avec les mesures du gyroscope de l'aile (MPU9250), visibles sur le graphique du bas de la Figure~\ref{fig:high_gain} (trace bleue). Nous constations que les mesures du gyroscope sont quelque peu bruitées, notamment en raison des vibrations générées par les moteurs. 
 
 \begin{figure}[ht!]
 \centering
@@ -514,30 +518,36 @@ La matrice d'efficacité du contrôle $\boldsymbol{G}$ est définie par :
 \end{align*}
 Cette sélection de la matrice d'efficacité a été déterminée pour les vols stationnaires, mais il est nécessaire d'effectuer une étude différente pour le vol vers l'avant.
 
+\section{Stabilisation du fuselage}
+\label{sec:stabfus}
 Pour stabiliser le fuselage, nous utilisons un bouclage proportionnel-dérivé de l'angle $\theta_{\text{F}}$ formé entre le fuselage et l'horizontale, que nous voulons maintenir à zéro. Cet angle est obtenu en convertissant le quaternion $q_{\text{F}}$ de l'équation \eqref{eq:quat_fuselage} en un angle d'Euler en suivant la convention d'Euler 'ZYX'. Le bouclage fournit la commande $u_{\text{tail}}$ pour la vitesse angulaire du moteur générant la force $F_{m}$ (voir Figure~\ref{fig:colibri_frame_side}), suivant l'expression :
-\begin{align*}
-    u_{\text{tail}} = u_{eq} + k_{p} \theta_{\text{F}} + k_{d} \dot{\theta_{\text{F}}},
-\end{align*}
-où $u_{eq}$ est la commande, à l'équilibre, du moteur pour maintenir le fuselage horizontal en l'absence de perturbation et $k_{p}$, $k_{d}$ sont des gains scalaires ajustables. La valeur $u_{eq}$ a été obtenue en appliquant le théorème des moments au fuselage au point $O_{\text{W}}$. En effet, les deux moments qui agissent sur le fuselage sont le couple dû à la force de poussée du moteur et le couple dû à la position du centre de gravité du fuselage. Ces deux forces sont représentées sur la figure \ref{fig:colibri_fus_force}. 
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[trim={0 15cm 0 25cm},clip, width=0.6\columnwidth]{figures/colibriMoment.png}
-    \caption{Force agissant sur le fuselage de Colibri.}
-    \label{fig:colibri_fus_force}
-\end{figure}
-Nous utilisons le théorème des moments $\sum M = 0$ pour obtenir la commande à l'équilibre du moteur $u_{eq}$
-\todo{Expliquer les moments}
+\begin{align}
+    \label{eq:pidfus}
+    u_{\text{tail}} = u_{\text{tail},eq} + k_{p} \theta_{\text{F}} + k_{d} \dot{\theta_{\text{F}}},
+\end{align}
+où $u_{eq}$ est la commande, à l'équilibre, du moteur pour maintenir le fuselage horizontal en l'absence de perturbation et $k_{p}$, $k_{d}$ sont des gains scalaires ajustables. Nous obtenons $\dot{\theta}_{\text{F}}$ à partir de $\boldsymbol{\omega}_{gyro}^{F} = [\dot{\phi}_{\text{F}}~\dot{\theta}_{\text{F}}~\dot{\psi}_{\text{F}}]^\top$.
 
-Les gains $k_{p}$ et $k_{d}$ ont été ajustés en vol pour assurer un comportement satisfaisant. On obtient $\dot{\theta}_{\text{F}}$ à partir de $\boldsymbol{\omega}_{gyro}^{F} = [\dot{\phi}_{\text{F}}~\dot{\theta}_{\text{F}}~\dot{\psi}_{\text{F}}]^\top$.
+{\color{blue} La valeur $u_{\text{tail},eq}$ a été obtenue en utilisant l'équation \eqref{eq:momentfuselage}. Nous annulons cette dernière $\sum \overrightarrow{M}_{O_{\text{W}}} = \overrightarrow{0}$  et nous obtenons :
 
+\begin{align}
+    \label{eq:momentnul}
+    m_{\text{F}} g \boldsymbol{e}_3 \times \boldsymbol{d}_{\text{G}O_{\text{W}}} + \boldsymbol{F}_{m} \times \boldsymbol{d}_{\text{M}O_{\text{W}}} = \overrightarrow{0}
+\end{align}
+En utilisant \eqref{eq:momentnul} et $\boldsymbol{F}_{m,eq} = - k_{\text{p}} {u_{\text{tail},eq}}^{2}$, nous obtenons :
+\begin{align}
+    u_{\text{tail},eq} = \sqrt(\frac{mg {z}_{\text{G}O_{\text{W}}} }{k_{\text{p}} {z}_{\text{M}O_{\text{W}}} })
+\end{align}
+avec ${z}_{\text{G}O_{\text{W}}}$ et ${z}_{\text{M}O_{\text{W}}}$, respectivement, la troisième composante de $\boldsymbol{d}_{\text{G}O_{\text{W}}} $ et $\boldsymbol{d}_{\text{M}O_{\text{W}}}$.
 
+Les gains $k_{p}$ et $k_{d}$ ont été ajustés lors d'un montage sur un banc de test pour assurer un comportement satisfaisant. 
 \begin{figure}[ht!]
     \centering
     \includegraphics[trim={0 15cm 0 25cm},clip, width=0.6\columnwidth]{figures/IMG_20230120_141852.jpg}
     \caption{Maquette expérimentale du fuselage de Colibri.}
     \label{fig:colibri_fus}
 \end{figure}
-
+Le banc de test de la figure \eqref{fig:colibri_fus} est un montage du fuselage sur un pivot fixe devant la soufflerie ouverte. Ce montage permet d'apprécier le fonctionnement de la commande \eqref{eq:pidfus} et son comportement face au vent.
+}
 
 
 
@@ -566,13 +576,54 @@ Sur la Figure~\ref{fig:colibri_flight}, de \SI{0}{\second} à \SI{8}{\second}, l
     \caption{Position et orientation de l'aile (six premiers graphiques) et mesure de l'angle entre l'aile et le fuselage (dernier graphique), lors d'un vol réel. }
     \label{fig:colibri_flight}
 \end{figure}
+{\color{blue}
 
-% \section{Vol avec un contrôleur unifié}
+\section{Vol avec un contrôleur INDI unifié}
+    Au vu du vol expérimental de la Figure~\ref{fig:colibri_flight}, nous avons supprimé le contrôleur proportionnel-dérivé du fuselage pour utiliser l'INDI. Nous ajoutons le moteur du fuselage comme actionneur dans le vecteur de commande $\boldsymbol{u}_{\text{W}}$ et nous ajoutons un nouvel objectif de stabilisation, lequel correspond à la stabilisation du fuselage $u_{\text{tail}}$.
 
-% \todo{feedforward accélération}
-% {\color{blue}
-    Dans le cas dynamique, le mouvement de l'aile et donc du point d'attache à un impact sur le fuselage. Il est donc nécessaire de réalisé une étude dynamique. Toutefois, en l'absence de vent l'actionneur utilisé poiur stabiliser le fuselage est le moteur qui ne peux generé qu'une force veers le bas. Ainsi, lors d'une accélération positive il ne sera pas possible de contrebalancer l'effet de l'acceleration sur le fuselage avec le moteur. Lors d'une décélération, une augmentation de la 
-% }
+    \begin{align*}
+        \begin{bmatrix}
+        \partial \phi \\
+        \partial \theta \\
+        \partial \psi \\
+        \partial T \\ 
+        \partial \theta_{\text{F}}
+        \end{bmatrix}\! =\! \boldsymbol{G} \boldsymbol{u}_{\text{W}} \!=\!
+        \begin{bmatrix}
+        -7.5 & -15 & 7.5 & 15 & 0 & 0 & 0\\
+        0 & 0 & 0 & 0 & 15 & 15 & 0\\
+        0 & 0 & 0 & 0 & 4 & -4 & 0 \\
+        -0.6 & -0.6 & -0.6 & -0.6 & 0 & 0 & 0\\
+        0 & 0 & 0 & 0 & 0 & 0 & 15 \\
+        \end{bmatrix}
+        \boldsymbol{u}_{\text{W}}
+    \end{align*}
+
+
+    Dans le cas dynamique, le mouvement de l'aile et donc du point d'attache à un impact sur le fuselage. Il est donc nécessaire de réalisé une étude dynamique \eqref{eq:dynamiquependule}. Toutefois, en l'absence de vent l'actionneur utilisé pour stabiliser le fuselage est le moteur qui ne peux générer qu'une force vers le bas (comme développé dans la section \ref{sec:stabfus}).
+    \begin{remark}
+        \label{rem:irréversibilité}
+        En raison de l'irréversibilité de la génération de force par le moteur du fuselage, une accélération positive ne pourra pas être contrebalancé par le moteur. Lors d'une décélération, une augmentation de la vitesse de rotation du moteur permet de compenser les accélérations linéaires et donc de maintenir le fuselage horizontal.
+    \end{remark}
+
+    Il est possible d'anticiper la commande de vitesse angulaire du fuselage en fonction des accélérations linéaires verticale $\ddot{z}$ et horizontale $\ddot{x}$ de l'aile.
+
+    \begin{align}
+        \label{eq:dynamiquependule}
+        m l^{2} \ddot{\theta}_{\text{p}} + ml(g-\ddot{z}) \sin{\theta_{\text{p}}} + ml \ddot{x} \cos{\theta_{\text{p}}} = 0\\
+        \implies \ddot{\theta}_{p} = -\frac{1}{l} \left( (g-\ddot{z})\sin{\theta_{\text{p}}} + \ddot{x} \cos{\theta_{\text{p}}} \right)
+    \end{align}
+    avec $l = \| \boldsymbol{d}_{\text{G}O_{\text{W}}} \|$ et $\theta_{\text{p}} = \theta_{\text{F}} - \frac{\pi}{2} - \arctan{\frac{{x}_{\text{G}O_{\text{W}}}}{{z}_{\text{G}O_{\text{W}}}}}$
+    En régime stationnaire, nous avons un équilibre qui assure que l'accélération de la gravité $g$ est compensé par la traction de l'hélice $\boldsymbol{F}_{m}$. Nous discrétisons cette équation pour obtenir le commande feedforward de vitesse angulaire : 
+    \begin{align}
+        \label{eq:feedforward}
+        \dot{\theta}_{p} (t+1) = -\frac{1}{l} \left( (-\ddot{z})\sin{\theta_{\text{\text{p}}}} + \ddot{x} \cos{\theta_{\text{p}}} \right) + dot{\theta}_{\text{p}} (t)
+    \end{align}
+    De cette équation \eqref{eq:feedforward}, nous observons qu'il est possible de généré une trajectoire qui permette d'accélérer horizontalement sans générer un changement de vitesse angulaire du fuselage (qui ne pourrait pas être compensé voir remarque \ref{rem:irréversibilité}). Cette trajectoire utilise une accélération verticale $\ddot{z}$ pour assurer $ (-\ddot{z})\sin{\theta_{\text{p}}} + \ddot{x} \cos{\theta_{\text{p}}} = 0 $. Cette trajectoire est donc ascendante. Une autre solution à la remarque \ref{rem:irréversibilité} est de permettre la génération d'une force bidirectionnelle (en ajoutant un second moteur ou un servomoteur pour diriger la force).
+
+
+
+}
 
 % \section{Commande Udwadia-Kalaba}
 
@@ -580,7 +631,12 @@ Sur la Figure~\ref{fig:colibri_flight}, de \SI{0}{\second} à \SI{8}{\second}, l
 
 % \section{Vols expérimentaux}
 
-\section{Conclusion du Chapitre \ref{chap:colibri}}
+\section{Conclusion}
+
+Ce chapitre propose une nouvelle architecture de drone \textit{freewing} qui possède des caractéristiques intéressantes, telle qu'un fuselage maintenu horizontal pendant toutes les phases de vol, un décollage et un atterrissage vertical, et une passivité naturelle aux perturbations de vent. Toutefois, de nombreuse complexité apparaissent avec cette architecture. La modélisation multicorps mener à permis d'obtenir un modèle représentant le comportement du drone et une identification à isolé les coefficients pour que le modèle soit le plus réaliste. Un travail a été mener sur l'estimation de l'état d'un tel drone permettant de conclure sur la meilleure position pour l'installation des capteurs et l'implémentation de la démarche nécessaire pour réaliser l'estimation de l'état. 
+
+À l'aide de cette dernière, une stabilisation basée sur une double boucle INDI et proportionnel-dérivé a permis de réaliser une validation expérimentale de la maquette, de l'estimation de l'état, mais cette implémentation a montré les limite d'une architecture à deux boucles. Nous avons donc proposé une architecture de commande unifier permettant le contrôle expérimental d'un drone à fuselage pendulaire non actionné.
+
 
 
 
