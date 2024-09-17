@@ -160,7 +160,7 @@ Elle est obtenue à partir de l'équation de Lagrange décrivant le mouvement d'
     \label{eq:unconstraintDyn}
     \boldsymbol{M}(\boldsymbol{x},t) \ddot{\boldsymbol{x}} = Q(\boldsymbol{x}, \dot{\boldsymbol{x}}, t)
 \end{align}
-Cette équation correspond au système non contraint, cela correspond au fait que les $n$ coordonnée de $\boldsymbol{x}$ sont indépendantes les unes vis-à-vis des autres ou du moins traité comme tel. Nous allons adjoindre à ce système non contraint $m$ contrainte :
+Cette équation correspond au système non contraint, où les $n$ coordonnée de $\boldsymbol{x}$ sont indépendantes les unes vis-à-vis des autres ou du moins traité comme tel. Nous allons adjoindre à ce système non contraint $m$ contrainte :
 \begin{align}
     \label{eq:contraintes_phi}
     \varphi_{i}(\boldsymbol{x},\dot{\boldsymbol{x}},t) = 0, \quad i=1,2,...,m.
@@ -364,7 +364,7 @@ et
     B_{4} = -\boldsymbol{R}_{1}(\boldsymbol{q}_{\text{F}})^\top \dot{\boldsymbol{L}}_{2}^{\text{W}}\dot{\boldsymbol{q}}_{\text{W}} - \boldsymbol{R}_{2}(\boldsymbol{q}_{\text{W}})^\top \dot{\boldsymbol{L}}_{1}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} - 2\dot{\boldsymbol{q}}_{\text{W}}^\top {\boldsymbol{L}_{2}^{\text{W}}}^\top \boldsymbol{L}_{1}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} \\- \delta_{1}(\boldsymbol{R}_{1}(\boldsymbol{q}_{\text{F}})^\top \boldsymbol{L}_{2}^{\text{W}}\dot{\boldsymbol{q}}_{\text{W}} +  \boldsymbol{R}_{2}(\boldsymbol{q}_{\text{W}})^\top \boldsymbol{L}_{1}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} ) - \delta_{2} \varphi_{4}
 \end{multline*}
 
-La simulation d'un drone reste complexe, car il est naturellement instable. Nous avons choisi d'utiliser la loi de contrôle proposée dans \ref{sec:h_inf6DOF_multi} pour stabiliser le système. Ce contrôle stabilise l'aile. Une autre loi de contrôle basée sur une rétroaction proportionnelle-dérivée stabilise le fuselage pour le maintenir horizontal. Les résultats de la simulation en boucle fermée sont présentés à la Figure~\ref{fig:sim_colibri}.
+La simulation d'un drone reste complexe, car il est naturellement instable. Nous avons choisi d'utiliser la loi de contrôle proposée dans \ref{sec:h_inf6DOF_multi} pour stabiliser le système. Ce contrôle stabilise l'aile. Une autre loi de contrôle basée sur une rétroaction proportionnelle-dérivée stabilise le fuselage pour le maintenir horizontal, développé dans la section \ref{sec:stabfus}. Les résultats de la simulation en boucle fermée sont présentés à la Figure~\ref{fig:sim_colibri}.
 
 \begin{figure}[ht!]
 \centering
@@ -425,7 +425,7 @@ Nous avons effectué une dérivation par différence finie (en vert) en post-tra
 
 \begin{figure}[ht!]
 \centering
-    \includegraphics[width=0.6\columnwidth,angle=0]{figures/highGainFilter.png}
+    \includegraphics[width=0.8\columnwidth,angle=0]{figures/highGainFilter.png}
     \caption{Mesure de l'angle (noir, graphique du haut), mesure de la vitesse angulaire avec le gyroscope de l'aile (bleu, graphique du bas), estimation de la vitesse angulaire par différence finie (vert, graphique du bas) et estimation avec le filtre grand gain (courbes rouges).}
     \label{fig:high_gain}
 \end{figure}
@@ -626,16 +626,16 @@ Sur la Figure~\ref{fig:colibri_flight}, de \SI{0}{\second} à \SI{8}{\second}, l
 }
 
 % \section{Commande Udwadia-Kalaba}
-
+\todo{Udwadia-Kalaba}
 % Mesure du vent, sonde 5 trous
 
 % \section{Vols expérimentaux}
-
+\todo{Vols expérimentaux unifiés}
 \section{Conclusion}
 
 Ce chapitre propose une nouvelle architecture de drone \textit{freewing} qui possède des caractéristiques intéressantes, telle qu'un fuselage maintenu horizontal pendant toutes les phases de vol, un décollage et un atterrissage vertical, et une passivité naturelle aux perturbations de vent. Toutefois, de nombreuse complexité apparaissent avec cette architecture. La modélisation multicorps mener à permis d'obtenir un modèle représentant le comportement du drone et une identification à isolé les coefficients pour que le modèle soit le plus réaliste. Un travail a été mener sur l'estimation de l'état d'un tel drone permettant de conclure sur la meilleure position pour l'installation des capteurs et l'implémentation de la démarche nécessaire pour réaliser l'estimation de l'état. 
 
-À l'aide de cette dernière, une stabilisation basée sur une double boucle INDI et proportionnel-dérivé a permis de réaliser une validation expérimentale de la maquette, de l'estimation de l'état, mais cette implémentation a montré les limite d'une architecture à deux boucles. Nous avons donc proposé une architecture de commande unifier permettant le contrôle expérimental d'un drone à fuselage pendulaire non actionné.
+À l'aide de cette dernière, une stabilisation basée sur une double boucle INDI et proportionnel-dérivé a permis de réaliser une validation expérimentale de la maquette, de l'estimation de l'état, mais cette implémentation a montré les limite d'une architecture à deux boucles. Nous avons donc proposé une architecture de commande unifier basée sur une rétroaction INDI contrôlant les deux corps et permettant le contrôle expérimental d'un drone à fuselage pendulaire non actionné.
 
 
 

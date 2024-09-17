@@ -67,7 +67,7 @@ Le prototype étant relié à un support fixe, il n'est pas possible de reprodui
 où $\boldsymbol{F}_{meas}$ représente les forces mesurées par le capteur dans le repère inertiel corrigé du biais. Pour calibrer la correction du biais, lors de l'initialisation, les forces mesurées sont moyennées sur 6000 échantillons, le modèle étant bloqué dans une position stable (angle de tangage à 0°, c'est-à-dire orientation verticale). Pour éliminer le biais de la force mesurée à chaque mesure, nous soustrayons l'effet de la gravité sur le modèle de la mesure. Une masse artificielle $m$ est attribuée à la dynamique du logiciel dans la boucle conformément à \eqref{eq:sub_accel_sensor}, ce qui permet de tester plusieurs configurations afin de mieux apprécier l'influence de la masse du drone sur d'éventuels événements transitoires de saturation. Cela permet d'étudier des scénarios impliquant la masse non négligeable de la batterie, qui n'est pas présente dans notre modèle. Bien que cette manipulation soit aisée, elle ne représente pas parfaitement la réalité car nous ne tenons pas compte de la répartition des masses dans le drone et donc des modifications de l'inertie.
 La vitesse et la position transitoire du drone sont ensuite obtenues par intégration numérique simple et double de l'accélération comme dans \eqref{eq:accel_sensor}, en utilisant une intégration numérique trapézoïdale.
 
-\section{Contrôle linéaire, architecture PI à 3 DOF}
+\section{Contrôle linéaire, architecture PI sur maquette à 3 DOF}
 \label{sec:3dofcmd}
 Dans la section \ref{sec:ctrl_hyste}, nous avons proposé un bouclage proportionnel stabilisant une position de vol stationnaire en l'absence de vent (sans perturbation). Nous proposons ici une extension incluant une action intégrale, adaptée au fonctionnement avec une perturbation non mesurée représentée par un vent constant. L'objectif est de stabiliser le drone à la position de référence, en rejetant une perturbation de vent constant inconnue.
 Les matrices de gain associées au gain intégral et proportionnel seront optimisées suivant un schéma de synthèse $H_{\infty}$ combinant à la fois des critères de robustesse et de performance. Nous mettons donc en œuvre une synthèse robuste basés sur des critères $H_{\infty}$ sous contraintes d'une structure PI multidimensionnelle (MIMO).
@@ -77,30 +77,44 @@ Nous expérimentons la situation avec le vent agissant uniquement le long de l'a
 
 \begin{figure}[ht!]
     \centering
-    \includegraphics[trim=5cm 0cm 0cm 0cm,clip,width=0.8\columnwidth]{figures/commande_integrale_ACA.png}
+    \includegraphics[trim=5cm 0cm 0cm 0cm,clip,width=1\columnwidth]{figures/commande_integrale_3DOF.png}
     \caption{Schéma de commande linéaire, proportionnel-intégral.}
     \label{fig:commande_int3DOF}
 \end{figure}
 Le contrôleur proposé, représenté sur la figure \ref{fig:commande_int3DOF}, correspond à :
+
 \begin{subequations}
+    \label{eq:ctrl3dof}
     \begin{align}
-        \label{eq:ctrl3dof}
-        \dot{\boldsymbol{x}_{c}} = \boldsymbol{H}(\boldsymbol{y}-\begin{bmatrix}\boldsymbol{r}_{p}\\\mathbb{0}_{8\times 1} \end{bmatrix}), \quad
-        \boldsymbol{y} = \boldsymbol{S} \boldsymbol{x},\quad
-        \boldsymbol{u} = \Sigma \boldsymbol{x}_{c} + \boldsymbol{K}(\boldsymbol{y}-\begin{bmatrix}\boldsymbol{r}_{p}\\\mathbb{0}_{8\times 1} \end{bmatrix}),\\
-        \boldsymbol{S} =\begin{bmatrix} \mathbb{I}_{7} &  \mathbb{0}_{7\times 5} \\
-         \mathbb{0}_{4\times 8} &  \mathbb{I}_{4}
-          \end{bmatrix}, \quad
-          \boldsymbol{\Sigma} = \begin{bmatrix} 1 & 1 & 0 & 0\\ 0 & 0 & 1 & 1\end{bmatrix}^\top,
+        \boldsymbol{e}_{p} &= \boldsymbol{r}_{p} - \boldsymbol{p},\\
+        \boldsymbol{e} &= \smallmat{
+        \boldsymbol{e}_{p}^\top & \boldsymbol{e}_{v\epsilon\omega}^\top}^\top, \quad \dot{\boldsymbol{x}}_{c} = \boldsymbol{H} \boldsymbol{e}, \quad    \boldsymbol{u} = \boldsymbol{\Sigma} \boldsymbol{x}_{c} + \boldsymbol{u}_{K},
+        \\
+        \boldsymbol{\Sigma} &:= \begin{bmatrix} \! 1 \!&\! 1\! & \!0\! &\! 0\!\\ \!0\! & \!0\! & \!1 \!& \!1\!\end{bmatrix}^\top, \quad
+        \boldsymbol{u}_{K} = \boldsymbol{K} \boldsymbol{e} ,
     \end{align}
 \end{subequations}
-où $\boldsymbol{x}_{c} \in \mathbb{R}^{2}$ est l'état de l'intégrateur ; $\boldsymbol{r}_{p} \in \mathbb{R}^{3}$ est la référence constante comprenant une position cible pour le mouvement de translation ; $\boldsymbol{S}$ est une matrice de sélection de sortie, qui supprime la composante de l'angle de tangage de la sortie mesurée (n'affectant que la linéarisation par quaternion) pour former $\boldsymbol{y}$ ; $\boldsymbol{\Sigma}$ est une matrice d'allocation d'entrée qui permet d'affecter la première composante de l'état de l'intégrateur à la commande du moteur et la seconde composante à la commande de la gouverne de profondeur. $\boldsymbol{K}$, $\boldsymbol{H}$ sont des gains constants à sélectionner pour que la matrice linéaire de la boucle fermée $\boldsymbol{A}_{cl}$ caractérisant la boucle fermée linéaire soit Hurwitz, afin d'assurer la stabilisation avec la dynamique linéarisée liée au scénario sans vent \eqref{eq:withouwind}.
+
+% \begin{subequations}
+%     \begin{align}
+%         \label{eq:ctrl3dof}
+%         \dot{\boldsymbol{x}_{c}} = \boldsymbol{H}(\boldsymbol{y}-\begin{bmatrix}\boldsymbol{r}_{p}\\\mathbb{0}_{8\times 1} \end{bmatrix}), \quad
+%         \boldsymbol{y} = \boldsymbol{S} \boldsymbol{x},\quad
+%         \boldsymbol{u} = \Sigma \boldsymbol{x}_{c} + \boldsymbol{K}(\boldsymbol{y}-\begin{bmatrix}\boldsymbol{r}_{p}\\\mathbb{0}_{8\times 1} \end{bmatrix}),\\
+%         \boldsymbol{S} =\begin{bmatrix} \mathbb{I}_{7} &  \mathbb{0}_{7\times 5} \\
+%          \mathbb{0}_{4\times 8} &  \mathbb{I}_{4}
+%           \end{bmatrix}, \quad
+%           \boldsymbol{\Sigma} = \begin{bmatrix} 1 & 1 & 0 & 0\\ 0 & 0 & 1 & 1\end{bmatrix}^\top,
+%     \end{align}
+% \end{subequations}
+
+où $\boldsymbol{x}_{c} \in \mathbb{R}^{2}$ est l'état de l'intégrateur ; $\boldsymbol{r}_{p} \in \mathbb{R}^{3}$ est la référence constante comprenant une position cible pour le mouvement de translation ; $\boldsymbol{\Sigma}$ est une matrice d'allocation d'entrée qui permet d'affecter la première composante de l'état de l'intégrateur à la commande du moteur et la seconde composante à la commande de la gouverne de profondeur. $\boldsymbol{K}$, $\boldsymbol{H}$ sont des gains constants à sélectionner pour que la matrice linéaire de la boucle fermée $\boldsymbol{A}_{cl}$ caractérisant la boucle fermée linéaire soit Hurwitz, afin d'assurer la stabilisation avec la dynamique linéarisée liée au scénario sans vent \eqref{eq:withouwind}.
 
 De manière synthétique, la matrice \eqref{eq:close_matrix} décrit la boucle fermée illustrée à la Fig.~\ref{fig:commande_int3DOF} avec \eqref{eq:ctrl3dof} : un retour de sortie avec 11 sorties, comprenant les trois positions, les trois vitesses linéaires, deux des trois angles ($\epsilon_{1}$ et $\epsilon_{3}$) et les trois vitesses angulaires.
 \begin{align} \label{eq:close_matrix}
     \begin{gathered}
         \boldsymbol{A}_{cl} \!= \!
-        \begin{bmatrix}\boldsymbol{A} & \mathbb{0}_{12\times 2} \\ \boldsymbol{H}\boldsymbol{S} & \mathbb{0}_{2\times 2}\end{bmatrix} \!- \!\begin{bmatrix}\boldsymbol{G} \\ \mathbb{0}_{2\times 4}\end{bmatrix} \left( \boldsymbol{K} \begin{bmatrix}\boldsymbol{S} & \mathbb{0}_{11\times 2}\end{bmatrix} -  \begin{bmatrix}\mathbb{0}_{4\times 12} & \boldsymbol{\Sigma} \end{bmatrix}\right),
+        \begin{bmatrix}\boldsymbol{A} & \mathbb{0}_{12\times 2} \\ \boldsymbol{H} & \mathbb{0}_{2\times 2}\end{bmatrix} \!- \!\begin{bmatrix}\boldsymbol{G} \\ \mathbb{0}_{2\times 4}\end{bmatrix} \left( \boldsymbol{K} -  \begin{bmatrix}\mathbb{0}_{4\times 12} & \boldsymbol{\Sigma} \end{bmatrix}\right),
     \end{gathered}
 \end{align}
 Cette structure est une structure proportionnelle-intégrale MIMO \nomenclature[]{\(MIMO\)}{Entrées et sorties multiples  (\textit{Multiple-Input Multiple-Output})} résultant d'une observation attentive de la dynamique linéarisée du drone, ce qui permet un nombre minimal d'intégrateurs dans le contrôleur. Ce contrôle devrait permettre de rejeter les perturbations constantes tout en ayant une robustesse satisfaisante. Le gain $\boldsymbol{K}$ correspond au terme proportionnel et le gain $\boldsymbol{H}$ pondère le terme intégral, induisant une convergence vers la cible. La matrice d'allocation $\boldsymbol{\Sigma}$ conduit à une utilisation symétrique des hélices et des ailerons. Il faut alors ajuster $\boldsymbol{K}$ et $\boldsymbol{H}$ pour obtenir un compromis satisfaisant entre robustesse et rejet des perturbations. Nous mettons en œuvre une synthèse multiobjectifs basée sur des contraintes $H_{\infty}$, décrite ci-après.
@@ -108,13 +122,28 @@ Cette structure est une structure proportionnelle-intégrale MIMO \nomenclature[
 \subsection{Schéma de synthèse $H_{\infty}$}
  \label{sec:h_inf3DOF}
 
- \todo{pédagogie}
-Pour effectuer une sélection robuste de $\boldsymbol{K}$ et $\boldsymbol{H}$, nous caractérisons d'abord plusieurs fonctions de transfert dans la figure \ref{fig:commande_int3DOF}.
+Pour effectuer une sélection robuste de $\boldsymbol{K}$ et $\boldsymbol{H}$, nous introduisons des matrices de transfert qui correspondent aux objectifs de robustesse à partir de la figure \ref{fig:commande_int3DOF}.
 
-La sortie de mesure $\boldsymbol{y}$ est utilisée pour la rétroaction, l'entrée $\boldsymbol{u}$ est la somme de l'entrée intégrale $\boldsymbol{\Sigma} \boldsymbol{x}_{c}$ et de l'action proportionnelle $\boldsymbol{K} \boldsymbol{e}$. La sortie $\boldsymbol{z}$ correspond aux signaux de performance de sortie à contrôler ($\boldsymbol{e}$, $\boldsymbol{w}$, $\boldsymbol{u}$, $\boldsymbol{y}$, $\boldsymbol{r}_{p}$). Grâce aux fonctions de pondération $W=\diag (W_{1},..., W_{4})$, la conception de $\boldsymbol{H}$ et $\boldsymbol{K}$ vise à rejeter une perturbation ou un échelon à basse fréquence $\boldsymbol{w}$ agissant en entrée du système. L'objectif de la conception est d'amener $\boldsymbol{y}$ à zéro, malgré la perturbation à basse fréquence sur $\boldsymbol{w}$.
+La sortie de mesure $\boldsymbol{y}$ est utilisée pour la rétroaction, l'entrée $\boldsymbol{u}$ est la somme de l'entrée intégrale $\boldsymbol{\Sigma} \boldsymbol{x}_{c}$ et de l'action proportionnelle $\boldsymbol{K} \boldsymbol{e}$. La sortie $\boldsymbol{z}$ correspond aux signaux de performance de sortie à contrôler ($\boldsymbol{e}$, $\boldsymbol{w}$, $\boldsymbol{u}$, $\boldsymbol{y}$, $\boldsymbol{r}_{p}$).
 
-\todo{explication}
-Plus précisément, les constantes de pondération sont réglées comme suit :
+Nous notons la marge de module d'une matrice de transfert $s \mapsto T_{v \rightarrow z}$ comme $\Delta_m(T_{v \rightarrow z}) = \min\limits_{\omega\in R} \sigma_{\min}(T_{v \rightarrow z}(j\omega))$. La fonction de sensibilité en sortie définie par $T_{\nu \rightarrow e}=(\mathbb{I}_{11}+\boldsymbol{P}\boldsymbol{F})^{-1}$ de dimensions 11\texttimes11, telle que $\lVert T_{\nu \rightarrow e} \rVert _{\infty}=\Delta_m(T_{\nu \rightarrow e})^{-1} $ et la fonction de sensibilité en entrée $T_{d \rightarrow u}=(\mathbb{I}_{4}+\boldsymbol{F}\boldsymbol{P})^{-1}$ de dimensions 4\texttimes4, définie par $\lVert T_{d \rightarrow u} \rVert _{\infty}=\Delta_m(T_{d \rightarrow u})^{-1}$.
+Par conséquent, la minimisation de la norme $H_{\infty}$ de $T_{\nu \rightarrow e}$ ou de $T_{d \rightarrow u}$ correspond à l'augmentation des marges de module en entrée et en sortie. Étant donné que le système $\boldsymbol{P}$ est MIMO, nous accordons de l'importance aux fonctions de sensibilité en entrée et en sortie qui ne coïncident pas, car $\boldsymbol{P}$ et $\boldsymbol{F}$ ne commutent pas.
+
+Nous définissons aussi la matrice de transfert $T_{\nu \rightarrow u}$ de dimensions 4\texttimes11 liée à l'impact du bruit de mesure $\nu$ sur la commande $\boldsymbol{u}$, et $T_{d \rightarrow y}$ de dimensions 11\texttimes4 représentant l'impact de la perturbation en entrée $\boldsymbol{d}$ sur la sortie du système $\boldsymbol{y}$. 
+
+{\color{blue}
+    Nous définissons des fonctions de pondération associée aux matrices de transfert précédemment explicité. Sachant que $ \| . \|_{\infty}$ représente la norme $H_{\infty}$, la pondération $W_{i}(s)$ est associé à une matrice de transfert $ T_{i}(s, x)$ permet de former la fonction :
+    \begin{align}
+        \label{eq:formecontrainte}
+        f_{i}(x) = \| W_{i}(s) T_{i}(s, x) \|_{\infty}
+    \end{align}
+    où $x$ représente le vecteur de paramètre ajustable par l'optimisation. Avec cette formulation, il est possible d'utiliser un code d'optimisation permettant de minimiser $f(x)$.
+
+ 
+En appliquant cette méthodologie dans notre cas et grâce aux fonctions de pondération $W=\diag (W_{1},..., W_{4})$, la conception de $\boldsymbol{H}$ et $\boldsymbol{K}$ vise à rejeter une perturbation ou un échelon à basse fréquence $\boldsymbol{w}$ agissant en entrée du système. L'objectif de la conception est d'amener $\boldsymbol{y}$ à zéro, malgré la perturbation à basse fréquence sur $\boldsymbol{w}$.
+
+
+Plus précisément, nous avons sélectionné des fonctions de pondération constante valant :
 \begin{align} \label{eq:weight_gain}
     &W_{1} =  0.5, \quad
     W_{2} = 0.5, \quad
@@ -122,15 +151,16 @@ Plus précisément, les constantes de pondération sont réglées comme suit :
     W_{4} = 0.5.
 \end{align}
 
+Il est maintenant possible de former le problème d'optimisation multicritère suivant, en concaténant les contraintes exprimé sous la forme de \eqref{eq:formecontrainte}
 \begin{align*} \label{eq:pb_optim}
 &\min_{C}\quad \begin{vmatrix}
-    \|W_{1} T_{\boldsymbol{r} \rightarrow \boldsymbol{\epsilon}}(P,C)\|\\
-    \|W_{2} T_{\boldsymbol{d} \rightarrow \boldsymbol{u}}(P,C)\|\\
-    \|W_{3} T_{\boldsymbol{r} \rightarrow \boldsymbol{u}}(P,C)\|\\
-    \|W_{4} T_{\boldsymbol{w} \rightarrow \boldsymbol{y}}(P,C)\|
+    \|W_{1} T_{\nu \rightarrow e}(P,C)\|\\
+    \|W_{2} T_{d \rightarrow u}(P,C)\|\\
+    \|W_{3} T_{\nu \rightarrow u}(P,C)\|\\
+    \|W_{4} T_{d \rightarrow y}(P,C)\|
     \end{vmatrix}_{\infty}, \text{ sous condition que } \\ &C \in \mathbb{R}^{11 \times 4} \text{ stabilise } P \text{ en interne.} \numberthis
 \end{align*}
-
+}
 Nous avons résolu \eqref{eq:pb_optim} en utilisant la fonction Matlab {\tt Systune} \cite{1576856}. Basé sur l'optimisation non lisse, {\tt Systune} traite plusieurs scénarios non convexes, telle que l'architecture de contrôle structurée où nous optimisons les matrices de gain $\boldsymbol{K}$, $\boldsymbol{H}$. L'algorithme d'optimisation renvoie la sélection optimisée suivante :
 
 \begin{align}\label{eq:HK}
@@ -158,9 +188,9 @@ Pour chaque valeur de $w$, le modèle converge vers un équilibre, dont la carac
 
 La vidéo de la maquette, avec les résultats expérimentaux est, disponible via le lien : \url{https://youtu.be/ce4_FUzeVzI}.
 
-\begin{figure}[!ht]
+\begin{figure}[H]
    \centering
-    \includegraphics[width=0.7\columnwidth]{figures/exp.png}
+    \includegraphics[width=0.6\columnwidth]{figures/exp.png}
     \caption{Résultats expérimentaux.}
     \label{fig_exp_centrage_arr}
 \end{figure}
