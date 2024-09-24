@@ -1,6 +1,6 @@
 % \chapter{Commande proportionnelle intégrale de DarkO}
 \chapter{Expérimentation d'un contrôle robuste pour DarkO}
-% \todo{titre}
+
 % \chapter{Control longitudinal robuste et multimodel de DarkO}
 \minitoc
 \label{chap:6DOF}
@@ -172,8 +172,7 @@ où l'entrée est la concaténation de l'entrée de commande $\boldsymbol{u}$ et
 
 Avec l'ensemble des matrices de transfert définies dans la section~\ref{sec:zerowind} et la nouvelle matrice de transfert $T_{w \rightarrow y}$, nous utilisons l'approche proposée dans \cite{1576856,ApkarianMulti}. Ainsi, nous pouvons régler notre architecture de contrôle structurée, pour laquelle nous optimisons les matrices de gain $\boldsymbol{K}$, $\boldsymbol{H}$ et les paramètres de filtrage $n_1$, $n_0$,  $d_2$,  $d_1$,  $d_0$  (en jaune sur la Figure~\ref{fig:commande_int6DOF}). Nous résolvons le problème d'optimisation multiobjectifs, en exploitant l'implémentation Matlab \cite[\S 3]{ApkarianMulti}.
 
-En particulier, sur la base d'un ensemble ${\mathcal W}$ comprenant une collection finie de couples $(w_x, w_z)$, avec $w_{x} \in [0,~8]~\SI{}{\meter\per\second}$ et $ w_{z} \in [\shortminus 4,~4]~\SI{}{\meter\per\second}$, nous considérons l'ensemble des systèmes linéarisés qui résulte de \eqref{eq:Pw_synthesis} et nous résolvons l'optimisation convexe suivante, où les scalaires $W_{1}$, $W_{2}$, $W_{3}$, $W_{4}$ et $W_{5}$ sont des facteurs de pondération à ajuster pour obtenir un compromis satisfaisant entre la robustesse (associée à $W_2$, $W_3$ et $W_4$) et la performance (associée à $W_1$ et $W_5$) :
-\todo{Pourquoi W1, je ne dis pas que c'est faux mais il me semble que tu l'as évoqué que pour la marge de module. D'ailleurs W1 et W2 peuvenet simultanément servir à la performance ( bande passante, action dérivée en basses fréquences) et à la robustesse (MM). Il faudrait peut être expliciter un petit peu plus.}
+En particulier, sur la base d'un ensemble ${\mathcal W}$ comprenant une collection finie de couples $(w_x, w_z)$, avec $w_{x} \in [0,~8]~\SI{}{\meter\per\second}$ et $ w_{z} \in [\shortminus 4,~4]~\SI{}{\meter\per\second}$, nous considérons l'ensemble des systèmes linéarisés qui résulte de \eqref{eq:Pw_synthesis} et nous résolvons l'optimisation convexe suivante, où les scalaires $W_{1}$, $W_{2}$, $W_{3}$, $W_{4}$ et $W_{5}$ sont des facteurs de pondération à ajuster pour obtenir un compromis satisfaisant entre la robustesse (associée à $W_1$, $W_2$, $W_3$ et $W_4$) et la performance (associée à $W_1$,  $W_2$ et $W_5$) :
 \begin{align*} \label{eq:pb_optim_lpv}
 \numberthis
 \gamma^\star &= \min_{\boldsymbol{F}} \max_{w \in {\mathcal W}} 
@@ -189,6 +188,12 @@ En particulier, sur la base d'un ensemble ${\mathcal W}$ comprenant une collecti
 \end{align*}
 où ${\mathcal F}_\ell(\boldsymbol{P}_w,\boldsymbol{F})$ désigne l'interconnexion de bouclage linéaire de la Figure~\ref{fig:commande_int6DOF} pour une valeur spécifique de $w$ (ceci est cohérent avec la notation classique de contrôle robuste \cite{1576856,ApkarianMulti}). 
 
+{
+    \color{green}
+    Il est intéressant de noter que $W_1$ et $W_2$ peuvent simultanément servir à la performance et à la robustesse (MM). Effectivement, ces deux pondérations agissent sur les sensibilités en sortie et en entrée du système, lesquelles auront une action sur la bande passante du bouclage et un impact dérivatif en basses fréquences ce qui permettra d'ajuster la performance. De plus, ces transferts pondérés assureront la robustesse du système grâce à la minimisation de la norme $H_{\infty}$ de $W_{1} T_{\nu \rightarrow e}(\boldsymbol{P}_w,\boldsymbol{F})$ ou de $W_{2} T_{d \rightarrow u}(\boldsymbol{P}_w,\boldsymbol{F})$ correspond à l'augmentation des marges de module en entrée et en sortie. Cette marge de module est la plus petite distance du point critique -1 au lieu de transfert en boucle ouverte dans le cas SISO selon le critère de Nyquist. Par extension dans le cas MIMO, nous en déduisons que la maximisation de la marge de module permet de s'éloigner de l'instabilité.
+
+}
+\nomenclature[]{\(SISO\)}{Entrée et sortie unique  (\textit{Single-Input Single-Output})} 
 
 \begin{algorithm}
   \caption{Réglage itératif et multimodèle des gains du contrôleur.}

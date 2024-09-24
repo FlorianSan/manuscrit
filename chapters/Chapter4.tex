@@ -117,8 +117,8 @@ De manière synthétique, la matrice \eqref{eq:close_matrix} décrit la boucle f
         \begin{bmatrix}\boldsymbol{A} & \mathbb{0}_{12\times 2} \\ \boldsymbol{H} & \mathbb{0}_{2\times 2}\end{bmatrix} \!- \!\begin{bmatrix}\boldsymbol{G} \\ \mathbb{0}_{2\times 4}\end{bmatrix} \left( \boldsymbol{K} -  \begin{bmatrix}\mathbb{0}_{4\times 12} & \boldsymbol{\Sigma} \end{bmatrix}\right),
     \end{gathered}
 \end{align}
-Cette structure est une structure proportionnelle-intégrale MIMO \nomenclature[]{\(MIMO\)}{Entrées et sorties multiples  (\textit{Multiple-Input Multiple-Output})} résultant d'une observation attentive de la dynamique linéarisée du drone, ce qui permet un nombre minimal d'intégrateurs dans le contrôleur. Ce contrôle devrait permettre de rejeter les perturbations constantes tout en ayant une robustesse satisfaisante. Le gain $\boldsymbol{K}$ correspond au terme proportionnel et le gain $\boldsymbol{H}$ pondère le terme intégral, induisant une convergence vers la cible. La matrice d'allocation $\boldsymbol{\Sigma}$ conduit à une utilisation symétrique des hélices et des ailerons. Il faut alors ajuster $\boldsymbol{K}$ et $\boldsymbol{H}$ pour obtenir un compromis satisfaisant entre robustesse et rejet des perturbations. Nous mettons en œuvre une synthèse multiobjectifs basée sur des contraintes $H_{\infty}$, décrite ci-après.
-
+Cette structure est une structure proportionnelle-intégrale MIMO résultant d'une observation attentive de la dynamique linéarisée du drone, ce qui permet un nombre minimal d'intégrateurs dans le contrôleur. Ce contrôle devrait permettre de rejeter les perturbations constantes tout en ayant une robustesse satisfaisante. Le gain $\boldsymbol{K}$ correspond au terme proportionnel et le gain $\boldsymbol{H}$ pondère le terme intégral, induisant une convergence vers la cible. La matrice d'allocation $\boldsymbol{\Sigma}$ conduit à une utilisation symétrique des hélices et des ailerons. Il faut alors ajuster $\boldsymbol{K}$ et $\boldsymbol{H}$ pour obtenir un compromis satisfaisant entre robustesse et rejet des perturbations. Nous mettons en œuvre une synthèse multiobjectifs basée sur des contraintes $H_{\infty}$, décrite ci-après.
+\nomenclature[]{\(MIMO\)}{Entrées et sorties multiples  (\textit{Multiple-Input Multiple-Output})} 
 \subsection{Schéma de synthèse $H_{\infty}$}
  \label{sec:h_inf3DOF}
 
@@ -150,8 +150,10 @@ Plus précisément, nous avons sélectionné des fonctions de pondération const
     W_{3} = 0.8, \quad 
     W_{4} = 0.5.
 \end{align}
-\todo{justifer ces valeurs}
-
+{
+    \color{green}
+    Ces valeurs ont été sélectionnées pour obtenir un bon compromis entre le rejeter des perturbations et la vitesse de convergence du systeme.
+}
 Il est maintenant possible de former le problème d'optimisation multicritère suivant, en concaténant les contraintes exprimé sous la forme de \eqref{eq:formecontrainte}
 \begin{align*} \label{eq:pb_optim}
 &\min_{C}\quad \begin{vmatrix}
