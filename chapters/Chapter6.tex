@@ -50,7 +50,7 @@ où la matrice de sortie $\boldsymbol{C} \in \real^{10\times12}$ enlève la comp
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.8\columnwidth]{figures/commande_integrale.png}
-    \caption{Schéma de commande intégrale avec la perturbation de vent $\boldsymbol{w}$, la perturbation du système à l'entrée $\boldsymbol{d}$ et à la sortie $\nu$.}
+    \caption{Schéma de commande intégrale avec la perturbation de vent $\boldsymbol{w}$, la perturbation du système à l'entrée $\boldsymbol{d}$ et à la sortie $\boldsymbol{\nu}$.}
     \label{fig:commande_int6DOF}
 \end{figure}
 
@@ -108,9 +108,9 @@ Dans notre validation numérique, présentée dans les sections~\ref{sec:zerowin
     \label{tab:noise}
 \end{table}
 
-En plus de présenter les résultats de la simulation du bouclage linéaire de la Fig. ~\ref{fig:commande_int6DOF} avec le modèle linéarisé \eqref{eq:lpv_linearisation}, dans les sections~\ref{sec:zerowind} et~\ref{sec:h_inf6DOF_multi}, nous simulons également la boucle fermée en remplaçant le modèle linéarisé $\boldsymbol{P}$ par le modèle non linéaire \eqref{eq:dyna_orig}, comprenant la dynamique réelle du drone.
+En plus de présenter les résultats de la simulation du bouclage linéaire de la Fig. ~\ref{fig:commande_int6DOF} avec le modèle linéarisé \eqref{eq:lpv_linearisation}, dans les sections~\ref{sec:zerowind} et~\ref{sec:h_inf6DOF_multi}, nous simulons également la boucle fermée en remplaçant le modèle linéarisé $\boldsymbol{P}$ par le modèle non-linéaire \eqref{eq:dyna_orig}, comprenant la dynamique réelle du drone.
 
-Lorsque l'on remplace le modèle linéarisé par la dynamique non linéaire \eqref{eq:dyna_orig}, dont l'état est $\boldsymbol{x} = (\boldsymbol{p}, \boldsymbol{v}, \boldsymbol{q},\boldsymbol{\omega}_{\text{b}}) \in \real^{13} $, nous remplaçons la sortie linéaire $\boldsymbol{y}$ avec la version non linéaire suivante :
+Lorsque l'on remplace le modèle linéarisé par la dynamique non-linéaire \eqref{eq:dyna_orig}, dont l'état est $\boldsymbol{x} = (\boldsymbol{p}, \boldsymbol{v}, \boldsymbol{q},\boldsymbol{\omega}_{\text{b}}) \in \real^{13} $, nous remplaçons la sortie linéaire $\boldsymbol{y}$ avec la version non-linéaire suivante :
 \begin{align}
 \label{eq:output}
     \boldsymbol{y}_{\text{NL}} \!=\! \smallmat{\boldsymbol{p}\\
@@ -145,7 +145,7 @@ Nous résolvons le même problème que dans notre travail précédent \ref{eq:pb
 \begin{figure}[ht!]
     \centering
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.6\columnwidth]{figures/sim_systune_zero_wind.png}
-    \caption{Simulation du modèle non linéaire \eqref{eq:dyna_orig} (ligne continue) et du modèle linéarisé \eqref{eq:lpv_linearisation} (ligne en pointillé) avec des incréments de vent constants croissants et le contrôleur basé sur l'optimisation sans vent de la section~\ref{sec:zerowind}.}
+    \caption{Simulation du modèle non-linéaire \eqref{eq:dyna_orig} (ligne continue) et du modèle linéarisé \eqref{eq:lpv_linearisation} (ligne en pointillé) avec des incréments de vent constants croissants et le contrôleur basé sur l'optimisation sans vent de la section~\ref{sec:zerowind}.}
     \label{fig:SimSytuneStruct_zero}
 \end{figure}
 
@@ -153,10 +153,10 @@ Une augmentation successive de l'intensité horizontale et verticale du vent (al
 L'objectif du système de contrôle est de maintenir le drone en position de vol stationnaire (définie comme $\boldsymbol{r}_{p} = [0,0,0]^\top$), malgré l'augmentation du vent horizontal et vertical $w_{x}$ et $w_{z}$. 
 
 
-La Figure~\ref{fig:SimSytuneStruct_zero} présente à la fois des simulations linéaires avec la dynamique linéarisée \eqref{eq:lpv_linearisation} (en pointillé) et des simulations non linéaires avec le modèle non-linéaire \eqref{eq:dyna_orig} (en traits pleins). Les simulations linéaires et non linéaires montrent systématiquement que le contrôleur fonctionne bien à faible vitesse de vent (effectivement, le réglage est effectué sur la base du modèle de vent nul). Cependant, lorsque la vitesse du vent $w_{x}$ et $w_{z}$ dépasse \SI{-5}{\meter\per\second}, la position de vol stationnaire devient instable et le drone oscille et diverge. Les angles d'inclinaison $\theta$ sont utilisés pour représenter l'attitude afin de donner un meilleur aperçu du comportement du véhicule, mais la simulation de la dynamique non linéaire \eqref{eq:dyna_orig} est effectuée avec un quaternion unitaire. L'instabilité observée dans les résultats de la simulation de la figure~\ref{fig:SimSytuneStruct_zero} confirme les instabilités expérimentales rapportées dans la section \ref{sec:exp3DOF}, où nous avons utilisé cette même méthode de réglage. Est également confirmée l'importance des Théorèmes~\ref{thm:eqs} et~\ref{th:lin} dans la Section~\ref{sec:model}, pour un réglage approprié des gains du contrôleur, comme cela est effectué dans la section suivante.
+La Figure~\ref{fig:SimSytuneStruct_zero} présente à la fois des simulations linéaires avec la dynamique linéarisée \eqref{eq:lpv_linearisation} (en pointillé) et des simulations non-linéaires avec le modèle non-linéaire \eqref{eq:dyna_orig} (en traits pleins). Les simulations linéaires et non-linéaires montrent systématiquement que le contrôleur fonctionne bien à faible vitesse de vent (effectivement, le réglage est effectué sur la base du modèle de vent nul). Cependant, lorsque la vitesse du vent $w_{x}$ et $w_{z}$ dépasse \SI{-5}{\meter\per\second}, la position de vol stationnaire devient instable et le drone oscille et diverge. Les angles d'inclinaison $\theta$ sont utilisés pour représenter l'attitude afin de donner un meilleur aperçu du comportement du véhicule, mais la simulation de la dynamique non-linéaire \eqref{eq:dyna_orig} est effectuée avec un quaternion unitaire. L'instabilité observée dans les résultats de la simulation de la figure~\ref{fig:SimSytuneStruct_zero} confirme les instabilités expérimentales rapportées dans la section \ref{sec:exp3DOF}, où nous avons utilisé cette même méthode de réglage. Est également confirmée l'importance des Théorèmes~\ref{thm:eqs} et~\ref{th:lin} dans la Section~\ref{sec:model}, pour un réglage approprié des gains du contrôleur, comme cela est effectué dans la section suivante.
 
 
-\subsection{Contrôleur optimisé sous contrainte $H_{\infty}$, cas multimodèle}
+\subsection{Contrôleur optimisé sous contraintes $H_{\infty}$, cas multimodèle}
 \label{sec:h_inf6DOF_multi}
 
 Les résultats de simulation obtenus avec la méthode de réglage sans vent (voir la Figure~\ref{fig:SimSytuneStruct_zero}), ainsi que les instabilités expérimentales observées dans la section \ref{sec:exp3DOF} confirment la nécessité d'une procédure de réglage du gain du contrôleur exploitant les linéarisations paramétrées en fonction du vent des Théorèmes~\ref{thm:eqs} et~\ref{th:lin}. En nous concentrant à nouveau sur le schéma de contrôle de la Figure~\ref{fig:commande_int6DOF}, nous considérons maintenant explicitement l'effet du vent (linéarisé) sur le système \eqref{eq:lpv_linearisation} avec la sortie \eqref{eq:output_lin} et avec les sélections de l'algorithme~\ref{alg:linea} comme définies ci-dessous :
@@ -301,11 +301,11 @@ Les valeurs singulières de la fonction de sensibilité de la sortie et de l'ent
 \begin{figure}[ht!]
     \centering
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.6\columnwidth]{figures/sim_systune_lpv_noise.png}
-    \caption{Simulation du modèle non linéaire \eqref{eq:dyna_orig} (ligne continue) et du modèle linéarisé \eqref{eq:lpv_linearisation} (ligne en pointillé) avec des incréments de vent constants croissants, le contrôleur étant réglé à l'aide de l'optimisation multimodèle de l'algorithme~\ref{alg:iterativeOptimisation} dans la section~\ref{sec:h_inf6DOF_multi}.}
+    \caption{Simulation du modèle non-linéaire \eqref{eq:dyna_orig} (ligne continue) et du modèle linéarisé \eqref{eq:lpv_linearisation} (ligne en pointillé) avec des incréments de vent constants croissants, le contrôleur étant réglé à l'aide de l'optimisation multimodèle de l'algorithme~\ref{alg:iterativeOptimisation} dans la section~\ref{sec:h_inf6DOF_multi}.}
     \label{fig:SimSytuneStruct_lpv}
 \end{figure}
 
-Avec le réglage indiqué dans \eqref{eq:gain_selection}, tel qu'il est obtenu avec l'Algorithme~\ref{alg:iterativeOptimisation}, nous présentons dans la Figure~\ref{fig:SimSytuneStruct_lpv} des résultats de simulation similaires à ceux déjà présentés dans la Figure.~\ref{fig:SimSytuneStruct_zero} pour la méthode de réglage sans vent discutée dans la Section~\ref{sec:zerowind}. Une fois de plus, nous simulons à la fois le modèle non linéaire \eqref{eq:dyna_orig} (lignes pleines) et le modèle linéarisé \eqref{eq:lpv_linearisation} (ligne en pointillé). 
+Avec le réglage indiqué dans \eqref{eq:gain_selection}, tel qu'il est obtenu avec l'Algorithme~\ref{alg:iterativeOptimisation}, nous présentons dans la Figure~\ref{fig:SimSytuneStruct_lpv} des résultats de simulation similaires à ceux déjà présentés dans la Figure.~\ref{fig:SimSytuneStruct_zero} pour la méthode de réglage sans vent discutée dans la Section~\ref{sec:zerowind}. Une fois de plus, nous simulons à la fois le modèle non-linéaire \eqref{eq:dyna_orig} (lignes pleines) et le modèle linéarisé \eqref{eq:lpv_linearisation} (ligne en pointillé). 
 
 Par rapport à la Fig.~\ref{fig:SimSytuneStruct_zero}, les simulations de la Figure~\ref{fig:SimSytuneStruct_lpv} montrent que le réglage du contrôleur basé sur les Théorèmes~\ref{thm:eqs} et~\ref{th:lin} résout les problèmes d'instabilité et parvient à stabiliser le vol stationnaire dans tous les scénarios de vent considérés. Nous notons également que la Figure.~\ref{fig:SimSytuneStruct_lpv} montre une action plus agressive. En effet, l'entrée de contrôle $u$ (à la fois la poussée et les déflexions) est plus affectée par le bruit de mesure.
 
@@ -316,7 +316,7 @@ L'efficacité du schéma de contrôle réglé sur la base de l'Algorithme~\ref{a
 Dans le chapitre \ref{sec:perturbation}, nous avons présenté des modèles de perturbation représentant une modélisation d'une rafale de vent. Nous allons les utiliser pour évaluer la réponse du drone face à cette perturbation. 
 
 
-Nous avons appliqué un vent horizontal $w_x$ avec trois valeurs moyennes $w_{m} \in {0,3,6}\SI{}{\meter\per\second}$ et avec les caractéristiques suivantes pour la fonction "Chapeau mexicain" $A_g=\SI{-5}{\meter\per\second}$, $f_g = \frac{1}{T_g} = \SI{0.2}{\Hz}$ soit une période $T_g$ de 5 secondes. Les résultats sont visibles sur la figure \ref{fig:sim_mex0_2}.
+Nous avons appliqué un vent horizontal $w_x$ avec trois valeurs moyennes $w_{m} \in {0,3,6}\SI{}{\meter\per\second}$ et avec les caractéristiques suivantes pour la fonction "Chapeau mexicain" $A_g=\SI{-5}{\meter\per\second}$, $f_g = \frac{1}{T_g} = \SI{0.2}{\Hz}$ soit une période $T_g$ de 5 secondes. Les résultats sont visibles sur la Figure \ref{fig:sim_mex0_2}.
 \begin{figure}[ht!]
     \centering
     \resizebox{.99\textwidth}{!}{%
@@ -326,12 +326,12 @@ Nous avons appliqué un vent horizontal $w_x$ avec trois valeurs moyennes $w_{m}
     \quad
     \includegraphics[width=0.33\textwidth]{figures/sim_mex_hat11msT5.png}
     }
-    \caption{Simulation du modèle non linéaire \eqref{eq:dyna_orig} face à une perturbation "Chapeau mexicain" \eqref{eq:mex} avec $f_g = \SI{0.2}{\Hz}$.}
+    \caption{Simulation du modèle non-linéaire \eqref{eq:dyna_orig} face à une perturbation "Chapeau mexicain" \eqref{eq:mex} avec $f_g = \SI{0.2}{\Hz}$.}
     \label{fig:sim_mex0_2}
 \end{figure}
 
 
-Nous avons aussi réalisé une simulation similaire à la précédente avec une fréquence égale à $f_g = \SI{1.2}{\Hz}$ soit une période $T_g$ de 0.83 seconde. Cette valeur est utilisée dans \cite{Gillebaart2014} pour représenter une rafale. Les résultats sont visibles sur la figure \ref{fig:sim_mex1_2}.
+Nous avons aussi réalisé une simulation similaire à la précédente avec une fréquence égale à $f_g = \SI{1.2}{\Hz}$ soit une période $T_g$ de 0.83 seconde. Cette valeur est utilisée dans \cite{Gillebaart2014} pour représenter une rafale. Les résultats sont visibles sur la Figure \ref{fig:sim_mex1_2}.
 \begin{figure}[h]
     \centering
     \resizebox{.99\textwidth}{!}{%
@@ -341,12 +341,12 @@ Nous avons aussi réalisé une simulation similaire à la précédente avec une 
     \quad
     \includegraphics[width=0.33\textwidth]{figures/sim_mex_hat11msF1.2.png}
     }
-    \caption{Simulation du modèle non linéaire \eqref{eq:dyna_orig} face à une perturbation "Chapeau mexicain" \eqref{eq:mex} avec $f_g = \SI{1.2}{\Hz}$.}
+    \caption{Simulation du modèle non-linéaire \eqref{eq:dyna_orig} face à une perturbation "Chapeau mexicain" \eqref{eq:mex} avec $f_g = \SI{1.2}{\Hz}$.}
     \label{fig:sim_mex1_2}
 \end{figure}
 
 
-Enfin nous avons réalisé une simulation avec un vent horizontal $w_x$ avec trois valeurs moyennes $w_{m} \in {0,3,6}\SI{}{\meter\per\second}$ et avec la caractéristique suivante pour la fonction "ondelettes de Morlet" $A_g=\SI{-5}{\meter\per\second}$. Les résultats sont visibles sur la figure \ref{fig:sim_morlet}.
+Enfin nous avons réalisé une simulation avec un vent horizontal $w_x$ avec trois valeurs moyennes $w_{m} \in {0,3,6}\SI{}{\meter\per\second}$ et avec la caractéristique suivante pour la fonction "ondelettes de Morlet" $A_g=\SI{-5}{\meter\per\second}$. Les résultats sont visibles sur la Figure \ref{fig:sim_morlet}.
 
 \begin{figure}[h]
     \centering
@@ -357,7 +357,7 @@ Enfin nous avons réalisé une simulation avec un vent horizontal $w_x$ avec tro
     \quad
     \includegraphics[width=0.33\textwidth]{figures/sim_mor11ms.png}
     }
-    \caption{Simulation du modèle non linéaire \eqref{eq:dyna_orig} face à une perturbation "ondelettes de Morlet" \eqref{eq:morlet}.}
+    \caption{Simulation du modèle non-linéaire \eqref{eq:dyna_orig} face à une perturbation "ondelettes de Morlet" \eqref{eq:morlet}.}
     \label{fig:sim_morlet}
 \end{figure}
 Nous observons que le drone et son contrôleur sont en mesure de rejeter les différentes perturbations.

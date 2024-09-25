@@ -27,7 +27,7 @@ Comme décrit dans la section \ref{sec:motivation3DOF}, nous souhaitons représe
     \label{fig:rotation}
 \end{figure} 
 
-Comme le montre la figure \ref{fig:rotation}, l'indexeur et le support sont percés pour que la rotation puisse être bloquée, par une vis, à des positions connues ($0^\circ$, $90^\circ$, etc.). Le verrouillage de l'appareil permet une initialisation correcte de l'encodeur incrémental. Le verrouillage permet également de placer l'appareil dans des positions exactes spécifiques afin d'identifier les coefficients aérodynamiques. 
+Comme le montre la Figure \ref{fig:rotation}, l'indexeur et le support sont percés pour que la rotation puisse être bloquée, par une vis, à des positions connues ($0^\circ$, $90^\circ$, etc.). Le verrouillage de l'appareil permet une initialisation correcte de l'encodeur incrémental. Le verrouillage permet également de placer l'appareil dans des positions exactes spécifiques afin d'identifier les coefficients aérodynamiques. 
 
 Le mécanisme est également équipé d'un capteur de forces et de moments à 6 degrés de liberté (DOF), qui permet de mesurer la force exercée sur le dispositif expérimental par le support. Le banc d'essai expérimental est également équipé d'un fil chaud pour mesurer la vitesse de l'air affectant la maquette. 
 
@@ -37,7 +37,7 @@ Le mécanisme est également équipé d'un capteur de forces et de moments à 6 
     \caption{Modèle de DarkO à un seul degré de liberté devant le \textit{WindShape}.}
     \label{fig:real_test_bench}
 \end{figure}
-La photo de la figure \ref{fig:real_test_bench} montre le dispositif expérimental dans son environnement de test. Le drone est placé devant une soufflerie ouverte, appelée \textit{WindShape}, qui génère un vent horizontal compris entre 2 et 16 \SI{}{\meter\per\second}. Ainsi, lors de nos tests, nous considérons que la composante verticale du vent est nulle. Le drone est placé au centre du \textit{WindShape}, dans la zone d'écoulement la plus laminaire, tandis que le capteur à fil chaud est placé aussi près que possible du drone. 
+La photo de la Figure \ref{fig:real_test_bench} montre le dispositif expérimental dans son environnement de test. Le drone est placé devant une soufflerie ouverte, appelée \textit{WindShape}, qui génère un vent horizontal compris entre 2 et 16 \SI{}{\meter\per\second}. Ainsi, lors de nos tests, nous considérons que la composante verticale du vent est nulle. Le drone est placé au centre du \textit{WindShape}, dans la zone d'écoulement la plus laminaire, tandis que le capteur à fil chaud est placé aussi près que possible du drone. 
 
 La géométrie du dispositif expérimental permet de placer les câbles d'alimentation et de signal près du centre de rotation afin de minimiser leurs effets de friction sur la structure. Malgré cela, le système de rotation interfère inévitablement avec le drone, en créant des forces parasites, notamment de la traînée. La surface projetée de l'articulation étant faible par rapport à la surface de l'aile, la traînée générée par ce support est faible par rapport à la traînée de l'aile et des hélices, et peut donc être négligée.
 
@@ -81,7 +81,7 @@ Nous expérimentons la situation avec le vent agissant uniquement le long de l'a
     \caption{Schéma de commande linéaire, proportionnel-intégral.}
     \label{fig:commande_int3DOF}
 \end{figure}
-Le contrôleur proposé, représenté sur la figure \ref{fig:commande_int3DOF}, correspond à :
+Le contrôleur proposé, représenté sur la Figure \ref{fig:commande_int3DOF}, correspond à :
 
 \begin{subequations}
     \label{eq:ctrl3dof}
@@ -122,7 +122,7 @@ Cette structure est une structure proportionnelle-intégrale MIMO résultant d'u
 \subsection{Schéma de synthèse $H_{\infty}$}
  \label{sec:h_inf3DOF}
 
-Pour effectuer une sélection robuste de $\boldsymbol{K}$ et $\boldsymbol{H}$, nous introduisons des matrices de transfert qui correspondent aux objectifs de robustesse à partir de la figure \ref{fig:commande_int3DOF}.
+Pour effectuer une sélection robuste de $\boldsymbol{K}$ et $\boldsymbol{H}$, nous introduisons des matrices de transfert qui correspondent aux objectifs de robustesse à partir de la Figure \ref{fig:commande_int3DOF}.
 
 La sortie de mesure $\boldsymbol{y}$ est utilisée pour la rétroaction, l'entrée $\boldsymbol{u}$ est la somme de l'entrée intégrale $\boldsymbol{\Sigma} \boldsymbol{x}_{c}$ et de l'action proportionnelle $\boldsymbol{K} \boldsymbol{e}$. La sortie $\boldsymbol{z}$ correspond aux signaux de performance de sortie à contrôler ($\boldsymbol{e}$, $\boldsymbol{w}$, $\boldsymbol{u}$, $\boldsymbol{y}$, $\boldsymbol{r}_{p}$).
 

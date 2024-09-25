@@ -1,7 +1,14 @@
-\chapter{Annexe technique sur les drones}
+\chapter*{Annexe technique sur les drones}
+\addstarredchapter{Annexe technique sur les drones} 
 \label{chap:annexe1}
 
-\section{Système de drone : Paparazzi}
+\renewcommand{\thefigure}{A.\arabic{figure}}
+\setcounter{figure}{0} % Réinitialiser le compteur à 0
+
+\renewcommand{\thetable}{A.\arabic{table}}
+\setcounter{table}{0} % Réinitialiser le compteur à 0
+
+\section*{Système de drone : Paparazzi}
 
 Un drone est composé de plusieurs pièces assemblées entre elles pour former la structure sur laquelle sont fixés des actionneurs, un autopilote et une charge utile (colis, caméra, capteur, etc.). L'élément central est l'autopilote qui assure la communication entre tous les éléments. Nous pouvons décomposer l'autopilote en deux parties : la partie matérielle et la partie logicielle.
 \nomenclature[]{\(PCB\)}{Circuit imprimé  \textit{Printed Circuit Board}}
@@ -9,7 +16,7 @@ La partie matérielle est constituée d'un circuit imprimé (PCB) sur lequel des
 
 Nous pouvons détailler les capteurs embarqués et le microcontrôleur avec l'ensemble de ses ports de communication \ref{sec:capteurs} et \ref{sec:micoctrl}. 
 
- \subsection{Les capteurs d'un autopilote}
+ \subsection*{Les capteurs d'un autopilote}
  \label{sec:capteurs}
  Un autopilote comporte généralement un accéléromètre, un gyroscope, un magnétomètre et un baromètre.
  
@@ -34,7 +41,7 @@ Nous pouvons détailler les capteurs embarqués et le microcontrôleur avec l'en
  \paragraph*{}
  Il est courant de retrouver plusieurs capteurs dans un même boitier, que l'on nomme centrale inertielle (Inertial Measurement Units, IMU), \nomenclature[]{\(IMU\)}{Centrales inertielles (\textit{Inertial Measurement Units})}. Ces dernières sont composées au minimum d'un accéléromètre 3-axes et d'un gyroscope 3-axes, mais il est courant de les trouver avec un magnétomètre 3-axes. 
 
- \subsection{Le microcontrôleur d'un autopilote}
+ \subsection*{Le microcontrôleur d'un autopilote}
  \label{sec:micoctrl}
  Le microcontrôleur (Microcontroller Unit, MCU) \nomenclature[]{\(MCU\)}{Microcontrôleurs (\textit{Microcontroller Unit})} est la pièce maitresse de l'autopilote en ce qu'il permet d'effectuer l'ensemble des traitements nécessaires à la conduite du vol.
 
@@ -50,7 +57,7 @@ La liaison série permet de relier deux équipements numériques pour qu'ils pui
 
  Enfin, le protocole \textit{I2C} est un bus de communication série simplifiant l'interconnexion de circuit intégré sur une même carte. Ce bus ne nécessite que deux fils pour être mis en place. Il n'est conçu que pour faire communiquer des équipements relativement proches (quelques centimètres).
 
- \subsection{Évolutions}
+ \subsection*{Évolutions}
  Les nombreux progrès dans les systèmes d'estimation état permettent de connaître précisément l'orientation et la position des drones pour assurer la stabilisation, le guidage et la navigation. Les progrès sont liés à l'amélioration continue des capteurs, notamment des centrales inertielles constituées d'un accéléromètre, d'un gyroscope et d'un magnétomètre.
 
 La Table \ref{tab:autopilote_ev} montre l'évolution des vitesses des microcontrôleurs (Microcontroller Unit, MCU) \nomenclature[]{\(MCU\)}{Microcontrôleurs (\textit{Microcontroller Unit})} embarqués sur les autopilotes et de la réduction du bruit des capteurs inertiels.
@@ -80,13 +87,13 @@ La Table \ref{tab:autopilote_ev} montre l'évolution des vitesses des microcontr
 Sur une période de dix ans, nous pouvons observer que les microcontrôleurs ont doublé leur vitesse d'exécution, que les fabricants ont divisé par deux le bruit moyen sur les gyroscopes et par quatre le bruit moyen des accéléromètres.
 Ces évolutions continues permettent une amélioration de l'estimation du drone utilisée pour la stabilisation. Il en résulte une stabilité accrue et de nouvelles possibilités pour la commande des drones.
 
- \subsection{Les logiciels d'un autopilote}
+ \subsection*{Les logiciels d'un autopilote}
  \label{sec:logiciel}
  Tout le fonctionnement d'un drone repose sur le logiciel qui permet de le faire voler. Il se décompose en deux catégories : la partie sol et la partie embarquée.
 
- \subsection{Le segment sol}
+ \subsection*{Le segment sol}
 
-Le segment sol est un ensemble de logiciels permettant de monitorer l'état du drone et de lui envoyer des ordres. Il repose sur les informations échangées avec le drone au travers de la télémétrie. L'interface principale est la GCS \textit{Ground Control Station} (voir figure \ref{fig:GCS}), laquelle assure la visualisation du drone sur la carte, ainsi que toutes les commandes nécessaires au vol (modification de point de passage, atterrissage, etc.). Elle est écrite en C++.
+Le segment sol est un ensemble de logiciels permettant de monitorer l'état du drone et de lui envoyer des ordres. Il repose sur les informations échangées avec le drone au travers de la télémétrie. L'interface principale est la GCS \textit{Ground Control Station} (voir Figure \ref{fig:GCS}), laquelle assure la visualisation du drone sur la carte, ainsi que toutes les commandes nécessaires au vol (modification de point de passage, atterrissage, etc.). Elle est écrite en C++.
 
 \begin{figure}[ht!]
     \centerline{
@@ -101,10 +108,10 @@ Une autre partie du segment sol est le code serveur qui gère les messages écha
 
 Enfin, un code assure la compilation croisée du logiciel embarqué qui doit être téléversé sur le drone, basée sur des Makefile et du code Ocaml. Le logiciel embarqué est décrit par la suite.
 
- \subsection{Le logiciel embarqué}
+ \subsection*{Le logiciel embarqué}
  Le logiciel embarqué est un code écrit en C, intégré dans un système d'exploitation temps réel "Chibios". Il est téléversé sur le microcontrôleur au travers d'une sonde de programmation ou de la prise USB présente sur l'autopilote.
 
- L'ensemble du code est organisé sous la forme de modules que l'on change au besoin. Chaque module assure des fonctionnalités telles que l'estimation d'état, la stabilisation, le guidage, la navigation ou encore la gestion de la charge utile (voir figure \ref{fig:schedulingpaparazzi}). Grâce à un mécanisme de gestion de dépendance, les modules ont la possibilité de charger d'autres modules nécessaires à leur fonctionnement. L'ordre de compilation et d'édition des liens sera géré par le logiciel de compilation.
+ L'ensemble du code est organisé sous la forme de modules que l'on change au besoin. Chaque module assure des fonctionnalités telles que l'estimation d'état, la stabilisation, le guidage, la navigation ou encore la gestion de la charge utile (voir Figure \ref{fig:schedulingpaparazzi}). Grâce à un mécanisme de gestion de dépendance, les modules ont la possibilité de charger d'autres modules nécessaires à leur fonctionnement. L'ordre de compilation et d'édition des liens sera géré par le logiciel de compilation.
 
 
  \begin{figure}[ht!]
@@ -115,7 +122,7 @@ Enfin, un code assure la compilation croisée du logiciel embarqué qui doit êt
 \end{figure}
 
  
-\section{AM32}
+\section*{AM32}
 \label{sec:AM32}
 Le logiciel AM32 est conçu pour les microprocesseurs ARM STM32 afin de contrôler un moteur \textit{brushless}, couramment utilisé pour les drones. Le logiciel est conçu pour être sûr et rapide, avec des démarrages rapides et sans à-coups et une accélération linéaire. Il est destiné à être utilisé avec plusieurs types de véhicules et de contrôleurs de vol. 
 
@@ -129,4 +136,6 @@ L'intérêt de ce logiciel est qu'il est ouvert, permettant de contribuer, en pr
 \end{figure}
 L'algorithme ABAG est adaptatif et robuste en ce qu'il ne nécessite pas la connaissance des paramètres mécaniques ou électriques du groupe moteur et hélice et qu'il n'est pas nécessaire de procéder à une identification, ni de connaître l'entrée nominale. De plus, l'algorithme ABAG ne nécessite que très peu de ressources de calcul, ce qui en fait un atout important pour un système embarqué.
 
- 
+ % Revenir à la numérotation normale après la section si nécessaire
+\renewcommand{\thefigure}{\thechapter.\arabic{figure}}
+\renewcommand{\thetable}{\thechapter.\arabic{table}}
