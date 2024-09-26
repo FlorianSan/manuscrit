@@ -10,24 +10,24 @@
 \section{Motivation}
 En prenant en compte les capacités d'un \textit{tailsitter}, il est légitime de se poser la question du mode de vol devant être utilisé pour rejoindre un point. Effectivement, le drone a la possibilité de se déplacer en stationnaire ou bien en vol d'avancement. Lors d'un déplacement en stationnaire, le drone est vertical donc il se retrouve fortement sujet aux perturbations. Il est donc nécessaire d'avoir une grande région d'attraction autour de la position d'équilibre pour assurer un rejet des perturbations et une stabilisation. Lors d'un vol d'avancement, le drone se trouve dans une configuration proche d'une aile volante. Ainsi, il se trouve moins perturbé par les turbulences, dans la mesure où la surface projetée d'aile impactée par le flux d'air est plus faible. Toutefois, le drone doit voler à une vitesse assez importante pour être dans cette configuration donc il ne peut pas maintenir une position, mais seulement effectuer des cercles autour. 
 
-Nous nous concentrons dans ce chapitre uniquement au vol stationnaire. Il s'agit donc de proposer une stratégie de commande pour stabiliser le drone en position stationnaire. Cette stratégie repose sur une dynamique discrète définissant l'usage d'une première loi de commande non-linéaire présentée dans \cite{2020e-MicCenZacFra} et qui fournit une grande région d'attraction et d'une seconde loi basée sur la dynamique linéarisée et fournissant une convergence plus rapide vers la cible. Les deux contrôleurs sont réunis par un mécanisme hybride qui permet de conserver les performances en régime permanent de la conception linéarisée, avec la grande région d'attraction garantie par la conception non-linéaire.
+Nous nous concentrons dans ce chapitre uniquement sur le vol stationnaire. Il s'agit donc de proposer une stratégie de commande pour stabiliser le drone en position stationnaire. Cette stratégie repose sur une dynamique discrète définissant l'usage d'une première loi de commande non-linéaire présentée dans \cite{2020e-MicCenZacFra} et qui fournit une grande région d'attraction et d'une seconde loi basée sur la dynamique linéarisée et fournissant une convergence plus rapide vers la cible. Les deux contrôleurs sont réunis par un mécanisme hybride qui permet de conserver les performances en régime permanent de la conception linéarisée, avec la grande région d'attraction garantie par la conception non-linéaire.
 { \color{blue}
-  Nous qualifions le contrôleur d'hybride car il possède deux dynamiques. Une dynamique continue qui assure le bouclage, il s'agit précisément de deux lois de commande qui sont exécuté simultanément et d'une dynamique discrète laquelle sélectionner le contrôleur le plus adapté en fonction de la situation.
+  Nous qualifions le contrôleur d'hybride car il possède deux dynamiques. Une dynamique continue qui assure le bouclage (il s'agit précisément de deux lois de commande qui sont exécutées simultanément) et d'une dynamique discrète, laquelle sélectionne le contrôleur le plus adapté en fonction de la situation.
 }
 
 Notre solution est testée en simulant le modèle non-linéaire complet.
 
-Dans cette partie, nous allons nous concentrer sur la stabilisation stationnaire du drone. Ainsi nous nous appuyons sur la dynamique simplifiée décrite dans la section \ref{sec:model_NL_simp}, avec la simplification $\boldsymbol{w} = 0$ qui permet d'obtenir la dynamique simplifiée sans vent \eqref{eq:withouwind}. 
+Dans cette partie, nous allons nous concentrer sur la stabilisation stationnaire du drone. Ainsi, nous nous appuyons sur la dynamique simplifiée décrite dans la section \ref{sec:model_NL_simp}, avec la simplification $\boldsymbol{w} = 0$ qui permet d'obtenir la dynamique simplifiée sans vent \eqref{eq:withouwind}. 
 
 
 
 \section{Contrôleur par retour d'état non-linéaire}
-Nous illustrons dans cette section une loi de contrôle dynamique non-linéaire inspirée du résultat de \cite{2020e-MicCenZacFra} et présenté en Figure \ref{fig:NLZeroMoment}. Pour que cette loi de contrôle non-linéaire soit applicable, les matrices $\boldsymbol{F}$ et $\boldsymbol{M}$ mentionnées dans \eqref{eq:withouwind} doivent permettre de définir une direction dite de zéro moment $\boldsymbol{\bar u} \in \real^4$ garantissant
+Nous illustrons dans cette section une loi de contrôle dynamique non-linéaire inspirée du résultat de \cite{2020e-MicCenZacFra} et présentée en Figure \ref{fig:NLZeroMoment}. Pour que cette loi de contrôle non-linéaire soit applicable, les matrices $\boldsymbol{F}$ et $\boldsymbol{M}$ mentionnées dans \eqref{eq:withouwind} doivent permettre de définir une direction dite de zéro moment $\boldsymbol{\bar u} \in \real^4$ garantissant
 $|\boldsymbol{F}\boldsymbol{\bar u}| = 1$ et $\boldsymbol{M} \boldsymbol{\bar u}=0$, et la matrice inverse à droite $\boldsymbol{M}^r$ de $\boldsymbol{M}$ doit satisfaire $\boldsymbol{M} \boldsymbol{M}^r = \mathbb{I}_3$ et $\boldsymbol{F}\boldsymbol{M}^r=0$. 
 
 \begin{figure}[ht!]
   \centering
-  \includegraphics[trim=0cm 0.6cm 0cm 0.6cm,clip,width=0.9\columnwidth]{figures/NLZeroMoment.png}
+  \includegraphics[trim=0cm 0.6cm 0cm 0.6cm,clip,width=1\columnwidth]{figures/NLZeroMoment.png}
   \caption{Schéma de commande non-linéaire basée sur une direction de zéro moment \cite{2020e-MicCenZacFra}.}
   \label{fig:NLZeroMoment}
 \end{figure}
@@ -71,20 +71,20 @@ Premièrement, pour obtenir un moment $\tau_{r,z}$ autour de l'axe $z_{\text{b}}
 Enfin, par rapport à la solution proposée dans \cite{2020e-MicCenZacFra}, pour prendre partiellement en compte les effets de saturation énoncés dans la section~\ref{sec:saturation}, le bouclage décrit dans \cite{2020e-MicCenZacFra} a été augmenté d'une stratégie de saturation d'erreur ne permettant jamais à l'erreur de position $\boldsymbol{\rm e}_p$ utilisée dans \cite[eqn. (22)]{2020e-MicCenZacFra} de dépasser la valeur maximale de 3 mètres. Les autres gains de réglage nécessaires à la solution de \cite{2020e-MicCenZacFra} ont été sélectionnés comme $k_{pp} = 0.5$, $k_{pd} = 1.2$, $k_{ap} = 0.08$, $k_{ad} = 0.1$ et $k_{\Delta} = 1$.
  
 La figure~\ref{fig_global_contol} montre la réponse du système en termes de positions, d'orientations (deux lignes du haut) et d'efforts des actionneurs (deux lignes du bas) lorsque le système part de la condition initiale $\boldsymbol{x(0)} = [\boldsymbol{p(0)}~ \boldsymbol{v(0)}~ \boldsymbol{q(0)}~ \boldsymbol{\omega_b(0)}]^\top = [0~0~0 ~ 0~0~0 ~0. 9140 ~0.1134~ -0.3728~ 0. 1134~ 0~ 0~ 0]^\top $ avec une position d'équilibre cible de $\boldsymbol{p_{\text{eq}}} = [4~5~6]^\top$ et $\boldsymbol{q_{\text{eq}}} = [\frac{\sqrt{2}}{2}~0~-\frac{\sqrt{2}}{2}~0]^\top$. 
-Une réponse adéquate peut être observée, laquelle reste assez éloignée des saturations des actionneurs (voir section~\ref{sec:saturation}). L'augmentation des gains peut accélérer la réponse, mais produit toutefois des oscillations d'attitude indésirables. Il est donc intéressant de combiner ce contrôleur non-linéaire (qui fournit une grande région d'attraction) avec un contrôleur possédant une vitesse de convergence supérieure, conçu sur la base de la dynamique linéarisée sans vent \eqref{eq:linearized}.
-
 
 \begin{figure}[ht!]
-    \centering
-    \includegraphics[trim=0cm 0.6cm 0cm 0.6cm,clip,width=0.8\columnwidth]{figures/global2.eps}
-    \caption{Simulation de la loi de commande non-linéaire avec la dynamique de DarkO \eqref{eq:dyna_orig}.}
-    \label{fig_global_contol}
+  \centering
+  \includegraphics[trim=0cm 0.6cm 0cm 0.6cm,clip,width=0.8\columnwidth]{figures/global2.eps}
+  \caption{Simulation de la loi de commande non-linéaire avec la dynamique de DarkO \eqref{eq:dyna_orig}.}
+  \label{fig_global_contol}
 \end{figure}
+Une réponse adéquate peut être observée, laquelle reste assez éloignée des saturations des actionneurs (voir section~\ref{sec:saturation}). L'augmentation des gains peut accélérer la réponse, mais produit toutefois des oscillations d'attitude indésirables. Il est donc intéressant de combiner ce contrôleur non-linéaire (qui fournit une grande région d'attraction) avec un contrôleur possédant une vitesse de convergence supérieure, conçu sur la base de la dynamique linéarisée sans vent \eqref{eq:linearized}.
+
 
 
 \section{Contrôleur par retour d'état linéaire}
 \label{sec:ctrlLin}
-Sur la base des observations de la section précédente et étant donné une position cible correspondant à un équilibre $\boldsymbol{p_{\text{eq}}}, \boldsymbol{q_{\text{eq}}}$ tel que caractérisé dans l'équation~\ref{eq:equilibria}, nous concevons ici un contrôleur par retour d'état linéaire capable de produire une réponse rapidement convergene. Pour cela, nous nous concentrons sur la dynamique linéarisée \eqref{eq:linearized} et proposons une loi de commande de la forme :
+Sur la base des observations de la section précédente et étant donné une position cible correspondant à un équilibre $\boldsymbol{p_{\text{eq}}}, \boldsymbol{q_{\text{eq}}}$ tel que caractérisé dans l'équation~\ref{eq:equilibria}, nous concevons ici un contrôleur par retour d'état linéaire capable de produire une réponse rapidement convergente. Pour cela, nous nous concentrons sur la dynamique linéarisée \eqref{eq:linearized} et proposons une loi de commande de la forme :
 \begin{align}
   \boldsymbol{u_{\text{lin}}} := \boldsymbol{u_{\text{eq}}} - \boldsymbol{K} \boldsymbol{\tilde x},
 \label{eq:u_lin}
@@ -101,6 +101,7 @@ pour tout $\boldsymbol{\tilde x} \neq 0$ ; en d'autres termes, le sous-ensemble 
 
 La détermination du plus grand scalaire $\bar v$ assurant \eqref{eq:Vdecrease} est un problème complexe et des bornes inférieures conservatrices peuvent être déterminées en quantifiant l'effet des non-linéarités sur la dynamique. Puisque $\boldsymbol{\dot{\tilde x}}$ est une fonction de $\boldsymbol{x}$, il est assez facile d'évaluer algébriquement $\dot V(\boldsymbol{\tilde x})$ pour un grand nombre d'extractions aléatoires de la variable $\boldsymbol{\tilde x}$, afin d'obtenir une estimation probabiliste du plus grand scalaire $\bar v$. Des garanties rigoureuses sur ces sélections peuvent être obtenues en appliquant les résultats de \cite{tempo2013randomized}, mais une évaluation de 10000 échantillons a confirmé que la valeur $\bar v = 400$ est une sélection satisfaisant \eqref{eq:Vdecrease}.
 
+La Figure \ref{fig_linearize_conv} montre une simulation commençant à l'origine avec un drone vertical et des vitesses linéaires et angulaires initiales nulles. La position cible est $\boldsymbol{p_{\text{eq}}} = [4,~5,~6]$ avec une stabilisation en vol stationnaire (drone vertical) avec $\beta = 0$.
 
 \begin{figure}[ht!]
     \centering
@@ -110,8 +111,8 @@ La détermination du plus grand scalaire $\bar v$ assurant \eqref{eq:Vdecrease} 
     \label{fig_linearize_conv}
 \end{figure}
 
-La Figure \ref{fig_linearize_conv} montre une simulation commençant à l'origine avec un drone vertical et des vitesses linéaires et angulaires initiales nulles. La position cible est $\boldsymbol{p_{\text{eq}}} = [4,~5,~6]$ avec une stabilisation en vol stationnaire (drone vertical) avec $\beta = 0$. La ligne en pointillé représente la position de la cible sur chaque axe. Le dernier graphique montre la décroissance exponentielle souhaitable de $V$.
-La Figure \ref{fig_linearize_conv} montre, à la fois, la simulation du modèle complet (continue) \eqref{eq:dyna_orig} et du modèle non-linéaire simplifié \eqref{eq:withouwind} (en pointillé), ce qui met en évidence des différences dans la phase transitoire.
+ La ligne en pointillé représente la position de la cible sur chaque axe. Le dernier graphique montre la décroissance exponentielle souhaitable de $V$.
+La Figure \ref{fig_linearize_conv} montre, à la fois, la simulation du modèle complet (ligne continue) \eqref{eq:dyna_orig} et du modèle non-linéaire simplifié \eqref{eq:withouwind} (ligne en pointillé), ce qui met en évidence des différences dans la phase transitoire.
 Lorsqu'on fournit une position cible plus importante $\boldsymbol{p_{\text{eq}}} =[8,~9,~10]$(avec la même orientation), la condition initiale se situe en dehors du bassin d'attraction et une divergence apparaît, comme le montre la figure~\ref{fig_linearize_div}.
 
 \begin{figure}[ht!]
@@ -127,7 +128,7 @@ Lorsqu'on fournit une position cible plus importante $\boldsymbol{p_{\text{eq}}}
 \section{Conception d'une commande locale-globale}
 \label{sec:ctrl_hyste}
  
-Considérant les stratégies locales-globales présentées dans \cite[Ex. 1. 7]{65}, similaires à la solution présentée dans \cite{AndreettoFZ16}, nous utilisons un mécanisme hybride sélectionnant le contrôleur local avec une grande vitesse de convergence \eqref{eq:u_lin} (tant que l'état se trouve dans le bassin d'attraction de l'équilibre) ou le contrôleur non-linéaire plus lent \eqref{eq:u_nonlin}, qui fournit une plus grande région d'attraction (et peut être appelé, par abus de langage, le "contrôleur global"). À cette fin, nous ajoutons à l'état du contrôleur une variable d'état logique $\ell \in \{0,1\}$, qui régit le choix de l'entrée de contrôle entre \eqref{eq:u_nonlin} et \eqref{eq:u_lin} tel que :
+Considérant les stratégies locales-globales présentées dans \cite[Ex. 1. 7]{65}, similaires à la solution présentée dans \cite{AndreettoFZ16}, nous utilisons un mécanisme hybride. Il sélectionnera le contrôleur local avec une grande vitesse de convergence \eqref{eq:u_lin} (tant que l'état se trouve dans le bassin d'attraction de l'équilibre) ou le contrôleur non-linéaire plus lent \eqref{eq:u_nonlin}, qui fournit une plus grande région d'attraction (et peut être appelé, par abus de langage, le "contrôleur global"). À cette fin, nous ajoutons à l'état du contrôleur une variable d'état logique $\ell \in \{0,1\}$, qui régit le choix de l'entrée de contrôle entre \eqref{eq:u_nonlin} et \eqref{eq:u_lin} tel que :
 \begin{align}
 \label{eq:u_hybrid}
   \boldsymbol{u}=\boldsymbol{u}_{\text{hyb}} := \ell \boldsymbol{u}_{\text{nl}} + (1-\ell) \boldsymbol{u}_{\text{lin}}.
@@ -141,8 +142,13 @@ Nous nous assurons, grâce à la dynamique hybride, que $\ell$ ne puisse prendre
         \end{array}.
     \right.
 \end{align}
-Ce formalise mathématique représente un fonctionnement simple qui correspond à un maintien de la valeur de $\ell$ lors de l'évolution continue $\mathcal{C}$ et à un changement de la valeur de $\ell$ de 1 vers 0 ou inversement lors des évolutions discrètes $\mathcal{D}$ représenté par les croix rouge sur la Figure \ref{fig:ensembletrnaistion}
-
+Ce formalisme mathématique représente un fonctionnement simple qui correspond à un maintien de la valeur de $\ell$ lors de l'évolution continue $\mathcal{C}$ et à un changement de la valeur de $\ell$ de 1 vers 0 ou inversement lors des évolutions discrètes $\mathcal{D}$ représentées par les croix rouges sur la Figure \ref{fig:ensembletrnaistion}.
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.8\columnwidth]{figures/transition.png}
+  \caption{Exemple de l'évolution de $V(\boldsymbol{\tilde x})$, de la variable discrète $\ell$ et des ensembles continus $\mathcal{C}_{0}$ et $ \mathcal{C}_{1}$ et discrets $\mathcal{D}_{0}$ et $\mathcal{D}_{1}$.}
+  \label{fig:ensembletrnaistion}
+\end{figure}
 
 Nous avons l'état complet de la boucle fermée $\chi = \left[\boldsymbol{p},~ \boldsymbol{v},~ \boldsymbol{q},~  \boldsymbol{\omega},~ l\right]$ et les ensembles continus et discrets sont, respectivement, $\mathcal{C}$ et $\mathcal{D}$ définis par :
 \begin{align*}
@@ -152,7 +158,7 @@ Nous avons l'état complet de la boucle fermée $\chi = \left[\boldsymbol{p},~ \
    & \mathcal{D}_{0} :=\left\{\boldsymbol{\chi} \in \mathbb{R}^{14}:~ V(\boldsymbol{\tilde x}) \geq \overline{v}\mbox{ and } \ell=0 \right\}\\
    & \mathcal{D}_{1} :=\left\{\boldsymbol{\chi} \in \mathbb{R}^{14}:~ V(\boldsymbol{\tilde x}) \leq \underline{v}\mbox{ and } \ell=1 \right\}
 \end{align*}
-où $V(\boldsymbol{\tilde x}) := \boldsymbol{\tilde x}^\top S \boldsymbol{\tilde x}$  a été défini dans la section précédente, $\overline{v}=400$ a été déterminée pour satisfaire \eqref{eq:Vdecrease} et $\underline{v}$ est toute constante positive satisfaisant $\underline{v}<\overline{v}$.
+où $V(\boldsymbol{\tilde x}) := \boldsymbol{\tilde x}^\top S \boldsymbol{\tilde x}$  a été définie dans la section précédente, $\overline{v}=400$ a été déterminée pour satisfaire \eqref{eq:Vdecrease} et $\underline{v}$ est toute constante positive satisfaisant $\underline{v}<\overline{v}$.
 
 L'intérêt de $\underline{v}$ et de $\overline{v}$ est de permettre une hystérésis sur le changement local/global de loi de commande de manière à éviter les oscillations entre les deux lois à proximité de la transition. Ce fonctionnement est représenté sur la Figure \ref{fig:hysteresis}. Il retarde toutefois le changement de loi de commande.
 
@@ -163,14 +169,8 @@ L'intérêt de $\underline{v}$ et de $\overline{v}$ est de permettre une hystér
   \label{fig:hysteresis}
 \end{figure}
 
-Dans notre cas, nous choisissons $\underline{v}= 350$. La Figure \ref*{fig:ensembletrnaistion} présente un exemple du fonctionnement du mécanisme hybride en fonction de l'évolution de $V(\boldsymbol{\tilde x})$
+Dans notre cas, nous choisissons $\underline{v}= 350$. La Figure \ref*{fig:ensembletrnaistion} présente un exemple du fonctionnement du mécanisme hybride en fonction de l'évolution de $V(\boldsymbol{\tilde x})$.
 
-\begin{figure}[ht!]
-  \centering
-  \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.8\columnwidth]{figures/transition.png}
-  \caption{Exemple de l'évolution de $V(\boldsymbol{\tilde x})$, de la variable discrète $\ell$ et des ensembles continus $\mathcal{C}_{0}$ et $ \mathcal{C}_{1}$ et discrets $\mathcal{D}_{0}$ et $\mathcal{D}_{1}$.}
-  \label{fig:ensembletrnaistion}
-\end{figure}
 
 Le résultat suivant est une conséquence immédiate des résultats de \cite[Ex. 1.7]{65} et des propriétés de nos modèles linéaires et non-linéaires.
 
@@ -182,7 +182,7 @@ Nous avons réalisé plusieurs simulations de la boucle fermée à l'aide de la 
 
 \begin{figure}[ht!]
     \centering
-    \includegraphics[trim=0cm 0cm 0cm 1.1cm,clip,width=0.8\columnwidth]{figures/switch_paper2.eps}
+    \includegraphics[trim=0cm 0cm 0cm 1.1cm,clip,width=0.7\columnwidth]{figures/switch_paper2.eps}
     \caption{Simulation en boucle fermée avec le contrôleur hybride \eqref{eq:u_hybrid}.}
     \label{fig_sim}
 \end{figure}

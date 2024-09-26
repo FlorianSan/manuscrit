@@ -8,9 +8,9 @@
 
 \section{Motivation}
 \label{sec:motivationcolibri}
-Les nombreux avantages d'une architecture \textit{tailsitter} nous ont poussé à nous intéresser à leur stabilisation. Nous avons toutefois observé une limitation dans leur usage. Effectivement, l'aile change d'incidence en fonction de la vitesse du drone ou du vent environnent et toute charge utile se trouve en rotation avec l'aile. Ce comportement est inapproprié pour une caméra ou une sonde Pitot, lesquelles doivent pouvoir maintenir une direction constante. Ainsi, nous avons pensé à une nouvelle architecture, a mi-chemin entre un \textit{tailsitter} et un \textit{tiltwing}, appelé \textit{freewing}. Cette dernière conserve les avantages du \textit{tiltwing} en ce qu'elle permet d'avoir un fuselage que l'on peut maintenir constamment horizontal. Elle s'inspire des \textit{tailsitters} en permettant de modifier librement l'incidence de l'aile pour se désensibiliser des turbulences. L'aile étant libre de s'orienter vis-à-vis du fuselage, une augmentation de portance engendrée par une augmentation de la vitesse du flux d'air (turbulence), modifiera l'angle d'incidence de l'aile ce qui entraînera une diminution de la portance et donc un nouvel équilibre.
+Les nombreux avantages d'une architecture \textit{tailsitter} nous ont poussé à nous intéresser à leur stabilisation. Nous avons toutefois observé une limitation dans leur usage. Effectivement, l'aile change d'incidence en fonction de la vitesse du drone ou du vent environnent et toute charge utile se trouve en rotation avec l'aile. Ce comportement est inapproprié pour une caméra ou une sonde Pitot, lesquelles doivent pouvoir maintenir une direction constante. Ainsi, nous avons pensé à une nouvelle architecture, à mi-chemin entre un \textit{tailsitter} et un \textit{tiltwing}, appelée \textit{freewing}. Cette dernière conserve les avantages du \textit{tiltwing} en ce qu'elle permet d'avoir un fuselage que l'on peut maintenir constamment horizontal. Elle s'inspire des \textit{tailsitters} en permettant de modifier librement l'incidence de l'aile pour se désensibiliser des turbulences. L'aile étant libre de s'orienter vis-à-vis du fuselage, une augmentation de portance engendrée par une augmentation de la vitesse du flux d'air (turbulences), modifiera l'angle d'incidence de l'aile ce qui entraînera une diminution de la portance et donc un nouvel équilibre.
 
-De plus, le fuselage permettra l'emport d'une charge utile fragile (car elle pourra être maintenue horizontale en toutes circonstances), mais aussi de capteurs et de la batterie. L'ensemble de la masse du drone sera concentré sur le fuselage de manière à minimiser l'inertie de l'aile et faciliter sa rotation face à des turbulences faibles.
+De plus, le fuselage permettra l'emport d'une charge utile fragile (car elle pourra être maintenue horizontale en toutes circonstances), mais aussi de capteurs et de la batterie. L'ensemble de la masse du drone sera concentré sur le fuselage de manière à minimiser l'inertie de l'aile et à faciliter sa rotation face à des turbulences faibles.
 
 \section{Réflexion autour de diverses architectures}
 {\color{blue}
@@ -18,16 +18,19 @@ La maquette utilisée dans le chapitre \ref{chap:3DOF} nous a permis d'expérime
 
 Nous avons réalisé un montage permettant de modifier la position du centre de rotation par rapport au centre de gravité (figure \ref{fig:MontageDarkoReglable}). Cela impacte la stabilité de l'aile, mais aussi son comportement face au vent. 
 
-
 \begin{figure}[ht!]
     \centering
-   \includegraphics[width=0.8\columnwidth]{figures/vueMaquetteDarkoReglage.png}
+   \includegraphics[width=0.7\columnwidth]{figures/vueMaquetteDarkoReglage.png}
     \caption{Montage de la maquette du chapitre \ref{chap:3DOF} avec un réglage de la position du centre de rotation (pièce jaune).}
     \label{fig:MontageDarkoReglable}
 \end{figure}
-La pièce jaune de la Figure \ref{fig:MontageDarkoReglable} assure la liaison entre les demi ailes (droite et gauche) et le système de rotation central. De plus, la pièce est conçue pour permettre un glissement dans le plan des ailes, ce qui à pour conséquence de déplacer le centre de gravité de l'ensemble par rapport au centre de rotation, ce dernier étant bloqué. Nous observons sur la Figure \ref{fig:MontageDarkoReglableAvArr} que le réglage permet un débattement d'environ \SI{30}{\milli\meter}. Le montage est verrouillé par deux vis par aile, assurant la rigidité.
+
+La pièce jaune de la Figure \ref{fig:MontageDarkoReglable} assure la liaison entre les demi-ailes (droite et gauche) et le système de rotation central. De plus, la pièce est conçue pour permettre un glissement dans le plan des ailes, ce qui a pour conséquence de déplacer le centre de gravité de l'ensemble par rapport au centre de rotation, ce dernier étant bloqué. Nous observons sur la Figure \ref{fig:MontageDarkoReglableAvArr} que le réglage permet un débattement d'environ \SI{30}{\milli\meter}. Le montage est verrouillé par deux vis par aile, assurant la rigidité.
 
 Le centre de gravité doit se trouver en arrière du centre de rotation pour assurer que l'aile soit verticale sans commande.
+
+De ce montage et en utilisant la loi de stabilisation de la Figure \ref{fig:commande_int3DOF}, nous avons observé l'intérêt de positionner un fuselage pendulaire fixé en rotation libre. Ainsi l'aile se trouve libre de tourner autour de l'axe de liaison pour obtenir l'incidence nécessaire à la stabilisation du drone dans la phase de vol considérée. Nous avons choisi d'expérimenter le cas où la charge utile, ainsi que la batterie, se situent sur le fuselage de manière à diminuer l'inertie de l'aile : cela permet d'augmenter sa réactivité. Ainsi, la maquette de la Figure \ref{fig:MontageDarkoReglable} était alimentée par une batterie au plomb installée au sol avec des câbles alimentant le système installé au niveau de la fixation. Ces câbles génèrent un moment résistant, permettant d'approcher au mieux le système réel.
+
 \begin{figure}[ht!]
     \centering
     \resizebox{.7\textwidth}{!}{%
@@ -39,26 +42,27 @@ Le centre de gravité doit se trouver en arrière du centre de rotation pour ass
     \label{fig:MontageDarkoReglableAvArr}
 \end{figure}
 
-De ce montage et en utilisant la loi de stabilisation de la Figure \ref{fig:commande_int3DOF}, nous avons observé l'intérêt de positionné un fuselage pendulaire fixé en rotation libre. Ainsi l'aile se trouve libre de tourner autours de l'axe de liaison pour obtenir l'incidence nécessaire à la stabilisation du drone dans la phase de vol considéré. Nous avons choisi d'expérimenté le cas ou la charge utile ainsi que la batterie se situe sur le fuselage de manière à diminuer l'inertie de l'aile, cela permet d'augmenter sa réactivité. Ainsi la maquette de la Figure \ref{fig:MontageDarkoReglable} était alimenté par une batterie au plomb installé au sol avec des câbles alimentant le système installé au niveau de la fixation. Ces câbles génèrent de moment résistant, permettant d'approcher au mieux le système réel.
+Au niveau de l'actionnement, le parti pris a été d'utiliser un mécanisme similaire à celui de DarkO, étant donné les études préliminaires réalisées sur la modélisation, l'étude des couplages et des saturations. Toutefois, il existait d'autres possibilités.
 
-Au niveau de l'actionnement, le parti prit a été d'utiliser un mécanisme similaire à celui de DarkO étant donné les études préliminaires réalisées sur la modélisation, l'étude des couplages, des saturations. Toutefois, il existait d'autres possibilités.
-Nous pouvions monter les moteurs sur des nacelles pour supprimer les élevons et généré de la pousser vectorielle. Ce mécanisme ne supprime pas d'actionneur car le servomoteur présent sur l'élevons se retrouve à actionner la nacelle. Ce servomoteur doit être dimensionné pour vaincre les affects gyroscopiques de l'hélice, ce qui peut diminuer la réactivité de l'actionnement. De plus, le mécanisme de nacelle augmente ne nombre de pièces en mouvement, ce qui pose des problèmes de fiabilité. L'absence de commande aérodynamique ne permet pas de vol plané, en cas de panne moteur, le contrôle du drone ne peut pas être assuré.
-Une autre possibilité était d'actionné non pas l'élevon, mais de motorisé l'intégralité d'une demi aile, ce qui permet de modifier la direction de poussé de moteur, mais aussi de modifier l'incidence de l'aile. Toutefois, vus les dimensions de l'aile, les servomoteurs doivent être dimensionnés au vu des effets gyroscopiques des hélices couplé à l'inertie de la demi aile. Cela va engendrer des servomoteurs puissants qui vont alourdir la structure.
+Nous pouvions monter les moteurs sur des nacelles pour supprimer les élevons et générer de la poussée vectorielle. Ce mécanisme ne supprime aucun actionneur car le servomoteur présent sur l'élevon se retrouve à actionner la nacelle. Ce servomoteur doit être dimensionné pour vaincre les effets gyroscopiques de l'hélice, ce qui peut diminuer la réactivité de l'actionnement. De plus, le mécanisme de nacelle augmente le nombre de pièces en mouvement, ce qui pose des problèmes de fiabilité. L'absence de commande aérodynamique ne permet pas de vol plané en cas de panne moteur, donc le contrôle du drone ne peut pas être assuré.
 
- Nous avons aussi évalué la possibilité de rendre les deux ailes droite et gauche indépendante. Ce qui ajoute un degré de liberté dans la dynamique du drone. Ce fonctionnement permet de se soustraire de l'impact d'une différence de vitesse air sur chacune des demi ailes. Toutefois, il est nécessaire de mesurer l'orientation de chacune des demi ailes, ce qui nécessite un capteur en plus dans un espace assez contraint.
+Une autre possibilité était de motoriser l'intégralité d'une demi-aile, ce qui permettrait de modifier la direction de poussée de moteur, mais aussi de modifier l'incidence de l'aile. Toutefois, vu les dimensions de l'aile, les servomoteurs doivent être dimensionnés au vu des effets gyroscopiques des hélices couplés à l'inertie de la demi aile. Cela aurait induit des servomoteurs puissants qui auraient alourdi la structure.
+
+ Nous avons aussi évalué la possibilité de rendre les deux ailes droite et gauche indépendantes, ce qui ajoute un degré de liberté dans la dynamique du drone. Ce fonctionnement permet de se soustraire de l'impact d'une différence de vitesse air sur chacune des demi-ailes. Toutefois, il est nécessaire de mesurer l'orientation de chacune des demi-ailes, ce qui nécessite un capteur en plus dans un espace assez contraint.
 
  {
     \color{green}
-    Bien que nous ayons convergé vers une architecture d'actionnement proche de celle de DarkO, nous avons réalisé une maquette avec une installation des moteurs en H (voir Figure \ref{fig:ColibriH}). Cette architecture permet d'utiliser un différentiel moteur entre ceux placer sous l'aile et ceux sur l'aile pour contrôler le moment de tangage du drone. Le principal intérêt de cela est la suppression de la nécessité d'utiliser les élevons lors de la transition. Les élevons sont utilisés uniquement lors de vol plané.
-    Effectivement, l'installation des moteurs permet d'avoir un contrôle total de la voilure (de manière similaire à un quadricoptere). Un angle a été ajouter lors de l'installation de moteur pour augmenter l'efficacité sur la rotation autour de l'axe vertical en stationnaire.
+    Bien que nous ayons convergé vers une architecture d'actionnement proche de celle de DarkO, nous avons réalisé une maquette avec une installation des moteurs en H (voir Figure \ref{fig:ColibriH}). 
+    
     \begin{figure}[ht!]
         \centering
-       \includegraphics[width=0.8\columnwidth]{figures/colibriH.png}
+       \includegraphics[width=0.7\columnwidth]{figures/colibriH.png}
         \caption{Maquette de Colibri avec un montage des moteurs en H.}
         \label{fig:ColibriH}
     \end{figure}
-    \todo{forme H et lineaire}
-    Nous n'avons pas poursuivi dans cette direction au profit de l'architecture linaire plus aligné dans nos précédent travaux.
+    Cette architecture permet d'utiliser un différentiel moteur entre ceux placer sous l'aile et ceux sur l'aile pour contrôler le moment de tangage du drone. Le principal intérêt de cela est la suppression de la nécessité d'utiliser les élevons lors de la transition. Les élevons sont utilisés uniquement lors de vol plané.
+    Effectivement, l'installation des moteurs permet d'avoir un contrôle total de la voilure (de manière similaire à un quadrirotor). Un angle a été ajouter lors de l'installation de moteur pour augmenter l'efficacité sur la rotation autour de l'axe vertical en stationnaire.
+    Nous n'avons pas poursuivi dans cette direction au profit de l'architecture linaire plus aligné dans nos précédents travaux.
  }
 
 }
@@ -71,8 +75,8 @@ Une autre possibilité était d'actionné non pas l'élevon, mais de motorisé l
 Le drone Colibri est dérivé d'un drone \textit{tailsitter} qui génère de la portance pendant le vol d'avancement. Cette aile possède plusieurs actionneurs : quatre moteurs $u_{i}, ~i = 1,2,3,4$ et deux élevons $\delta_{\text{l}}$ et $\delta_{\text{r}}$. Nous pouvons définir le vecteur de contrôle $\boldsymbol{u}_{\text{W}}$ de l'aile d'après la Figure~\ref{fig:world_body} comme :
 \begin{align}
     \label{eq:uw}
-    \boldsymbol{u}_{\text{W}} = [u_{1}~u_{2}~u_{3}~u_{4}~\delta_{\text{l}}~\delta_{\text{r}}]^\top
-\end{align}. Un fuselage relié par un pivot est fixé au centre aérodynamique de l'aile. Ce fuselage supporte l'autopilote, la batterie, un moteur et un empennage pour le maintenir horizontal.
+    \boldsymbol{u}_{\text{W}} = [u_{1}~u_{2}~u_{3}~u_{4}~\delta_{\text{l}}~\delta_{\text{r}}]^\top.
+\end{align} Un fuselage relié par un pivot est fixé au centre aérodynamique de l'aile. Ce fuselage supporte l'autopilote, la batterie, un moteur et un empennage pour le maintenir horizontal.
 
 Dans la Figure~\ref{fig:world_body}, toutes les surfaces de contrôle aérodynamiques sont représentées en rose et les hélices en vert. Trois repères sont attachés au drone tel que : (I) est un repère inertiel NED lié à la surface de la terre, (W) est un repère attaché à l'aile du drone et (F) est un repère attaché au fuselage du drone.
 
@@ -91,7 +95,7 @@ Certaines des dimensions caractéristiques sont indiquées dans la Table~\ref{ta
   \centering
     \begin{tabular}{|l|c|c|}
       \hline
-      \multicolumn{1}{|c|}{Paramètres} & Valeur & Unités  \\
+      \multicolumn{1}{|c|}{Paramètres} & Valeurs & Unités  \\
       \hline
       $m_{\text{W}}$ (masse de l'aile)  & 0.53& \SI{}{\kilogram} \\
       \hline
@@ -131,11 +135,11 @@ Certaines des dimensions caractéristiques sont indiquées dans la Table~\ref{ta
 \end{table}
 
 {\color{blue}
-    Nous avons déjà conçu un système de rotation libre dans le chapitre \ref{sec:motivation3DOF}, toutefois il était fixé à un banc de test. Pour Colibri, il est nécessaire de concevoir une liaison robuste, mais légère pour être embarqué sur le drone. 
+    Nous avons déjà conçu un système de rotation libre dans le chapitre \ref{sec:motivation3DOF}, toutefois il était fixé à un banc de test. Pour Colibri, il est nécessaire de concevoir une liaison robuste, mais légère pour être embarquée sur le drone. 
 
-    Nous avons donc conçu un système de rotation basée sur deux roulements à aiguille (en violet sur l'image \ref{fig:ColibriRot}) et deux butées à bille F6-12M pour minimiser le couple résistant (en jaune sur l'image \ref{fig:ColibriRot}). Les butées à  bille sont bloqué par des pièces de verrouillage (en bleu sur l'image \ref{fig:ColibriRot}) obtenues par impression 3D stéréolithographique (SLA). Ces verrouilleurs pincent le tube en carbone pour éviter qu'il coulisse de droite à gauche. 
+    Nous avons donc conçu un système de rotation basé sur deux roulements à aiguille (en violet sur l'image \ref{fig:ColibriRot}) et deux butées à billes F6-12M pour minimiser le couple résistant (en jaune sur l'image \ref{fig:ColibriRot}). Les butées à  billes sont bloquées par des pièces de verrouillage (en bleu sur l'image \ref{fig:ColibriRot}) obtenues par impression 3D stéréolithographique (SLA). Ces verrouilleurs pincent le tube en carbone pour éviter qu'il coulisse de droite à gauche. 
 
-    L'impression 3D SLA est un procédé de photopolymérisation qui utilise un laser UV pour polymériser une résine liquide en plastique durci. Cette technologie permet d'obtenir des pièces d'une grande précision et plus résistante que l'impression 3D à dépôt de fil fondu (FDM).
+    L'impression 3D SLA est un procédé de photopolymérisation qui utilise un laser UV pour polymériser une résine liquide en plastique durci. Cette technologie permet d'obtenir des pièces d'une grande précision et plus résistantes que l'impression 3D à dépôt de fil fondu (FDM).
 
     
 
@@ -154,7 +158,7 @@ Certaines des dimensions caractéristiques sont indiquées dans la Table~\ref{ta
         \label{fig:ColibriRot}
     \end{figure}
 
-    L'encodeur rotatif, CUI Devices AMT22, est fixée au bâti qui maintient les roulements (figure \ref{fig:ColibriRotReel} gauche), un système de pince est installé sur le tube en carbone et permet au capteur de mesurer l'angle de rotation de l'ensemble aile par rapport au fuselage.
+    L'encodeur rotatif, CUI Devices AMT22 est fixé au bâti qui maintient les roulements (figure \ref{fig:ColibriRotReel} gauche). Un système de pince est installé sur le tube en carbone et permet au capteur de mesurer l'angle de rotation de l'ensemble aile par rapport au fuselage.
 
     \begin{figure}[ht!]
         \centering
@@ -166,7 +170,7 @@ Certaines des dimensions caractéristiques sont indiquées dans la Table~\ref{ta
         \caption{Visualisation de l'encodeur rotatif sur le modèle 3D (gauche) et modèle réel (droite).}
         \label{fig:ColibriRotReel}
     \end{figure}
-    Le montage réel est proposé sur la Figure \ref{fig:ColibriRotReel} de droite. Nous observons le montage du contrôleur moteur avec les fils qui vont jusqu'au moteur (3 par moteur soit un total de 12 fils) et le câbles de commande de l'ESC, les câbles de l'encodeur rotatif et les câbles de commandes des servomoteurs (3 fils, car les servomoteurs sont chainés) et enfin les câbles de l'IMU installé sur l'aile.
+    Le montage réel est proposé sur la Figure \ref{fig:ColibriRotReel} de droite. Nous observons le montage du contrôleur moteur avec les fils qui vont jusqu'au moteur (3 par moteur soit un total de 12 fils) et les câbles de commande de l'ESC, les câbles de l'encodeur rotatif et les câbles de commandes des servomoteurs (3 fils, car les servomoteurs sont chainés) et enfin les câbles de l'IMU installée sur l'aile.
 }
 
 \subsection{Modélisation}
@@ -176,12 +180,12 @@ Elle est obtenue à partir de l'équation de Lagrange décrivant le mouvement d'
     \label{eq:unconstraintDyn}
     \boldsymbol{M}(\boldsymbol{x},t) \ddot{\boldsymbol{x}} = Q(\boldsymbol{x}, \dot{\boldsymbol{x}}, t)
 \end{align}
-Cette équation correspond au système non contraint, où les $n$ coordonnée de $\boldsymbol{x}$ sont indépendantes les unes vis-à-vis des autres ou du moins traité comme tel. Nous allons adjoindre à ce système non contraint $m$ contrainte :
+Cette équation correspond au système non contraint, où les $n$ coordonnées de $\boldsymbol{x}$ sont indépendantes les unes vis-à-vis des autres ou du moins traitées comme telles. Nous allons adjoindre à ce système non contraint $m$ contraintes :
 \begin{align}
     \label{eq:contraintes_phi}
     \varphi_{i}(\boldsymbol{x},\dot{\boldsymbol{x}},t) = 0, \quad i=1,2,...,m.
 \end{align}
-En supposant que ces contraintes soient assez lisses, nous pouvons différentier \eqref{eq:contraintes_phi} par rapport au temps pour obtenir : 
+En supposant que ces contraintes soient assez lisses, nous pouvons les différencier \eqref{eq:contraintes_phi} par rapport au temps pour obtenir : 
 \begin{align}
     \label{eq:contrainteAB}
     \boldsymbol{A}(\boldsymbol{x},\dot{\boldsymbol{x}}, t) \ddot{\boldsymbol{x}} = \boldsymbol{B}(\boldsymbol{x},\dot{\boldsymbol{x}},t).
@@ -198,16 +202,6 @@ En utilisant \eqref{eq:unconstraintDyn} et \eqref{eq:contrainteAB}, nous pouvons
 \end{align}
 dont l'expression est valide tant que $\hat{\boldsymbol{M}}$ a un rang complet et où $\boldsymbol{A}$, $\boldsymbol{M}$, $\boldsymbol{Q}$ et $\boldsymbol{B}$ sont décrits par la suite. L'algorithme de calcul de ces matrices se trouve dans \cite{udwadia-schutte}.
 
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=0.6\columnwidth,angle=0,trim={0 0 0 0.5cm},clip]{figures/fram_side_colibri.png}
-    \caption{Repère inertiel (I), du fuselage (F) et de l'aile (W) et forces agissant sur le drone Colibri.}
-    \label{fig:colibri_frame_side}
-\end{figure}
-Nous utiliserons les quaternions $\boldsymbol{q} = \left[ \eta ~ \boldsymbol{\epsilon}^\top \right]^\top  \in {\mathbb S}^3:=\{ \boldsymbol{q}\in \real^4: |\boldsymbol{q}| = 1\}$ pour représenter les orientations des deux corps. La matrice de rotation qui en résulte $\boldsymbol{R}(\boldsymbol{q}) \in SO(3): = \{\boldsymbol{R}\in \real^{3\times 3}: \boldsymbol{R}^\top \boldsymbol{R} = \mathbb{I}_{3} \text{ et}~\det(\boldsymbol{R})=1\}$ est définie de manière unique comme $\boldsymbol{R}(\boldsymbol{q}) := \mathbb{I}_{3} +2\eta \skewsym{\boldsymbol{\epsilon}} + 2\skewsym{\boldsymbol{\epsilon}}^{2} = [\boldsymbol{R}_{1}~\boldsymbol{R}_{2}~\boldsymbol{R}_{3}]$.
-
-D'après les Figures~\ref{fig:world_body} et \ref{fig:colibri_frame_side}, nous définissons les vecteurs $\boldsymbol{p}_{\text{F}} = \overrightarrow{\boldsymbol{O}_{\text{I}} \boldsymbol{O}_{\text{F}}} $, $\boldsymbol{p}_{\text{W}} = \overrightarrow{\boldsymbol{O}_{\text{I}} \boldsymbol{O}_{\text{W}}} $, $\boldsymbol{d}_{\text{FW}} = \overrightarrow{\boldsymbol{O}_{\text{F}} \boldsymbol{O}_{\text{W}}} $ satisfaisant $\boldsymbol{d}_{\text{FW}} = \boldsymbol{p}_{\text{W}} - \boldsymbol{p}_{\text{F}}$ and $\boldsymbol{d}_{\text{\textbf{M}}O_{\text{W}}} = \overrightarrow{\text{M} \boldsymbol{O}_{\text{W}} }$, $\boldsymbol{d}_{\text{\textbf{G}}\boldsymbol{O}_{\text{W}}} = \overrightarrow{\text{\textbf{G}} \boldsymbol{O}_{\text{W}} }$.
-
 D'après \cite{Tangirala2015}, nous avons une définition d'une réalisation minimale : 
 \begin{definition}[Réalisation minimale]
     \label{def:reaMini}
@@ -215,9 +209,24 @@ D'après \cite{Tangirala2015}, nous avons une définition d'une réalisation min
 \end{definition}
 
 
-Le vecteur d'état global est $(\boldsymbol{x},\boldsymbol{v}) \in \real^{28}$ avec $\boldsymbol{x}=(\boldsymbol{p}_{\text{W}},~\boldsymbol{q}_{\text{W}},~\boldsymbol{p}_{\text{F}},~\boldsymbol{q}_{\text{F}}) \in \real^{14}$ et $\boldsymbol{v}=(\boldsymbol{v}_{\text{W}},~\dot{\boldsymbol{q}}_{\text{W}},~\boldsymbol{v}_{\text{F}},~\dot{\boldsymbol{q}}_{\text{F}}) = (\dot{\boldsymbol{p}}_{\text{W}},~\dot{\boldsymbol{q}}_{\text{W}},~\dot{\boldsymbol{p}}_{\text{F}},~\dot{\boldsymbol{q}}_{\text{F}})=\dot{\boldsymbol{x}} \in \real^{14}$. Nous avons $\boldsymbol{v}_{\text{W}} = \dot{\boldsymbol{p}}_{\text{W}} \in \real^{3}$ qui représente la vitesse linéaire de l'aile dans le repère inertiel ; $\dot{\boldsymbol{q}}_{\text{W}} \in \real^{4}$  est la dérivée du quaternion. $\boldsymbol{q}_{\text{W}} \in \real^{4}$ représentant l'orientation de l'aile ; $\boldsymbol{v}_{\text{F}} =\boldsymbol{p}_{\text{F}} \in \real^{3}$  est la vitesse linéaire du fuselage dans le repère inertiel et $\dot{\boldsymbol{q}}_{\text{F}} \in \real^{4}$  est la dérivée du quaternion. $\boldsymbol{q}_{\text{F}} \in \real^{4}$ représentant l'orientation du fuselage. Nous observons que le vecteur d'état n'est pas minimal d'après la définition \ref{def:reaMini}. Effectivement, le système possède sept degrés de liberté (six degrés pour l'aile et un degré pour le fuselage) et nous le représentons avec un vecteur d'état de dimension quatorze.
+Nous utiliserons les quaternions $\boldsymbol{q} = \left[ \eta ~ \boldsymbol{\epsilon}^\top \right]^\top  \in {\mathbb S}^3:=\{ \boldsymbol{q}\in \real^4: |\boldsymbol{q}| = 1\}$ pour représenter les orientations des deux corps. La matrice de rotation qui en résulte $\boldsymbol{R}(\boldsymbol{q}) \in SO(3): = \{\boldsymbol{R}\in \real^{3\times 3}: \boldsymbol{R}^\top \boldsymbol{R} = \mathbb{I}_{3} \text{ et}~\det(\boldsymbol{R})=1\}$ est définie de manière unique comme $\boldsymbol{R}(\boldsymbol{q}) := \mathbb{I}_{3} +2\eta \skewsym{\boldsymbol{\epsilon}} + 2\skewsym{\boldsymbol{\epsilon}}^{2} = [\boldsymbol{R}_{1}~\boldsymbol{R}_{2}~\boldsymbol{R}_{3}]$.
 
-Nous devons aussi définir le vecteur de commande de dimension huit $\boldsymbol{u} = (u_{1},u_{2},u_{3},u_{4},\delta_{\text{l}},\delta_{\text{r}},u_{\text{tail}},\delta_{\text{tail}})$, où les actionneurs sont repérés en vert et rose sur la Figure \ref{fig:world_body}. Les actionneurs verts sont des groupes moteurs-hélices et les actionneurs roses sont des surfaces aérodynamiques. 
+
+D'après les Figures~\ref{fig:world_body} et \ref{fig:colibri_frame_side}, nous définissons les vecteurs $\boldsymbol{p}_{\text{F}} = \overrightarrow{\boldsymbol{O}_{\text{I}} \boldsymbol{O}_{\text{F}}} $, $\boldsymbol{p}_{\text{W}} = \overrightarrow{\boldsymbol{O}_{\text{I}} \boldsymbol{O}_{\text{W}}} $, $\boldsymbol{d}_{\text{FW}} = \overrightarrow{\boldsymbol{O}_{\text{F}} \boldsymbol{O}_{\text{W}}} $ satisfaisant $\boldsymbol{d}_{\text{FW}} = \boldsymbol{p}_{\text{W}} - \boldsymbol{p}_{\text{F}}$ et $\boldsymbol{d}_{\text{\textbf{M}}O_{\text{W}}} = \overrightarrow{\text{M} \boldsymbol{O}_{\text{W}} }$, $\boldsymbol{d}_{\text{\textbf{G}}\boldsymbol{O}_{\text{W}}} = \overrightarrow{\text{\textbf{G}} \boldsymbol{O}_{\text{W}} }$.
+
+
+Le vecteur d'état global est $(\boldsymbol{x},\boldsymbol{v}) \in \real^{28}$ avec $\boldsymbol{x}=(\boldsymbol{p}_{\text{W}},~\boldsymbol{q}_{\text{W}},~\boldsymbol{p}_{\text{F}},~\boldsymbol{q}_{\text{F}}) \in \real^{14}$ et $\boldsymbol{v}=(\boldsymbol{v}_{\text{W}},~\dot{\boldsymbol{q}}_{\text{W}},~\boldsymbol{v}_{\text{F}},~\dot{\boldsymbol{q}}_{\text{F}}) = (\dot{\boldsymbol{p}}_{\text{W}},~\dot{\boldsymbol{q}}_{\text{W}},~\dot{\boldsymbol{p}}_{\text{F}},~\dot{\boldsymbol{q}}_{\text{F}})=\dot{\boldsymbol{x}} \in \real^{14}$. Nous avons $\boldsymbol{v}_{\text{W}} = \dot{\boldsymbol{p}}_{\text{W}} \in \real^{3}$ qui représente la vitesse linéaire de l'aile dans le repère inertiel ; $\dot{\boldsymbol{q}}_{\text{W}} \in \real^{4}$  est la dérivée du quaternion. $\boldsymbol{q}_{\text{W}} \in \real^{4}$ représente l'orientation de l'aile ; $\boldsymbol{v}_{\text{F}} =\boldsymbol{p}_{\text{F}} \in \real^{3}$  est la vitesse linéaire du fuselage dans le repère inertiel et $\dot{\boldsymbol{q}}_{\text{F}} \in \real^{4}$  est la dérivée du quaternion. $\boldsymbol{q}_{\text{F}} \in \real^{4}$ représente l'orientation du fuselage. Nous observons que le vecteur d'état n'est pas minimal d'après la définition \ref{def:reaMini}. Effectivement, le système possède sept degrés de liberté (six degrés pour l'aile et un degré pour le fuselage) et nous le représentons avec un vecteur d'état de dimension quatorze.
+
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.6\columnwidth,angle=0,trim={0 0 0 0.5cm},clip]{figures/fram_side_colibri.png}
+    \caption{Repère inertiel (I), du fuselage (F) et de l'aile (W) et forces agissant sur le drone Colibri.}
+    \label{fig:colibri_frame_side}
+\end{figure}
+
+
+Nous devons aussi définir le vecteur de commande de dimension huit $\boldsymbol{u} = (u_{1},u_{2},u_{3},u_{4},\delta_{\text{l}},\delta_{\text{r}},u_{\text{tail}},\delta_{\text{tail}})$, où les actionneurs sont repérés en vert et rose sur la Figure \ref{fig:world_body}. Les actionneurs verts sont des groupes moteurs-hélices et les actionneurs rose sont des surfaces aérodynamiques. 
 
 Il convient de noter que la vitesse angulaire $\boldsymbol{\omega} \in \real^{3}$ peut être obtenue à partir de la dérivée du quaternion $\dot{\boldsymbol{q}}$ en utilisant l'équation \cite[équation (2.7)]{udwadia-schutte} rappelée ici : 
 \begin{align*}
@@ -249,7 +258,7 @@ où nous avons noté $\boldsymbol{H}_{\text{W}} = \boldsymbol{H}(\boldsymbol{q}_
 \end{align}
 
 
-où $\dot{\boldsymbol{H}}_{\text{W}}$ désigne $\boldsymbol{H}(\dot{\boldsymbol{q}}_{\text{W}})$, coïncidant avec la dérivée temporelle de $\boldsymbol{H}(\boldsymbol{q}_{\text{W}})$ et $\dot{\boldsymbol{H}}_{\text{F}}$ désigne $\boldsymbol{H}(\dot{\boldsymbol{q}}_{\text{F}})$, coïncidant avec la dérivée temporelle de $\boldsymbol{H}(\boldsymbol{q}_{\text{F}})$. De plus, $\boldsymbol{F}_{\text{W}}(x)$ et $\boldsymbol{M}_{\text{b}}(x)$ représentent respectivement toutes les forces et tous les moments agissant sur l'aile. Leur expression est tirée de \cite[équations (45) et (57)]{lustosaHal-03035938} où est développée la $\phi$-théorie, paramétrage qui permet de soustraire les angles classiques d'incidence et de dérapage et d'éviter la singularité du vol stationnaire. De manière similaire aux équations \eqref{eq:Fbdarko} et \eqref{eq:Mbdarko} exprimant les forces et les moments agissant sur DarkO, nous pouvons exprimer $\boldsymbol{F}_{\text{W}}(x)$ et $\boldsymbol{M}_{\text{b}}(x)$ relatif à l'aile de Colibri.
+où $\dot{\boldsymbol{H}}_{\text{W}}$ désigne $\boldsymbol{H}(\dot{\boldsymbol{q}}_{\text{W}})$, coïncidant avec la dérivée temporelle de $\boldsymbol{H}(\boldsymbol{q}_{\text{W}})$ et $\dot{\boldsymbol{H}}_{\text{F}}$ désigne $\boldsymbol{H}(\dot{\boldsymbol{q}}_{\text{F}})$, coïncidant avec la dérivée temporelle de $\boldsymbol{H}(\boldsymbol{q}_{\text{F}})$. De plus, $\boldsymbol{F}_{\text{W}}(x)$ et $\boldsymbol{M}_{\text{b}}(x)$ représentent respectivement toutes les forces et tous les moments agissant sur l'aile. Leur expression est tirée de \cite[équations (45) et (57)]{lustosaHal-03035938} où est développée la $\phi$-théorie, paramétrage qui permet de soustraire les angles classiques d'incidence et de dérapage et d'éviter la singularité du vol stationnaire. De manière similaire aux équations \eqref{eq:Fbdarko} et \eqref{eq:Mbdarko} exprimant les forces et les moments agissant sur DarkO, nous pouvons exprimer $\boldsymbol{F}_{\text{W}}(x)$ et $\boldsymbol{M}_{\text{b}}(x)$ relatifs à l'aile de Colibri.
 
 Chaque hélice génère une poussée $\boldsymbol{T}_i$ orientée dans la direction $-z{\text{W}}$ du repère de l'aile et un moment $\boldsymbol{N}_i$ selon le même axe :
 \begin{align}
@@ -377,10 +386,10 @@ avec
 \end{multline*}
 et 
 \begin{multline*}
-    B_{4} = -\boldsymbol{R}_{1}(\boldsymbol{q}_{\text{F}})^\top \dot{\boldsymbol{L}}_{2}^{\text{W}}\dot{\boldsymbol{q}}_{\text{W}} - \boldsymbol{R}_{2}(\boldsymbol{q}_{\text{W}})^\top \dot{\boldsymbol{L}}_{1}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} - 2\dot{\boldsymbol{q}}_{\text{W}}^\top {\boldsymbol{L}_{2}^{\text{W}}}^\top \boldsymbol{L}_{1}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} \\- \delta_{1}(\boldsymbol{R}_{1}(\boldsymbol{q}_{\text{F}})^\top \boldsymbol{L}_{2}^{\text{W}}\dot{\boldsymbol{q}}_{\text{W}} +  \boldsymbol{R}_{2}(\boldsymbol{q}_{\text{W}})^\top \boldsymbol{L}_{1}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} ) - \delta_{2} \varphi_{4}
+    B_{4} = -\boldsymbol{R}_{1}(\boldsymbol{q}_{\text{F}})^\top \dot{\boldsymbol{L}}_{2}^{\text{W}}\dot{\boldsymbol{q}}_{\text{W}} - \boldsymbol{R}_{2}(\boldsymbol{q}_{\text{W}})^\top \dot{\boldsymbol{L}}_{1}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} - 2\dot{\boldsymbol{q}}_{\text{W}}^\top {\boldsymbol{L}_{2}^{\text{W}}}^\top \boldsymbol{L}_{1}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} \\- \delta_{1}(\boldsymbol{R}_{1}(\boldsymbol{q}_{\text{F}})^\top \boldsymbol{L}_{2}^{\text{W}}\dot{\boldsymbol{q}}_{\text{W}} +  \boldsymbol{R}_{2}(\boldsymbol{q}_{\text{W}})^\top \boldsymbol{L}_{1}^{\text{F}} \dot{\boldsymbol{q}}_{\text{F}} ) - \delta_{2} \varphi_{4}.
 \end{multline*}
 
-La simulation d'un drone reste complexe, car il est naturellement instable. Nous avons choisi d'utiliser la loi de contrôle proposée dans \ref{sec:h_inf6DOF_multi} pour stabiliser le système. Ce contrôle stabilise l'aile. Une autre loi de contrôle basée sur une rétroaction proportionnelle-dérivée stabilise le fuselage pour le maintenir horizontal, développé dans la section \ref{sec:stabfus}. Les résultats de la simulation en boucle fermée sont présentés à la Figure~\ref{fig:sim_colibri}.
+La simulation d'un drone reste complexe, car il est naturellement instable. Nous avons choisi d'utiliser la loi de contrôle proposée dans \ref{sec:h_inf6DOF_multi} pour stabiliser le système. Ce contrôle stabilise l'aile. Une autre loi de contrôle basée sur une rétroaction proportionnelle-dérivée stabilise le fuselage pour le maintenir horizontal, développée dans la section \ref{sec:stabfus}. Les résultats de la simulation en boucle fermée sont présentés à la Figure~\ref{fig:sim_colibri}.
 
 \begin{figure}[ht!]
 \centering
@@ -392,7 +401,7 @@ La simulation d'un drone reste complexe, car il est naturellement instable. Nous
 En considérant les degrés de liberté de la liaison pivot, le couplage entre les deux corps est clairement visible sur les trois graphiques du bas. En effet, les angles de roulis et de lacet $(\phi_{\text{F}}, \psi_{\text{F}})$ et $(\phi_{\text{W}}, \psi_{\text{W}})$ du fuselage et de l'aile coïncident parfaitement, alors que les angles de tangage $(\theta_{\text{F}}, \theta_{\text{F}})$ sont différents.
 
 {\color{blue}
-    Par la suite, nous souhaitons réaliser des expérimentations avec un système réel, nous devons donc étudier la possibilité d'obtention de l'estimation des corps pour stabiliser le drone.
+    Par la suite, nous souhaitons réaliser des expérimentations avec un système réel. Nous devons donc étudier la possibilité d'obtention de l'estimation des corps pour stabiliser le drone.
 }
 
 
@@ -437,7 +446,7 @@ Suivant \cite{203613}, la dynamique de l'estimateur est donnée par :
 où $\kappa$ est la mesure angulaire récupérée du capteur, $k_{p}$ et $k_{v}$ sont deux gains scalaires positifs tels que l'équation caractéristique $s^{2} + k_{v} s + k_{p} = 0$ ait des racines à partie réelle négative. Pour notre estimateur, nous avons choisi $k_{p} = 1$ et $k_{v} = 1,3$ de manière à obtenir un facteur d'amortissement $\zeta = 0,65$ conduisant à une réponse légèrement sous-amortie comme compromis approprié entre un temps de montée rapide et une réponse légèrement oscillatoire. Le gain $\epsilon_{\kappa}$ peut être ajusté de manière pratique afin d'obtenir un compromis entre l'action de lissage (obtenue en augmentant $\epsilon_{\kappa}$) et la réduction du retard temporel
 de l'estimateur (obtenue en réduisant $\epsilon_{\kappa}$). En outre, l'action de lissage de l'approche proposée atténue l'effet de la quantification de la mesure angulaire. Nous avons choisi $\epsilon_{\kappa} = 0,05$ pour nos expériences. La Figure~\ref{fig:high_gain} montre les résultats expérimentaux obtenus après la mise en œuvre du filtre grand gain \eqref{eq:high_dyn} dans le cas d'un vol générant des oscillations angulaires de grande amplitude.
 
-Nous avons effectué une dérivation par différence finie (en vert) en post-traitement pour comparer les résultats. En raison de la nature quantifiée de l'encodeur rotatif, nous observons que la vitesse angulaire obtenue par différence finie est très bruitée. Nous constatons que le filtre grand gain permet d'estimer la vitesse angulaire avec plus de précision (en rouge), bien qu'avec un léger retard. Grâce à l'ajout d'une IMU supplémentaire sur l'aile lors d'un essai en vol, il est possible de comparer l'estimation de la vitesse avec les mesures du gyroscope de l'aile (MPU9250), visibles sur le graphique du bas de la Figure~\ref{fig:high_gain} (trace bleue). Nous constations que les mesures du gyroscope sont quelque peu bruitées, notamment en raison des vibrations générées par les moteurs. 
+Nous avons effectué une dérivation par différence finie (en vert) en post-traitement pour comparer les résultats. En raison de la nature quantifiée de l'encodeur rotatif, nous observons que la vitesse angulaire obtenue par différence finie est très bruitée. Nous constatons que le filtre grand gain permet d'estimer la vitesse angulaire avec plus de précisions (en rouge), bien qu'avec un léger retard. Grâce à l'ajout d'une IMU supplémentaire sur l'aile lors d'un essai en vol, il est possible de comparer l'estimation de la vitesse avec les mesures du gyroscope de l'aile (MPU9250), visibles sur le graphique du bas de la Figure~\ref{fig:high_gain} (trace bleue). Nous constations que les mesures du gyroscope sont quelque peu bruitées, notamment en raison des vibrations générées par les moteurs. 
 
 \begin{figure}[ht!]
 \centering
@@ -458,6 +467,7 @@ Afin d'effectuer la transformation nécessaire entre les repères, nous définis
 Sur la base de l'angle estimé $\hat{\kappa}$ et de la vitesse angulaire estimée $\hat{\omega}_{\kappa}$, il est possible de transformer les mesures réalisées dans le repère du fuselage vers le repère de l'aile. Tous les capteurs sont installés sur la carte de l'autopilote, qui est elle-même fixée au fuselage. Cependant, nous voulons utiliser INDI pour stabiliser l'aile. Cette loi de contrôle nécessite donc des informations sur l'état du drone dans le repère de l'aile, où toutes les forces sont appliquées (aérodynamiques et de traction).
 
 Deux solutions viables sont alors possibles : effectuer l'estimation d'état dans le repère du fuselage et faire pivoter l'estimation en utilisant l'estimation de l'angle $\hat{\kappa}$, ou faire pivoter les mesures brutes à l'avance pour les exprimer dans le repère l'aile, et ensuite effectuer l'estimation d'état dans ce dernier. 
+
 Compte tenu de l'architecture actuelle du logiciel du système Paparazzi (voir Annexe \ref{sec:logiciel}), il est impossible d'avoir deux structures conjointes d'estimation de l'état. Il est donc complexe de mettre en œuvre la première solution, dans laquelle le contrôleur récupère directement l'estimation de l'état actuel. C'est pourquoi nous avons choisi d'estimer l'état de l'aile à partir des données mesurées sur le fuselage. À cette fin, nous détaillons ci-dessous les transformations pour les trois capteurs : gyroscope, accéléromètre et magnétomètre. 
 
 Pour les mesures de la vitesse angulaire basées sur le gyroscope, nous pouvons calculer la vitesse angulaire de l'aile exprimée dans le repère de l'aile :
@@ -499,9 +509,10 @@ où l'opérateur $\otimes$ désigne le produit hamiltonien. La connaissance de $
 
 \section{Inversion non-linéaire incrémentale de la dynamique du drone}
 
-La théorie de l'inversion dynamique non-linéaire incrémentale (INDI) utilisée dans le contexte des micro-drones est présentée dans \cite{smeurINDI}. Nous utilisons la notation proposée dans \cite{smeurINDITail}. L'hypothèse centrale sous-jacente est que le principe de séparation des échelles de temps s'applique à la dynamique de l'actionneur et à la dynamique des forces et des moments aérodynamiques. Le signal de commande $\boldsymbol{u}_{\text{W}}$ définit dans \eqref{eq:uw} peut alors être calculé de manière incrémentale en utilisant la matrice d'efficacité de l'actionneur $G$.
+La théorie de l'inversion dynamique non-linéaire incrémentale (INDI) utilisée dans le contexte des micro-drones est présentée dans \cite{smeurINDI}. Nous utilisons la notation proposée dans \cite{smeurINDITail}. L'hypothèse centrale sous-jacente est que le principe de séparation des échelles de temps s'applique à la dynamique de l'actionneur et à la dynamique des forces et des moments aérodynamiques. Le signal de commande $\boldsymbol{u}_{\text{W}}$ définit dans \eqref{eq:uw} peut alors être calculé de manière incrémentale en utilisant la matrice d'efficacité de l'actionneur $\boldsymbol{G}$.
 
 \begin{align}
+    \label{eq:INDI}
     \boldsymbol{u}_{\text{W}} = \boldsymbol{u}_{\text{W}} + \boldsymbol{G}^{\dag} (\boldsymbol{\nu} - \begin{bmatrix}
     \dot{\boldsymbol{\omega}}_{\text{W}} \\
     T_{\text{W}}
@@ -544,7 +555,6 @@ Pour stabiliser le fuselage, nous utilisons un bouclage proportionnel-dérivé d
 où $u_{eq}$ est la commande, à l'équilibre, du moteur pour maintenir le fuselage horizontal en l'absence de perturbation et $k_{p}$, $k_{d}$ sont des gains scalaires ajustables. Nous obtenons $\dot{\theta}_{\text{F}}$ à partir de $\boldsymbol{\omega}_{gyro}^{F} = [\dot{\phi}_{\text{F}}~\dot{\theta}_{\text{F}}~\dot{\psi}_{\text{F}}]^\top$.
 
 {\color{blue} La valeur $u_{\text{tail},eq}$ a été obtenue en utilisant l'équation \eqref{eq:momentfuselage}. Nous annulons cette dernière $\sum \overrightarrow{M}_{O_{\text{W}}} = \overrightarrow{0}$  et nous obtenons :
-
 \begin{align}
     \label{eq:momentnul}
     m_{\text{F}} g \boldsymbol{e}_3 \times \boldsymbol{d}_{\text{G}O_{\text{W}}} + \boldsymbol{F}_{m} \times \boldsymbol{d}_{\text{M}O_{\text{W}}} = \overrightarrow{0}
@@ -558,7 +568,7 @@ avec ${z}_{\text{G}O_{\text{W}}}$ et ${z}_{\text{M}O_{\text{W}}}$, respectivemen
 Les gains $k_{p}$ et $k_{d}$ ont été ajustés lors d'un montage sur un banc de test pour assurer un comportement satisfaisant. 
 \begin{figure}[ht!]
     \centering
-    \includegraphics[trim={0 15cm 0 25cm},clip, width=0.6\columnwidth]{figures/IMG_20230120_141852.jpg}
+    \includegraphics[trim={0 15cm 0 25cm},clip, width=0.7\columnwidth]{figures/IMG_20230120_141852.jpg}
     \caption{Maquette expérimentale du fuselage de Colibri.}
     \label{fig:colibri_fus}
 \end{figure}
@@ -569,12 +579,6 @@ Le banc de test de la Figure \eqref{fig:colibri_fus} est un montage du fuselage 
 
 \section{Expérimentations}
 \label{sec:exp}
-% \todo{Photo de la volière: It is difficult to understand the experimental results
-% due to the absence of snapshots, detailed explanations, or
-% pictures of the experimental environment. Illustrations and
-% explanations of the experimental structure, actual flight
-% photos, and the design structure of the entire flight
-% system must be added.}
 Un prototype a été mis au point, comme le montre la Figure~\ref{fig:colibri_real}. La Figure~\ref{fig:colibri_flight} présente une sélection des résultats expérimentaux en environnement contrôlé.
 
 
@@ -597,6 +601,7 @@ Sur la Figure~\ref{fig:colibri_flight}, de \SI{0}{\second} à \SI{8}{\second}, l
 \section{Vol avec un contrôleur INDI unifié}
     Au vu du vol expérimental de la Figure~\ref{fig:colibri_flight}, nous avons supprimé le contrôleur proportionnel-dérivé du fuselage pour utiliser l'INDI. Nous ajoutons le moteur du fuselage comme actionneur dans le vecteur de commande $\boldsymbol{u}_{\text{W}}$ et nous ajoutons un nouvel objectif de stabilisation, lequel correspond à la stabilisation du fuselage $u_{\text{tail}}$.
 
+    Ainsi, la matrice $\boldsymbol{G}$ définit dans \eqref{eq:INDI} devient : 
     \begin{align*}
         \begin{bmatrix}
         \partial \phi \\
@@ -612,46 +617,43 @@ Sur la Figure~\ref{fig:colibri_flight}, de \SI{0}{\second} à \SI{8}{\second}, l
         -0.6 & -0.6 & -0.6 & -0.6 & 0 & 0 & 0\\
         0 & 0 & 0 & 0 & 0 & 0 & 15 \\
         \end{bmatrix}
-        \boldsymbol{u}_{\text{W}}
+        \boldsymbol{u}_{\text{W}}.
     \end{align*}
 
 
-    Dans le cas dynamique, le mouvement de l'aile et donc du point d'attache à un impact sur le fuselage. Il est donc nécessaire de réalisé une étude dynamique \eqref{eq:dynamiquependule}. Toutefois, en l'absence de vent l'actionneur utilisé pour stabiliser le fuselage est le moteur qui ne peux générer qu'une force vers le bas (comme développé dans la section \ref{sec:stabfus}).
+    Dans le cas dynamique, le mouvement de l'aile et donc du point d'attache a un impact sur le fuselage. Il est donc nécessaire de réaliser une étude dynamique \eqref{eq:dynamiquependule}. Toutefois, en l'absence de vent, l'actionneur utilisé pour stabiliser le fuselage est le moteur qui ne peut générer qu'une force vers le bas (comme développé dans la section \ref{sec:stabfus}).
     \begin{remark}
         \label{rem:irréversibilité}
-        En raison de l'irréversibilité de la génération de force par le moteur du fuselage, une accélération positive ne pourra pas être contrebalancé par le moteur. Lors d'une décélération, une augmentation de la vitesse de rotation du moteur permet de compenser les accélérations linéaires et donc de maintenir le fuselage horizontal.
+        En raison de l'irréversibilité de la génération de forces par le moteur du fuselage, une accélération positive ne pourra pas être contrebalancée par le moteur. Lors d'une décélération, une augmentation de la vitesse de rotation du moteur permet de compenser les accélérations linéaires et donc de maintenir le fuselage horizontal.
     \end{remark}
 
     Il est possible d'anticiper la commande de vitesse angulaire du fuselage en fonction des accélérations linéaires verticale $\ddot{z}$ et horizontale $\ddot{x}$ de l'aile.
-
     \begin{align}
         \label{eq:dynamiquependule}
         m l^{2} \ddot{\theta}_{\text{p}} + ml(g-\ddot{z}) \sin{\theta_{\text{p}}} + ml \ddot{x} \cos{\theta_{\text{p}}} = 0\\
         \implies \ddot{\theta}_{p} = -\frac{1}{l} \left( (g-\ddot{z})\sin{\theta_{\text{p}}} + \ddot{x} \cos{\theta_{\text{p}}} \right)
     \end{align}
-    avec $l = \| \boldsymbol{d}_{\text{G}O_{\text{W}}} \|$ et $\theta_{\text{p}} = \theta_{\text{F}} - \frac{\pi}{2} - \arctan{\frac{{x}_{\text{G}O_{\text{W}}}}{{z}_{\text{G}O_{\text{W}}}}}$
-    En régime stationnaire, nous avons un équilibre qui assure que l'accélération de la gravité $g$ est compensé par la traction de l'hélice $\boldsymbol{F}_{m}$. Nous discrétisons cette équation pour obtenir le commande feedforward de vitesse angulaire : 
+    avec $l = \| \boldsymbol{d}_{\text{G}O_{\text{W}}} \|$ et $\theta_{\text{p}} = \theta_{\text{F}} - \frac{\pi}{2} - \arctan{\frac{{x}_{\text{G}O_{\text{W}}}}{{z}_{\text{G}O_{\text{W}}}}}$.
+    En régime stationnaire, nous avons un équilibre qui assure que l'accélération de la gravité $g$ soit compensée par la traction de l'hélice $\boldsymbol{F}_{m}$. Nous discrétisons cette équation pour obtenir la commande \textit{feedforward} de vitesse angulaire : 
     \begin{align}
         \label{eq:feedforward}
-        \dot{\theta}_{p} (t+1) = -\frac{1}{l} \left( (-\ddot{z})\sin{\theta_{\text{\text{p}}}} + \ddot{x} \cos{\theta_{\text{p}}} \right) + dot{\theta}_{\text{p}} (t)
+        \dot{\theta}_{p} (t+1) = -\frac{1}{l} \left( (-\ddot{z})\sin{\theta_{\text{\text{p}}}} + \ddot{x} \cos{\theta_{\text{p}}} \right) + dot{\theta}_{\text{p}} (t).
     \end{align}
-    De cette équation \eqref{eq:feedforward}, nous observons qu'il est possible de généré une trajectoire qui permette d'accélérer horizontalement sans générer un changement de vitesse angulaire du fuselage (qui ne pourrait pas être compensé voir remarque \ref{rem:irréversibilité}). Cette trajectoire utilise une accélération verticale $\ddot{z}$ pour assurer $ (-\ddot{z})\sin{\theta_{\text{p}}} + \ddot{x} \cos{\theta_{\text{p}}} = 0 $. Cette trajectoire est donc ascendante. Une autre solution à la remarque \ref{rem:irréversibilité} est de permettre la génération d'une force bidirectionnelle (en ajoutant un second moteur ou un servomoteur pour diriger la force).
+    De cette équation \eqref{eq:feedforward}, nous observons qu'il est possible de générer une trajectoire qui permette d'accélérer horizontalement sans générer un changement de vitesse angulaire du fuselage (qui ne pourrait pas être compensé voir remarque \ref{rem:irréversibilité}). Cette trajectoire utilise une accélération verticale $\ddot{z}$ pour assurer $ (-\ddot{z})\sin{\theta_{\text{p}}} + \ddot{x} \cos{\theta_{\text{p}}} = 0 $. Cette trajectoire est donc ascendante. Une autre solution à la remarque \ref{rem:irréversibilité} est de permettre la génération d'une force bidirectionnelle (en ajoutant un second moteur ou un servomoteur pour diriger la force).
 
 
 
 }
 
 
-% Mesure du vent, sonde 5 trous
-
-% \section{Vols expérimentaux}
-\todo{Vols expérimentaux unifiés}
+\section{Vols expérimentaux}
+\todo{Vols expérimentaux unifiés Photo volière}
 
 \section{Conclusion}
 
-Ce chapitre propose une nouvelle architecture de drone \textit{freewing} qui possède des caractéristiques intéressantes, telle qu'un fuselage maintenu horizontal pendant toutes les phases de vol, un décollage et un atterrissage vertical, et une passivité naturelle aux perturbations de vent. Toutefois, de nombreuse complexité apparaissent avec cette architecture. La modélisation multicorps mener à permis d'obtenir un modèle représentant le comportement du drone et une identification à isolé les coefficients pour que le modèle soit le plus réaliste. Un travail a été mener sur l'estimation de l'état d'un tel drone permettant de conclure sur la meilleure position pour l'installation des capteurs et l'implémentation de la démarche nécessaire pour réaliser l'estimation de l'état. 
+Ce chapitre propose une nouvelle architecture de drone \textit{freewing} qui possède des caractéristiques intéressantes, tel qu'un fuselage maintenu horizontal pendant toutes les phases de vol, un décollage et un atterrissage vertical, et une passivité naturelle aux perturbations de vent. Toutefois, de nombreuses complexités apparaissent avec cette architecture. La modélisation multicorps menée a permis d'obtenir un modèle représentant le comportement du drone et une identification a isolé les coefficients pour que le modèle soit le plus réaliste. Un travail a été mené sur l'estimation de l'état d'un tel drone, permettant de conclure sur la meilleure position pour l'installation des capteurs et l'implémentation de la démarche nécessaire pour réaliser l'estimation de l'état. 
 
-À l'aide de cette dernière, une stabilisation basée sur une double boucle INDI et proportionnel-dérivé a permis de réaliser une validation expérimentale de la maquette, de l'estimation de l'état, mais cette implémentation a montré les limite d'une architecture à deux boucles. Nous avons donc proposé une architecture de commande unifier basée sur une rétroaction INDI contrôlant les deux corps et permettant le contrôle expérimental d'un drone à fuselage pendulaire non actionné.
+À l'aide de cette dernière, une stabilisation basée sur une double boucle INDI et proportionnelle dérivée a permis de réaliser une validation expérimentale de la maquette, de l'estimation de l'état. Toutefois, cette implémentation a montré les limites d'une architecture à deux boucles. Nous avons donc proposé une architecture de commande unifiée basée sur une rétroaction INDI, contrôlant les deux corps et permettant le contrôle expérimental d'un drone à fuselage pendulaire non actionné.
 
 
 

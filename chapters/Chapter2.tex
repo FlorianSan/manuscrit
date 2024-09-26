@@ -9,7 +9,7 @@ DarkO est assemblé à partir de plusieurs pièces d'Onyx imprimées en 3D (un m
 
 \nomenclature[]{\(ENAC\)}{École Nationale de l'Aviation Civile}
 
-L'autopilote embarqué est une carte Apogee~\footnote{\url{https://wiki.paparazziuav.org/wiki/Apogee/v1.00}} fabriquée à l'ENAC (voir Fig. \ref{fig:apogee}). 
+L'autopilote embarqué est une carte Apogee~\footnote{\url{https://wiki.paparazziuav.org/wiki/Apogee/v1.00}} fabriquée à l'ENAC (voir Figure \ref{fig:apogee}). 
 
 
 \begin{figure}[ht!]
@@ -29,7 +29,7 @@ L'autopilote offre la possibilité d'enregistrer les données de bord sur une ca
     \caption{Repère de référence de DarkO avec une représentation schématique des actionneurs.}
     \label{fig:darko2}
 \end{figure}
-Les actionneurs de DarkO sont classifiables en deux catégories. La première est liée à la propulsion et est constituée de deux hélices (T-Motor T5147) placées symétriquement à l'avant de l'aile (illustrées en \textbf{noir} dans la Fig. \ref{fig:darko2}) et alimentées par deux moteurs électriques (T-Motor F30 2300kv) générant une traction selon l'axe $x_{b}$. La seconde catégorie est relative aux actionneurs aérodynamiques. Ainsi, le drone possède deux élevons, placés à l'arrière de l'aile (illustrés en \textcolor{cyan}{bleu} dans la Fig. \ref{fig:darko2}), agissant en tant que surface de contrôle. Les élevons génèrent des forces et des moments en modifiant leur incidence relativement au flux d'air dans lequel ils sont placés.  Ce flux d'air peut être dû au vent relatif (lié à la vitesse du drone), au vent extérieur, mais aussi au souffle des hélices. Les élevons sont commandés par deux servomoteurs MKS DS65K qui apportent une grande rapidité lors des déplacements avec une grande robustesse et une faible masse.
+Les actionneurs de DarkO sont classifiables en deux catégories. La première est liée à la propulsion et est constituée de deux hélices (T-Motor T5147) placées symétriquement à l'avant de l'aile (illustrées en \textbf{noir} dans la Figure \ref{fig:darko2}) et alimentées par deux moteurs électriques (T-Motor F30 2300kv) générant une traction selon l'axe $x_{b}$. La seconde catégorie est relative aux actionneurs aérodynamiques. Ainsi, le drone possède deux élevons, placés à l'arrière de l'aile (illustrés en \textcolor{cyan}{bleu} dans la Figure \ref{fig:darko2}), agissant en tant que surface de contrôle. Les élevons génèrent des forces et des moments en modifiant leur incidence relativement au flux d'air dans lequel ils sont placés.  Ce flux d'air peut être dû au vent relatif (lié à la vitesse du drone), au vent extérieur, mais aussi au souffle des hélices. Les élevons sont commandés par deux servomoteurs MKS DS65K qui apportent une grande rapidité lors des déplacements avec une grande robustesse et une faible masse.
 
 La Figure \ref{fig:darko2} montre le modèle de DarkO, ainsi qu'un repère de référence inertiel \textit{North, east, down} (NED) \nomenclature[]{\(NED\)}{Nord Est Bas (\textit{North, East, Down})} (ou repère terrestre) ``$\text{i}$'' lié à la surface de la Terre, et un repère corps `$\text{b}$'' attaché au drone, avec $x_{\text{b}}$ correspondant à l'axe de roulis (l'axe des hélices dans le plan $z_{\text{b}} = 0$), $y_{\text{b}}$ l'axe de tangage (la direction des ailes), $z_{\text{b}}$ l'axe de lacet. En utilisant la même notation que dans \cite{lustosaHal-03035938}, le couple hélice/élevon gauche et droit est désigné par les indices $i=1$ (gauche) et $i=2$ (droite). La convention de signe sera définie comme positive pour les positions des élevons $\delta_{1}$, $\delta_{2}$ lorsqu'ils créent un moment à cabrer avec les hélices tournant dans des directions opposées avec des vitesses angulaires $\omega_{1} > 0$ et $\omega_{2} < 0$, respectivement.
 
@@ -266,7 +266,7 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
         \label{fig:IOmot}
     \end{figure}
     
-    Pour effectuer l'identification des trois coefficients principaux (diagonaux) de la matrice d'inertie, nous avons réalisé un montage de pendule bifilaire. Cette méthode est largement utilisée dans le domaine des drones \cite{Jardin2007OptimizedMO}, et est basée sur la période d'oscillation autour de chacun des trois axes ($x_{{\text{b}}}$, $y_{\text{b}}$, $z_{\text{b}}$) du drone, lequel est suspendu par deux fils, ce qui forme un pendule de torsion comme le montre la Fig. \ref{fig:BifilarPend}.
+    Pour effectuer l'identification des trois coefficients principaux (diagonaux) de la matrice d'inertie, nous avons réalisé un montage de pendule bifilaire. Cette méthode est largement utilisée dans le domaine des drones \cite{Jardin2007OptimizedMO}, et est basée sur la période d'oscillation autour de chacun des trois axes ($x_{{\text{b}}}$, $y_{\text{b}}$, $z_{\text{b}}$) du drone, lequel est suspendu par deux fils, ce qui forme un pendule de torsion comme le montre la Figure \ref{fig:BifilarPend}.
 
     \begin{figure}[ht!]
         \centerline{
@@ -488,7 +488,7 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
     Il est intéressant de noter que pour chaque couple de vent($w_{\text{r}z}$, $w_{\text{r}x}$) correspond une orientation d'équilibre \eqref{eq:qeq}, \eqref{eq:theta_alg} étant indépendante de l'entrée $\boldsymbol{u}_{\text{eq}}$. En outre, il convient de souligner que pour toutes les valeurs de vent raisonnables, l'équation \eqref{eq:tau_alg} correspond à la racine positive d'un polynôme du second ordre, l'autre racine étant toujours négative, ce qui conduit à une condition de poussée négative physiquement impossible.
 
 
-    À partir de l'expression analytique \eqref{eq:equilibrium} de l'équilibre du drone pour différentes conditions de vent $\boldsymbol{w}$, nous reportons, sur la Fig. \ref{fig:saturation}, les valeurs correspondantes de $\theta$, $\delta$, $\tau$ pour des valeurs de vitesse de vent horizontal allant de 0 à \SI{-20}{\meter\per\second} et pour des valeurs de vitesse de vent vertical allant de \SI{-6}{} à \SI{6}{\meter\per\second}.
+    À partir de l'expression analytique \eqref{eq:equilibrium} de l'équilibre du drone pour différentes conditions de vent $\boldsymbol{w}$, nous reportons, sur la Figure \ref{fig:saturation}, les valeurs correspondantes de $\theta$, $\delta$, $\tau$ pour des valeurs de vitesse de vent horizontal allant de 0 à \SI{-20}{\meter\per\second} et pour des valeurs de vitesse de vent vertical allant de \SI{-6}{} à \SI{6}{\meter\per\second}.
 
     \begin{figure}[ht!]
             \centering
@@ -925,7 +925,7 @@ $$
             \end{smallmatrix} \end{array} \! \!\right]
 \end{align*}
 
-\State Définissons les forces de portance et de trainée ainsi que leurs dérivées par rapport à $\epsilon_2$ (défini dans l'étape 1), comme
+\State Définissons les forces de portance et de trainée ainsi que leur dérivée par rapport à $\epsilon_2$ (défini dans l'étape 1), comme :
 \begin{equation}
 \label{eq:draglift_ALG}
 \!\! \smallmat{\!f_{\text{d}} & \frac{\partial  f_{\text{d}}  }{\partial \epsilon_{2}} \!\! \\ 0 & 0  \\ \! f_{\ell} & \frac{\partial  f_{\ell} \!\! }{\partial \epsilon_{2}}} 
@@ -936,7 +936,7 @@ $$
     }\!\!, 
 \end{equation}
 
-\State Définissons les forces des moteurs et des élevons comme
+\State Définissons les forces des moteurs et des élevons comme :
 \begin{align}
 \label{eq:motor_elevon_forces}
     \smallmat{ f_{\text{m}}  \\f_{\text{e}} }\! := \!\smallmat{\left(\frac{S_{\text{wet}}C_{\text{d}}}{2S_{\text{p}}}-2\right)\tau \\  - \frac{S_{\text{wet}}\tau \delta \xi_{\text{f}} C_{\ell}}{2S_{\text{p}}}}
