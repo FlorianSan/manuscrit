@@ -11,9 +11,8 @@
 En prenant en compte les capacités d'un \textit{tailsitter}, il est légitime de se poser la question du mode de vol devant être utilisé pour rejoindre un point. Effectivement, le drone a la possibilité de se déplacer en stationnaire ou bien en vol d'avancement. Lors d'un déplacement en stationnaire, le drone est vertical donc il se retrouve fortement sujet aux perturbations. Il est donc nécessaire d'avoir une grande région d'attraction autour de la position d'équilibre pour assurer un rejet des perturbations et une stabilisation. Lors d'un vol d'avancement, le drone se trouve dans une configuration proche d'une aile volante. Ainsi, il se trouve moins perturbé par les turbulences, dans la mesure où la surface projetée d'aile impactée par le flux d'air est plus faible. Toutefois, le drone doit voler à une vitesse assez importante pour être dans cette configuration donc il ne peut pas maintenir une position, mais seulement effectuer des cercles autour. 
 
 Nous nous concentrons dans ce chapitre uniquement sur le vol stationnaire. Il s'agit donc de proposer une stratégie de commande pour stabiliser le drone en position stationnaire. Cette stratégie repose sur une dynamique discrète définissant l'usage d'une première loi de commande non-linéaire présentée dans \cite{2020e-MicCenZacFra} et qui fournit une grande région d'attraction et d'une seconde loi basée sur la dynamique linéarisée et fournissant une convergence plus rapide vers la cible. Les deux contrôleurs sont réunis par un mécanisme hybride qui permet de conserver les performances en régime permanent de la conception linéarisée, avec la grande région d'attraction garantie par la conception non-linéaire.
-{ \color{blue}
-  Nous qualifions le contrôleur d'hybride car il possède deux dynamiques. Une dynamique continue qui assure le bouclage (il s'agit précisément de deux lois de commande qui sont exécutées simultanément) et d'une dynamique discrète, laquelle sélectionne le contrôleur le plus adapté en fonction de la situation.
-}
+Nous qualifions le contrôleur d'hybride car il possède deux dynamiques : une dynamique continue qui assure le bouclage (il s'agit précisément de deux lois de commande qui sont exécutées simultanément) et d'une dynamique discrète, laquelle sélectionne le contrôleur le plus adapté en fonction de la situation.
+
 
 Notre solution est testée en simulant le modèle non-linéaire complet.
 
@@ -84,7 +83,7 @@ Une réponse adéquate peut être observée, laquelle reste assez éloignée des
 
 \section{Contrôleur par retour d'état linéaire}
 \label{sec:ctrlLin}
-Sur la base des observations de la section précédente et étant donné une position cible correspondant à un équilibre $\boldsymbol{p_{\text{eq}}}, \boldsymbol{q_{\text{eq}}}$ tel que caractérisé dans l'équation~\ref{eq:equilibria}, nous concevons ici un contrôleur par retour d'état linéaire capable de produire une réponse rapidement convergente. Pour cela, nous nous concentrons sur la dynamique linéarisée \eqref{eq:linearized} et proposons une loi de commande de la forme :
+Sur la base des observations de la section précédente et étant donné une position cible correspondant à un équilibre $\boldsymbol{p_{\text{eq}}}, \boldsymbol{q_{\text{eq}}}$ tel que caractérisé dans l'équation~\eqref{eq:equilibria}, nous concevons ici un contrôleur par retour d'état linéaire capable de produire une réponse rapidement convergente. Pour cela, nous nous concentrons sur la dynamique linéarisée \eqref{eq:linearized} et proposons une loi de commande de la forme :
 \begin{align}
   \boldsymbol{u_{\text{lin}}} := \boldsymbol{u_{\text{eq}}} - \boldsymbol{K} \boldsymbol{\tilde x},
 \label{eq:u_lin}
@@ -101,7 +100,7 @@ pour tout $\boldsymbol{\tilde x} \neq 0$ ; en d'autres termes, le sous-ensemble 
 
 La détermination du plus grand scalaire $\bar v$ assurant \eqref{eq:Vdecrease} est un problème complexe et des bornes inférieures conservatrices peuvent être déterminées en quantifiant l'effet des non-linéarités sur la dynamique. Puisque $\boldsymbol{\dot{\tilde x}}$ est une fonction de $\boldsymbol{x}$, il est assez facile d'évaluer algébriquement $\dot V(\boldsymbol{\tilde x})$ pour un grand nombre d'extractions aléatoires de la variable $\boldsymbol{\tilde x}$, afin d'obtenir une estimation probabiliste du plus grand scalaire $\bar v$. Des garanties rigoureuses sur ces sélections peuvent être obtenues en appliquant les résultats de \cite{tempo2013randomized}, mais une évaluation de 10000 échantillons a confirmé que la valeur $\bar v = 400$ est une sélection satisfaisant \eqref{eq:Vdecrease}.
 
-La Figure \ref{fig_linearize_conv} montre une simulation commençant à l'origine avec un drone vertical et des vitesses linéaires et angulaires initiales nulles. La position cible est $\boldsymbol{p_{\text{eq}}} = [4,~5,~6]$ avec une stabilisation en vol stationnaire (drone vertical) avec $\beta = 0$.
+La Figure \ref{fig_linearize_conv} montre une simulation commençant à l'origine, avec un drone vertical et des vitesses linéaires et angulaires initiales nulles. La position cible est $\boldsymbol{p_{\text{eq}}} = [4,~5,~6]$ avec une stabilisation en vol stationnaire (drone vertical) avec $\beta = 0$.
 
 \begin{figure}[ht!]
     \centering
@@ -112,7 +111,7 @@ La Figure \ref{fig_linearize_conv} montre une simulation commençant à l'origin
 \end{figure}
 
  La ligne en pointillé représente la position de la cible sur chaque axe. Le dernier graphique montre la décroissance exponentielle souhaitable de $V$.
-La Figure \ref{fig_linearize_conv} montre, à la fois, la simulation du modèle complet (ligne continue) \eqref{eq:dyna_orig} et du modèle non-linéaire simplifié \eqref{eq:withouwind} (ligne en pointillé), ce qui met en évidence des différences dans la phase transitoire.
+La Figure \ref{fig_linearize_conv} illustre, à la fois, la simulation du modèle complet (ligne continue) \eqref{eq:dyna_orig} et du modèle non-linéaire simplifié \eqref{eq:withouwind} (ligne en pointillé), ce qui met en évidence des différences dans la phase transitoire.
 Lorsqu'on fournit une position cible plus importante $\boldsymbol{p_{\text{eq}}} =[8,~9,~10]$(avec la même orientation), la condition initiale se situe en dehors du bassin d'attraction et une divergence apparaît, comme le montre la figure~\ref{fig_linearize_div}.
 
 \begin{figure}[ht!]
@@ -180,7 +179,7 @@ Le résultat suivant est une conséquence immédiate des résultats de \cite[Ex.
 
 Nous avons réalisé plusieurs simulations de la boucle fermée à l'aide de la \textit{Hybrid Equations Toolbox} (HyEQ) de Matlab \cite{sanfelice_2017}. Les simulations sont effectuées avec le modèle complet du drone \eqref{eq:dyna_orig}, comprenant tous les effets aérodynamiques non-linéaires. Un exemple de simulation est présenté dans la Figure~\ref{fig_sim}, où nous initialisons le drone à l'origine avec une orientation nulle, sauf pour l'angle de tangage fixé à 45 degrés. L'orientation de la cible est en configuration de vol stationnaire vertical et la position de la cible est assignée à $\boldsymbol{p_{\text{eq}}} = [50,~25,~12.5]$.
 
-\begin{figure}[ht!]
+\begin{figure}[H]
     \centering
     \includegraphics[trim=0cm 0cm 0cm 1.1cm,clip,width=0.7\columnwidth]{figures/switch_paper2.eps}
     \caption{Simulation en boucle fermée avec le contrôleur hybride \eqref{eq:u_hybrid}.}

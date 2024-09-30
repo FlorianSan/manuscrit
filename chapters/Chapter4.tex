@@ -1,10 +1,11 @@
+% LTeX: enabled=false
 \chapter{Commande robuste longitudinale d'une maquette}
 \minitoc
 \label{chap:3DOF}
 
 \section{Motivation}
 \label{sec:motivation3DOF}
-Les simulations en boucle fermée avec le contrôleur \eqref{eq:u_hybrid} développé dans la section \ref{sec:ctrl_hyste} montrent qu'en présence d'un vent horizontal constant dans le plan $(x_{[b]},z_{[b]})$, le drone modifie son angle de tangage. Ce comportement a également été observé lors d'essais en soufflerie avec le dispositif expérimental \cite{olszaneckibarthHal-02542982}. Intuitivement, une réduction de l'angle d'attaque entraîne une diminution de la surface exposée au vent, de manière à réduire la force de traînée, ce qui a une forte incidence sur la position. Dans le même temps, le flux d'air dû au vent constant génère une portance, compensée par une réduction de la poussée de l'hélice et une réduction conséquente de la consommation du drone. L'objectif de la maquette décrite ici est d'évaluer expérimentalement l'effet du vent sur le dispositif DarkO.
+Les simulations en boucle fermée, avec le contrôleur \eqref{eq:u_hybrid} développé dans la section \ref{sec:ctrl_hyste}, montrent qu'en présence d'un vent horizontal constant dans le plan $(x_{[b]},z_{[b]})$, le drone modifie son angle de tangage. Ce comportement a également été observé lors d'essais en soufflerie avec le dispositif expérimental \cite{olszaneckibarthHal-02542982}. Intuitivement, une réduction de l'angle d'attaque entraîne une diminution de la surface exposée au vent, de manière à réduire la force de traînée, ce qui a une forte incidence sur la position. Dans le même temps, le flux d'air dû au vent constant génère une portance, compensée par une réduction de la poussée de l'hélice, et une réduction conséquente de la consommation du drone. L'objectif de la maquette décrite ici est d'évaluer expérimentalement l'effet du vent sur le dispositif DarkO.
 
 De plus, il faut noter que le changement de l'angle d'attaque du drone a un impact sur la mesure du vent. Comme la sonde de Pitot est fixée sur le corps du drone, cette dernière se trouve être en rotation lors de la transition. On comprend donc que la mesure du vent ne sera valide qu'en vol d'avancement, à haute vitesse. En vol stationnaire ou lors de la transition, nous n'avons pas de mesure du vent, ni des rafales impactant le drone.
 
@@ -19,7 +20,8 @@ Nous allons donc proposer dans ce chapitre une méthode de commande linéaire n'
 Le prototype développé comprend des pièces imprimées en 3D, en Onyx et PLA  \nomenclature[]{\(PLA\)}{Thermoplastique : acide polylactique} (acide polylactique, un polyester thermoplastique). Le drone est spécialement conçu pour réaliser des expériences devant une soufflerie, avec un comportement semblable à celui de DarkO en raison de leur forme similaire (voir Figure \ref{fig:real_test_bench}). La partie centrale, qui contient l'avionique embarquée (pilote automatique, GPS, etc.) dans DarkO, a été remplacée ici par un joint tournant à un degré de liberté (voir Figure \ref{fig:rotation}). Les ailes sont les mêmes que celles du DarkO, avec les contrôleurs électroniques de vitesse (ESC), régissant la vitesse du moteur \textit{brushless}, placés dans les ailes.
 
 Comme décrit dans la section \ref{sec:motivation3DOF}, nous souhaitons représenter et étudier le degré de liberté de l'axe $y_{\text{b}}$ du drone DarkO. Le tube principal en carbone reliant les deux ailes est utilisé comme axe de rotation. Ce tube est fixé sur deux roulements espacés de \SI{28.5}{\milli\meter} afin d'obtenir une fixation solide de l'ensemble. Cet axe de rotation est équipé d'un codeur optique rotatif en quadrature pour mesurer précisément l'orientation de l'appareil. L'avantage de ce capteur est qu'il ne produit pas de couple résistant sur l'axe de rotation. Ce codeur offre 4000 impulsions par tour, ce qui donne une résolution de $\SI{0.09}{\degree}/impulsion$.
-\begin{figure}[!ht]
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.6\columnwidth]{figures/MontageSupport2.png}.
     \caption{Montage à un degré de liberté.}
@@ -41,7 +43,7 @@ La photo de la Figure \ref{fig:real_test_bench} montre le dispositif expériment
 La géométrie du dispositif expérimental permet de placer les câbles d'alimentation et de signal près du centre de rotation afin de minimiser leurs effets de friction sur la structure. Malgré cela, le système de rotation interfère inévitablement avec le drone, en créant des forces parasites, notamment de la traînée. La surface projetée de l'articulation étant faible par rapport à la surface de l'aile, la traînée générée par ce support est faible par rapport à la traînée de l'aile et des hélices, et peut donc être négligée. Un diagramme schématique des composants du dispositif expérimental et de leurs interconnexions est présenté à la Figure \ref{fig:archi}.
 
 \begin{figure}[!ht]
-    \includegraphics[width=\columnwidth]{figures/maquette-min.png}
+    \includegraphics[width=0.9\columnwidth]{figures/maquette-min.png}
     \caption{Architecture d'essai en vol virtuel : \textit{WindShape} (a) ; capteur de vitesse (b) ; capteur de forces et moments (c) ; encodeur rotatif (d) ; servomoteur (e) ; moteur \textit{brushless} + ESC (f) ; LabJack (g) ; ordinateur de contrôle (h)}
     \label{fig:archi}
 \end{figure}
@@ -51,14 +53,14 @@ Les moteurs (f) sont alimentés par une batterie externe de 12v 20Ah et les serv
 Les élevons sont commandés par des servomoteurs qui ne fournissent pas de signal de mesure de la position. Nous utilisons donc le point de consigne, en supposant que les actionneurs soient parfaits. Cela est raisonnable en raison de la saturation logicielle imposée à l'entrée des élevons et du dimensionnement correct des servomoteurs par rapport aux forces impliquées. 
 Le LabJack (g) possède une interface de programmation d'application (API), permettant une connexion avec un ordinateur. Nous avons développé un code Python qui communique avec le LabJack afin de récupérer les valeurs des capteurs, de calculer la commande à appliquer aux servomoteurs selon le schéma de contrôle présenté ci-dessous et de générer les signaux de sortie pour les servomoteurs. Les données collectées par le LabJack sont enregistrées afin d'être utilisées pour le post-traitement et de générer le graphique présenté dans la section \ref{sec:exp3DOF}. 
 
-\nomenclature[]{\(PWM\)}{Modulation de largeur d'impulsions (\textit{Pulse Width Modulation})}
+\nomenclature[]{\(PWM\)}{Modulation de largeur d'impulsion (\textit{Pulse Width Modulation})}
 \nomenclature[]{\(API\)}{Interface de programmation d'application (\textit{Application Programming Interface})}
 
-Le \textit{WindShape} dispose également d'une API lui permettant d'être contrôlé via un réseau Ethernet. Le code Python développé peut assigner la vitesse du vent générée par le \textit{WindShape} et donc agir sur le modèle. Il est ainsi possible de tester un ensemble de configurations de vols stationnaires et les transitoires associés dans la même campagne d'essais, sans aucune action sur le modèle. 
+Le \textit{WindShape} dispose également d'une API lui permettant d'être contrôlé via un réseau Ethernet. Le code Python développé peut assigner la vitesse du vent généré par le \textit{WindShape} et donc agir sur le modèle. Il est ainsi possible de tester un ensemble de configurations de vols stationnaires et les transitoires associés dans la même campagne d'essais, sans aucune action sur le modèle. 
 
 
 \subsection{Simulation des mouvements du drone}
-Le prototype étant relié à un support fixe, il n'est pas possible de reproduire expérimentalement le mouvement de translation.  Nous avons donc inclus une simulation logicielle du mouvement en intégrant les mesures de force disponibles au niveau de la fixation. La vitesse de translation (respectivement la position) du drone est obtenue par intégration simple (respectivement double) des données mesurées par le capteur de force. Par souci de simplicité, nous négligeons l'influence aérodynamique de la vitesse (simulée) sur l'aile. En particulier, à partir des équations \eqref{eq:dyna_orig_a} et \eqref{eq:dyna_orig_b}, nous obtenons le modèle simplifié suivant : 
+Le prototype étant relié à un support fixe, il n'est pas possible de reproduire expérimentalement le mouvement de translation.  Nous avons donc inclus une simulation logicielle du mouvement en intégrant les mesures de forces disponibles au niveau de la fixation. La vitesse de translation (respectivement la position) du drone est obtenue par intégration simple (respectivement double) des données mesurées par le capteur de forces. Par souci de simplicité, nous négligeons l'influence aérodynamique de la vitesse (simulée) sur l'aile. En particulier, à partir des équations \eqref{eq:dyna_orig_a} et \eqref{eq:dyna_orig_b}, nous obtenons le modèle simplifié suivant : 
 \begin{subequations}\label{eq:accel_sensor}
     \begin{align}
         \boldsymbol{\dot v} &= \boldsymbol{g} + \frac{1}{m}\left( R(\boldsymbol{q})(F\boldsymbol{u} +  D_{\text{f}}(\delta) R^\top(\boldsymbol{q})\lVert \boldsymbol{w} \rVert \boldsymbol{w}) \right)\\
@@ -71,7 +73,7 @@ La vitesse et la position transitoire du drone sont ensuite obtenues par intégr
 \section{Contrôle linéaire, architecture PI sur maquette à 3 DOF}
 \label{sec:3dofcmd}
 Dans la section \ref{sec:ctrl_hyste}, nous avons proposé un bouclage proportionnel stabilisant une position de vol stationnaire en l'absence de vent (sans perturbation). Nous proposons ici une extension incluant une action intégrale, adaptée au fonctionnement avec une perturbation non mesurée représentée par un vent constant. L'objectif est de stabiliser le drone à la position de référence, en rejetant une perturbation de vent constant inconnue.
-Les matrices de gain associées au gain intégral et proportionnel seront optimisées suivant un schéma de synthèse $H_{\infty}$ combinant à la fois des critères de robustesse et de performance. Nous mettons donc en œuvre une synthèse robuste basés sur des critères $H_{\infty}$ sous contrainte d'une structure PI multidimensionnelle (MIMO).
+Les matrices de gain associées au gain intégral et proportionnel seront optimisées suivant un schéma de synthèse $H_{\infty}$ combinant à la fois des critères de robustesse et de performance. Nous mettons donc en œuvre une synthèse robuste basée sur des critères $H_{\infty}$, sous contrainte d'une structure PI multidimensionnelle (MIMO).
 
 \subsection{Description du schéma de contrôle}
 Nous expérimentons la situation avec le vent agissant uniquement le long de l'axe $x_{i}$, avec le drone orienté vers le vent, c'est-à-dire avec des angles de roulis et de lacet nuls. Dans cette configuration, le vent n'agit que sur la vitesse linéaire le long des axes $x_{b}$ et $z_{b}$, et ne génère qu'un moment autour de l'axe $y_{b}$. Un examen attentif de la commande et des matrices d'entrée des perturbations $\boldsymbol{F}$, $\boldsymbol{M}$ dans \eqref{eq:FandM} suggère une architecture de commande efficace pour rejeter une perturbation constante. En effet, les élevons et les hélices peuvent être utilisés symétriquement pour générer respectivement un moment autour de l'axe $y_{b}$ et une force le long de l'axe $x_{b}$, compensant ainsi l'effet de la perturbation. Néanmoins, il reste une force le long de l'axe $z_{b}$ à compenser et une action intégrale peut converger asymptotiquement vers la force désirée, même avec une perturbation du vent non mesurée $\boldsymbol{w}$. Nous pouvons ainsi stabiliser le drone à une position de vol stationnaire, différente de l'équilibre sans vent. La solution de contrôle exploite le degré de liberté de l'angle de tangage pour compenser l'effet du vent.
@@ -79,11 +81,10 @@ Nous expérimentons la situation avec le vent agissant uniquement le long de l'a
 \begin{figure}[ht!]
     \centering
     \includegraphics[trim=5cm 0cm 0cm 0cm,clip,width=1\columnwidth]{figures/commande_integrale_3DOF.png}
-    \caption{Schéma de commande linéaire, proportionnel-intégral.}
+    \caption{Schéma de commande linéaire, proportionnelle-intégrale.}
     \label{fig:commande_int3DOF}
 \end{figure}
 Le contrôleur proposé, représenté sur la Figure \ref{fig:commande_int3DOF}, correspond à :
-
 \begin{subequations}
     \label{eq:ctrl3dof}
     \begin{align}
@@ -132,13 +133,12 @@ Par conséquent, la minimisation de la norme $H_{\infty}$ de $T_{\nu \rightarrow
 
 Nous définissons aussi la matrice de transfert $T_{\nu \rightarrow u}$ de dimensions 4\texttimes11 liée à l'impact du bruit de mesure $\nu$ sur la commande $\boldsymbol{u}$, et $T_{d \rightarrow y}$ de dimensions 11\texttimes4 représentant l'impact de la perturbation en entrée $\boldsymbol{d}$ sur la sortie du système $\boldsymbol{y}$. 
 
-{\color{blue}
-    Nous définissons des fonctions de pondération associées aux matrices de transfert précédemment explicitées. Sachant que $ \| . \|_{\infty}$ représente la norme $H_{\infty}$, la pondération $W_{i}(s)$ est associée à une matrice de transfert $ T_{i}(s, x)$, qui permet de former la fonction :
-    \begin{align}
-        \label{eq:formecontrainte}
-        f_{i}(x) = \| W_{i}(s) T_{i}(s, x) \|_{\infty}
-    \end{align}
-    où $x$ représente le vecteur de paramètres ajustables par l'optimisation. Avec cette formulation, il est possible d'utiliser un code d'optimisation permettant de minimiser $f(x)$.
+Nous définissons des fonctions de pondération associées aux matrices de transfert précédemment explicitées. Sachant que $ \| . \|_{\infty}$ représente la norme $H_{\infty}$, la pondération $W_{i}(s)$ est associée à une matrice de transfert $ T_{i}(s, x)$, qui permet de former la fonction :
+\begin{align}
+    \label{eq:formecontrainte}
+    f_{i}(x) = \| W_{i}(s) T_{i}(s, x) \|_{\infty}
+\end{align}
+où $x$ représente le vecteur de paramètres ajustables par l'optimisation. Avec cette formulation, il est possible d'utiliser un code d'optimisation permettant de minimiser $f(x)$.
 
  
 En appliquant cette méthodologie dans notre cas et grâce aux fonctions de pondération $W=\diag (W_{1},..., W_{4})$, la conception de $\boldsymbol{H}$ et $\boldsymbol{K}$ vise à rejeter une perturbation ou un échelon à basse fréquence $\boldsymbol{w}$ agissant en entrée du système. L'objectif de la conception est d'amener $\boldsymbol{y}$ à zéro, malgré la perturbation à basse fréquence sur $\boldsymbol{w}$. Plus précisément, nous avons sélectionné des fonctions de pondération constantes valant :
@@ -148,10 +148,9 @@ En appliquant cette méthodologie dans notre cas et grâce aux fonctions de pond
     W_{3} = 0.8, \quad 
     W_{4} = 0.5.
 \end{align}
-{
-    \color{green}
-    Ces valeurs ont été sélectionnées pour obtenir un bon compromis entre le rejeter des perturbations et la vitesse de convergence du système.
-}
+
+Ces valeurs ont été sélectionnées pour obtenir un bon compromis entre le rejet des perturbations et la vitesse de convergence du système.
+
 Il est maintenant possible de former le problème d'optimisation multicritère suivant, en concaténant les contraintes exprimées sous la forme de \eqref{eq:formecontrainte}
 \begin{align*} \label{eq:pb_optim}
 &\min_{C}\quad \begin{vmatrix}
@@ -161,7 +160,7 @@ Il est maintenant possible de former le problème d'optimisation multicritère s
     \|W_{4} T_{d \rightarrow y}(P,C)\|
     \end{vmatrix}_{\infty}, \text{ sous condition que } \\ &C \in \mathbb{R}^{11 \times 4} \text{ stabilise } P \text{ en interne.} \numberthis
 \end{align*}
-}
+
 Nous avons résolu \eqref{eq:pb_optim} en utilisant la fonction Matlab {\tt Systune} \cite{1576856}. Basé sur l'optimisation non lisse, {\tt Systune} traite plusieurs scénarios non convexes, telle que l'architecture de contrôle structurée où nous optimisons les matrices de gain $\boldsymbol{K}$, $\boldsymbol{H}$. L'algorithme d'optimisation renvoie la sélection optimisée suivante :
 
 \begin{align}\label{eq:HK}
@@ -181,19 +180,21 @@ Nous obtenons une abscisse spectrale en boucle fermée pour $\boldsymbol{A}_{cl}
 \section{Résultats}
 \label{sec:exp3DOF}
 La figure~\ref{fig_exp_centrage_arr} montre le résultat de la boucle fermée de la figure~\ref{fig:commande_int3DOF} avec la sélection des gains \eqref{eq:HK} et une valeur constante et croissante par morceaux du vent horizontal $w$ (dernier graphique). 
-\begin{figure}[H]
+
+\begin{figure}[ht!]
     \centering
      \includegraphics[width=0.6\columnwidth]{figures/exp.png}
      \caption{Résultats expérimentaux.}
      \label{fig_exp_centrage_arr}
  \end{figure}
+
 Malgré quelques oscillations, le drone maintient sa position en dépit du vent, en inclinant convenablement l'angle de tangage. Les oscillations expérimentales sont absentes de nos simulations, ce qui suggère la présence de phénomènes non modélisés.
 Nous observons également un comportement qui pourrait être important pour de futures recherches : le drone semble se stabiliser plus facilement le long de l'axe vertical que le long de l'axe horizontal. 
 
 Comme prévu, lorsque le vent augmente, l'angle d'inclinaison diminue, ce qui modifie la poussée nécessaire et la déflexion des élevons. En effet, le vent génère de la portance sur les ailes, ce qui compense l'effet de la gravité, et donc la poussée nécessaire devient plus faible.
-Pour chaque valeur de $w$, le modèle converge vers un équilibre, dont la caractérisation mathématique précise est détaillée dans \ref{sec:eq_vent}. Il est donc nécessaire d'étendre la robustesse du contrôleur en effectuant une optimisation multimodèle du contrôleur (décrite dans \ref{sec:h_inf6DOF_multi}). Il est également possible d'ajouter des degrés de libertés supplémentaires à  la structure du contrôleur afin de lui donner plus de degrés de liberté dans l'optimisation.
+Pour chaque valeur de $w$, le modèle converge vers un équilibre, dont la caractérisation mathématique précise est détaillée dans \ref{sec:eq_vent}. Il est donc nécessaire d'étendre la robustesse du contrôleur en effectuant une optimisation multimodèle du contrôleur (décrite dans \ref{sec:h_inf6DOF_multi}). Il est également possible d'ajouter des degrés de liberté supplémentaires à  la structure du contrôleur afin de lui donner plus de degrés de liberté dans l'optimisation.
 
-La vidéo de la maquette, avec les résultats expérimentaux est, disponible via le lien : \url{https://youtu.be/ce4_FUzeVzI}.
+La vidéo de la maquette, avec les résultats expérimentaux, est disponible via le lien : \url{https://youtu.be/ce4_FUzeVzI}.
 
 
 

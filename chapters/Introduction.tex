@@ -1,3 +1,4 @@
+% LTeX: enabled=false
 \chapter*{Introduction}
 \addstarredchapter{Introduction} %Sinon cela n'apparait pas dans la table des matières
 \markboth{Introduction}{Introduction} % headers
@@ -10,10 +11,10 @@ Ces dernières années, le domaine des drones s'est considérablement développ�
 
 La possibilité d'utiliser des systèmes de vols autonomes dans le secteur civil a été rendue possible par l'accessibilité croissante, proposée par l'industrie, de solutions à faible coût pour les applications d'imagerie aérienne. Ainsi, ce sont dans des domaines aussi variés que l'agriculture de précision,  l'inspection des infrastructures civiles ou encore les opérations de sécurité que les drones autonomes sont aujourd'hui mobilisés, devenant alors un riche sujet de recherche.
 
-La miniaturisation des équipements électroniques et mécaniques est à l'origine de l'essor d'une classe de drones de plus en plus petits. Souvent qualifiés de \textit{Micro Air Vehicle} (MAV) ou de \textit{Unmanned Aerial Vehicle} (UAV), leur petite taille leur permet d'intervenir dans des espaces confinés ou contraints. Ils n'ont, cependant, qu'une charge utile restreinte, souvent limitée à l'emport d'une caméra ou d'un colis de faible masse. Leur faible autonomie restreignant leur usage, la recherche s'est alors concentrée sur une solution permettant d'optimiser leur utilisation. En cela, les drones à décollage et atterrissage verticaux (\textit{Vertical take-off and landing}; VTOL) répondent aux exigences.
-\nomenclature[]{\(VTOL\)}{Drones à décollage et atterrissage verticaux (\textit{Vertical Take-Off and landing})}
-\nomenclature[]{\(MAV\)}{Micro drone (\textit{Micro Air Vehicle})}
-\nomenclature[]{\(UAV\)}{Drone autonomes (\textit{Unmanned Aerial Vehicle})}
+La miniaturisation des équipements électroniques et mécaniques est à l'origine de l'essor d'une classe de drones de plus en plus petits. Souvent qualifiés de \textit{Micro Air Vehicle} (MAV) ou de \textit{Unmanned Aerial Vehicle} (UAV), leur petite taille leur permet d'intervenir dans des espaces confinés ou contraints. Ils n'ont, cependant, qu'une charge utile restreinte, souvent limitée à l'emport d'une caméra ou d'un colis de faible masse. Leur faible autonomie restreignant leur usage, la recherche s'est alors concentrée sur une solution permettant d'optimiser leur utilisation. En cela, les drones à décollage et atterrissage vertical (\textit{Vertical take-off and landing}; VTOL) répondent aux exigences.
+\nomenclature[]{\(VTOL\)}{Drones à décollage et atterrissage vertical (\textit{Vertical Take-Off and landing})}
+\nomenclature[]{\(MAV\)}{Micro-drone (\textit{Micro Air Vehicle})}
+\nomenclature[]{\(UAV\)}{Drone autonome (\textit{Unmanned Aerial Vehicle})}
 
 Dans l'ensemble des VTOL, plusieurs architectures existent et seront détaillées dans la section \ref{sec:archConvertible}. Toutefois, nos travaux se sont concentrés sur les classes des \textit{tailsitters} et des \textit{freewings}.
 
@@ -35,7 +36,7 @@ Le vecteur $\overrightarrow{W}$ représente la perturbation de vent qui peut aff
 \begin{figure}[ht!]
     \centering
         \includegraphics[width=0.8\columnwidth]{figures/darko_transition.png}
-        \caption{Phases de vol d'un drone \textit{tailsitters}, DarkO.}
+        \caption{Phases de vol d'un drone \textit{tailsitter}, DarkO.}
         \label{fig:darko_flight}
 \end{figure}
 
@@ -52,7 +53,7 @@ De nombreuses maquettes réelles ont été assemblées dans le but de réaliser 
     \quad
     \includegraphics[height=3cm]{figures/KHlion.png}
     }
-    \caption{Maquette «~T-Wing~», «~MavIon~» et «~KH-Lion~».}
+    \caption{Maquettes «~T-Wing~», «~MavIon~» et «~KH-Lion~».}
     \label{fig:maquettetailsitter}
 \end{figure}
 
@@ -87,17 +88,13 @@ Au vu des contraintes des \textit{tailsitters}, l'installation de capteurs de me
 \section*{Plan et contribution}
 Notre exposé commencera par une description générale des architectures de drone convertible (Chapitre~\ref{chap:generalites}), avec une présentation des avantages et des inconvénients, ainsi que leur mode de fonctionnement. Une description générale de la modélisation, de l'actionnement et des lois de commande proposées sur les \textit{tailsitters} et les \textit{freewings} introduira nos propos sur ces architectures.
 
-Le chapitre \ref{chap:model} détaillera le modèle non-linéaire d'un drone \textit{tailsitter}, DarkO, à partir des travaux de \cite{lustosaHal-03035938} et de \cite{olszaneckibarthHal-02542982}. Nous proposons un modèle simplifié pour les basses vitesses, ainsi que le détail des équilibres stationnaires en présence ou non de vent. De ces équilibres, nous présenterons la dynamique linéarisée du drone paramétrée par deux scalaires : le vent horizontal et vertical. Ce modèle étant le point de départ de chacun de nos travaux, il se retrouve expliqué dans \cite[Chapitre 2]{sansouStage} et \cite[Section II]{sansouECC} dans la condition de vent nulle, dans \cite[Section 2]{SANSOUACA} avec des conditions de vent non nulle et dans \cite[Section II]{sansouTCST} sous sa forme la plus complète.
+Le chapitre \ref{chap:model} détaillera le modèle non-linéaire d'un drone \textit{tailsitter}, DarkO, à partir des travaux de \cite{lustosaHal-03035938} et de \cite{olszaneckibarthHal-02542982}. Nous proposerons un modèle simplifié pour les basses vitesses, ainsi que le détail des équilibres stationnaires en présence ou non de vent. De ces équilibres, nous présenterons la dynamique linéarisée du drone paramétrée par deux scalaires : le vent horizontal et vertical. Ce modèle étant le point de départ de chacun de nos travaux, il se retrouve expliqué dans \cite[Chapitre 2]{sansouStage} et \cite[Section II]{sansouECC} dans la condition de vent nul, dans \cite[Section 2]{SANSOUACA} avec des conditions de vent non nul et dans \cite[Section II]{sansouTCST} sous sa forme la plus complète.
 
 Le chapitre \ref{chap:hybrid} fera l'objet d'une proposition de loi de commande hybride permettant d'augmenter le domaine de stabilité d'une loi linéaire avec une loi de commande non-linéaire basée sur une direction de zéro moment. Ces travaux ont été publiés dans  \cite{sansouStage} et \cite{sansouECC}.
 
-Le chapitre \ref{chap:3DOF} permettra de décrire une maquette expérimentale utilisée pour évaluer les performances d'une loi de commande basée sur une architecture proportionnelle dérivative. Cette loi est un retour de sortie permettant de stabiliser une position stationnaire en présence de vent. Cette maquette restreint les degrés de liberté classiques d'un drone pour se concentrer sur la réjection de perturbation de vent, grâce à un changement d'incidence de la maquette. La description de la loi de commande, son optimisation et les résultats sont disponibles dans \cite{SANSOUACA}.
+Le chapitre \ref{chap:3DOF} permettra de décrire une maquette expérimentale utilisée pour évaluer les performances d'une loi de commande basée sur une architecture proportionnelle dérivative. Cette loi est un retour de sortie permettant de stabiliser une position stationnaire en présence de vent. Cette maquette restreint les degrés de liberté classiques d'un drone pour se concentrer sur la réjection de perturbations de vent, grâce à un changement d'incidence de la maquette. La description de la loi de commande, son optimisation et les résultats sont disponibles dans \cite{SANSOUACA}.
 
-Le chapitre \ref{chap:LMI} propose une méthode différente d'obtention des gains de la boucle fermée, basée sur les inégalités linéaires matricielles et la théorie de Lyapunov. L'ensemble de l'optimisation sera réalisé à l'aide de la dynamique linéarisée du drone autour de la condition de vent nulle. Ce contrôleur sera testé sur une maquette à six degrés de liberté en environnement contrôlé. {
-    \color{green}
-    Cette seconde méthode d'obtention des gains du contrôleur est disponible dans \cite{a_curpanaru_et_al}.
-
-}
+Le chapitre \ref{chap:LMI} propose une méthode différente d'obtention des gains de la boucle fermée, basée sur les inégalités linéaires matricielles et la théorie de Lyapunov. L'ensemble de l'optimisation sera réalisé à l'aide de la dynamique linéarisée du drone autour de la condition de vent nul. Ce contrôleur sera testé sur une maquette à six degrés de liberté en environnement contrôlé. Cette seconde méthode d'obtention des gains du contrôleur est disponible dans \cite{a_curpanaru_et_al}.
 
 Le chapitre \ref{chap:6DOF} étendra le contrôleur proposé dans le chapitre \ref{chap:3DOF} pour stabiliser la dynamique complète d'un drone \textit{tailsitter}. La méthode d'obtention des gains du contrôleur est basée sur un algorithme itératif permettant de maintenir la complexité algorithmique, tout en identifiant les conditions de vol critiques. Les travaux ont été publiés dans \cite{sansouTCST}.
 

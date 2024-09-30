@@ -1,3 +1,4 @@
+% LTeX: enabled=false
 \chapter{Généralités sur les drones convertibles}
 \minitoc
 \label{chap:generalites}
@@ -26,11 +27,7 @@
         \label{tab:architecture}
     \end{table}
 
-   Nous observons sur la Table \ref{tab:architecture} qu'un drone convertible possède un domaine de vol bien plus important qu'un drone à voilure fixe, lequel ne sera pas en mesure de voler à très basse vitesse, et qu'un quadrirotor, dont l'autonomie va être limitée par sa consommation. Toutefois, les drones convertibles sont nettement moins efficaces qu'une voilure fixe car ils sont plus lourds en raison des mécanismes nécessaires à la conversion et des redondances indispensable pour lutter contre les pannes. Il faut aussi noter que les voilures fixes ont une consommation inférieure pour les mêmes raisons qu'évoquées précédemment. Les drones convertibles ont une consommation variable qui dépend de l'architecture (liée à la masse ajoutée) et du temps passé en vol stationnaire et en vol d'avancement.
-   { 
-    \color{magenta}Cette consommation est quand même inférieure à celle d'un quadrirotor qui se maintient en vol grâce à la rotation des hélices. Les convertibles utilisent une aile ce qui diminue la consommation énergétique en vol d'avancement
-   }
-   En alliant autonomie et vol stationnaire, le modèle convertible répond aux exigences des missions civiles et militaires.
+   Nous observons sur la Table \ref{tab:architecture} qu'un drone convertible possède un domaine de vol bien plus important qu'un drone à voilure fixe, lequel ne sera pas en mesure de voler à très basse vitesse, et qu'un quadrirotor, dont l'autonomie va être limitée par sa consommation. Toutefois, les drones convertibles sont nettement moins efficaces qu'une voilure fixe car ils sont plus lourds en raison des mécanismes nécessaires à la conversion et des redondances indispensables pour lutter contre les pannes. Il faut aussi noter que les voilures fixes ont une consommation inférieure pour les mêmes raisons qu'évoquées précédemment. Les drones convertibles ont une consommation variable qui dépend de l'architecture (liée à la masse ajoutée) et du temps passé en vol stationnaire et en vol d'avancement. Cette consommation est quand même inférieure à celle d'un quadrirotor qui se maintient en vol grâce à la rotation des hélices. Les convertibles utilisent une aile, ce qui diminue la consommation énergétique en vol d'avancement. En alliant autonomie et vol stationnaire, le modèle convertible répond aux exigences des missions civiles et militaires.
 
     \subsection{Types d'architectures des drones convertibles}
     \label{sec:archConvertible}
@@ -92,7 +89,8 @@
 
     
         \subsubsection*{\textit{Tiltwing}} 
-        La particularité des \textit{tiltwings} réside dans le fait que les rotors sont inclinés en même temps que les ailes (voir Figure \ref{fig:tiltwing}). Un actionneur supplémentaire et puissant est donc nécessaire pour surmonter le couple de l'aile, afin de la positionner dans l'orientation souhaitée \cite{holsten2011design, rohr2019attitude, ccetinsoy2012design}. La commande de cet actionneur doit être prise en compte lors de la conception des lois de commande car ce servomoteur permet de fixer l'orientation de l'aile et par conséquent l'incidence vis-à-vis du flux d'air incident. Toutefois, la dynamique de cet actionneur et l'inertie de l'aile limitent les déplacements rapides, lesquels permettraient de rejeter des turbulences. Pendant le décollage, l'atterrissage et les vols stationnaires, les ailes doivent être positionnées vers le haut afin de produire une force de poussée opposée au vecteur gravité. Dans ces phases de vol, lorsque les ailes sont orientées vers le haut, l'aéronef est plus vulnérable au vent et les lois de commande doivent rejeter ces perturbations. Dans la littérature, il existe plusieurs configurations d'ailes basculantes et différentes approches de contrôle conçues pour stabiliser leur dynamique de vol.
+        La particularité des \textit{tiltwings} réside dans le fait que les rotors sont inclinés en même temps que les ailes (voir Figure \ref{fig:tiltwing}). 
+
         \begin{figure}[ht!]
             \centering
             \resizebox{.9\textwidth}{!}{%
@@ -103,7 +101,9 @@
             \caption{Structure \textit{tiltwing}  proposée par \cite{Aero2_2024, Ostermann2012ControlCO}.}
             \label{fig:tiltwing}
         \end{figure}
-
+        
+        Un actionneur supplémentaire et puissant est donc nécessaire pour surmonter le couple de l'aile, afin de la positionner dans l'orientation souhaitée \cite{holsten2011design, rohr2019attitude, ccetinsoy2012design}. La commande de cet actionneur doit être prise en compte lors de la conception des lois de commande car ce servomoteur permet de fixer l'orientation de l'aile et par conséquent l'incidence vis-à-vis du flux d'air incident. Toutefois, la dynamique de cet actionneur et l'inertie de l'aile limitent les déplacements rapides, lesquels permettraient de rejeter des turbulences. Pendant le décollage, l'atterrissage et les vols stationnaires, les ailes doivent être positionnées vers le haut afin de produire une force de poussée opposée au vecteur gravité. Dans ces phases de vol, lorsque les ailes sont orientées vers le haut, l'aéronef est plus vulnérable au vent et les lois de commande doivent rejeter ces perturbations. Dans la littérature, il existe plusieurs configurations d'ailes basculantes et différentes approches de contrôle conçues pour stabiliser leur dynamique de vol.
+       
         Par ailleurs, les \textit{freewings} sont une gamme en cours de développement à l'intérieur de l'architecture des \textit{tiltwings}. Ils sont actionnés comme des \textit{tiltwings}, excepté au niveau de l'axe de rotation entre l'aile et le fuselage. Cette rotation est laissée libre, ce degré de liberté permettant à l'aile de changer librement son incidence. Il en résulte un gain de masse car il est possible de supprimer l'actionneur puissant et lourd nécessaire à la rotation de l'aile. De plus, l'aile étant libre de s'orienter, les turbulences ont un impact plus faible sur la structure, ce qui rend les vols plus stables \cite{freewing2012, Johnson2021, Johnson2023}. 
 
 
@@ -153,7 +153,7 @@
 \label{sec:modelisation}
 
 \subsection{Dynamique du système}
-Dans le cas des drones convertibles basculant, le modèle aérodynamique doit être correct dans les phases de transition. Cela nécessite l'extension de l'aérodynamique classique (faible incidence) à un angle d'attaque élevé et à un fonctionnement à faible vitesse. En outre, l'effet du souffle de l'hélice sur les profils aérodynamiques du véhicule doit être compris et pris en compte dans le modèle du système. Par exemple, les travaux de \cite{9444145} sur un \textit{tiltwing} identifient les zones d'interaction entre l'hélice et l'aile. Ils séparent clairement la génération de forces et de couples, lesquelles sont obtenues par la partie soufflée et non-soufflée de l'aile.
+Dans le cas des drones convertibles basculant, le modèle aérodynamique doit être correct dans les phases de transition. Cela nécessite l'extension de l'aérodynamique classique (faible incidence) à un angle d'attaque élevé et à un fonctionnement à faible vitesse. En outre, l'effet du souffle de l'hélice sur les profils aérodynamiques du véhicule doit être compris et pris en compte dans le modèle du système. Par exemple, les travaux de \cite{9444145} sur un \textit{tiltwing} identifient les zones d'interaction entre l'hélice et l'aile. Les auteurs séparent clairement la génération de forces et de couples obtenues par la partie soufflée et non-soufflée de l'aile.
 
 Des fonctions non-linéaires continues décrivant les coefficients de portance et de traînée aérodynamiques sur toute la plage de l'angle d'attaque pour les  \textit{tiltrotors} ont été dérivées dans \cite{6981467} et pour les \textit{tiltwings} dans \cite{Lustosa2017LaP, lustosaHal-03035938}.
 
@@ -224,12 +224,14 @@ La rotation autour de l'axe $x_{\text{b}}$ peut être contrôlée par des braqua
 
 
 Une approche en cascade est une méthode couramment utilisée dans le cadre de la commande de drone. Cette approche, illustrée sur la Figure \ref{fig:schemahiera}, est basée sur l'imbrication de boucles de  commande.
+
 \begin{figure}[ht!]
     \centerline{
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.8\columnwidth]{figures/controlhierachique.png}}
     \caption{Architecture classique de contrôle hiérarchique pour les drones.}
     \label{fig:schemahiera}
 \end{figure}
+
 Cette architecture s'appuie sur la séparation des dynamiques d'un drone sous actionné. Effectivement, le drone étant obligé de modifier son orientation pour changer de position, le schéma de contrôle prend en compte cette spécificité. Ainsi, la boucle interne est réglée pour avoir un temps de réponse faible vis-à-vis des autres lois. Cette boucle interne stabilise l'attitude du drone ($att_{m}$) en la faisant converger vers l'attitude de consigne ($att_{c}$). Cette attitude de consigne est le résultat de la boucle de vitesse faisant converger la vitesse du drone ($vel_{m}$) vers la vitesse de consigne ($vel_{c}$). La vitesse de consigne est la résultante de la boucle de position faisant converger la position du drone ($pos_{m}$) vers la position de consigne définie par le pilote ($pos_{c}$).
 
 
@@ -276,19 +278,19 @@ Les auteurs de \cite{Lustosa2017LaP} ont proposé l'approche de séquencement de
 
 \subsection*{Contrôleur non-linéaire}
 
-L'approche "inversion dynamique non-linéaire incrémentale" (INDI) utilise la connaissance de la dynamique d'un système. Une inversion incrémentale est réalisée pour d'obtenir les accélérations angulaires cibles. Théoriquement, le bouclage des accélérations angulaires élimine la sensibilité aux imperfections du modèle, ce qui augmente considérablement la robustesse du système par rapport à l'inversion dynamique non-linéaire conventionnelle \cite{Sieberling2010, Binz2019}. Ce contrôleur nécessite l'identification des actionneurs afin de régler les paramètres du contrôleur, telle que l'efficacité des actionneurs. Étant donné que l'efficacité des surfaces de contrôle aérodynamiques n'est pas constante pendant toute l'enveloppe de vol sur un \textit{tiltwing}, une méthode de programmation des gains a été mise au point \cite{smeurINDI,smeurINDITail}.
+L'approche "inversion dynamique non-linéaire incrémentale" (INDI) utilise la connaissance de la dynamique d'un système. Une inversion incrémentale est réalisée pour obtenir les accélérations angulaires cibles. Théoriquement, le bouclage des accélérations angulaires élimine la sensibilité aux imperfections du modèle, ce qui augmente considérablement la robustesse du système par rapport à l'inversion dynamique non-linéaire conventionnelle \cite{Sieberling2010, Binz2019}. Ce contrôleur nécessite l'identification des actionneurs afin de régler les paramètres du contrôleur, telle que l'efficacité des actionneurs. Étant donné que l'efficacité des surfaces de contrôle aérodynamiques n'est pas constante pendant toute l'enveloppe de vol sur un \textit{tiltwing}, une méthode de programmation des gains a été mise au point \cite{smeurINDI,smeurINDITail}.
 La limitation d'une telle loi de commande est la disponibilité et la qualité  des accélérations angulaires. En effet, les capteurs mesurant la vitesse angulaire sont très bruités et nous sommes contraints de dériver ce signal pour obtenir les accélérations angulaires.
 
 
 
-\subsection*{Contrôleur sans modèle basée mesure}
+\subsection*{Contrôleur sans modèle basé mesure}
 
 Contrairement à l'INDI basée sur l'inversion d'un modèle, la loi de commande sans modèle (MFC) \cite{Fliess_2013}  nécessite peu de connaissances préalables du système contrôlé pour concevoir le contrôleur.
 On modélise la dynamique inconnue par une équation numérique, appelée modèle ultra-local :
 \begin{align}
     y_{m}^{(\nu)} = F_{y} + \lambda u.
 \end{align}
-$F_{y}$ représente la dynamique réelle du modèle ainsi que les différentes perturbations qui pourraient affecter la performance du système en sortie. Une estimation précise de $F_{y}$, définie comme $\hat{F}_{y}$, est cruciale et joue un rôle important dans les performances de contrôle de la MFC et est obtenue à l'aide d'un estimateur non-linéaire. Soulignons que cet estimateur ne modifie pas les gains de la commande en retour, contrairement aux méthodes de commande adaptative. Le processus adaptatif MFC est réalisé par l'estimateur qui fourni une sortie, laquelle est utilisée pour calculer la commande formant la boucle fermée. Avec cet estimateur, il est possible de mettre en œuvre un contrôleur robuste et adaptatif qui assure la stabilité des systèmes variables dans le temps, en estimant en temps réel leur dynamique à partir des mesures périodiques. Nous pouvons citer le travail de \cite{olszaneckibarthHal-02542982} sur un \textit{tailsitter}, lequel continue de voler malgré une modification importante de son actionnement et de sa dynamique (voir Figure \ref{fig:darko_mfc}).
+$F_{y}$ représente la dynamique réelle du modèle ainsi que les différentes perturbations qui pourraient affecter la performance du système en sortie. Une estimation précise de $F_{y}$, définie comme $\hat{F}_{y}$, est cruciale et joue un rôle important dans les performances de contrôle de la MFC et est obtenue à l'aide d'un estimateur non-linéaire. Soulignons que cet estimateur ne modifie pas les gains de la commande en retour, contrairement aux méthodes de commande adaptative. Le processus adaptatif MFC est réalisé par l'estimateur qui fournit une sortie, laquelle est utilisée pour calculer la commande formant la boucle fermée. Avec cet estimateur, il est possible de mettre en œuvre un contrôleur robuste et adaptatif qui assure la stabilité des systèmes variables dans le temps, en estimant en temps réel leur dynamique à partir des mesures périodiques. Nous pouvons citer le travail de \cite{olszaneckibarthHal-02542982} sur un \textit{tailsitter}, lequel continue de voler malgré une modification importante de son actionnement et de sa dynamique (voir Figure \ref{fig:darko_mfc}).
 
 \begin{figure}[ht!]
     \centerline{
@@ -340,22 +342,21 @@ Pour l'estimation des paramètres en temps réel, les méthodes les plus couramm
 
 \section{Méthodes de résolution}
 \label{sec:methodo}
-{\color{blue}
-    Il existe plusieurs méthodes pour obtenir les gains des contrôleurs évoqués précédemment (section \ref{sec:archcmd}) des plus naïve avec un réglage des gains d'un PID par essais erreur et jusqu'aux méthodes complexes d'optimisation (optimisation non lisse pour synthèse multiobjectif). Nous pouvons ajouter la résolution de l'équation algébrique de Riccati pour obtenir la matrice de gain d'un contrôleur LQR (section \ref{sec:LQR}). Nous nous attarderons ici sur deux méthodes, le réglage des gains d'un PID par une méthode de placement de pôles et une synthèse basée sur des critères $H_{\infty}$.
+    Il existe plusieurs méthodes pour obtenir les gains des contrôleurs évoqués précédemment (section \ref{sec:archcmd}) des plus naïves avec un réglage des gains d'un PID par essais erreur et jusqu'aux méthodes complexes d'optimisation (optimisation non lisse pour synthèse multiobjectif). Nous pouvons ajouter la résolution de l'équation algébrique de Riccati pour obtenir la matrice de gain d'un contrôleur LQR (section \ref{sec:LQR}). Nous nous attarderons ici sur deux méthodes : le réglage des gains d'un PID par une méthode de placement de pôles et une synthèse basée sur des critères $H_{\infty}$.
 
 
 \subsection*{Obtention des gains d'un PID par une méthode de placement de pôles \cite{WANG2008PID}}
-Les contrôleurs PID sont très largement utilisé dans l'industrie. Le réglage des gains (proportionnel, intégral et dérivatif) est souvent réalisé à l'aide d'une méthode manuelle des valeurs. Toutefois, à l'aide d'un modèle, il est possible d'obtenir les gains qui assurent des critères de performance (rapidité et dépassement). Cette méthode a été proposée par \cite{WANG2008PID}.
+Les contrôleurs PID sont très largement utilisés dans l'industrie. Le réglage des gains (proportionnel, intégral et dérivatif) est souvent réalisé à l'aide d'une méthode manuelle des valeurs. Toutefois, à l'aide d'un modèle, il est possible d'obtenir les gains qui assurent des critères de performance (rapidité et dépassement). Cette méthode a été proposée par \cite{WANG2008PID}.
 
 Considérons un contrôleur PID de la forme :
 \begin{align}
     C(s) = K_{p} +  \frac{K_{i}}{s} + K_{d} s
 \end{align}
-utilisé pour contrôler un système $G(s)$ avec un retour unitaire d'équation caractéristique de bouclage 
+utilisé pour contrôler un système $G(s)$ avec un retour unitaire d'équation caractéristique de bouclage :
 \begin{align}
     \label{eq:bouclePID}
-    1+ C(s)G(s) = 0
-\end{align}.
+    1+ C(s)G(s) = 0.
+\end{align}
 
 Nous proposons de convertir les exigences de performance en une paire de pôles conjugués $\rho_{1,2} = -a \pm bj$.
 
@@ -383,11 +384,10 @@ Cette équation complexe peut être résolue en exprimant $K_{i}$ et $K_{d}$ en 
 
   L'équation \eqref{eq:simplifyPID} simplifie la conception du contrôleur PID dépendant d'un paramètre $K_{p}$. Par conséquent, le gain $K_{p}$ peut être déterminé pour ses valeurs positives à partir de la méthode du lieu racine. Selon le tracé des racines de l'équation caractéristique de la boucle fermée, nous sommes en mesure de déterminer la plage de $K_{p}$, de sorte que les racines se trouvent dans la région complexe requise. 
 
-}
 \subsection*{Synthèse $H_{\infty}$}
 La synthèse $H_{\infty}$ est une méthode qui sert à la conception de commandes optimales, en imposant des contraintes sur la norme $H_{\infty}$ d'un système \cite{1576856, ApkarianMulti}. En se basant sur une synthèse $H_{\infty}$, les auteurs de \cite{SunYang2009} ont obtenu la stabilisation longitudinale d'un \textit{tiltrotor}. En combinant une synthèse $H_{\infty}$ à une approche de séquencement des gains, les auteurs de \cite{DickesonMix2005, DickesonCifdaloz2006,DickesonMiles2007} ont proposé la stabilisation d'un \textit{tiltwing} sur l'ensemble de son enveloppe de vol.
 
-Pour résoudre un problème par synthèse $H_{\infty}$ il est nécessaire de mettre le modèle du système dans la structure classique, représentée sur la Figure \ref{fig:schemalft}. 
+Pour résoudre un problème par synthèse $H_{\infty}$, il est nécessaire de mettre le modèle du système dans la structure classique, représentée sur la Figure \ref{fig:schemalft}. 
 
 \begin{figure}[ht!]
     \centerline{
@@ -399,8 +399,8 @@ Pour résoudre un problème par synthèse $H_{\infty}$ il est nécessaire de met
 L'objectif est de minimiser l'effet de la perturbation $w$  (cas le moins favorable possible) sur la variable de performance $z$, par le biais d'un contrôleur $u = K(s) y$. En d'autres termes, $K(s)$ est choisi de telle sorte que $\| F(P(s), K(s))\|_{\infty}$  soit minimisée, où $F(P(s), K(s))$ est la fonction de transfert de la perturbation $w$ vers le signal d'erreur $z$. 
 Dans ce formalisme, le contrôleur peut être de plusieurs formes PID, retour d'état ou de sortie, etc.
 
-Nous pouvons aussi citer le travail de \cite{SNYDER2021106621} qui utilise une approche de contrôle $H_{\infty}$ ainsi qu'une représentation du système \textit{Linear Parameter Varying} (LPV). Cette représentation permet d'avoir la dynamique linéaire du drone sur l'ensemble du domaine de vol par interpolation des dynamiques paramétrées par la vitesse totale du drone.
-\nomenclature[]{\(LPV\)}{Système linéaire à paramètres variant (\textit{Linear Parameter Varying})}
+Nous pouvons aussi citer le travail de \cite{SNYDER2021106621} qui utilise une approche de contrôle $H_{\infty}$, ainsi qu'une représentation du système \textit{Linear Parameter Varying} (LPV). Cette représentation permet d'avoir la dynamique linéaire du drone sur l'ensemble du domaine de vol par interpolation des dynamiques paramétrées par la vitesse totale du drone.
+\nomenclature[]{\(LPV\)}{Système linéaire à paramètres variants (\textit{Linear Parameter Varying})}
 
 Enfin, il existe une extension non-linéaire de l'approche $H_{\infty}$ en utilisant l'espace de Sobolev pondéré $W_{\infty}$ \cite{cardoso2018nonlinear, CardosoEsteban2019, cardoso2021robust, cardoso2024robust}. Cette méthode s'appuie sur la norme de Sobolev $W_{m,p}$  d'un signal, laquelle est définie par :
 \begin{align*}
@@ -412,14 +412,17 @@ Grâce à la nature de la norme $W_{m,p}$, la variable de coût et ses dérivée
 
 \section{Technologies et réalisations}
 
-{\color{blue}
 Bien que les modèles proposés soient de plus en plus précis (section \ref{sec:modelisation}), que les simulations soient de plus en plus réalistes et que par conséquent, nous soyons en mesure de proposer des lois de commande de plus en plus élaborées (section \ref{sec:archcmd} et \ref{sec:methodo}), tout ce travail n'a pour validation finale que l'expérimentation. Ce travail nécessite  le montage d'une plateforme comprenant plusieurs composants, l'identification des coefficients des modèles, le transfert des lois de commande dans un autopilote et la mise en place de vols expérimentaux.
-}
 
 
-Nos expérimentations sont réalisées grâce au système de drone Paparazzi (voir Annexe \ref{chap:annexe1}), lequel est constitué d'une partie matérielle et logicielle. La partie matérielle est principalement composée de l'autopilote (Apogee ou Tawaki) et la partie logicielle comporte l'ensemble des codes, embarqués et sol, permettant de faire voler un drone. 
+Nos expérimentations sont réalisées grâce au système de drone Paparazzi (voir Annexe), lequel est constitué d'une partie matérielle et logicielle. La partie matérielle est principalement composée de l'autopilote (Apogee ou Tawaki) et la partie logicielle comporte l'ensemble des codes, embarqués et sol, permettant de faire voler un drone. 
 
 La Figure \ref{fig:schemaComposent} présente de manière schématique les principaux composants nécessaires à la conduite d'un vol, tous étant reliés à l'autopilote. L'autopilote se charge d'exécuter périodiquement les codes associés aux différentes fonctions du drone (estimation d'état, navigation, guidage, contrôle (figure~\ref{fig:schemahiera}), charge utile, etc.).
+
+
+Nos principales contributions dans cet environnement sont le codage des lois de commande proposées dans les chapitres \ref{chap:hybrid} et \ref{chap:6DOF} et le codage de l'estimation d'état du chapitre \ref{chap:colibri}. 
+
+Un travail supplémentaire a été réalisé sur les contrôleurs moteurs. Les ESC ont été flashés avec le code open-source AM32 (voir Annexe). L'avantage de ce \textit{firmware}, par rapport au code commercial, est qu'il exploite un retour PID de bas niveau de la vitesse de rotation du moteur, calculé à la même vitesse que la commutation de phase du moteur. Nous avons adapté le code de la boucle de vitesse dans le \textit{firmware}, en suivant l'approche de \cite{franchi2017}, avec un algorithme de biais et de gain adaptatif (ABAG). 
 
 \begin{figure}[ht!]
     \centerline{
@@ -428,11 +431,10 @@ La Figure \ref{fig:schemaComposent} présente de manière schématique les princ
     \label{fig:schemaComposent}
 \end{figure}
 
-Nos principales contributions dans cet environnement sont le codage des lois de commande proposées dans les chapitres \ref{chap:hybrid} et \ref{chap:6DOF} et le codage de l'estimation d'état du chapitre \ref{chap:colibri}. 
-
-Un travail supplémentaire a été réalisé sur les contrôleurs moteurs. Les ESC ont été flashés avec le code open-source AM32 (voir Annexe \ref{sec:AM32}). L'avantage de ce \textit{firmware}, par rapport au code commercial, est qu'il exploite un retour PID \nomenclature[]{\(PID\)}{Proportionnel Intégral Dérivé} de bas niveau de la vitesse de rotation du moteur, calculé à la même vitesse que la commutation de phase du moteur. Nous avons adapté le code de la boucle de vitesse dans le \textit{firmware}, en suivant l'approche de \cite{franchi2017}, avec un algorithme de biais et de gain adaptatif (ABAG). Les avantages de la solution ABAG sont une grande réactivité et une grande adaptabilité, puisque les dimensions de l'hélice peuvent être modifiées sans qu'il ne soit nécessaire de modifier les gains d'actionnement.
+Les avantages de la solution ABAG sont une grande réactivité et une grande adaptabilité, puisque les dimensions de l'hélice peuvent être modifiées sans qu'il ne soit nécessaire de modifier les gains d'actionnement.
 Un module a aussi été développé pour pouvoir utiliser des servomoteurs \textit{Feetech} (le modèle STS3032), qui ont la possibilité d'être chaînés et d'être commandés via une liaison série bidirectionnelle. Cela permet notamment d'avoir un retour sur la position du servomoteur.
 
+\nomenclature[]{\(PID\)}{Proportionnel Intégral Dérivé}
 \nomenclature[]{\(ABAG\)}{Biais adaptatif et gain adaptatif \textit{Adaptive Bias and Adaptive Gain}}
 \begin{figure}[ht!]
     \centering
@@ -452,7 +454,9 @@ Un module a aussi été développé pour pouvoir utiliser des servomoteurs \text
 
 Ce chapitre présente un résumé de la littérature relative à la modélisation et au contrôle des \textit{tailsitters}.
 
-Le domaine des drones convertibles est vaste et chaque architecture cherche à répondre à une mission. Les diverses complexités engendrées sont autant de challenges pour assurer la stabilité du drone. Les défis aérodynamiques liés aux différents domaines de vol, tels que les écoulements à faible nombre de Reynolds, l'interaction hélice-ailes et l'identification des coefficients aérodynamiques par des campagnes en soufflerie, ont été résumés. Plusieurs publications expliquent la complexité de développer un modèle dynamique pour les \textit{tailsitters}. Cette difficulté notamment liée à la dynamique instable dans les vols de transition due à des changements rapides des forces et des moments aérodynamiques, appelle au développement de stratégies de contrôle innovantes et robustes. 
+Le domaine des drones convertibles est vaste et chaque architecture cherche à répondre à une mission. Les diverses complexités engendrées sont autant de challenges pour assurer la stabilité du drone. Les défis aérodynamiques liés aux différents domaines de vol, tels que les écoulements à faible nombre de Reynolds, l'interaction hélice-ailes et l'identification des coefficients aérodynamiques par des campagnes en soufflerie, ont été résumés. 
+
+Plusieurs publications expliquent la complexité de développer un modèle dynamique pour les \textit{tailsitters}. Cette difficulté notamment liée à la dynamique instable dans les vols de transition due à des changements rapides des forces et des moments aérodynamiques, appelle au développement de stratégies de contrôle innovantes et robustes. 
 
 L'analyse de la littérature sur les lois de commande indique que la mise en œuvre d'une loi robuste abordant directement l'impact du vent sur le drone n'a jamais été réalisée.
 

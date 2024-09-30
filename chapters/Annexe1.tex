@@ -1,6 +1,8 @@
+% LTeX: enabled=true
 \chapter*{Annexe technique sur les drones}
 \addstarredchapter{Annexe technique sur les drones} 
-\label{chap:annexe1}
+
+\markboth{Annexe technique sur les drones}{Annexe technique sur les drones}
 
 \renewcommand{\thefigure}{A.\arabic{figure}}
 \setcounter{figure}{0} % Réinitialiser le compteur à 0
@@ -12,12 +14,11 @@
 
 Un drone est composé de plusieurs pièces assemblées entre elles pour former la structure sur laquelle sont fixés des actionneurs, un autopilote et une charge utile (colis, caméra, capteur, etc.). L'élément central est l'autopilote qui assure la communication entre tous les éléments. Nous pouvons décomposer l'autopilote en deux parties : la partie matérielle et la partie logicielle.
 \nomenclature[]{\(PCB\)}{Circuit imprimé  \textit{Printed Circuit Board}}
-La partie matérielle est constituée d'un circuit imprimé (PCB) sur lequel des composants sont installés pour assurer les tâches relatives au vol. La partie logicielle se décompose en deux éléments : le segment sol et le logiciel embarqué \ref{sec:logiciel}.
+La partie matérielle est constituée d'un circuit imprimé (PCB) sur lequel des composants sont installés pour assurer les tâches relatives au vol. La partie logicielle se décompose en deux éléments : le segment sol et le logiciel embarqué.
 
-Nous pouvons détailler les capteurs embarqués et le microcontrôleur avec l'ensemble de ses ports de communication \ref{sec:capteurs} et \ref{sec:micoctrl}. 
+Nous pouvons détailler les capteurs embarqués et le microcontrôleur avec l'ensemble de ses ports de communication. 
 
  \subsection*{Les capteurs d'un autopilote}
- \label{sec:capteurs}
  Un autopilote comporte généralement un accéléromètre, un gyroscope, un magnétomètre et un baromètre.
  
  \paragraph*{}
@@ -35,19 +36,20 @@ Nous pouvons détailler les capteurs embarqués et le microcontrôleur avec l'en
  
 
  \paragraph*{}
- \textbf{Le GPS} est monté en extérieur de l'autopilote. Ce système de géopositionnement par satellite (\textit{ Global Positioning System}) \nomenclature[]{\(GPS\)}{Géo-positionnement par satellite (\textit{Global Positioning System})} permet d'obtenir un positionnement absolu du drone. 
+ \textbf{Le GPS} est monté en extérieur de l'autopilote. Ce système de géopositionnement par satellite (\textit{Global Positioning System}) permet d'obtenir un positionnement absolu du drone. 
 
-
+ \nomenclature[]{\(GPS\)}{Géo-positionnement par satellite (\textit{Global Positioning System})}
  \paragraph*{}
- Il est courant de retrouver plusieurs capteurs dans un même boitier, que l'on nomme centrale inertielle (Inertial Measurement Units, IMU), \nomenclature[]{\(IMU\)}{Centrales inertielles (\textit{Inertial Measurement Units})}. Ces dernières sont composées au minimum d'un accéléromètre 3-axes et d'un gyroscope 3-axes, mais il est courant de les trouver avec un magnétomètre 3-axes. 
+ Il est courant de retrouver plusieurs capteurs dans un même boitier, que l'on nomme centrale inertielle (Inertial Measurement Units, IMU). Ces dernières sont composées au minimum d'un accéléromètre 3-axes et d'un gyroscope 3-axes, mais il est courant de les trouver avec un magnétomètre 3-axes. 
+
+ \nomenclature[]{\(IMU\)}{Centrales inertielles (\textit{Inertial Measurement Units})}
 
  \subsection*{Le microcontrôleur d'un autopilote}
- \label{sec:micoctrl}
- Le microcontrôleur (Microcontroller Unit, MCU) \nomenclature[]{\(MCU\)}{Microcontrôleurs (\textit{Microcontroller Unit})} est la pièce maitresse de l'autopilote en ce qu'il permet d'effectuer l'ensemble des traitements nécessaires à la conduite du vol.
+ Le microcontrôleur (Microcontroller Unit, MCU) est la pièce maitresse de l'autopilote en ce qu'il permet d'effectuer l'ensemble des traitements nécessaires à la conduite du vol.
 
- De plus il possède plusieurs ports de communication pour récupérer les données des capteurs ou envoyer des ordres aux actionneurs.
+ \nomenclature[]{\(MCU\)}{Microcontrôleurs (\textit{Microcontroller Unit})}
 
-
+ De plus, il possède plusieurs ports de communication pour récupérer les données des capteurs ou envoyer des ordres aux actionneurs.
 
 La liaison série permet de relier deux équipements numériques pour qu'ils puissent s'échanger des informations. C'est le moyen de communication le plus simple. Toutefois, il contient un moyen de détection des erreurs tel que le bit de parité.
 
@@ -88,7 +90,6 @@ Sur une période de dix ans, nous pouvons observer que les microcontrôleurs ont
 Ces évolutions continues permettent une amélioration de l'estimation du drone utilisée pour la stabilisation. Il en résulte une stabilité accrue et de nouvelles possibilités pour la commande des drones.
 
  \subsection*{Les logiciels d'un autopilote}
- \label{sec:logiciel}
  Tout le fonctionnement d'un drone repose sur le logiciel qui permet de le faire voler. Il se décompose en deux catégories : la partie sol et la partie embarquée.
 
  \subsection*{Le segment sol}
@@ -111,7 +112,7 @@ Enfin, un code assure la compilation croisée du logiciel embarqué qui doit êt
  \subsection*{Le logiciel embarqué}
  Le logiciel embarqué est un code écrit en C, intégré dans un système d'exploitation temps réel "Chibios". Il est téléversé sur le microcontrôleur au travers d'une sonde de programmation ou de la prise USB présente sur l'autopilote.
 
- L'ensemble du code est organisé sous la forme de modules que l'on change au besoin. Chaque module assure des fonctionnalités telles que l'estimation d'état, la stabilisation, le guidage, la navigation ou encore la gestion de la charge utile (voir Figure \ref{fig:schedulingpaparazzi}). Grâce à un mécanisme de gestion de dépendance, les modules ont la possibilité de charger d'autres modules nécessaires à leur fonctionnement. L'ordre de compilation et d'édition des liens sera géré par le logiciel de compilation.
+ L'ensemble du code est organisé sous la forme de modules que l'on change au besoin. Chaque module assure des fonctionnalités telles que l'estimation d'état, la stabilisation, le guidage, la navigation ou encore la gestion de la charge utile (voir Figure \ref{fig:schedulingpaparazzi}). Grâce à un mécanisme de gestion de dépendance, les modules ont la possibilité de charger d'autres modules nécessaires à leur fonctionnement. L'ordre de compilation et d'édition des liens seront gérés par le logiciel de compilation.
 
 
  \begin{figure}[ht!]
@@ -123,7 +124,6 @@ Enfin, un code assure la compilation croisée du logiciel embarqué qui doit êt
 
  
 \section*{AM32}
-\label{sec:AM32}
 Le logiciel AM32 est conçu pour les microprocesseurs ARM STM32 afin de contrôler un moteur \textit{brushless}, couramment utilisé pour les drones. Le logiciel est conçu pour être sûr et rapide, avec des démarrages rapides et sans à-coups et une accélération linéaire. Il est destiné à être utilisé avec plusieurs types de véhicules et de contrôleurs de vol. 
 
 L'intérêt de ce logiciel est qu'il est ouvert, permettant de contribuer, en proposant des évolutions. Nous avons ainsi implémenté l'approche de \cite{franchi2017}, avec un algorithme de biais et de gain adaptatif (ABAG) (voir \ref{fig:ABAG_algo}).

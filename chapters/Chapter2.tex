@@ -246,20 +246,20 @@ où les vecteurs $\boldsymbol{M}_{\text{f}}(\boldsymbol{u})$ et $ \boldsymbol{M}
              0 & 0 & \!\! \shortminus a_{y}C_{\ell}\xi_{\text{m}}(\delta_{1} \!-\!\delta_{2})
           \end{bmatrix},   \label{eq:dm}  
 \end{align}
-où l'on observe l'effet d'un vent non nul, de plus la dynamique est non-linéaire vis-à-vis de $\boldsymbol{q}$, $\lVert \boldsymbol{v}_{\text{b}} \rVert$ et $\boldsymbol{w}$. Comme dans \cite[eqn. (10)]{olszaneckibarthHal-02542982} et selon la formule de Diederich, nous obtenons $C_{\ell} = C_{\text{d}} + \frac{\pi AR}{1+\sqrt{1+\left(\frac{AR}{2}\right)^{2}}}$ où $AR = \frac{b^{2}}{S}$ est l'allongement de l'aile.
+où l'on observe l'effet d'un vent non nul. De plus, la dynamique est non-linéaire vis-à-vis de $\boldsymbol{q}$, $\lVert \boldsymbol{v}_{\text{b}} \rVert$ et $\boldsymbol{w}$. Comme dans \cite[eqn. (10)]{olszaneckibarthHal-02542982} et selon la formule de Diederich, nous obtenons $C_{\ell} = C_{\text{d}} + \frac{\pi AR}{1+\sqrt{1+\left(\frac{AR}{2}\right)^{2}}}$ où $AR = \frac{b^{2}}{S}$ est l'allongement de l'aile.
 Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2}\tau_{2}\right)$  dans les expressions des vecteurs $\boldsymbol{M}_{\text{f}}(\boldsymbol{u})$ et $\boldsymbol{M}_{\text{m}}(\boldsymbol{u})$.
 
 \section{Caractérisation de la maquette}
 \label{sec:identification}
 {\color{blue}
-    L'obtention d'un modèle cohérent avec la réalité est lié à la caractérisation des paramètres constitutifs du modèle. Toutefois, lors de l'utilisation d'un modèle complexe avec de fortes composantes non-linéaires, il peut être difficile de caractériser une valeur. Nous avons donc choisi une méthode itérative basée sur l'identification individuelle des coefficients caractéristiques par des méthodes dédiées. Ainsi, nous avons obtenu les constantes des moteurs par une mesure sur un capteur de force et de moment, la matrice d'inertie à l'aide d'un montage de pendule bifilaire et un montage en soufflerie pour mesurer les coefficients aérodynamiques du modèle.
+    L'obtention d'un modèle cohérent avec la réalité est liée à la caractérisation des paramètres constitutifs du modèle. Toutefois, lors de l'utilisation d'un modèle complexe avec de fortes composantes non-linéaires, il peut être difficile de caractériser une valeur. Nous avons donc choisi une méthode itérative basée sur l'identification individuelle des coefficients caractéristiques par des méthodes dédiées. Ainsi, nous avons obtenu les constantes des moteurs par une mesure sur un capteur de force et de moment, la matrice d'inertie à l'aide d'un montage de pendule bifilaire et un montage en soufflerie pour mesurer les coefficients aérodynamiques du modèle.
     }
 
 \subsection{Identification des paramètres du modèle}
 
 
-    Les valeurs numériques de la Table~\ref{tab:pars} ont été obtenues par une campagne d'identification du modèle \cite{sansouStage}. En particulier, le coefficient $k_{\text{f}}$ a été identifié à partir de l'équation \eqref{eq:thrust}, qui relie la vitesse de rotation du moteur $\omega_{i}$ à la traction générée, à la vitesse de rotation minimale et maximale et à la constante de temps de la chaîne d'actionnement du moteur. La Figure \ref{fig:IOmot} montre la génération de force en fonction de la vitesse de rotation du moteur.
-    \begin{figure}[ht!]
+    Les valeurs numériques de la Table~\ref{tab:pars} ont été obtenues par une campagne d'identification du modèle \cite{sansouStage}. En particulier, le coefficient $k_{\text{f}}$ a été identifié à partir de l'équation \eqref{eq:thrust}, qui relie la vitesse de rotation du moteur $\omega_{i}$ à la traction générée, à la vitesse de rotation minimale et maximale et à la constante de temps de la chaîne d'actionnement du moteur. La Figure \ref{fig:IOmot} montre la génération de la force en fonction de la vitesse de rotation du moteur.
+    \begin{figure}[H]
         \centerline{
         \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\columnwidth]{figures/ident_motor March 27 2024 1651.png}}
         \caption{Réponse entrée-sortie de l'ensemble moteur/hélice.}
@@ -275,9 +275,18 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
         \label{fig:BifilarPend}
     \end{figure}
 
-    Lors de la mesure, l'autopilote est utilisé pour réaliser une acquisition de l'orientation du drone à 500 Hz. Le drone est positionné avec un angle non nul vis-à-vis de la position d'équilibre du pendule bifilaire puis il est lâché sans vitesse initiale. Le couple de rappel engendré par les deux fils produit des oscillations amorties (Voir la Figure \ref{fig:BifilarPend_meas}). Il est nécessaire de connaître la longueur des fils $h$ ainsi que leur écartement $D$ pour réaliser l'identification. Ces valeurs sont mesurées directement sur le banc de mesure pour chacune des trois configurations et reportées dans la table \ref{tab:lgFils}.
+    Lors de la mesure, l'autopilote est utilisé pour réaliser une acquisition de l'orientation du drone à 500 Hz. Le drone est positionné avec un angle non nul vis-à-vis de la position d'équilibre du pendule bifilaire puis il est lâché sans vitesse initiale. Le couple de rappel engendré par les deux fils produit des oscillations amorties (voir la Figure \ref{fig:BifilarPend_meas}).
 
-    \begin{table}[ht]
+    \begin{figure}[H]
+        \centerline{
+        \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\columnwidth]{figures/ident_inertia.png}}
+        \caption{Identification de l'inertie ($\boldsymbol{J}$), à partir des mesures issues du pendule bifilaire \ref{fig:BifilarPend}.}
+        \label{fig:BifilarPend_meas}
+        \end{figure}
+    
+    Il est nécessaire de connaître la longueur des fils $h$ ainsi que leur écartement $D$ pour réaliser l'identification. Ces valeurs sont mesurées directement sur le banc de mesure pour chacune des trois configurations et reportées dans la table \ref{tab:lgFils}.
+
+    \begin{table}[ht!]
         \centering
         \begin{tabular}{|c|c|c|}
             \hline
@@ -299,16 +308,6 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
         \ddot{\theta} +  \frac{C}{I}\dot{\theta} + \left(\frac{mgD^2}{4Ih}\right)\frac{\sin\theta}{\sqrt{1 - 0.5\left(\frac{D}{h}\right)^2(1 - \cos\theta)}} = 0
     \end{align*}
     où $\theta$ est l'angle mesuré par l'autopilote à l'aide du code d'estimation d'état utilisant le gyroscope, l'accéléromètre et l'Optitrack.
-    
-
-    \begin{figure}[ht!]
-    \centerline{
-    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\columnwidth]{figures/ident_inertia.png}}
-    \caption{Identification de l'inertie ($\boldsymbol{J}$), à partir des mesures issues du pendule bifilaire \ref{fig:BifilarPend}.}
-    \label{fig:BifilarPend_meas}
-    \end{figure}
-
-
     
     Les autres coefficients ont été estimés à l'aide d'un montage sur un capteur de forces et moments à 6 degrés de liberté (DOF), observé sur la Figure~\ref{fig:montage_ident}. \nomenclature[]{\(DOF\)}{Degrés de liberté  (\textit{Degrees of Freedom})}
     \begin{figure}[ht!]
@@ -337,9 +336,11 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
 
 \section{Équilibres stationnaires}
 \label{sec:eqpoint}
-{\color{blue}
-    Notre travail a pour point de départ les travaux réalisés par \cite{ olszaneckibarthHal-02542982, smeurINDITail} qui utilisent des lois de commande basées mesure. Ces lois de commande fournissent de très bonnes propriétés de stabilisation, même en présence de perturbation. Toutefois, elles permettent d'atteindre des équilibres qui n'ont jamais été caractérisés. Ce manque engendre une incompréhension des mécanismes en jeu lors de la déstabilisation. Effectivement, les expérimentations réalisées avec un bouclage INDI ont montré une oscillation de DarkO pour certaines vitesses de vent horizontal. Ainsi, il se pose la question de savoir si ce comportement est dû à un cycle limite lié à des saturations d'actionneur ou bien à des effets aérodynamiques. Pour répondre à cette question, nous allons étudier l'ensemble des points d'équilibre du drone soumis ou non à du vent.
-}
+
+Notre travail a pour point de départ les travaux réalisés par \cite{ olszaneckibarthHal-02542982, smeurINDITail} qui utilisent des lois de commande basées mesure. Ces lois de commande fournissent de très bonnes propriétés de stabilisation, même en présence de perturbations. Toutefois, elles permettent d'atteindre des équilibres qui n'ont jamais été caractérisés. Ce manque engendre une incompréhension des mécanismes en jeu lors de la déstabilisation. Effectivement, les expérimentations réalisées avec un bouclage INDI ont montré une oscillation de DarkO pour certaines vitesses de vent horizontal.
+
+Ainsi, il se pose la question de savoir si ce comportement est dû à un cycle limite lié à des saturations des actionneurs ou bien à des effets aérodynamiques. Pour répondre à cette question, nous allons étudier l'ensemble des points d'équilibre du drone soumis ou non à du vent.
+
     \subsection{Équilibre stationnaire sans vent}
         \label{sec:eq_nowind}
 
@@ -379,7 +380,7 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
             \end{align*}
 
 
-        Tous les couples d'équilibre $(\boldsymbol{u}_{\text{nowind}}, \boldsymbol{x}) = (\boldsymbol{u}_{\text{nowind},\text{eq}}, \boldsymbol{x_{\text{eq}}})$ sont paramétrés par une rotation arbitraire autour de l'axe $z_{[\text{i}]}$, définit par $\beta \in \left[-\sqrt{\frac{1}{2}},\sqrt{\frac{1}{2}}\right]$. Le point d'équilibre a pour expression :
+        Tous les couples d'équilibre $(\boldsymbol{u}_{\text{nowind}}, \boldsymbol{x}) = (\boldsymbol{u}_{\text{nowind},\text{eq}}, \boldsymbol{x_{\text{eq}}})$ sont paramétrés par une rotation arbitraire autour de l'axe $z_{[\text{i}]}$, définie par $\beta \in \left[-\sqrt{\frac{1}{2}},\sqrt{\frac{1}{2}}\right]$. Le point d'équilibre a pour expression :
         \begin{subequations}
             \label{eq:equilibria}
             \begin{align}
@@ -404,8 +405,7 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
             &\boldsymbol{\omega}_{\text{b},\text{eq}} = 0 , \quad \boldsymbol{v}_{\text{eq}} = 0.
     \end{align}
     \end{subequations}
-    Nous définissons deux quaternions $\boldsymbol{q}_{\mathrm{eq}\psi}$ et $\boldsymbol{q}_{\mathrm{eq}\psi}$ permettant d'exprimer l'ensemble des conditions de vent dans le repère inertiel vers un repère tourné où le vent est toujours contenu dans le plan $x-z$. Grâce à cette transformation, nous exprimons un ensemble continu d'équilibres en présence de vent. 
-
+    Nous définissons deux quaternions $\boldsymbol{q}_{\mathrm{eq}\psi}$ et $\boldsymbol{q}_{\mathrm{eq}\psi}$ permettant d'exprimer l'ensemble des conditions de vent dans le repère inertiel vers un repère tourné où le vent est toujours contenu dans le plan $x-z$. Grâce à cette transformation, nous exprimons un ensemble continu d'équilibres en présence de vent :
     \begin{align}
     \label{eq:qtheta}
         \boldsymbol{q}_{\mathrm{eq}\theta} &:= \begin{bmatrix} \cos(\frac{\theta}{2}) & 0 & \sin(\frac{\theta}{2}) & 0 \end{bmatrix}^\top
@@ -490,100 +490,87 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
 
     À partir de l'expression analytique \eqref{eq:equilibrium} de l'équilibre du drone pour différentes conditions de vent $\boldsymbol{w}$, nous reportons, sur la Figure \ref{fig:saturation}, les valeurs correspondantes de $\theta$, $\delta$, $\tau$ pour des valeurs de vitesse de vent horizontal allant de 0 à \SI{-20}{\meter\per\second} et pour des valeurs de vitesse de vent vertical allant de \SI{-6}{} à \SI{6}{\meter\per\second}.
 
-    \begin{figure}[ht!]
-            \centering
-            \resizebox{.9\textwidth}{!}{%
-            \includegraphics[height=8cm]{figures/equilibrium_wx_wz.png}
-            \quad
-            \includegraphics[height=8cm]{figures/equilibrium.png}
-            }
-            \caption{Les paramètres ($\tau$, $\delta$, $\theta$) de l'ensemble des points d'équilibre (surface) obtenus à l'aide du Théorème~\ref{thm:eqs} et de l'Algorithme \ref{alg:eq} pour un vent constant horizontal et vertical ($w_{\text{r}x}$,$w_{\text{r}z}$), avec les saturations des actionneurs (rose) (gauche) et coupe pour $\boldsymbol{w}_{\text{rx}} = 0$ (droite).}
-        \label{fig:saturation}
-        \end{figure}
 
-L'angle d'incidence $\theta$ diminue de \SI{90}{\degree} à \SI{-4.65}{\degree}. $\theta = \SI{90}{\degree}$ correspond à un vol stationnaire sans vent. La traction $\tau$ atteint son minimum à $w_{rx} = \SI{-12.8}{\meter\per\second}$, ce qui correspond à une condition de vol qui minimise la consommation d'énergie, car les moteurs sont la principale source de consommation électrique. Il est possible de faire une coupe des surfaces présentées dans \eqref{fig:saturation} gauche pour une vitesse verticale nulle $\boldsymbol{w}_{\text{rx}} = 0$, ce qui nous donne le résultat de la Figure \eqref{fig:saturation} droite.
+
+L'angle d'incidence $\theta$ diminue de \SI{90}{\degree} à \SI{-4.65}{\degree}. $\theta = \SI{90}{\degree}$ correspond à un vol stationnaire sans vent. La traction $\tau$ atteint son minimum à $w_{rx} = \SI{-12.8}{\meter\per\second}$, ce qui correspond à une condition de vol qui minimise la consommation d'énergie, car les moteurs sont la principale source de consommation électrique.
+
+\begin{figure}[ht!]
+    \centering
+    \resizebox{.9\textwidth}{!}{%
+    \includegraphics[height=8cm]{figures/equilibrium_wx_wz.png}
+    \quad
+    \includegraphics[height=8cm]{figures/equilibrium.png}
+    }
+    \caption{Les paramètres ($\tau$, $\delta$, $\theta$) de l'ensemble des points d'équilibre (surface) obtenus à l'aide du Théorème~\ref{thm:eqs} et de l'Algorithme \ref{alg:eq} pour un vent constant horizontal et vertical ($w_{\text{r}x}$,$w_{\text{r}z}$), avec les saturations des actionneurs (rose) (gauche) et coupe pour $\boldsymbol{w}_{\text{rx}} = 0$ (droite).}
+    \label{fig:saturation}
+\end{figure}
+
+Il est possible de faire une coupe des surfaces présentées dans \eqref{fig:saturation} gauche pour une vitesse verticale nulle $\boldsymbol{w}_{\text{rx}} = 0$, ce qui nous donne le résultat de la Figure \eqref{fig:saturation} droite.
 \vfill
 
-    % \begin{figure}[ht!]
-    %     \centering
-    %     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\columnwidth]{figures/equilibrium_wx_wz.png}
-    %     \caption{Les paramètres ($\tau$, $\delta$, $\theta$) de l'ensemble des points d'équilibre (surface) obtenus à l'aide du Théorème~\ref{thm:eqs} et de l'Algorithme \ref{alg:eq} pour un vent constant horizontal et vertical ($w_{\text{r}x}$,$w_{\text{r}z}$), avec les saturations des actionneurs (rose).}
-    %     \label{fig:saturation}
-    % \end{figure}
 
+\newpage
+\begin{algorithm}[H]
+    \caption{Obtention des paramètres d'équilibre en \eqref{eq:equilibrium}.}
+    \label{alg:eq}
+    \hspace*{.1cm} \textbf{Entrée} : Vecteur vent $\boldsymbol{w}_{\text{eq}} =\smallmat{w_x & w_y & w_z}^\top$ \\
+    \hspace*{.1cm} \textbf{Sortie} : Paramètres $\psi$, $\theta$, $\tau$, $\delta$ dans \eqref{eq:equilibrium}
+    \begin{algorithmic}[1]
+        %\Require {\bf Input} values: $\boldsymbol{w} =\smallmat{w_x & w_y & w_z}^\top$ 
+        %\Ensure  $\psi$, $\theta$, $\tau$, $\delta$
+        \State Détermine l'angle $\psi = \text{atan2}(w_x, w_y)$ de manière à obtenir $\boldsymbol{q}_{\mathrm{eq}\psi}$ dans \eqref{eq:qpsi}  
+        \State Détermine la perturbation tournée $\boldsymbol{w}_{\text{r}}$ avec la composante $y$ nulle, en utilisant $\boldsymbol{R}_{\psi}:= \smallmat{ \cos \psi & \sin \psi & 0 \\ -\sin \psi & \cos \psi & 0 \\ 0 & 0 & 1 }$, selon :
+        \begin{align}
+        \label{eq:wh}
+        \boldsymbol{w}_{\mathrm{r,eq}} := \smallmat{w_{\text{r}x} \\ 0 \\w_{\text{r}z}} :=  \boldsymbol{R}^\top(\boldsymbol{q}_{\mathrm{eq}\psi}) \boldsymbol{w}_{\mathrm{eq}} = \boldsymbol{R}^\top_{\psi} \boldsymbol{w}_{\mathrm{eq}}
+        \end{align}
 
-    % Il est possible de faire une coupe des surfaces présentées dans \eqref{fig:saturation} pour une vitesse verticale nulle $\boldsymbol{w}_{\text{rx}} = 0$, ce qui nous donne le résultat de la Figure \ref{fig:saturation_wz0}
+        \State Détermine l'angle d'inclinaison $\theta$ de manière à obtenir $\boldsymbol{q}_{\text{eq}\theta}$ dans \eqref{eq:qeq}:  
+        \begin{align}
+        \label{eq:theta_alg}
+            \theta = -\tan^{-1}\left(\frac{w_{\text{r}z}}{w_{\text{r}x}} + \frac{2mg}{\rho S \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert C_{\ell}  (1-\frac{\xi_{\text{f}}}{\xi_{\text{m}}}) w_{\text{r}x} } \right)
+        \end{align}
+    \State Pour des raisons de commodité, nous définissons les scalaires :
+        $$ 
+        \left[\begin{array}{c|c} 
+        \!\!a\!\!&\!\!b\!\! \\ \hline \!\!c\!\!&\!\! d\!\!\end{array}  \right] \!:=\! 
+        \left[\begin{array}{c|c}
+        2 S_{\text{wet}} C_{\ell} mg \sin{\theta} \xi_{\text{f}} &
+        \! 2 S_{\text{wet}} C_{\text{d}} C_{\ell} \rho  \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert  w_{x}^{\text{b}}\!\! \\ \hline
+        \!\!-4 S S_{\text{p}} C_{\ell} \rho  \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert  w_{x}^{\text{b}} \xi_{\text{f}}\!\! & \frac{b \xi_{\text{f}}}{2}
+        \end{array}\right]
+        $$ 
+        et grâce à ces scalaires $(a,b,c,d)$, déterminons la traction des hélices $\tau$ dans \eqref{eq:ueq} comme :
+        \begin{align}
+            \nonumber
+            \tau &= \frac{S_{\text{p}}}{2 S_{\text{wet}} C_{\ell} \xi_{\text{f}} (4S_{\text{p}} -  S_{\text{wet}} C_{\text{d}} )} \Bigg( a+b+c+d + \Bigg[ (a+b+c \shortminus d)^2 \shortminus 4 (d^2+ac \shortminus bd)  \\ 
+            & \quad
+            \shortminus \frac{4 {w_{z}^{\text{b}}}^2 d}{ {w_{x}^{\text{b}}}^2 } (d+c) + \frac{4 w_{z}^{\text{b}}ad\cos{\theta}}{w_{x}^{\text{b}} C_{\ell} \sin{\theta} } \left(C_{\text{d}} - \frac{4 S_{\text{p}}}{S_{\text{wet}}}\right) \Bigg] ^{\frac{1}{2}} \Bigg),\label{eq:tau_alg}
+        \end{align}
+        où
+        $$
+        \bigmat{w_{x}^{\text{b}} \\ w_{z}^{\text{b}}} = \bigmat{   w_{\text{r}x} \cos{\theta} - w_{\text{r}z} \sin{\theta}\\
+                    w_{\text{r}x} \sin{\theta} +  w_{\text{r}z} \cos{\theta} }.
+        $$
+        
+        \State Déterminons la déflexion des élevons $\delta$ comme :
+        \begin{align}
+        \label{eq:delta_alg}
+            \delta = \frac{2mg\sin{\theta}}{\rho S \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert C_{\text{d}}\xi_{\text{f}} w_{z}^{\text{b}}} + \frac{w_{x}^{\text{b}}}{\xi_{\text{f}}w_{z}^{\text{b}}} -  \frac{(4-\frac{S_{\text{wet}}}{S_{\text{p}}} C_{\text{d}})}{\rho S \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert C_{\text{d}}\xi_{\text{f}} w_{z}^{\text{b}}} \tau.
+        \end{align}
 
-
-    % \begin{figure}[ht!]
-    %     \centering
-    %     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\columnwidth]{figures/equilibrium.png}
-    %     \caption{Section des surfaces de la Figure \ref{fig:saturation} pour $w_{\text{r}z} = \SI{0}{\meter\per\second}$.}
-    %     \label{fig:saturation_wz0}
-    % \end{figure}
-
-    \newpage
-    \begin{algorithm}[H]
-        \caption{Obtention des paramètres d'équilibre en \eqref{eq:equilibrium}.}
-        \label{alg:eq}
-        \hspace*{.1cm} \textbf{Entrée} : Vecteur vent $\boldsymbol{w}_{\text{eq}} =\smallmat{w_x & w_y & w_z}^\top$ \\
-        \hspace*{.1cm} \textbf{Sortie} : Paramètres $\psi$, $\theta$, $\tau$, $\delta$ dans \eqref{eq:equilibrium}
-        \begin{algorithmic}[1]
-            %\Require {\bf Input} values: $\boldsymbol{w} =\smallmat{w_x & w_y & w_z}^\top$ 
-            %\Ensure  $\psi$, $\theta$, $\tau$, $\delta$
-            \State Détermine l'angle $\psi = \text{atan2}(w_x, w_y)$ de manière à obtenir $\boldsymbol{q}_{\mathrm{eq}\psi}$ dans \eqref{eq:qpsi}  
-            \State Détermine la perturbation tournée $\boldsymbol{w}_{\text{r}}$ avec la composante $y$ nulle, en utilisant $\boldsymbol{R}_{\psi}:= \smallmat{ \cos \psi & \sin \psi & 0 \\ -\sin \psi & \cos \psi & 0 \\ 0 & 0 & 1 }$, selon :
-            \begin{align}
-            \label{eq:wh}
-            \boldsymbol{w}_{\mathrm{r,eq}} := \smallmat{w_{\text{r}x} \\ 0 \\w_{\text{r}z}} :=  \boldsymbol{R}^\top(\boldsymbol{q}_{\mathrm{eq}\psi}) \boldsymbol{w}_{\mathrm{eq}} = \boldsymbol{R}^\top_{\psi} \boldsymbol{w}_{\mathrm{eq}}
-            \end{align}
-
-            \State Détermine l'angle d'inclinaison $\theta$ de manière à obtenir $\boldsymbol{q}_{\text{eq}\theta}$ dans \eqref{eq:qeq}:  
-            \begin{align}
-            \label{eq:theta_alg}
-                \theta = -\tan^{-1}\left(\frac{w_{\text{r}z}}{w_{\text{r}x}} + \frac{2mg}{\rho S \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert C_{\ell}  (1-\frac{\xi_{\text{f}}}{\xi_{\text{m}}}) w_{\text{r}x} } \right)
-            \end{align}
-        \State Pour des raisons de commodité, nous définissons les scalaires :
-            $$ 
-            \left[\begin{array}{c|c} 
-            \!\!a\!\!&\!\!b\!\! \\ \hline \!\!c\!\!&\!\! d\!\!\end{array}  \right] \!:=\! 
-            \left[\begin{array}{c|c}
-            2 S_{\text{wet}} C_{\ell} mg \sin{\theta} \xi_{\text{f}} &
-            \! 2 S_{\text{wet}} C_{\text{d}} C_{\ell} \rho  \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert  w_{x}^{\text{b}}\!\! \\ \hline
-            \!\!-4 S S_{\text{p}} C_{\ell} \rho  \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert  w_{x}^{\text{b}} \xi_{\text{f}}\!\! & \frac{b \xi_{\text{f}}}{2}
-            \end{array}\right]
-            $$ 
-            et grâce à ces scalaires $(a,b,c,d)$, déterminons la traction des hélices $\tau$ dans \eqref{eq:ueq} comme :
-            \begin{align}
-                \nonumber
-                \tau &= \frac{S_{\text{p}}}{2 S_{\text{wet}} C_{\ell} \xi_{\text{f}} (4S_{\text{p}} -  S_{\text{wet}} C_{\text{d}} )} \Bigg( a+b+c+d + \Bigg[ (a+b+c \shortminus d)^2 \shortminus 4 (d^2+ac \shortminus bd)  \\ 
-                & \quad
-                \shortminus \frac{4 {w_{z}^{\text{b}}}^2 d}{ {w_{x}^{\text{b}}}^2 } (d+c) + \frac{4 w_{z}^{\text{b}}ad\cos{\theta}}{w_{x}^{\text{b}} C_{\ell} \sin{\theta} } \left(C_{\text{d}} - \frac{4 S_{\text{p}}}{S_{\text{wet}}}\right) \Bigg] ^{\frac{1}{2}} \Bigg),\label{eq:tau_alg}
-            \end{align}
-            où
-            $$
-            \bigmat{w_{x}^{\text{b}} \\ w_{z}^{\text{b}}} = \bigmat{   w_{\text{r}x} \cos{\theta} - w_{\text{r}z} \sin{\theta}\\
-                        w_{\text{r}x} \sin{\theta} +  w_{\text{r}z} \cos{\theta} }.
-            $$
-            
-            \State Déterminons la déflexion des élevons $\delta$ comme :
-            \begin{align}
-            \label{eq:delta_alg}
-                \delta = \frac{2mg\sin{\theta}}{\rho S \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert C_{\text{d}}\xi_{\text{f}} w_{z}^{\text{b}}} + \frac{w_{x}^{\text{b}}}{\xi_{\text{f}}w_{z}^{\text{b}}} -  \frac{(4-\frac{S_{\text{wet}}}{S_{\text{p}}} C_{\text{d}})}{\rho S \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert C_{\text{d}}\xi_{\text{f}} w_{z}^{\text{b}}} \tau.
-            \end{align}
-
-        \end{algorithmic}
-        \hspace*{.1cm} \textbf{Retourne}:  $\psi$, $\theta$, $\tau$, $\delta$
-    \end{algorithm}
+    \end{algorithmic}
+    \hspace*{.1cm} \textbf{Retourne}:  $\psi$, $\theta$, $\tau$, $\delta$
+\end{algorithm}
 
 \section{Dynamiques linéarisées}
 {\color{magenta}
-    Des points équilibres obtenus dans la section \ref{sec:eqpoint} et notamment de l'Algorithme~\ref{alg:eq}, il semble cohérent de poursuivre notre travail en obtenant les dynamiques linéarisés autours des points d'équilibre. Ces résultats permettront, par exemple, de concevoir des lois de commande linéaire basée modèle. De nombreux outils existent pour le contrôle des modèles linéaires. Tout l'intérêt réside dans le fait d'avoir une modèle linéarisé autour d'un point d'équilibre assez consistant. Nous pouvons définir la consistance d'une linéarisation comme la précision du modèle linéaire vis-à-vis du modèle non-linéaire. Nous sommes intéressés par la meilleure prise en compte des phénomènes non-linéaire tel que les actions aérodynamiques.
+    Des points d'équilibres, obtenus dans la section \ref{sec:eqpoint} et notamment de l'Algorithme~\ref{alg:eq}, il semble cohérent de poursuivre notre travail en obtenant les dynamiques linéarisées autour des points d'équilibre. Ces résultats permettront, par exemple, de concevoir des lois de commande linéaires basées modèles. De nombreux outils existent pour le contrôle des modèles linéaires. Tout l'intérêt réside dans le fait d'avoir un modèle linéarisé autour d'un point d'équilibre assez consistant. Nous pouvons définir la consistance d'une linéarisation comme la précision du modèle linéaire vis-à-vis du modèle non-linéaire. Nous sommes intéressés par la meilleure prise en compte des phénomènes non-linéaires telles que les actions aérodynamiques.
 
 }
 \subsection{Dynamique linéarisée sans vent}
 \label{sec:nowind_lin}
-Considérons le cas sans vent discuté dans la section \ref{sec:eq_nowind} pour lequel nous utilisons le vecteur de commande $\boldsymbol{u}_{\text{nowind}}$  et le vecteur de commande à l'équilibre $\boldsymbol{u}_{\text{nowind},\text{eq}}$ défini dans l'équation \eqref{eq:bar_u} et rappelons la transformation du vecteur de commande suivante $ \boldsymbol{u}_{\text{nowind}} := \begin{bmatrix}\tau_{1}  \!&\! \tau_{2}  \!&\! \delta_{1}\tau_{1} \!&\! \delta_{2}\tau_{2} \end{bmatrix}^\top$. La dynamique linéarisée dans le cas sans vent est :
+Considérons le cas sans vent discuté dans la section \ref{sec:eq_nowind} pour lequel nous utilisons le vecteur de commande $\boldsymbol{u}_{\text{nowind}}$  et le vecteur de commande à l'équilibre $\boldsymbol{u}_{\text{nowind},\text{eq}}$ défini dans l'équation \eqref{eq:bar_u} et rappelons la transformation du vecteur de commande suivant $ \boldsymbol{u}_{\text{nowind}} := \begin{bmatrix}\tau_{1}  \!&\! \tau_{2}  \!&\! \delta_{1}\tau_{1} \!&\! \delta_{2}\tau_{2} \end{bmatrix}^\top$. La dynamique linéarisée dans le cas sans vent est :
 \begin{align}
     \label{eq:linearized}
      \boldsymbol{\dot{\tilde{x}}} = \boldsymbol{A}_{0} \tilde{\boldsymbol{x}} + \boldsymbol{G}_{0} (\boldsymbol{u}_{\text{nowind}}-\boldsymbol{u}_{\text{nowind},\text{eq}}),
@@ -679,7 +666,7 @@ En exploitant le fait que les vitesses linéaires et angulaires ($\boldsymbol{v}
 avec les matrices $\boldsymbol{A}_{vv} $, $\boldsymbol{A}_{v\epsilon}$, $\boldsymbol{A}_{\epsilon \omega_{\text{b}}}$, $\boldsymbol{A}_{\omega \epsilon}$, $ \boldsymbol{G}_{v}$, $\boldsymbol{G}_{\omega}$ $\boldsymbol{E}_{v}$, $\boldsymbol{E}_{\omega}$ construites en suivant l'Algorithme~\ref{alg:linea}.
 
 \begin{theorem} \label{th:lin}
-Pour tout vent constant, $\boldsymbol{w} =\smallmat{w_x & w_y & w_z}^\top \in \real^3$ ayant une composante horizontale non nulle $\smallmat{w_x \\ w_y}$, et pour le doublet d'équilibre qui découle $(\boldsymbol{u}_{\text{eq}}, \boldsymbol{x}_{\text{eq}})$ de la dynamique \eqref{eq:dyna_simp} telle que caractérisée dans \eqref{eq:qpsi}-\eqref{eq:qtheta}, la dynamique linéarisée du vecteur état incrémental \eqref{eq:xtilde} est donnée par \eqref{eq:lpv_linearisation}, avec les matrices construites comme dans l'Algorithme~\ref{alg:linea}.
+Pour tout vent constant, $\boldsymbol{w} =\smallmat{w_x & w_y & w_z}^\top \in \real^3$ ayant une composante horizontale non nulle $\smallmat{w_x \\ w_y}$, et pour le doublet d'équilibre qui découle $(\boldsymbol{u}_{\text{eq}}, \boldsymbol{x}_{\text{eq}})$ de la dynamique \eqref{eq:dyna_simp} tel que caractérisée dans \eqref{eq:qpsi}-\eqref{eq:qtheta}, la dynamique linéarisée du vecteur état incrémental \eqref{eq:xtilde} est donnée par \eqref{eq:lpv_linearisation}, avec les matrices construites comme dans l'Algorithme~\ref{alg:linea}.
 \end{theorem}
 %
 \begin{proof}
@@ -817,7 +804,7 @@ Nous pouvons définir deux forces $(f_{\text{d}} , f_{\ell})$ qui agissent sur l
 \end{align}
 Après calcul, cette expression coïncide avec celle de \eqref{eq:draglift_ALG} donnée dans l'Algorithme~\ref{alg:linea}. 
 
-À partir des deux forces $(f_{\text{d}} , f_{\ell})$ dans \eqref{eq:draglift}, il est possible de déterminer leurs dérivées partielles par rapport à la composante $\overline \epsilon_2$ du quaternion, qui représente le tangage du drone. En utilisant \eqref{eq:diffRtop}, nous obtenons :
+À partir des deux forces $(f_{\text{d}} , f_{\ell})$ dans \eqref{eq:draglift}, il est possible de déterminer leur dérivées partielle par rapport à la composante $\overline \epsilon_2$ du quaternion, qui représente le tangage du drone. En utilisant \eqref{eq:diffRtop}, nous obtenons :
 \begin{align}
     \smallmat{\frac{\partial  f_{\text{d}}  }{\partial \epsilon_{2}} \\ 0 \\ \frac{\partial  f_{\ell}  }{\partial \epsilon_{2}}} = - \boldsymbol{D}_{\text{f}}(\boldsymbol{u_{\text{eq}}})  \lVert \boldsymbol{w}_{\mathrm{eq}} \rVert \partial \boldsymbol{R}_{\boldsymbol{ \epsilon}}( -\boldsymbol{ \epsilon}, \boldsymbol{w}_{\mathrm{r,eq}}) \smallmat{0\\ 1\\ 0},
 \end{align}
