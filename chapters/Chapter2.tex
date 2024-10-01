@@ -251,9 +251,9 @@ Nous observons le couplage des actionneurs $\left(\delta_{1}\tau_{1} + \delta_{2
 
 \section{Caractérisation de la maquette}
 \label{sec:identification}
-{\color{blue}
+
     L'obtention d'un modèle cohérent avec la réalité est liée à la caractérisation des paramètres constitutifs du modèle. Toutefois, lors de l'utilisation d'un modèle complexe avec de fortes composantes non-linéaires, il peut être difficile de caractériser une valeur. Nous avons donc choisi une méthode itérative basée sur l'identification individuelle des coefficients caractéristiques par des méthodes dédiées. Ainsi, nous avons obtenu les constantes des moteurs par une mesure sur un capteur de force et de moment, la matrice d'inertie à l'aide d'un montage de pendule bifilaire et un montage en soufflerie pour mesurer les coefficients aérodynamiques du modèle.
-    }
+
 
 \subsection{Identification des paramètres du modèle}
 
@@ -564,10 +564,10 @@ Il est possible de faire une coupe des surfaces présentées dans \eqref{fig:sat
 \end{algorithm}
 
 \section{Dynamiques linéarisées}
-{\color{magenta}
+
     Des points d'équilibres, obtenus dans la section \ref{sec:eqpoint} et notamment de l'Algorithme~\ref{alg:eq}, il semble cohérent de poursuivre notre travail en obtenant les dynamiques linéarisées autour des points d'équilibre. Ces résultats permettront, par exemple, de concevoir des lois de commande linéaires basées modèles. De nombreux outils existent pour le contrôle des modèles linéaires. Tout l'intérêt réside dans le fait d'avoir un modèle linéarisé autour d'un point d'équilibre assez consistant. Nous pouvons définir la consistance d'une linéarisation comme la précision du modèle linéaire vis-à-vis du modèle non-linéaire. Nous sommes intéressés par la meilleure prise en compte des phénomènes non-linéaires telles que les actions aérodynamiques.
 
-}
+
 \subsection{Dynamique linéarisée sans vent}
 \label{sec:nowind_lin}
 Considérons le cas sans vent discuté dans la section \ref{sec:eq_nowind} pour lequel nous utilisons le vecteur de commande $\boldsymbol{u}_{\text{nowind}}$  et le vecteur de commande à l'équilibre $\boldsymbol{u}_{\text{nowind},\text{eq}}$ défini dans l'équation \eqref{eq:bar_u} et rappelons la transformation du vecteur de commande suivant $ \boldsymbol{u}_{\text{nowind}} := \begin{bmatrix}\tau_{1}  \!&\! \tau_{2}  \!&\! \delta_{1}\tau_{1} \!&\! \delta_{2}\tau_{2} \end{bmatrix}^\top$. La dynamique linéarisée dans le cas sans vent est :

@@ -16,7 +16,7 @@ De plus, le fuselage permettra l'emport d'une charge utile fragile (car elle pou
 
 La maquette utilisée dans le chapitre \ref{chap:3DOF} nous a permis d'expérimenter le comportement de l'aile en fonction de la position du centre de rotation.
 
-Nous avons réalisé un montage permettant de modifier la position du centre de rotation par rapport au centre de gravité (figure \ref{fig:MontageDarkoReglable}). Cela impacte la stabilité de l'aile, mais aussi son comportement face au vent. 
+Nous avons réalisé un montage permettant de modifier la position du centre de rotation par rapport au centre de gravité (Figure \ref{fig:MontageDarkoReglable}). Cela impacte la stabilité de l'aile, mais aussi son comportement face au vent. 
 
 \begin{figure}[ht!]
     \centering
@@ -155,7 +155,7 @@ L'impression 3D SLA est un procédé de photopolymérisation qui utilise un lase
     \label{fig:ColibriRot}
 \end{figure}
 
-L'encodeur rotatif, CUI Devices AMT22 est fixé au bâti qui maintient les roulements (figure \ref{fig:ColibriRotReel} gauche). Un système de pince est installé sur le tube en carbone et permet au capteur de mesurer l'angle de rotation de l'ensemble aile par rapport au fuselage.
+L'encodeur rotatif, CUI Devices AMT22 est fixé au bâti qui maintient les roulements (Figure \ref{fig:ColibriRotReel} gauche). Un système de pince est installé sur le tube en carbone et permet au capteur de mesurer l'angle de rotation de l'ensemble aile par rapport au fuselage.
 
 \begin{figure}[ht!]
     \centering
@@ -197,7 +197,7 @@ En utilisant \eqref{eq:unconstraintDyn} et \eqref{eq:contrainteAB}, nous pouvons
 \label{eq:udwadia}
     \ddot{\boldsymbol{x}} := \hat{\boldsymbol{M}}^{\dag} \begin{bmatrix} \boldsymbol{Q} \\ \boldsymbol{B} \end{bmatrix}  = \begin{bmatrix} (\mathbb{I} - \boldsymbol{A}^{\dag}\boldsymbol{A})\boldsymbol{M} \\ \boldsymbol{A} \end{bmatrix}^{\dag} \begin{bmatrix} \boldsymbol{Q} \\ \boldsymbol{B} \end{bmatrix}
 \end{align}
-dont l'expression est valide tant que $\hat{\boldsymbol{M}}$ a un rang complet et où $\boldsymbol{A}$, $\boldsymbol{M}$, $\boldsymbol{Q}$ et $\boldsymbol{B}$ sont décrits par la suite. L'algorithme de calcul de ces matrices se trouve dans \cite{udwadia-schutte}.
+dont l'expression est valide tant que $\hat{\boldsymbol{M}}$ a un rang complet et où $\boldsymbol{A}$, $\boldsymbol{M}$, $\boldsymbol{Q}$ et $\boldsymbol{B}$ sont décrits par la suite. $(\boldsymbol{A})^{\dag}$ désigne la pseudo-inverse de Moore-Penrose a gauche de la matrice de $\boldsymbol{A}$. L'algorithme de calcul de ces matrices se trouve dans \cite{udwadia-schutte}.
 
 D'après \cite{Tangirala2015}, nous avons une définition d'une réalisation minimale : 
 \begin{definition}[Réalisation minimale]

@@ -22,7 +22,7 @@ Dans cette partie, nous allons nous concentrer sur la stabilisation stationnaire
 
 \section{Contrôleur par retour d'état non-linéaire}
 Nous illustrons dans cette section une loi de contrôle dynamique non-linéaire inspirée du résultat de \cite{2020e-MicCenZacFra} et présentée en Figure \ref{fig:NLZeroMoment}. Pour que cette loi de contrôle non-linéaire soit applicable, les matrices $\boldsymbol{F}$ et $\boldsymbol{M}$ mentionnées dans \eqref{eq:withouwind} doivent permettre de définir une direction dite de zéro moment $\boldsymbol{\bar u} \in \real^4$ garantissant
-$|\boldsymbol{F}\boldsymbol{\bar u}| = 1$ et $\boldsymbol{M} \boldsymbol{\bar u}=0$, et la matrice inverse à droite $\boldsymbol{M}^r$ de $\boldsymbol{M}$ doit satisfaire $\boldsymbol{M} \boldsymbol{M}^r = \mathbb{I}_3$ et $\boldsymbol{F}\boldsymbol{M}^r=0$. 
+$|\boldsymbol{F}\boldsymbol{\bar u}| = 1$ et $\boldsymbol{M} \boldsymbol{\bar u}=0$, et la matrice inverse à droite $\boldsymbol{M}^{\dag}$ de $\boldsymbol{M}$ doit satisfaire $\boldsymbol{M} \boldsymbol{M}^{\dag} = \mathbb{I}_3$ et $\boldsymbol{F}\boldsymbol{M}^{\dag}=0$. 
 
 \begin{figure}[ht!]
   \centering
@@ -31,9 +31,9 @@ $|\boldsymbol{F}\boldsymbol{\bar u}| = 1$ et $\boldsymbol{M} \boldsymbol{\bar u}
   \label{fig:NLZeroMoment}
 \end{figure}
 
-Dans notre cas, nous constatons que la direction du moment zéro $\boldsymbol{\bar u} = \frac{\sqrt{2}}{2a_{\text{f}}}\smallmat{1&1&0&0}^\top$ satisfait les conditions, alors que le fait que $\rank(\boldsymbol{F}) = 2$ (donc que le noyau de $\boldsymbol{F}$ ($\ker \boldsymbol{F}$) soit de dimension 2) rend impossible l'obtention de la matrice inverse à droite $\boldsymbol{M}^r$ de $\boldsymbol{M}$, laquelle est entièrement contenue dans $\ker \boldsymbol{F}$.
+Dans notre cas, nous constatons que la direction du moment zéro $\boldsymbol{\bar u} = \frac{\sqrt{2}}{2a_{\text{f}}}\smallmat{1&1&0&0}^\top$ satisfait les conditions, alors que le fait que $\rank(\boldsymbol{F}) = 2$ (donc que le noyau de $\boldsymbol{F}$ ($\ker \boldsymbol{F}$) soit de dimension 2) rend impossible l'obtention de la matrice inverse à droite $\boldsymbol{M}^{\dag}$ de $\boldsymbol{M}$, laquelle est entièrement contenue dans $\ker \boldsymbol{F}$.
 
-Nous déterminons $\boldsymbol{M}^r$ en paramétrant (de manière conservatrice) les  pseudo-inverses à droite de $\boldsymbol{M}$ comme $\boldsymbol{M}^r := \boldsymbol{K}\boldsymbol{M}^\top ( \boldsymbol{M}\boldsymbol{K}\boldsymbol{M}^\top)^{-1}$, où la matrice $\boldsymbol{K} \in \real^{4\times 4}$ est symétrique et satisfait $\boldsymbol{M}\boldsymbol{K}\boldsymbol{M}^\top \geq \mathbb{I}_3$ (pour assurer l'inversibilité). Avec ce paramétrage, le but est de minimiser la norme de $\boldsymbol{F}\boldsymbol{M}^r = \boldsymbol{F} \boldsymbol{K}\boldsymbol{M}^\top ( \boldsymbol{M}\boldsymbol{K}\boldsymbol{M}^\top)^{-1}$, ce qui est bien obtenu en minimisant la norme de $\boldsymbol{F} \boldsymbol{K}\boldsymbol{M}^\top$, du fait que la contrainte sur $\boldsymbol{M}\boldsymbol{K}\boldsymbol{M}^\top \geq \mathbb{I}_3$ garantit que le facteur $( \boldsymbol{M}\boldsymbol{K}\boldsymbol{M}^\top)^{-1}$ ait une norme plus petite que 1.
+Nous déterminons $\boldsymbol{M}^{\dag}$ en paramétrant (de manière conservatrice) les  pseudo-inverses à droite de $\boldsymbol{M}$ comme $\boldsymbol{M}^{\dag} := \boldsymbol{K}\boldsymbol{M}^\top ( \boldsymbol{M}\boldsymbol{K}\boldsymbol{M}^\top)^{-1}$, où la matrice $\boldsymbol{K} \in \real^{4\times 4}$ est symétrique et satisfait $\boldsymbol{M}\boldsymbol{K}\boldsymbol{M}^\top \geq \mathbb{I}_3$ (pour assurer l'inversibilité). Avec ce paramétrage, le but est de minimiser la norme de $\boldsymbol{F}\boldsymbol{M}^{\dag} = \boldsymbol{F} \boldsymbol{K}\boldsymbol{M}^\top ( \boldsymbol{M}\boldsymbol{K}\boldsymbol{M}^\top)^{-1}$, ce qui est bien obtenu en minimisant la norme de $\boldsymbol{F} \boldsymbol{K}\boldsymbol{M}^\top$, du fait que la contrainte sur $\boldsymbol{M}\boldsymbol{K}\boldsymbol{M}^\top \geq \mathbb{I}_3$ garantit que le facteur $( \boldsymbol{M}\boldsymbol{K}\boldsymbol{M}^\top)^{-1}$ ait une norme plus petite que 1.
 En effectuant un complément de Schur, cette minimisation est obtenue en résolvant le programme semi-défini suivant :
 \begin{align*}
 &  \min_{\boldsymbol{K}, \kappa} \kappa, \; \mbox{sous condition:}
@@ -41,7 +41,7 @@ En effectuant un complément de Schur, cette minimisation est obtenue en résolv
   \begin{bmatrix}
   \kappa \mathbb{I}_3  &\! \boldsymbol{F} \boldsymbol{K} \boldsymbol{M}^\top \\ 
   \boldsymbol{M} \boldsymbol{K}^\top \boldsymbol{F}^\top &\! \kappa \mathbb{I}_3
-  \end{bmatrix}\! \geq\! 0, kappa > 0, 
+  \end{bmatrix}\! \geq\! 0, \kappa > 0, 
 \end{align*}
 lequel minimise $\kappa$ tout en assurant $\boldsymbol{F} \boldsymbol{K} \boldsymbol{M}^\top \boldsymbol{M} \boldsymbol{K}^\top \boldsymbol{F}^\top \leq \kappa^2 \mathbb{I}_3$.  En résolvant cette optimisation, on obtient, pour les matrices spécifiques considérées,
 \begin{align*}
@@ -49,21 +49,21 @@ lequel minimise $\kappa$ tout en assurant $\boldsymbol{F} \boldsymbol{K} \boldsy
       -737  &  0   &  -171  &     171\\
        171  &    -171    &   1583.5    &   -43.73\\
       -171  &     171    &   -43.73    &   1583.5}\!, \,
-      \boldsymbol{M}^r \!=\! \smallmat{0     &          0   &   -3.19\\
+      \boldsymbol{M}^{\dag} \!=\! \smallmat{0     &          0   &   -3.19\\
                  0      &         0   &    3.19\\
                -4.51    &  -27.75    &   -1.48\\
                 4.51    &  -27.75    &    1.48}
 \end{align*}
 conduisant à $\kappa = 39,7$. Avec cette sélection basée sur l'optimalité, la conception dynamique non-linéaire de \cite{2020e-MicCenZacFra} peut être appliquée efficacement en obtenant des réponses qui sont presque impossibles à distinguer du cas entièrement découplé 
-$\boldsymbol{F}\boldsymbol{M}^r=0$. Il convient de noter qu'une approche similaire, négligeant essentiellement les termes supplémentaires agissant sur la dynamique de translation, est également suggérée dans l'étude \cite{hamel_minhduc}. 
-Sur la base du choix de $\boldsymbol{M}^r$ et de $\boldsymbol{\bar u}$ décrit ci-dessus, en appliquant la loi de commande de \cite[eqn (19)]{2020e-MicCenZacFra}, l'entrée $\boldsymbol{u}$ devient :
+$\boldsymbol{F}\boldsymbol{M}^{\dag}=0$. Il convient de noter qu'une approche similaire, négligeant essentiellement les termes supplémentaires agissant sur la dynamique de translation, est également suggérée dans l'étude \cite{hamel_minhduc}. 
+Sur la base du choix de $\boldsymbol{M}^{\dag}$ et de $\boldsymbol{\bar u}$ décrit ci-dessus, en appliquant la loi de commande de \cite[eqn (19)]{2020e-MicCenZacFra}, l'entrée $\boldsymbol{u}$ devient :
 \begin{align}
 \label{eq:u_nonlin}
-    \boldsymbol{u} = \boldsymbol{u_{\text{nl}}} := \boldsymbol{M}^r \boldsymbol{\tau_{r}} + \boldsymbol{\bar u} \boldsymbol{f},
+    \boldsymbol{u} = \boldsymbol{u_{\text{nl}}} := \boldsymbol{M}^{\dag} \boldsymbol{\tau_{r}} + \boldsymbol{\bar u} \boldsymbol{f},
 \end{align}
 où $\boldsymbol{\tau_{r}} = -k_{ap} \boldsymbol{\epsilon}_{\Delta} - k_{ad} \boldsymbol{\omega}_{\Delta} + \boldsymbol{\omega} \times J \boldsymbol{\omega} + J \boldsymbol{\omega}_{dd}$ est le moment de référence et $\boldsymbol{f}$ est la force dans la direction de zéro moment. 
 
-La sélection de $\boldsymbol{M}^r$ basée sur l'optimalité peut être interprétée de manière intéressante lorsqu'on observe le produit $\boldsymbol{M}^r \boldsymbol{\tau_{r}} = \boldsymbol{M}^r \smallmat{\tau_{r,x} & \tau_{r,y} & \tau_{r,z}}^top$. 
+La sélection de $\boldsymbol{M}^{\dag}$ basée sur l'optimalité peut être interprétée de manière intéressante lorsqu'on observe le produit $\boldsymbol{M}^{\dag} \boldsymbol{\tau_{r}} = \boldsymbol{M}^{\dag} \smallmat{\tau_{r,x} & \tau_{r,y} & \tau_{r,z}}^top$. 
 
 Premièrement, pour obtenir un moment $\tau_{r,z}$ autour de l'axe $z_{\text{b}}$, nous utilisons principalement l'action différentielle de la poussée ; deuxièmement, un moment $\tau_{r,y}$ autour de l'axe $y_{\text{b}}$ est généré par une utilisation symétrique des deux volets, avec une grande efficacité ; enfin, un moment $\tau_{r,x}$ autour de l'axe $x_{\text{b}}$ provient d'une utilisation différentielle des volets. 
 
