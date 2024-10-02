@@ -128,7 +128,7 @@ Pour effectuer une sélection robuste de $\boldsymbol{K}$ et $\boldsymbol{H}$, n
 
 La sortie de mesure $\boldsymbol{y}$ est utilisée pour la rétroaction, l'entrée $\boldsymbol{u}$ est la somme de l'entrée intégrale $\boldsymbol{\Sigma} \boldsymbol{x}_{c}$ et de l'action proportionnelle $\boldsymbol{K} \boldsymbol{e}$. La sortie $\boldsymbol{z}$ correspond aux signaux de performance de sortie à contrôler ($\boldsymbol{e}$, $\boldsymbol{w}$, $\boldsymbol{u}$, $\boldsymbol{y}$, $\boldsymbol{r}_{p}$).
 
-Nous notons la marge de module d'une matrice de transfert $s \mapsto T_{v \rightarrow z}$ comme $\Delta_m(T_{v \rightarrow z}) = \min\limits_{\omega\in R} \sigma_{\min}(T_{v \rightarrow z}(j\omega))$. La fonction de sensibilité en sortie est définie par $T_{\nu \rightarrow e}=(\mathbb{I}_{11}+\boldsymbol{P}\boldsymbol{F})^{-1}$ de dimensions 11\texttimes11, telle que $\lVert T_{\nu \rightarrow e} \rVert _{\infty}=\Delta_m(T_{\nu \rightarrow e})^{-1} $ et la fonction de sensibilité en entrée $T_{d \rightarrow u}=(\mathbb{I}_{4}+\boldsymbol{F}\boldsymbol{P})^{-1}$ de dimensions 4\texttimes4, est définie par $\lVert T_{d \rightarrow u} \rVert _{\infty}=\Delta_m(T_{d \rightarrow u})^{-1}$.
+Nous notons la marge de module d'une matrice de transfert $s \mapsto T_{v \rightarrow z}$ comme $\Delta_m(T_{v \rightarrow z}) = \min\limits_{\omega\in R} \sigma_{\min}(\frac{1}{T_{v \rightarrow z}(j\omega)})$. La fonction de sensibilité en sortie est définie par $T_{\nu \rightarrow e}=(\mathbb{I}_{11}+\boldsymbol{P}\boldsymbol{F})^{-1}$ de dimensions 11\texttimes11, telle que $\lVert T_{\nu \rightarrow e} \rVert _{\infty}=\Delta_m(T_{\nu \rightarrow e})^{-1} $ et la fonction de sensibilité en entrée $T_{d \rightarrow u}=(\mathbb{I}_{4}+\boldsymbol{F}\boldsymbol{P})^{-1}$ de dimensions 4\texttimes4, est définie par $\lVert T_{d \rightarrow u} \rVert _{\infty}=\Delta_m(T_{d \rightarrow u})^{-1}$.
 Par conséquent, la minimisation de la norme $H_{\infty}$ de $T_{\nu \rightarrow e}$ ou de $T_{d \rightarrow u}$ correspond à l'augmentation des marges de module en entrée et en sortie. Étant donné que le système $\boldsymbol{P}$ est MIMO, nous accordons de l'importance aux fonctions de sensibilité en entrée et en sortie qui ne coïncident pas, car $\boldsymbol{P}$ et $\boldsymbol{F}$ ne commutent pas.
 
 Nous définissons aussi la matrice de transfert $T_{\nu \rightarrow u}$ de dimensions 4\texttimes11 liée à l'impact du bruit de mesure $\nu$ sur la commande $\boldsymbol{u}$, et $T_{d \rightarrow y}$ de dimensions 11\texttimes4 représentant l'impact de la perturbation en entrée $\boldsymbol{d}$ sur la sortie du système $\boldsymbol{y}$. 
@@ -149,7 +149,7 @@ En appliquant cette méthodologie dans notre cas et grâce aux fonctions de pond
     W_{4} = 0.5.
 \end{align}
 
-Ces valeurs ont été sélectionnées pour obtenir un bon compromis entre le rejet des perturbations et la vitesse de convergence du système.
+Ces valeurs ont été sélectionnées pour obtenir un bon compromis entre le rejet des perturbations et la robustesse de la boucle fermée au travers de la marge de module.
 
 Il est maintenant possible de former le problème d'optimisation multicritère suivant, en concaténant les contraintes exprimées sous la forme de \eqref{eq:formecontrainte}
 \begin{align*} \label{eq:pb_optim}

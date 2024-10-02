@@ -1,4 +1,4 @@
-% LTeX: enabled=false
+% LTeX: enabled=true
 \chapter{Généralités sur les drones convertibles}
 \minitoc
 \label{chap:generalites}
@@ -275,17 +275,31 @@ où Q et R sont, respectivement, les matrices de pondération de l'état et des 
 Bien que le contrôleur LQR présente généralement de bonnes propriétés de robustesse, l'optimalité n'est plus assurée si des erreurs de modélisation et des perturbations sont présentes dans le système. Une discussion détaillée et une comparaison entre le contrôle PID sans modèle et le contrôle LQR basé sur le modèle d'un \textit{tailsitter} est disponible dans \cite{BarthCondomines2018}.
 Les auteurs de \cite{Lustosa2017LaP} ont proposé l'approche de séquencement des gains obtenus pour un ensemble de modèles linéaires. Cette architecture de contrôle optimise le gain K en boucle fermée afin de répondre aux exigences de contrôle de la vitesse et de l'attitude définies par l'utilisateur. Grâce à des simulations de vol et à des vols expérimentaux, les auteurs soulignent et prouvent qu'une seule matrice de gains LQR n'est pas suffisante pour stabiliser le \textit{tailsitter} dans toute son enveloppe de vol, ce qui justifie l'utilisation de méthodes de séquencement des gains.
 
+\nomenclature[]{\(LQR\)}{Régulation linéaire quadratique}
+{\color{blue}
+    Au vu des technologies de capteur embarqué sur un drone, il n'est pas possible d'obtenir directement l'état du drone nécessaire à une commande LQR. Pour palier ce problème, une classe de contrôleur a été développé : le contrôleur LQG, linéaire-quadratique-gaussienne. 
+    \begin{figure}[H]
+        \centerline{
+        \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.6\columnwidth]{figures/regulator.png}}
+        \caption{Schéma de commande LQG.}
+        \label{fig:LQG}
+    \end{figure}
+
+    Comme le montre la figure \ref{fig:LQG}, la commande LQG s'appui sur un estimateur d'état pour obtenir l'état du système à partir de la connaissance d'un modèle, de la commande appliqué et de la sortie. 
+    \nomenclature[]{\(LQG\)}{Régulation linéaire-quadratique-gaussienne}
+}
+
 
 \subsection*{Contrôleur non-linéaire}
-
-L'approche "inversion dynamique non-linéaire incrémentale" (INDI) utilise la connaissance de la dynamique d'un système. Une inversion incrémentale est réalisée pour obtenir les accélérations angulaires cibles. Théoriquement, le bouclage des accélérations angulaires élimine la sensibilité aux imperfections du modèle, ce qui augmente considérablement la robustesse du système par rapport à l'inversion dynamique non-linéaire conventionnelle \cite{Sieberling2010, Binz2019}. Ce contrôleur nécessite l'identification des actionneurs afin de régler les paramètres du contrôleur, telle que l'efficacité des actionneurs. Étant donné que l'efficacité des surfaces de contrôle aérodynamiques n'est pas constante pendant toute l'enveloppe de vol sur un \textit{tiltwing}, une méthode de programmation des gains a été mise au point \cite{smeurINDI,smeurINDITail}.
+{\color{blue}
+L'approche "inversion dynamique non-linéaire incrémentale" (INDI) utilise la connaissance de la dynamique d'un système pour réaliser la commande du système. Toutefois, elle est classée dans les commandes basées mesure (Figure \ref{fig:methodecmd}) car le modèle n'est pas nécessaire pour l'obtention et le réglage des gains du contrôleur. Une inversion incrémentale du modèle est réalisée pour obtenir les accélérations angulaires cibles. Théoriquement, le bouclage des accélérations angulaires élimine la sensibilité aux imperfections du modèle, ce qui augmente considérablement la robustesse du système par rapport à l'inversion dynamique non-linéaire conventionnelle \cite{Sieberling2010, Binz2019}. Ce contrôleur nécessite l'identification des actionneurs afin de régler les paramètres du contrôleur, telle que l'efficacité des actionneurs. Étant donné que l'efficacité des surfaces de contrôle aérodynamiques n'est pas constante pendant toute l'enveloppe de vol sur un \textit{tiltwing}, une méthode de programmation des gains a été mise au point \cite{smeurINDI,smeurINDITail}.
 La limitation d'une telle loi de commande est la disponibilité et la qualité  des accélérations angulaires. En effet, les capteurs mesurant la vitesse angulaire sont très bruités et nous sommes contraints de dériver ce signal pour obtenir les accélérations angulaires.
-
+}
 
 
 \subsection*{Contrôleur sans modèle basé mesure}
 
-Contrairement à l'INDI basée sur l'inversion d'un modèle, la loi de commande sans modèle (MFC) \cite{Fliess_2013}  nécessite peu de connaissances préalables du système contrôlé pour concevoir le contrôleur.
+La loi de commande sans modèle (MFC) \cite{Safonov, Stefanovic, Fliess_2013}  nécessite peu de connaissances préalables du système contrôlé pour concevoir le contrôleur.
 On modélise la dynamique inconnue par une équation numérique, appelée modèle ultra-local :
 \begin{align}
     y_{m}^{(\nu)} = F_{y} + \lambda u.
@@ -346,7 +360,7 @@ Pour l'estimation des paramètres en temps réel, les méthodes les plus couramm
 
 
 \subsection*{Obtention des gains d'un PID par une méthode de placement de pôles \cite{WANG2008PID}}
-Les contrôleurs PID sont très largement utilisés dans l'industrie. Le réglage des gains (proportionnel, intégral et dérivatif) est souvent réalisé à l'aide d'une méthode manuelle des valeurs. Toutefois, à l'aide d'un modèle, il est possible d'obtenir les gains qui assurent des critères de performance (rapidité et dépassement). Cette méthode a été proposée par \cite{WANG2008PID}.
+Les contrôleurs PID sont très largement utilisés dans l'industrie. Le réglage des gains (proportionnel, intégral et dérivatif) est souvent réalisé à l'aide d'un ajustement manuel des valeurs. Toutefois, à l'aide d'un modèle, il est possible d'obtenir les gains qui assurent des critères de performance (rapidité et dépassement). Cette méthode a été proposée par \cite{WANG2008PID}.
 
 Considérons un contrôleur PID de la forme :
 \begin{align}
@@ -385,20 +399,21 @@ Cette équation complexe peut être résolue en exprimant $K_{i}$ et $K_{d}$ en 
   L'équation \eqref{eq:simplifyPID} simplifie la conception du contrôleur PID dépendant d'un paramètre $K_{p}$. Par conséquent, le gain $K_{p}$ peut être déterminé pour ses valeurs positives à partir de la méthode du lieu racine. Selon le tracé des racines de l'équation caractéristique de la boucle fermée, nous sommes en mesure de déterminer la plage de $K_{p}$, de sorte que les racines se trouvent dans la région complexe requise. 
 
 \subsection*{Synthèse $H_{\infty}$}
-La synthèse $H_{\infty}$ est une méthode qui sert à la conception de commandes optimales, en imposant des contraintes sur la norme $H_{\infty}$ d'un système \cite{1576856, ApkarianMulti}. En se basant sur une synthèse $H_{\infty}$, les auteurs de \cite{SunYang2009} ont obtenu la stabilisation longitudinale d'un \textit{tiltrotor}. En combinant une synthèse $H_{\infty}$ à une approche de séquencement des gains, les auteurs de \cite{DickesonMix2005, DickesonCifdaloz2006,DickesonMiles2007} ont proposé la stabilisation d'un \textit{tiltwing} sur l'ensemble de son enveloppe de vol.
+La synthèse $H_{\infty}$ est une méthode qui sert à la conception de commandes optimales, en imposant des contraintes sur la norme $H_{\infty}$ d'un système \cite{DGKF89}. En se basant sur une synthèse $H_{\infty}$, les auteurs de \cite{SunYang2009} ont obtenu la stabilisation longitudinale d'un \textit{tiltrotor}. En combinant une synthèse $H_{\infty}$ à une approche de séquencement des gains, les auteurs de \cite{DickesonMix2005, DickesonCifdaloz2006,DickesonMiles2007} ont proposé la stabilisation d'un \textit{tiltwing} sur l'ensemble de son enveloppe de vol.
 
 Pour résoudre un problème par synthèse $H_{\infty}$, il est nécessaire de mettre le modèle du système dans la structure classique, représentée sur la Figure \ref{fig:schemalft}. 
 
 \begin{figure}[ht!]
     \centerline{
     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\columnwidth]{figures/lft.png}}
-    \caption{Architecture d'un contrôleur $H_{\infty}$.}
+    \caption{Forme standard.}
     \label{fig:schemalft}
 \end{figure}
 
 L'objectif est de minimiser l'effet de la perturbation $w$  (cas le moins favorable possible) sur la variable de performance $z$, par le biais d'un contrôleur $u = K(s) y$. En d'autres termes, $K(s)$ est choisi de telle sorte que $\| F(P(s), K(s))\|_{\infty}$  soit minimisée, où $F(P(s), K(s))$ est la fonction de transfert de la perturbation $w$ vers le signal d'erreur $z$. 
-Dans ce formalisme, le contrôleur peut être de plusieurs formes PID, retour d'état ou de sortie, etc.
-
+{\color{blue}
+    Les contraintes de structure rendent le problème non convexe ce qui nécessite l'utilisation d'un outil de synthèse basée sur l'optimisation non lisse. Dans ce formalisme, une structure de type PID peut être utilisé explicitement au moment de la synthèse pour optimiser les gains P, I et D à partir des contraintes $H_{\infty}$ \cite{1576856,ApkarianMulti}.
+}
 Nous pouvons aussi citer le travail de \cite{SNYDER2021106621} qui utilise une approche de contrôle $H_{\infty}$, ainsi qu'une représentation du système \textit{Linear Parameter Varying} (LPV). Cette représentation permet d'avoir la dynamique linéaire du drone sur l'ensemble du domaine de vol par interpolation des dynamiques paramétrées par la vitesse totale du drone.
 \nomenclature[]{\(LPV\)}{Système linéaire à paramètres variants (\textit{Linear Parameter Varying})}
 
