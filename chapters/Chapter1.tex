@@ -276,8 +276,8 @@ Bien que le contrôleur LQR présente généralement de bonnes propriétés de r
 Les auteurs de \cite{Lustosa2017LaP} ont proposé l'approche de séquencement des gains obtenus pour un ensemble de modèles linéaires. Cette architecture de contrôle optimise le gain K en boucle fermée afin de répondre aux exigences de contrôle de la vitesse et de l'attitude définies par l'utilisateur. Grâce à des simulations de vol et à des vols expérimentaux, les auteurs soulignent et prouvent qu'une seule matrice de gains LQR n'est pas suffisante pour stabiliser le \textit{tailsitter} dans toute son enveloppe de vol, ce qui justifie l'utilisation de méthodes de séquencement des gains.
 
 \nomenclature[]{\(LQR\)}{Régulation linéaire quadratique}
-{\color{blue}
-    Au vu des technologies de capteur embarqué sur un drone, il n'est pas possible d'obtenir directement l'état du drone nécessaire à une commande LQR. Pour palier ce problème, une classe de contrôleur a été développé : le contrôleur LQG, linéaire-quadratique-gaussienne. 
+
+    Au vu des technologies de capteurs embarqués sur un drone, il n'est pas possible d'obtenir directement l'état du drone nécessaire à une commande LQR. Pour palier ce problème, une classe de contrôleur a été développée : le contrôleur LQG, linéaire-quadratique-gaussienne. 
     \begin{figure}[H]
         \centerline{
         \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.6\columnwidth]{figures/regulator.png}}
@@ -285,16 +285,16 @@ Les auteurs de \cite{Lustosa2017LaP} ont proposé l'approche de séquencement de
         \label{fig:LQG}
     \end{figure}
 
-    Comme le montre la figure \ref{fig:LQG}, la commande LQG s'appui sur un estimateur d'état pour obtenir l'état du système à partir de la connaissance d'un modèle, de la commande appliqué et de la sortie. 
+    Comme le montre la figure \ref{fig:LQG}, la commande LQG s'appuie sur un estimateur d'état pour obtenir l'état du système à partir de la connaissance d'un modèle, de la commande appliquée et de la sortie. 
     \nomenclature[]{\(LQG\)}{Régulation linéaire-quadratique-gaussienne}
-}
+
 
 
 \subsection*{Contrôleur non-linéaire}
-{\color{blue}
-L'approche "inversion dynamique non-linéaire incrémentale" (INDI) utilise la connaissance de la dynamique d'un système pour réaliser la commande du système. Toutefois, elle est classée dans les commandes basées mesure (Figure \ref{fig:methodecmd}) car le modèle n'est pas nécessaire pour l'obtention et le réglage des gains du contrôleur. Une inversion incrémentale du modèle est réalisée pour obtenir les accélérations angulaires cibles. Théoriquement, le bouclage des accélérations angulaires élimine la sensibilité aux imperfections du modèle, ce qui augmente considérablement la robustesse du système par rapport à l'inversion dynamique non-linéaire conventionnelle \cite{Sieberling2010, Binz2019}. Ce contrôleur nécessite l'identification des actionneurs afin de régler les paramètres du contrôleur, telle que l'efficacité des actionneurs. Étant donné que l'efficacité des surfaces de contrôle aérodynamiques n'est pas constante pendant toute l'enveloppe de vol sur un \textit{tiltwing}, une méthode de programmation des gains a été mise au point \cite{smeurINDI,smeurINDITail}.
+
+L'approche "inversion dynamique non-linéaire incrémentale" (INDI) utilise la connaissance de la dynamique d'un système pour réaliser la commande du système. Toutefois, elle est classée dans les commandes basées mesure (Figure \ref{fig:methodecmd}) car le modèle n'est pas nécessaire pour l'obtention et le réglage des gains du contrôleur. Une inversion incrémentale du modèle est réalisée pour obtenir les accélérations angulaires cibles. Théoriquement, le bouclage des accélérations angulaires élimine la sensibilité aux imperfections du modèle, ce qui augmente considérablement la robustesse du système par rapport à l'inversion dynamique non-linéaire conventionnelle \cite{Sieberling2010, Binz2019}. Ce contrôleur ne nécessite que l'identification des actionneurs afin de régler les paramètres du contrôleur, telles que leur efficacité et leur dynamique. Étant donné que l'efficacité des surfaces de contrôle aérodynamiques n'est pas constante pendant toute l'enveloppe de vol sur un \textit{tiltwing}, une méthode de programmation des gains a été mise au point \cite{smeurINDI,smeurINDITail}.
 La limitation d'une telle loi de commande est la disponibilité et la qualité  des accélérations angulaires. En effet, les capteurs mesurant la vitesse angulaire sont très bruités et nous sommes contraints de dériver ce signal pour obtenir les accélérations angulaires.
-}
+
 
 
 \subsection*{Contrôleur sans modèle basé mesure}
@@ -410,10 +410,8 @@ Pour résoudre un problème par synthèse $H_{\infty}$, il est nécessaire de me
     \label{fig:schemalft}
 \end{figure}
 
-L'objectif est de minimiser l'effet de la perturbation $w$  (cas le moins favorable possible) sur la variable de performance $z$, par le biais d'un contrôleur $u = K(s) y$. En d'autres termes, $K(s)$ est choisi de telle sorte que $\| F(P(s), K(s))\|_{\infty}$  soit minimisée, où $F(P(s), K(s))$ est la fonction de transfert de la perturbation $w$ vers le signal d'erreur $z$. 
-{\color{blue}
-    Les contraintes de structure rendent le problème non convexe ce qui nécessite l'utilisation d'un outil de synthèse basée sur l'optimisation non lisse. Dans ce formalisme, une structure de type PID peut être utilisé explicitement au moment de la synthèse pour optimiser les gains P, I et D à partir des contraintes $H_{\infty}$ \cite{1576856,ApkarianMulti}.
-}
+L'objectif est de minimiser l'effet de la perturbation $w$  (cas le moins favorable possible) sur la variable de performance $z$, par le biais d'un contrôleur $u = K(s) y$. En d'autres termes, $K(s)$ est choisi de telle sorte que $\| F(P(s), K(s))\|_{\infty}$  soit minimisée, où $F(P(s), K(s))$ est la fonction de transfert de la perturbation $w$ vers le signal d'erreur $z$.Les contraintes de structure rendent le problème non convexe, ce qui nécessite l'utilisation d'un outil de synthèse basé sur l'optimisation non lisse. Dans ce formalisme, une structure de type PID peut être utilisée explicitement au moment de la synthèse pour optimiser les gains P, I et D à partir des contraintes $H_{\infty}$ \cite{1576856,ApkarianMulti}.
+
 Nous pouvons aussi citer le travail de \cite{SNYDER2021106621} qui utilise une approche de contrôle $H_{\infty}$, ainsi qu'une représentation du système \textit{Linear Parameter Varying} (LPV). Cette représentation permet d'avoir la dynamique linéaire du drone sur l'ensemble du domaine de vol par interpolation des dynamiques paramétrées par la vitesse totale du drone.
 \nomenclature[]{\(LPV\)}{Système linéaire à paramètres variants (\textit{Linear Parameter Varying})}
 
@@ -450,7 +448,7 @@ Les avantages de la solution ABAG sont une grande réactivité et une grande ada
 Un module a aussi été développé pour pouvoir utiliser des servomoteurs \textit{Feetech} (le modèle STS3032), qui ont la possibilité d'être chaînés et d'être commandés via une liaison série bidirectionnelle. Cela permet notamment d'avoir un retour sur la position du servomoteur.
 
 \nomenclature[]{\(PID\)}{Proportionnel Intégral Dérivé}
-\nomenclature[]{\(ABAG\)}{Biais adaptatif et gain adaptatif \textit{Adaptive Bias and Adaptive Gain}}
+\nomenclature[]{\(ABAG\)}{Biais adaptatif et gain adaptatif (\textit{Adaptive Bias and Adaptive Gain})}
 \begin{figure}[ht!]
     \centering
     \resizebox{.9\textwidth}{!}{%

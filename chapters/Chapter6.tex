@@ -226,7 +226,7 @@ Il est intéressant de noter que $W_1$ et $W_2$ peuvent simultanément servir à
 \end{algorithm}
 
 Le problème d'optimisation \eqref{eq:pb_optim_lpv} devient de plus en plus lourd d'un point de vue informatique, à mesure que nous augmentons la cardinalité de l'ensemble des conditions de vent considérées dans ${\mathcal W}$. En fait, une approche de force brute incluant un maillage fin de points dans ${\mathcal W}$ conduit à une optimisation difficile à calculer. Au lieu de cela, nous suivons ici la procédure itérative décrite dans l'algorithme~\ref{alg:iterativeOptimisation}, où ${\mathcal W}$ est initialement sélectionné comme un maillage grossier comprenant $3 \times 3 = 9$ points (étape 1) ; une étape de synthèse (étape 2) est ensuite suivie de manière répétée par une étape d'analyse (simple du point de vue du calcul) (étape 3) où le contrôleur $\boldsymbol{F}$ est fixé.
-L'étape 3 identifie les points de violation en utilisant un maillage de validation plus fin ${\mathcal W}_{\text{v}}$ et les ajoute à l'ensemble d'optimisation ${\mathcal W}_{\text{v}}$. L'algorithme se termine après quelques itérations, lorsque aucun point du maillage de validation ne viole les contraintes.
+L'étape 3 identifie les points de violation en utilisant un maillage de validation plus fin ${\mathcal W}_{\text{v}}$ et les ajoute à l'ensemble d'optimisation ${\mathcal W}$. L'algorithme se termine après quelques itérations, lorsque aucun point du maillage de validation ne viole les contraintes.
 
 \begin{table}[ht]
     \centering
@@ -288,13 +288,23 @@ Les diagrammes rouges de la Figure~\ref{fig:transferts_tcst} illustrent claireme
 
 Les valeurs singulières de la fonction de sensibilité de la sortie et de l'entrée (respectivement $T_{r \rightarrow e}$ et $T_{d \rightarrow u}$) sont représentées sur la Figure~\ref{fig:transferts_tcst} (ligne supérieure). Le graphique de la troisième ligne représente la valeur singulière du transfert entre la perturbation du vent $\boldsymbol{w}$ et la sortie du drone $\boldsymbol{y}$. La valeur singulière qui tangente la contrainte est celle de la condition de vent la plus élevée du modèle de synthèse, $(w_x, w_z) = (-8,-4)~\SI{}{\meter\per\second}$.
 
+% \begin{figure}[ht!]
+%     \centering
+%     \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.6\columnwidth]{figures/transferts_tcst.png}
+%     \caption{Diagrammes des valeurs singulières des fonctions de transfert dans \eqref{eq:validation_step}, à la première itération de l'algorithme~\ref{alg:iterativeOptimisation}.}
+%     \label{fig:transferts_tcst}
+% \end{figure}
+ 
 \begin{figure}[ht!]
     \centering
-    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.6\columnwidth]{figures/transferts_tcst.png}
-    \caption{Diagrammes des valeurs singulières des fonctions de transfert dans \eqref{eq:validation_step}, à la première itération de l'algorithme~\ref{alg:iterativeOptimisation}.}
+    \resizebox{\textwidth}{!}{%
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\textwidth]{figures/transferts_tcst.png}
+    \quad
+    \includegraphics[trim=0cm 0cm 0cm 0cm,clip,width=0.5\textwidth]{figures/transferts_tcst_it2.png}
+    }
+    \caption{Diagrammes des valeurs singulières des fonctions de transfert dans \eqref{eq:validation_step}, à la première itération de l'algorithme~\ref{alg:iterativeOptimisation} (à gauche) et à la seconde itération (à droite).}
     \label{fig:transferts_tcst}
 \end{figure}
- 
 
 
 Avec le réglage indiqué dans \eqref{eq:gain_selection}, tel qu'il est obtenu avec l'Algorithme~\ref{alg:iterativeOptimisation}, nous présentons dans la Figure~\ref{fig:SimSytuneStruct_lpv} des résultats de simulation similaires à ceux déjà présentés dans la Figure.~\ref{fig:SimSytuneStruct_zero} pour la méthode de réglage sans vent discutée dans la Section~\ref{sec:zerowind}. Une fois de plus, nous simulons à la fois le modèle non-linéaire \eqref{eq:dyna_orig} (lignes pleines) et le modèle linéarisé \eqref{eq:lpv_linearisation} (lignes en pointillé). 
@@ -313,7 +323,7 @@ L'efficacité du schéma de contrôle réglé sur la base de l'Algorithme~\ref{a
 
 \section{Rafale de vent}
 
-Dans la section \ref{sec:perturbation}, nous avons présenté des modèles de perturbation représentant une modélisation d'une rafale de vent. Nous allons les utiliser pour évaluer la réponse du drone face à cette perturbation. 
+Dans la section \ref{sec:perturbation}, nous avons présenté des modèles de perturbation représentant une modélisation d'une rafale de vent. Nous allons les utiliser pour évaluer la réponse du drone face à cette perturbation. Étant donné que le drone a une dynamique instable, les simulations montrent la stabilisation du drone par le contrôleur malgré des perturbations constantes et l'ajout de variations (voir le graphique à la septième ligne des Figures \ref{fig:sim_mex0_2}, \ref{fig:sim_mex1_2} et \ref{sec:exp6DOF}).
 
 
 Nous avons appliqué un vent horizontal $w_x$ avec trois valeurs moyennes $w_{m} \in {0,3,6}\SI{}{\meter\per\second}$ et avec les caractéristiques suivantes pour la fonction "Chapeau mexicain" $A_g=\SI{-5}{\meter\per\second}$, $f_g = \frac{1}{T_g} = \SI{0.2}{\Hz}$ soit une période $T_g$ de 5 secondes. Les résultats sont visibles sur la Figure \ref{fig:sim_mex0_2}.
@@ -326,7 +336,7 @@ Nous avons appliqué un vent horizontal $w_x$ avec trois valeurs moyennes $w_{m}
     \quad
     \includegraphics[width=0.33\textwidth]{figures/sim_mex_hat11msT5.png}
     }
-    \caption{Simulation du modèle non-linéaire \eqref{eq:dyna_orig} face à une perturbation "Chapeau mexicain" \eqref{eq:mex} avec $f_g = \SI{0.2}{\Hz}$.}
+    \caption{Simulation du modèle non-linéaire \eqref{eq:dyna_orig} face à une perturbation "chapeau mexicain" \eqref{eq:mex} avec $f_g = \SI{0.2}{\Hz}$.}
     \label{fig:sim_mex0_2}
 \end{figure}
 
@@ -341,7 +351,7 @@ Nous avons aussi réalisé une simulation similaire à la précédente avec une 
     \quad
     \includegraphics[width=0.33\textwidth]{figures/sim_mex_hat11msF1.2.png}
     }
-    \caption{Simulation du modèle non-linéaire \eqref{eq:dyna_orig} face à une perturbation "Chapeau mexicain" \eqref{eq:mex} avec $f_g = \SI{1.2}{\Hz}$.}
+    \caption{Simulation du modèle non-linéaire \eqref{eq:dyna_orig} face à une perturbation "chapeau mexicain" \eqref{eq:mex} avec $f_g = \SI{1.2}{\Hz}$.}
     \label{fig:sim_mex1_2}
 \end{figure}
 
@@ -374,7 +384,7 @@ Les vols expérimentaux de DarkO se sont déroulés dans un espace dédié (voir
 \end{figure}
 
 Bien que cette information sur le vent soit enregistrée à bord du drone pour synchroniser les données, nous n'utilisons pas cette mesure dans la loi de commande. La fréquence de mesure de cette sonde de vent n'est que de 0,5 Hz, de sorte que nous n'avons qu'une mesure toutes les deux secondes. 
-L'estimation de l'état est effectuée à l'aide d'un système de navigation inertielle pour fusionner les données de l'unité de mesure inertielle (IMU) et du système de localisation Optitrack afin d'obtenir une estimation précise de la sortie $\boldsymbol{y}$ dans la Figure~\ref{fig:commande_int6DOF}. Cependant, la vitesse angulaire du drone $\boldsymbol{\omega}_{\text{b}}$ est mesurée sur la base du gyromètre de l'IMU, qui fournit des mesures bruitées. Nous avons donc ajouté un filtre passe-bas \textit{Butterworth} de second ordre avec une fréquence de coupure de 20 Hz pour lisser la sortie $\boldsymbol{\omega}_{text{b}}$. Le filtre de \textit{Butterworth} est pris en compte dans la dynamique linéarisée lors de l'optimisation des gains du contrôleur en suivant l'Algorithme~\ref{alg:iterativeOptimisation}. 
+L'estimation de l'état est effectuée à l'aide d'un système de navigation inertielle pour fusionner les données de l'unité de mesure inertielle (IMU) et du système de localisation Optitrack afin d'obtenir une estimation précise de la sortie $\boldsymbol{y}$ dans la Figure~\ref{fig:commande_int6DOF}. Cependant, la vitesse angulaire du drone $\boldsymbol{\omega}_{\text{b}}$ est mesurée sur la base du gyromètre de l'IMU, qui fournit des mesures bruitées. Nous avons donc ajouté un filtre passe-bas \textit{Butterworth} de second ordre avec une fréquence de coupure de 20 Hz pour lisser la sortie $\boldsymbol{\omega}_{\text{b}}$. Le filtre de \textit{Butterworth} est pris en compte dans la dynamique linéarisée lors de l'optimisation des gains du contrôleur en suivant l'Algorithme~\ref{alg:iterativeOptimisation}. 
 
 Nous avons également utilisé les ESC similaires à ceux utilisés lors de l'identification montrée dans la Figure~\ref{fig:IOmot} pour l'actionnement des hélices. Les deux ESC ont été flashés avec le code open-source AM32 (voir Annexe). De cette manière, nous compensons les effets de décharge de la batterie et obtenons un suivi précis de la vitesse commandée. Avant cette modification, l'action intégrale de la rétroaction stabilisatrice de la Figure~\ref{fig:commande_int6DOF} compensait la perte de vitesse du moteur causée par la réduction de la tension de la batterie pendant le vol. Cette compensation intégrale a été indirectement générée par la perte d'altitude du drone causée par la réduction de la traction. 
 
